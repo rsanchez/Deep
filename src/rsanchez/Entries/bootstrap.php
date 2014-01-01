@@ -11,4 +11,4 @@ require_once __DIR__.'/Channel/Entries/Entry.php';
 require_once __DIR__.'/Channel/Entries/Collection.php';
 require_once __DIR__.'/Channel/Entries/Filter.php';
 require_once __DIR__.'/Channel/Entries/Query.php';
-require_once __DIR__.'/Channel/Entries.php';
+require_once __DIR__.'/Entries.php';
