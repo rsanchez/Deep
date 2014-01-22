@@ -1,22 +1,22 @@
 <?php
 
-namespace rsanchez\Entries\Channel\Entries;
+namespace rsanchez\Entries\Entries;
 
 use \Iterator;
-use rsanchez\Entries\Channel\Entries\Filter;
+use rsanchez\Entries\Entries\Filter;
 
 class Collection implements Iterator {
 
-	public $total_results;
-	public $count;
+	public $total_results = 0;
+	public $count = 1;
 
-	protected $entries;
+	protected $entries = array();
 
-	public function __construct(array $entries = array())
-	{
-		$this->entries = $entries;
-		$this->total_results = count($this->entries);
-	}
+    public function push(Entry $entry)
+    {
+        array_push($this->entries, $entry);
+        $this->total_results++;
+    }
   
   public function rewind()
 	{

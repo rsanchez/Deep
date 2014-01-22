@@ -7,13 +7,12 @@ A pure PHP implementation of the ExpressionEngine {exp:channel:entries} tag.
 ```
 <?php
 
-use \rsanchez\Entries\Entries;
+use rsanchez\Entries\Channel;
 
-$entries = new Entries();
-
-$entries->channel('blog')
-		 ->limit(1)
-		 ->show_future_entries(true);
+$entries = Channel::entries()
+		->channel('blog')
+		->limit(1)
+		->show_future_entries(true);
 ?>
 
 <?php foreach ($entries as $entry) : ?>

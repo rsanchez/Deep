@@ -2,65 +2,56 @@
 
 namespace rsanchez\Entries;
 
-use \Iterator;
+use rsanchez\Entries\Channel\Storage as ChannelStorage;
+use rsanchez\Entries\Channel\Factory as ChannelFactory;
+use \IteratorAggregate;
 
-class Channels implements Iterator {
+class Channels implements IteratorAggregate
+{
+    private $channels = array();
 
-	protected $index = 0;
+    public function __construct(ChannelStorage $storage, FieldGroups $fieldGroups, ChannelFactory $factory, FieldGroupFactory $fieldGroupFactory)
+    {
+        foreach ($storage() as $channelRow) {
 
-	protected $channels = array();
-	protected $channelsById = array();
-	protected $channelsByName = array();
+            // provide an empty fieldGroup if one isn't found
+            if (!$channelRow->fieldGroup || ! $fieldGroup = $fieldGroups->find($channelRow->fieldGroup)) {
+                $fieldGroup = $fieldGroupFactory();
+            }
 
-	public function __construct(array $channels = array())
-	{
-		$this->channels = $channels;
+            $channel = $factory($channelRow, $fieldGroup);
 
-		foreach ($this->channels as $channel) {
-			$this->channelsById[$channel->channel_id] =& $channel;
-			$this->channelsByName[$channel->channel_name] =& $channel;
-		}
-	}
+            $this->push($channel);
+        }
+    }
 
-	public function find($id) {
-		if (is_numeric($id)) {
-			//@TODO custom exception
-			if ( ! array_key_exists($id, $this->channelsById)) {
-				throw new \Exception('invalid channel id');
-			}
+    public function push(Channel $channel)
+    {
+        array_push($this->channels, $channel);
+        $this->channelsById[$channel->channel_id] =& $channel;
+        $this->channelsByName[$channel->channel_name] =& $channel;
+    }
 
-			return $this->channelsById[$id];
-		}
+    public function find($id)
+    {
+        if (is_numeric($id)) {
+            //@TODO custom exception
+            if (! array_key_exists($id, $this->channelsById)) {
+                throw new \Exception('invalid channel id');
+            }
 
-		if ( ! array_key_exists($id, $this->channelsByName)) {
-			throw new \Exception('invalid channel name');
-		}
+            return $this->channelsById[$id];
+        }
 
-		return $this->channelsByName[$id];
-	}
-  
-  public function rewind()
-	{
-		$this->index = 0;
-  }
+        if (! array_key_exists($id, $this->channelsByName)) {
+            throw new \Exception('invalid channel name');
+        }
 
-  public function current()
-	{
-		return $this->channels[$this->index];
-  }
+        return $this->channelsByName[$id];
+    }
 
-  public function key()
-	{
-    return $this->index;
-  }
-
-  public function next() {
-    ++$this->index;
-  }
-
-  public function valid()
-	{
-    return array_key_exists($this->index, $this->channels);
-  }
+    public function getIterator()
+    {
+        return new ArrayIterator($this->channels);
+    }
 }
-

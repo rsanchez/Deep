@@ -2,24 +2,55 @@
 
 namespace rsanchez\Entries\Channel;
 
-class Field {
-	public static $classMap = array(
-		'matrix' => 'MatrixField',
-		'playa' => 'PlayaField',
-		'relationships' => 'RelationshipsField',
-		'grid' => 'GridField',
-	);
+use \rsanchez\Entries\Channel;
 
-	public static function create($field_id, $field_name, $field_type, $params) {
+class Field
+{
+    // exp_fieldtypes
+    public $fieldtype_id;
+    public $name;
+    public $version;
+    public $settings;
+    public $has_global_settings;
 
-		$class = 'rsanchez\Entries\Channel\\';
+    // exp_channel_fields
+    public $field_id;
+    public $site_id;
+    public $group_id;
+    public $field_name;
+    public $field_label;
+    public $field_instructions;
+    public $field_type;
+    public $field_list_items;
+    public $field_pre_populate;
+    public $field_pre_channel_id;
+    public $field_pre_field_id;
+    public $field_ta_rows;
+    public $field_maxl;
+    public $field_required;
+    public $field_text_direction;
+    public $field_search;
+    public $field_is_hidden;
+    public $field_fmt;
+    public $field_show_fmt;
+    public $field_order;
+    public $field_content_type;
+    public $field_settings;
 
-		$class .= isset(self::$classMap[$field_type]) ? self::$classMap[$field_type] : 'Field';
+    public function __construct(\stdClass $result)
+    {
+        $properties = get_class_vars(__CLASS__);
 
-		return new $class($field_id, $field_name, $params);
-	}
+        foreach ($properties as $property => $value) {
+            if (property_exists($result, $property)) {
+                $this->$property = $result->$property;
+            }
+        }
 
-	public function __construct($field_id, $field_name, $params) {
-		
-	}
+        $this->field_settings = unserialize(base64_decode($this->field_settings));
+
+        if ($this->has_global_settings === 'y') {
+            $this->field_settings = array_merge(unserialize(base64_decode($this->settings)), $this->field_settings);
+        }
+    }
 }

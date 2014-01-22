@@ -5,28 +5,29 @@ namespace rsanchez\Entries;
 use \rsanchez\Entries\Channels;
 use \rsanchez\Entries\Db;
 use \rsanchez\Entries\Channel\Query;
+use \rsanchez\Entries\Channel\FieldGroup;
+use \rsanchez\Entries\EE;
 
 class Factory {
-	public static function db() {
-   return new Db(array(
-			'dbdriver' => 'mysql',
-			'conn_id' => ee()->db->conn_id,
-			'database' => ee()->db->database,
-			'dbprefix' => ee()->db->dbprefix,
-		));
-	}
+	public static function ee() {
+		static $ee;
 
-	public static function channels() {
-		static $channels;
-
-		if (is_null($channels)) {
-			$query = new Query(self::db());
-
-			foreach ($query->result() as $row) {
-				$channels[] = new Channel($row);
-			}
+		if (is_null($ee)) {
+			$ee = new EE();
 		}
 
-		return new Channels($channels);
+		return $ee;
+	}
+
+	public static function entries() {
+    static $channels;
+
+    if (is_null($channels)) {
+      $channels = self::channels(self::db());
+    }
+
+    $db = self::db();
+
+    return new Entries($db, $channels);
 	}
 }

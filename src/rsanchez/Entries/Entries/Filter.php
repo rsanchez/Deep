@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Entries\Channel\Entries;
+namespace rsanchez\Entries\Entries;
 
-class Filter {
+class Filter implements FilterInterface {
 
 	public $author_id = array();
 	public $cache = FALSE;
@@ -53,7 +53,6 @@ class Filter {
 	public $year;
 	public $month;
 	public $day;
-
 
 	public function setInteger($name, $value)
 	{
