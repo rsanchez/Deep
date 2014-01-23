@@ -21,7 +21,7 @@ class IoC extends Pimple
         $this['db'] = $this->factory(function () {
             return new Db(array(
                 'dbdriver' => 'mysql',
-                'conn_id' => ee()->db->conn_id,
+                'conn_id'  => ee()->db->conn_id,
                 'database' => ee()->db->database,
                 'dbprefix' => ee()->db->dbprefix,
             ));
@@ -44,7 +44,11 @@ class IoC extends Pimple
         };
 
         $this['fieldGroups'] = function ($container) {
-            return new FieldGroups($container['fieldStorage'], $container['fieldGroupFactory'], $container['channelFieldFactory']);
+            return new FieldGroups(
+                $container['fieldStorage'],
+                $container['fieldGroupFactory'],
+                $container['channelFieldFactory']
+            );
         };
 
         $this['channelFactory'] =function ($container) {
@@ -52,7 +56,12 @@ class IoC extends Pimple
         };
 
         $this['channels'] = function ($container) {
-            return new Channels($container['channelStorage'], $container['fieldGroups'], $container['channelFactory'], $container['fieldGroupFactory']);
+            return new Channels(
+                $container['channelStorage'],
+                $container['fieldGroups'],
+                $container['channelFactory'],
+                $container['fieldGroupFactory']
+            );
         };
 
         $this['entryQuery'] = $this->factory(function ($container) {
