@@ -16,6 +16,8 @@ class Entries extends Collection
     protected $channels;
     protected $factory;
 
+    protected $entryIds = array();
+
     protected static $baseUrl;
 
     public function __construct(
@@ -35,6 +37,11 @@ class Entries extends Collection
         self::$baseUrl = $url;
 
         return $this;
+    }
+
+    public function entryIds()
+    {
+        return $this->entryIds;
     }
 
     public function baseUrl()
@@ -105,17 +112,21 @@ class Entries extends Collection
             $executed = true;
 
             foreach ($query->result() as $row) {
-                $this->push(
-                    $this->factory->createEntry(
-                        $this,
-                        $this->channels->find($row->channel_id),
-                        $this->fieldFactory,
-                        $row
-                    )
+                $this->entryIds[] = $row->entry_id;
+
+                $entry = $this->factory->createEntry(
+                    $this,
+                    $this->channels->find($row->channel_id),
+                    $this->fieldFactory,
+                    $row
                 );
+
+                $this->push($entry);
             }
 
             $query->free_result();
+
+            // pre-load any fieldtype data, eg. Matrix
         }
 
         return $this;
