@@ -16,12 +16,34 @@ class Entries extends Collection
     protected $channels;
     protected $factory;
 
-    public function __construct(Channels $channels, EntriesModel $model, EntryFactory $factory, FieldFactory $fieldFactory)
-    {
+    protected static $baseUrl;
+
+    public function __construct(
+        Channels $channels,
+        EntriesModel $model,
+        EntryFactory $factory,
+        FieldFactory $fieldFactory
+    ) {
         $this->channels = $channels;
         $this->model = $model;
         $this->factory = $factory;
         $this->fieldFactory = $fieldFactory;
+    }
+
+    public function setBaseUrl($url)
+    {
+        self::$baseUrl = $url;
+
+        return $this;
+    }
+
+    public function baseUrl()
+    {
+        if (is_null(self::$baseUrl)) {
+            throw new \Exception('You must set a baseUrl: Entries::setBaseUrl("http://yoursite.com/")');
+        }
+
+        return self::$baseUrl;
     }
 
     public function __call($name, $args)
@@ -85,6 +107,7 @@ class Entries extends Collection
             foreach ($query->result() as $row) {
                 $this->push(
                     $this->factory->createEntry(
+                        $this,
                         $this->channels->find($row->channel_id),
                         $this->fieldFactory,
                         $row

@@ -83,12 +83,16 @@ class IoC extends Pimple
         };
 
         $this['entries'] = $this->factory(function ($container) {
-            return new Entries(
+            $entries = new Entries(
                 $container['channels'],
                 $container['entryModel'],
                 $container['entryFactory'],
                 $container['entryFieldFactory']
             );
+
+            $entries->setBaseUrl(ee()->config->item('site_url'));
+
+            return $entries;
         });
     }
 }
