@@ -30,7 +30,7 @@ class EE
             $api->global_settings[$field->field_type] = array();
         }
 
-        $ft = $ee)->api_channel_fields->setup_handler($field->field_id, true);
+        $ft = $ee->api_channel_fields->setup_handler($field->field_id, true);
 
         $ft->row = array_merge($entry->toArray(), $entry->channel->toArray());
 

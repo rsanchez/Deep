@@ -83,7 +83,13 @@ class Entries extends Collection
             $executed = true;
 
             foreach ($query->result() as $row) {
-                $this->push($this->factory->createEntry($this->channels->find($row->channel_id), $this->fieldFactory, $row));
+                $this->push(
+                    $this->factory->createEntry(
+                        $this->channels->find($row->channel_id),
+                        $this->fieldFactory,
+                        $row
+                    )
+                );
             }
 
             $query->free_result();

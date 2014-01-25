@@ -41,7 +41,8 @@ class Entry
      */
     public $channel;
 
-    public function __construct(Channel $channel, FieldFactory $fieldFactory, stdClass $result) {
+    public function __construct(Channel $channel, FieldFactory $fieldFactory, stdClass $result)
+    {
         $this->channel = $channel;
 
         $properties = get_class_vars(__CLASS__);
