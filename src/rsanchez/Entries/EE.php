@@ -6,66 +6,49 @@ use \rsanchez\Entries\Entries\Field;
 use \rsanchez\Entries\Entries\Entry;
 use \rsanchez\Entries\EE\Template;
 
-class EE {
-  public function __construct() {
-    ee()->load->library(array('functions', 'localize'));
-  }
+class EE
+{
+    public function callFieldtype(\CI_Controller $ee, Entry $entry, Field $field, $params = array(), $modifier = 'tag')
+    {
+        $ee->load->library('api');
+        $ee->load->helper('custom_field');
+        $ee->load->library('typography');
+        $ee->api->instantiate('channel_fields');
 
-  public function create_url() {
-    return call_user_func_array(array(ee()->functions, __FUNCTION__), func_get_args());
-  }
+        $api =& $ee->api_channel_fields;
 
-  public function format_date() {
-  	$args = func_get_args();
-    return call_user_func_array(array(ee()->localize, __FUNCTION__), $args);
-  }
+        if (! isset($api->custom_fields[$field->field_id])) {
+            $settings = $field->field_settings;
+            $settings['field_type'] = $field->field_type;
+            $settings['field_fmt'] = $field->field_fmt;
 
-  public function call_fieldtype(Channel $channel, Entry $entry, Field $field, $params = array(), $modifier = 'tag') {
-		ee()->load->library('api');
-		ee()->load->helper('custom_field');
-		ee()->load->library('typography');
-		ee()->api->instantiate('channel_fields');
+            $api->field_types[$field->field_type] = $api->include_handler($field->field_type);
+            $api->custom_fields[$field->field_id] = $field->field_type;
+            $api->set_settings($field->field_id, $settings);
 
-		if ( ! isset(ee()->api_channel_fields->custom_fields[$field->field_id]))
-		{
-			$settings = $field->field_settings;
-			$settings['field_type'] = $field->field_type;
-			$settings['field_fmt'] = $field->field_fmt;
+            //since it will already be in our settings array, leave it blank
+            $api->global_settings[$field->field_type] = array();
+        }
 
-			ee()->api_channel_fields->field_types[$field->field_type] = ee()->api_channel_fields->include_handler($field->field_type);
-			ee()->api_channel_fields->custom_fields[$field->field_id] = $field->field_type;
-			ee()->api_channel_fields->set_settings($field->field_id, $settings);
+        $ft = $ee)->api_channel_fields->setup_handler($field->field_id, true);
 
-			//since it will already be in our settings array, leave it blank
-			ee()->api_channel_fields->global_settings[$field->field_type] = array();
-		}
+        $ft->row = array_merge($entry->toArray(), $entry->channel->toArray());
 
-		$ft = ee()->api_channel_fields->setup_handler($field->field_id, TRUE);
+        $data = $api->apply('pre_process', array($field->value));
 
-		$ft->row = array_merge($entry->toArray(), $channel->toArray());
+        if (! isset($ee->TMPL)) {
+            $ee->load->library('template', null, 'TMPL');
+        }
 
-		$data = ee()->api_channel_fields->apply('pre_process', array($field->value));
+        $TMPL = new Template($ee);
 
-		$TMPL = NULL;
+        $output = $api->apply('replace_'.$modifier, array(
+            'data' => $data,
+            'params' => $params,
+        ));
 
-		if (isset(ee()->TMPL))
-		{
-			$TMPL = ee()->TMPL;
-		}
+        unset($TMPL);
 
-		ee()->TMPL = new Template;
-
-		$output = ee()->api_channel_fields->apply('replace_'.$modifier, array(
-			'data' => $data,
-			'params' => $params,
-		));
-
-		if ($TMPL) {
-			ee()->TMPL = $TMPL;
-		} else {
-			unset(ee()->TMPL);
-		}
-
-		return $output;
-  }
+        return $output;
+    }
 }

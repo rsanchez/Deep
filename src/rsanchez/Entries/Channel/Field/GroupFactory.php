@@ -7,8 +7,8 @@ use rsanchez\Entries\Channel\Field\Group;
 
 class GroupFactory
 {
-    public function __invoke()
+    public function createGroup($group_id)
     {
-        return new Group();
+        return new Group($group_id);
     }
 }

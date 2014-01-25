@@ -2,15 +2,14 @@
 
 namespace rsanchez\Entries\Channel;
 
+use rsanchez\Entries\Channel\Field\Group as FieldGroup;
 use rsanchez\Entries\Channel;
 use \stdClass;
 
 class Factory
 {
-    public function __invoke(FieldGroups $fieldGroups, FieldGroupFactory $fieldGroupFactory, stdClass $row)
+    public function createChannel(FieldGroup $fieldGroup, stdClass $row)
     {
-        $fieldGroup = $fieldGroups->find($row->field_group);
-
         return new Channel($fieldGroup, $row);
     }
 }

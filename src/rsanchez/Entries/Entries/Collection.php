@@ -3,7 +3,6 @@
 namespace rsanchez\Entries\Entries;
 
 use \Iterator;
-use rsanchez\Entries\Entries\Filter;
 
 class Collection implements Iterator {
 

@@ -3,22 +3,16 @@
 namespace rsanchez\Entries\Channel\Field;
 
 use rsanchez\Entries\Channel\Field;
+use rsanchez\Entries\Channel\Field\Collection;
 use \IteratorAggregate;
 use \ArrayIterator;
 
-class Group implements IteratorAggregate
+class Group extends Collection
 {
-    private $fields = array();
+    public $group_id;
 
-    public function push(Field $field)
+    public function __construct($group_id)
     {
-        array_push($this->fields, $field);
-
-        $this->{$field->field_name} =& $field;
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->fields);
+        $this->group_id = $group_id;
     }
 }

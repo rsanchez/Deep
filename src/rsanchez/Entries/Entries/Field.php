@@ -5,7 +5,6 @@ namespace rsanchez\Entries\Entries;
 use \rsanchez\Entries\Channel;
 use \rsanchez\Entries\Channel\Field as ChannelField;
 use \rsanchez\Entries\Entries\Entry;
-use \rsanchez\Entries\Factory;
 
 class Field {
   protected $channelField;
@@ -17,7 +16,6 @@ class Field {
     $this->channelField = $channelField;
     $this->entry = $entry;
     $this->value = $value;
-    $this->ee = Factory::ee();
   }
 
   public function __toString() {
@@ -28,6 +26,7 @@ class Field {
     return $this->channelField->$name;
   }
 
+/*
   //tag modifiers
   public function __call($name, $args) {
     $params = isset($args[0]) ? $args[0] : array();
@@ -37,4 +36,5 @@ class Field {
   public function __invoke($params = array()) {
     return $this->__call('tag', array($params));
   }
+  */
 }

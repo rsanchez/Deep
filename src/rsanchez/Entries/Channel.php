@@ -2,8 +2,8 @@
 
 namespace rsanchez\Entries;
 
-use \stdClass;
 use rsanchez\Entries\Channel\Field\Group as FieldGroup;
+use \stdClass;
 
 class Channel
 {
@@ -71,15 +71,15 @@ class Channel
         return $ioc['entries'];
     }
 
-    public function __construct(stdClass $result, FieldGroup $fieldGroup)
+    public function __construct(FieldGroup $fieldGroup, stdClass $row)
     {
         $this->fields = $fieldGroup;
 
         $properties = get_class_vars(__CLASS__);
 
         foreach ($properties as $property => $value) {
-            if (property_exists($result, $property)) {
-                $this->$property = $result->$property;
+            if (property_exists($row, $property)) {
+                $this->$property = $row->$property;
             }
         }
 
@@ -88,11 +88,13 @@ class Channel
         }
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         return (array) $this;
     }
 
-    public function hasField($name) {
+    public function hasField($name)
+    {
         return array_key_exists($name, $this->fieldNames);
     }
 }

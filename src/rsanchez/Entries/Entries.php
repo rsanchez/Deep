@@ -2,75 +2,74 @@
 
 namespace rsanchez\Entries;
 
-use \rsanchez\Entries\Factory;
 use \rsanchez\Entries\ChannelsInterface;
 use \rsanchez\Entries\Entries\Entry;
-use \rsanchez\Entries\Entries\Query as EntriesQuery;
+use \rsanchez\Entries\Entries\Factory as EntryFactory;
+use \rsanchez\Entries\Entries\Field\Factory as FieldFactory;
+use \rsanchez\Entries\Entries\Model as EntriesModel;
 use \rsanchez\Entries\Entries\Collection;
 use \rsanchez\Entries\DbInterface;
 
 class Entries extends Collection
 {
-    public $authorId = array();
-    public $cache = false;
-    public $refresh = 60;
-    public $catLimit;
-    public $category = array();
-    public $categoryGroup = array();
-    public $channelId = array();
-    public $disable = array();
-    public $displayBy;
-    public $dynamic = true;
-    public $dynamicParameters;
-    public $dynamicStart;
-    public $entryId = array();
-    public $notEntryId = array();
-    public $entryIdFrom;
-    public $entryIdTo;
-    public $fixedOrder = array();
-    public $groupId = array();
-    public $not_groupId = array();
-    public $limit;
-    public $monthLimit;
-    public $offset;
-    public $orderby = array('entry_date');
-    public $paginate;
-    public $paginateBase;
-    public $paginateType;
-    public $relatedCategoriesMode;
-    public $relaxedCategories;
-    public $requireEntry;
-    public $search;
-    public $showCurrentWeek = false;
-    public $showExpired = false;
-    public $showFutureEntries = false;
-    public $showPages;
-    public $sort = 'desc';
-    public $startDay;
-    public $startOn;
-    public $status = 'open';
-    public $stopBefore;
-    public $sticky = false;
-    public $trackViews;
-    public $uncategorizedEntries = true;
-    public $urlTitle;
-    public $username;
-    public $weekSort = 'desc';
-    public $year;
-    public $month;
-    public $day;
-
-    protected $query;
+    protected $model;
     protected $channels;
     protected $factory;
-    protected $dynamicParameters;
 
-    public function __construct(Channels $channels, EntriesQuery $query, EntryFactory $factory, $dynamicParameters = array())
+    public function __construct(Channels $channels, EntriesModel $model, EntryFactory $factory, FieldFactory $fieldFactory)
     {
         $this->channels = $channels;
-        $this->query = $query;
+        $this->model = $model;
         $this->factory = $factory;
-        $this->dynamicParameters = $dynamicParameters;
+        $this->fieldFactory = $fieldFactory;
+    }
+
+    public function __call($name, $args)
+    {
+        static $methodMap = array(
+            'author_id' => 'authorId',
+            'cat_limit' => 'catLimit',
+            'category_group' => 'categoryGroup',
+            'channel_id' => 'channelId',
+            'display_by' => 'displayBy',
+            'dynamic' => 'dynamic',
+            'dynamic_parameters' => 'dynamicParameters',
+            'dynamic_start' => 'dynamicStart',
+            'entry_id' => 'entryId',
+            'not_entry_id' => 'notEntryId',
+            'entry_id_from' => 'entryIdFrom',
+            'entry_id_fo' => 'entryIdTo',
+            'fixed_order' => 'fixedOrder',
+            'group_id' => 'groupId',
+            'not_group_id' => 'notGroupId',
+            'month_limit' => 'monthLimit',
+            'paginate_base' => 'paginateBase',
+            'paginate_type' => 'paginateType',
+            'related_categories_mode' => 'relatedCategoriesMode',
+            'relaxed_categories' => 'relaxedCategories',
+            'require_entry' => 'requireEntry',
+            'show_current_week' => 'showCurrentWeek',
+            'show_expired' => 'showExpired',
+            'show_future_entries' => 'showFutureEntries',
+            'show_pages' => 'showPages',
+            'start_day' => 'startDay',
+            'start_on' => 'startOn',
+            'stop_before' => 'stopBefore',
+            'track_views' => 'trackViews',
+            'uncategorized_entries' => 'uncategorizedEntries',
+            'url_title' => 'urlTitle',
+            'week_sort' => 'weekSort',
+        );
+
+        if (array_key_exists($name, $methodMap)) {
+            $name = $methodMap[$name];
+        }
+
+        if (method_exists($this->model, $name) && is_callable(array($this->model, $name))) {
+            return call_user_func_array(array($this->model, $name), $args);
+        }
+
+        throw new \Exception('invalid method '.$name);
     }
 
     public function get()
@@ -79,61 +78,15 @@ class Entries extends Collection
 
         if (! $executed) {
 
-            $order = array(
-                //'channel',
-                'channelId',
-                'dynamicParameters',
-                'disable',
-                'authorId',
-                //'cache',
-                //'refresh',
-                'catLimit',
-                'category',
-                'categoryGroup',
-                'displayBy',
-                'dynamic',
-                'sticky',
-                'entryId',
-                //@TODO//'notEntryId',
-                'entryIdFrom',
-                'entryIdTo',
-                'fixedOrder',
-                'groupId',
-                //@TODO//'notGroupId',
-                'limit',
-                'monthLimit',
-                'offset',
-                'orderby',
-                'requireEntry',
-                'search',
-                'showCurrentWeek',
-                'showExpired',
-                'showFutureEntries',
-                'sort',
-                'startDay',
-                'startOn',
-                'status',
-                'stopBefore',
-                'uncategorizedEntries',
-                'urlTitle',
-                'username',
-                'weekSort',
-                'year',
-                'month',
-                'day',
-            );
-
-            foreach ($order as $which) {
-                if (! is_null($this->$which)) {
-                    $this->query->$which($this->$which);
-                }
-            }
+            $query = $this->model->get();
 
             $executed = true;
 
-            foreach ($this->query->result() as $row) {
-                $this->push($this->factory($row, $this->channels->find($row->channel_id)));
+            foreach ($query->result() as $row) {
+                $this->push($this->factory->createEntry($this->channels->find($row->channel_id), $this->fieldFactory, $row));
             }
+
+            $query->free_result();
         }
 
         return $this;
@@ -144,366 +97,5 @@ class Entries extends Collection
         $this->get();
 
         return parent::valid();
-    }
-
-    protected function setIntegerParam(&$property, $value)
-    {
-        if (is_int($value)) {
-            $property = $value;
-        } elseif (ctype_digit($value)) {
-            $property = intval($value);
-        }
-
-        return $this;
-    }
-
-    protected function setBoolParam(&$property, $value)
-    {
-        $property = (bool) $value;
-
-        return $this;
-    }
-
-    protected function setStringParam(&$property, $value)
-    {
-        $property = strval($value);
-
-        return $this;
-    }
-
-    protected function setArrayParam(&$property, $value)
-    {
-        if (! is_array($value)) {
-            if (func_num_args() > 2) {
-                $property = array_slice(func_get_args(), 1);
-            } else {
-                $property = explode('|', strval($value));
-            }
-        } else {
-            $property = array();
-
-            foreach ($value as $v) {
-                $this->{$name}[] = strval($v);
-            }
-        }
-
-        return $this;
-    }
-
-    protected function setArrayIntegerParam(&$property, $value)
-    {
-        if (! is_array($value)) {
-            if (func_num_args() > 2) {
-                $value = array_slice(func_get_args(), 1);
-            } else {
-                $value = explode('|', $value);
-            }
-        }
-
-        $property = array();
-        
-        foreach ($value as $v) {
-            if (ctype_digit($v)) {
-                $this->{$name}[] = intval($v);
-            }
-        }
-
-        return $this;
-    }
-
-    protected function setDateParam(&$property, $value)
-    {
-        if (ctype_digit($value)) {
-            $property = intval($value);
-        } elseif (($value = strtotime($value)) !== false) {
-            $property = $value;
-        }
-
-        return $this;
-    }
-
-    protected function setRegexParam(&$property, $value, $pattern)
-    {
-        if (preg_match($pattern, $value)) {
-            $property = $value;
-        }
-
-        return $this;
-    }
-
-    public function channel($value)
-    {
-        $channelId = array();
-
-        if (! is_array($value)) {
-            $value = array($value);
-        }
-
-        foreach ($value as $channelName) {
-            try {
-                $channel = $this->channels->find($channelName);
-
-                $channelId[] = $channel->channel_id;
-            } catch(Exception $e) {
-                $e->getMessage();
-            }
-        }
-
-        $this->setArrayParam($this->channelId, $channelId);
-
-        return $this;
-    }
-
-    public function channel_id($value)
-    {
-        $this->setArrayIntegerParam($this->channelId, $value);
-
-        return $this;
-    }
-
-    public function author_id($value)
-    {
-        $this->setArrayIntegerParam($this->authorId, $value);
-
-        return $this;
-    }
-
-    public function cat_limit($value)
-    {
-        $this->setIntegerParam($this->catLimit, $value);
-
-        return $this;
-    }
-
-    public function category($value)
-    {
-        $this->setArrayIntegerParam($this->category, $value);
-
-        return $this;
-    }
-
-    public function category_group($value)
-    {
-        $this->setArrayIntegerParam($this->categoryGroup, $value);
-
-        return $this;
-    }
-
-    public function display_by($value)
-    {
-        $this->setRegexParam($this->displayBy, $value, '/^month|day|number$/i');
-
-        return $this;
-    }
-
-    public function dynamic($value)
-    {
-        $this->setBoolParam($this->dynamic, $value);
-
-        return $this;
-    }
-
-    public function sticky($value)
-    {
-        $this->setBoolParam($this->sticky, $value);
-
-        return $this;
-    }
-
-    public function entry_id($value)
-    {
-        $this->setArrayIntegerParam($this->entryId, $value);
-
-        return $this;
-    }
-
-    public function not_entry_id($value)
-    {
-        $this->setArrayIntegerParam($this->notEntryId, $value);
-
-        return $this;
-    }
-
-    public function entry_id_from($value)
-    {
-        $this->setIntegerParam($this->entryIdFrom, $value);
-
-        return $this;
-    }
-
-    public function entry_id_to($value)
-    {
-        $this->setIntegerParam($this->entryIdTo, $value);
-
-        return $this;
-    }
-
-    public function fixed_order($value)
-    {
-        $this->setArrayIntegerParam($this->fixedOrder, $value);
-
-        return $this;
-    }
-
-    public function group_id($value)
-    {
-        $this->setArrayIntegerParam($this->groupId, $value);
-
-        return $this;
-    }
-
-    public function not_group_id($value)
-    {
-        $this->setArrayIntegerParam($this->notGroupId, $value);
-
-        return $this;
-    }
-
-    public function limit($value)
-    {
-        $this->setIntegerParam($this->limit, $value);
-
-        return $this;
-    }
-
-    public function month_limit($value)
-    {
-        $this->setIntegerParam($this->monthLimit, $value);
-
-        return $this;
-    }
-
-    public function offset($value)
-    {
-        $this->setIntegerParam($this->offset, $value);
-
-        return $this;
-    }
-
-    public function orderby($value)
-    {
-        $this->setStringParam($this->orderby, $value);
-
-        return $this;
-    }
-
-    public function require_entry($value)
-    {
-        $this->setBoolParam($this->requireEntry, $value);
-
-        return $this;
-    }
-
-    public function search($field, $value)
-    {
-
-
-        return $this;
-    }
-
-    public function show_current_week($value)
-    {
-        $this->setBoolParam($this->showCurrentWeek, $value);
-
-        return $this;
-
-    }
-
-    public function show_expired($value)
-    {
-        $this->setBoolParam($this->showExpired, $value);
-
-        return $this;
-    }
-
-    public function show_future_entries($value)
-    {
-        $this->setBoolParam($this->showFutureEntries, $value);
-
-        return $this;
-    }
-
-    public function sort($value)
-    {
-        $this->setRegexParam($this->sort, $value, '/^asc|desc$/i');
-
-        return $this;
-    }
-
-    public function start_day($value)
-    {
-        $this->setRegexParam($this->startDay, $value, '/^Monday|Sunday$/i');
-
-        return $this;
-    }
-
-    public function start_on($value)
-    {
-        $this->setDateParam($this->startOn, $value);
-
-        return $this;
-    }
-
-    public function status($value)
-    {
-        $this->setStringParam($this->status, $value);
-
-        return $this;
-    }
-
-    public function stop_before($value)
-    {
-        $this->setDateParam($this->stopBefore, $value);
-
-        return $this;
-    }
-
-    public function uncategorized_entries($value)
-    {
-        $this->setBoolParam($this->uncategorizedEntries, $value);
-
-        return $this;
-    }
-
-    public function url_title($value)
-    {
-        $this->setStringParam($this->urlTitle, $value);
-
-        return $this;
-    }
-
-    public function username($value)
-    {
-        $this->setStringParam($this->username, $value);
-
-        return $this;
-    }
-
-    public function week_sort($value)
-    {
-        $this->setRegexParam($this->weekSort, $value, '/^asc|desc$/i');
-
-        return $this;
-    }
-
-    public function year($value)
-    {
-        $this->setIntegerParam($this->year, $value);
-
-        return $this;
-    }
-
-    public function month($value)
-    {
-        $this->setIntegerParam($this->month, $value);
-
-        return $this;
-    }
-
-    public function day($value)
-    {
-        $this->setIntegerParam($this->day, $value);
-
-        return $this;
     }
 }

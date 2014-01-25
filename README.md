@@ -12,7 +12,7 @@ use rsanchez\Entries\Channel;
 $entries = Channel::entries()
 		->channel('blog')
 		->limit(1)
-		->show_future_entries(true);
+		->show_future_entries();
 ?>
 
 <?php foreach ($entries as $entry) : ?>
@@ -26,9 +26,21 @@ $entries = Channel::entries()
 <?php endforeach; ?>
 ```
 
+## Autoloading
+
+Add this to your composer.json and then `composer install`
+
+```
+    "autoload": {
+        "psr-0": {
+            "rsanchez\\Entries\\": "/path/to/Entries/src/"
+        }
+    },
+```
+
 ##Todo
 
-- autoloading (instead of bootstrap.php)
+- autoloading
 - composer
 - unit tests
 - fieldtype abstraction

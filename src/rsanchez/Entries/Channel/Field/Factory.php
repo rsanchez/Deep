@@ -7,13 +7,15 @@ use \stdClass;
 class Factory
 {
     private $classMap = array(
+        /*
         'matrix' => 'MatrixField',
         'playa' => 'PlayaField',
         'relationships' => 'RelationshipsField',
         'grid' => 'GridField',
+        */
     );
 
-    public function __invoke(stdClass $row)
+    public function createField(stdClass $row)
     {
         $class = 'rsanchez\Entries\Channel\\';
 

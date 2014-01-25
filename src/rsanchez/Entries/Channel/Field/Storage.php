@@ -30,7 +30,7 @@ class Storage
         $query = $this->db->get('channel_fields');
 
         foreach ($query->result() as $row) {
-            if (! isset($data[$row->group_id])) {
+            if (! isset($this->data[$row->group_id])) {
                 $this->data[$row->group_id] = array();
             }
 

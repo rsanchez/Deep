@@ -2,9 +2,9 @@
 
 namespace rsanchez\Entries\Entries;
 
-use \rsanchez\Entries\EE;
-use \rsanchez\Entries\Channel;
-use \rsanchez\Entries\Entries\Field;
+use rsanchez\Entries\Channel;
+use rsanchez\Entries\Entries\Field;
+use rsanchez\Entries\Entries\Field\Factory as FieldFactory;
 use \stdClass;
 
 class Entry {
@@ -40,8 +40,7 @@ class Entry {
    */
   public $channel;
 
-  public function __construct(EE $ee, Channel $channel, stdClass $result) {
-    $this->ee = $ee;
+  public function __construct(Channel $channel, FieldFactory $fieldFactory, stdClass $result) {
     $this->channel = $channel;
 
     $properties = get_class_vars(__CLASS__);
@@ -55,7 +54,7 @@ class Entry {
     foreach ($this->channel->fields as $field) {
       $property = 'field_id_'.$field->field_id;
       $value = property_exists($result, $property) ? $result->$property : '';
-      $this->{$field->field_name} = new Field($channel, $field, $this, $value);
+      $this->{$field->field_name} = $fieldFactory->createField($channel, $field, $this, $value);
     }
   }
 
@@ -63,41 +62,43 @@ class Entry {
     return (array) $this;
   }
 
+/*
   public function __call($name, $args) {
     if (isset($this->$name) && $this->$name instanceof Field) {
       return call_user_func_array($this->$name, $args);
     }
   }
+*/
 
   public function url_title_path($path) {
-    return $this->ee->create_url($path.'/'.$this->url_title);
+    return '/'.($path.'/'.$this->url_title);
   }
 
   public function title_permalink($path) {
-    return $this->url_title_path($path);
+    return '/'.($path);
   }
 
   public function entry_id_path($path) {
-    return $this->ee->create_url($path.'/'.$this->entry_id);
+    return '/'.($path.'/'.$this->entry_id);
   }
 
   public function entry_date($format) {
-    return $this->ee->format_date($format, $this->entry_date);
+    return date($format, $this->entry_date);
   }
 
   public function edit_date($format) {
-    return $this->ee->format_date($format, $this->edit_date);
+    return date($format, $this->edit_date);
   }
 
   public function expiration_date($format) {
-    return $this->ee->format_date($format, $this->expiration_date);
+    return date($format, $this->expiration_date);
   }
 
   public function comment_expiration_date($format) {
-    return $this->ee->format_date($format, $this->comment_expiration_date);
+    return date($format, $this->comment_expiration_date);
   }
 
   public function recent_comment_date($format) {
-    return $this->ee->format_date($format, $this->recent_comment_date);
+    return date($format, $this->recent_comment_date);
   }
 }
