@@ -4,12 +4,12 @@ namespace rsanchez\Entries;
 
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entries;
+use rsanchez\Entries\Entity;
 use rsanchez\Entries\Entry\Field;
-use rsanchez\Entries\Entry\Field\Factory as FieldFactory;
-use Carbon\Carbon;
+use rsanchez\Entries\Entry\Field\Collection as FieldCollection;
 use \stdClass;
 
-class Entry
+class Entry extends Entity
 {
     public $entry_id;
     public $site_id;
@@ -52,51 +52,14 @@ class Entry
      * @var \rsanchez\Entries\Channel
      */
     public $channel;
-    public $fields = array();
     protected $entries;
 
-    public function __construct(Entries $entries, Channel $channel, FieldFactory $fieldFactory, stdClass $result)
+    public function __construct(stdClass $row, FieldCollection $fieldCollection, Entries $entries, Channel $channel)
     {
+        parent::__construct($row, $fieldCollection, $entries, $channel);
+
         $this->channel = $channel;
         $this->entries = $entries;
-
-        $properties = get_class_vars(__CLASS__);
-
-        foreach ($properties as $property => $value) {
-            if (property_exists($result, $property)) {
-                $this->$property = $result->$property;
-            }
-        }
-
-        foreach ($this->channel->fields as $channelField) {
-            $property = 'field_id_'.$channelField->field_id;
-            $value = property_exists($result, $property) ? $result->$property : '';
-            $field = $fieldFactory->createField($channel, $channelField, $this, $value);
-            $this->fields[$channelField->field_name] = $field;
-            $this->{$channelField->field_name} = $field;
-        }
-    }
-
-    public function toArray()
-    {
-        return (array) $this;
-    }
-
-
-    public function __call($name, $args)
-    {
-        /*
-        if (isset($this->$name) && $this->$name instanceof Field) {
-            return call_user_func_array($this->$name, $args);
-        }
-        */
-        if (array_key_exists($name, $this->methodAliases)) {
-            return call_user_func_array(array($this, $this->methodAliases[$name]), $args);
-        }
-
-        if (array_key_exists($name, $this->fields)) {
-            return call_user_func_array(array($this->fields[$name], '__invoke'), $args);
-        }
     }
 
     public function entryDate($format = 'U')

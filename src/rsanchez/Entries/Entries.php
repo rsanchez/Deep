@@ -5,7 +5,9 @@ namespace rsanchez\Entries;
 use \rsanchez\Entries\ChannelsInterface;
 use \rsanchez\Entries\Entry;
 use \rsanchez\Entries\Entry\Factory as EntryFactory;
-use \rsanchez\Entries\Entry\Field\Factory as FieldFactory;
+use \rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
+use \rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
+use \rsanchez\Entries\Entry\Field as EntryField;
 use \rsanchez\Entries\Model;
 use \rsanchez\Entries\Collection;
 use \rsanchez\Entries\DbInterface;
@@ -18,18 +20,58 @@ class Entries extends Collection
 
     protected $entryIds = array();
 
+    protected $fieldPreloaders = array();
+    protected $fieldPostloaders = array();
     protected static $baseUrl;
 
     public function __construct(
         Channels $channels,
         Model $model,
+        DbInterface $db,
         EntryFactory $factory,
-        FieldFactory $fieldFactory
+        EntryFieldFactory $entryFieldFactory,
+        ChannelFieldFactory $channelFieldFactory
     ) {
         $this->channels = $channels;
         $this->model = $model;
+        $this->db = $db;
         $this->factory = $factory;
-        $this->fieldFactory = $fieldFactory;
+        $this->entryFieldFactory = $entryFieldFactory;
+        $this->channelFieldFactory = $channelFieldFactory;
+    }
+
+    /**
+     * Register Field Preloader
+     *
+     * Some field types store data in their own DB table(s),
+     * e.g. Matrix, Grid, etc.
+     *
+     * This allows you to add a callback where your fieldtype
+     * can query the database for additional data. The callback
+     * is called after the entries are loaded, and is only called
+     * ONCE per namespace. In your callback, you should load
+     * all of the fieldtype
+     * @param  [type] $namespace [description]
+     * @param  [type] $callback  [description]
+     * @return [type]            [description]
+     */
+    public function registerFieldPreloader($fieldType, EntryField $entryField, $highPriority = false)
+    {
+        // preload only once
+        if (! array_key_exists($fieldType, $this->fieldPreloaders)) {
+            if ($highPriority) {
+                $this->fieldPreloaders = array($fieldType => $entryField) + $this->fieldPreloaders;
+            } else {
+                $this->fieldPreloaders[$fieldType] = $entryField;
+            }
+        }
+
+        // postload each field
+        if (! isset($this->fieldPostloaders[$fieldType])) {
+            $this->fieldPostloaders[$fieldType] = array();
+        }
+
+        $this->fieldPostloaders[$fieldType][] = $entryField;
     }
 
     public function setBaseUrl($url)
@@ -115,10 +157,9 @@ class Entries extends Collection
                 $this->entryIds[] = $row->entry_id;
 
                 $entry = $this->factory->createEntry(
+                    $row,
                     $this,
-                    $this->channels->find($row->channel_id),
-                    $this->fieldFactory,
-                    $row
+                    $this->channels->find($row->channel_id)
                 );
 
                 $this->push($entry);
@@ -126,7 +167,21 @@ class Entries extends Collection
 
             $query->free_result();
 
+            $payloads = array();
+
             // pre-load any fieldtype data, eg. Matrix
+            foreach ($this->fieldPreloaders as $fieldType => $entryField) {
+                $fieldIds = $this->channels->fields->filterByType($fieldType)->fieldIds();
+                $payloads[$fieldType] = $entryField->preload($this->db, $this->entryIds, $fieldIds);
+            }
+
+            foreach ($this->fieldPostloaders as $fieldType => $entryFields) {
+                foreach ($entryFields as $entryField) {
+                    $entryField->hydrate($payloads[$fieldType]);
+                }
+            }
+
+            unset($payloads);
         }
 
         return $this;

@@ -9,6 +9,7 @@ use rsanchez\Entries\Channel\Field\Group as FieldGroup;
 use rsanchez\Entries\FilePath;
 use rsanchez\Entries\FilePath\Factory as FilePathFactory;
 use rsanchez\Entries\FilePath\Storage as FilePathStorage;
+use rsanchez\Entries\Entry\Field\CollectionFactory as EntryFieldCollectionFactory;
 use rsanchez\Entries\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Fields;
@@ -27,13 +28,27 @@ class IoC extends Pimple
     {
         parent::__construct();
 
+        $this['baseUrl'] = ee()->config->item('site_url');
+
         $this['db'] = $this->factory(function () {
-            return new Db(array(
+            static $count = 1;
+
+            $db = new Db(array(
                 'dbdriver' => 'mysql',
                 'conn_id'  => ee()->db->conn_id,
                 'database' => ee()->db->database,
                 'dbprefix' => ee()->db->dbprefix,
             ));
+
+            // log queries
+            $db->save_queries = ee()->config->item('show_profiler') === 'y' || DEBUG === 1;
+
+            // attach back to ee so the profiler knows to show these queries
+            ee()->{'db'.$count} = $db;
+
+            $count++;
+
+            return $db;
         });
 
         $this['filePathStorage'] = function ($container) {
@@ -93,22 +108,28 @@ class IoC extends Pimple
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntryFieldFactory($container['filePaths']);
+            return new EntryFieldFactory($container['filePaths'], $container['channelFieldFactory']);
+        };
+
+        $this['entryFieldCollectionFactory'] = function ($container) {
+            return new EntryFieldCollectionFactory();
         };
 
         $this['entryFactory'] = function ($container) {
-            return new EntryFactory();
+            return new EntryFactory($container['entryFieldFactory'], $container['entryFieldCollectionFactory']);
         };
 
         $this['entries'] = $this->factory(function ($container) {
             $entries = new Entries(
                 $container['channels'],
                 $container['model'],
+                $container['db'],
                 $container['entryFactory'],
-                $container['entryFieldFactory']
+                $container['entryFieldFactory'],
+                $container['channelFieldFactory']
             );
 
-            $entries->setBaseUrl(ee()->config->item('site_url'));
+            $entries->setBaseUrl($container['baseUrl']);
 
             return $entries;
         });

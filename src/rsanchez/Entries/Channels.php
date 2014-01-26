@@ -11,6 +11,7 @@ use \IteratorAggregate;
 
 class Channels implements IteratorAggregate
 {
+    public $fields;
     private $channels = array();
 
     public function __construct(
@@ -19,6 +20,8 @@ class Channels implements IteratorAggregate
         ChannelFactory $factory,
         FieldGroupFactory $fieldGroupFactory
     ) {
+        $this->fields = $fields;
+
         foreach ($storage() as $channelRow) {
 
             // provide an empty fieldGroup if one isn't found

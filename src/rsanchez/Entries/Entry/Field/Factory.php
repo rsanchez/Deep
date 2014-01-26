@@ -5,47 +5,48 @@ namespace rsanchez\Entries\Entry\Field;
 use rsanchez\Entries\FilePaths;
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entry\Field;
+use rsanchez\Entries\Entries;
 use rsanchez\Entries\Channel\Field as ChannelField;
-use rsanchez\Entries\Entry;
+use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
+use rsanchez\Entries\Entity;
 use \Pimple;
 
 class Factory extends Pimple
 {
-    protected $classMap = array(
-        'date' => '\rsanchez\Entries\Entry\Field\Date',
-        /*
-        'file' => '\rsanchez\Entries\Entry\Field\File',
-        'matrix' => '\rsanchez\Entries\Entry\Field\Matrix',
-        'grid' => '\rsanchez\Entries\Entry\Field\Grid',
-        'playa' => '\rsanchez\Entries\Entry\Field\Playa',
-        'relationships' => '\rsanchez\Entries\Entry\Field\Relationships',
-        'assets' => '\rsanchez\Entries\Entry\Field\Assets',
-        */
-    );
-
-    public function __construct(FilePaths $filePaths)
+    public function __construct(FilePaths $filePaths, ChannelFieldFactory $channelFieldFactory)
     {
         parent::__construct();
 
         $this['filePaths'] = $filePaths;
+        $this['channelFieldFactory'] = $channelFieldFactory;
 
         $this['date'] = $this->factory(function ($container) {
-            return new Date($container['channel'], $container['channelField'], $container['entry'], $container['value']);
+            return new Date($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry']);
         });
 
         $this['file'] = $this->factory(function ($container) {
-            return new File($container['channel'], $container['channelField'], $container['entry'], $container['value'], $container['filePaths']);
+            return new File($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry'], $container['filePaths']);
+        });
+
+        $this['matrix'] = $this->factory(function ($container) {
+            return new Matrix($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry'], $container, $container['channelFieldFactory']);
         });
 
         $this['field'] = $this->factory(function ($container) {
-            return new Field($container['channel'], $container['channelField'], $container['entry'], $container['value']);
+            return new Field($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry']);
         });
     }
 
-    public function createField(Channel $channel, ChannelField $channelField, Entry $entry, $value)
-    {
+    public function createField(
+        $value,
+        Channel $channel,
+        ChannelField $channelField,
+        Entries $entries,
+        $entry = null
+    ) {
         $this['channel'] = $channel;
         $this['channelField'] = $channelField;
+        $this['entries'] = $entries;
         $this['entry'] = $entry;
         $this['value'] = $value;
 

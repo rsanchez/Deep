@@ -37,6 +37,18 @@ class Field
     public $field_content_type;
     public $field_settings;
 
+    // exp_matrix_cols
+    public $col_id;
+    public $col_name;
+    public $col_label;
+    public $col_instructions;
+    public $col_type;
+    public $col_required;
+    public $col_search;
+    public $col_order;
+    public $col_width;
+    public $col_settings;
+
     public function __construct(\stdClass $result)
     {
         $properties = get_class_vars(__CLASS__);
@@ -47,10 +59,20 @@ class Field
             }
         }
 
-        $this->field_settings = unserialize(base64_decode($this->field_settings));
+        if ($this->field_settings) {
+            $this->field_settings = unserialize(base64_decode($this->field_settings));
+        } else {
+            $this->field_settings = array();
+        }
 
         if ($this->has_global_settings === 'y') {
             $this->field_settings = array_merge(unserialize(base64_decode($this->settings)), $this->field_settings);
+        }
+
+        if ($this->col_settings) {
+            $this->col_settings = unserialize(base64_decode($this->col_settings));
+        } else {
+            $this->col_settings = array();
         }
     }
 }

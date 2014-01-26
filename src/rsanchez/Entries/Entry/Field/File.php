@@ -6,14 +6,21 @@ use rsanchez\Entries\DbInterface;
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\FilePaths;
 use rsanchez\Entries\Entry\Field;
+use rsanchez\Entries\Collection as EntryCollection;
 use rsanchez\Entries\Channel\Field as ChannelField;
-use rsanchez\Entries\Entry;
+use rsanchez\Entries\Entity;
 
 class File extends Field
 {
-    public function __construct(Channel $channel, ChannelField $channelField, Entry $entry, $value, FilePaths $filePaths)
-    {
-        parent::__construct($channel, $channelField, $entry, $value);
+    public function __construct(
+        $value,
+        Channel $channel,
+        ChannelField $channelField,
+        EntryCollection $entries,
+        $entity = null,
+        FilePaths $filePaths
+    ) {
+        parent::__construct($value, $channel, $channelField, $entries, $entity);
 
         $this->filePaths = $filePaths;
     }

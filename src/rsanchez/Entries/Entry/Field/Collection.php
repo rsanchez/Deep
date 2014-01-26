@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Entries\Channel\Field;
+namespace rsanchez\Entries\Entry\Field;
 
-use rsanchez\Entries\Channel\Field;
+use rsanchez\Entries\Entry\Field;
 use \IteratorAggregate;
 use \ArrayIterator;
 
