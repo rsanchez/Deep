@@ -3,11 +3,11 @@
 namespace rsanchez\Entries;
 
 use \rsanchez\Entries\ChannelsInterface;
-use \rsanchez\Entries\Entries\Entry;
-use \rsanchez\Entries\Entries\Factory as EntryFactory;
-use \rsanchez\Entries\Entries\Field\Factory as FieldFactory;
-use \rsanchez\Entries\Entries\Model as EntriesModel;
-use \rsanchez\Entries\Entries\Collection;
+use \rsanchez\Entries\Entry;
+use \rsanchez\Entries\Entry\Factory as EntryFactory;
+use \rsanchez\Entries\Entry\Field\Factory as FieldFactory;
+use \rsanchez\Entries\Model;
+use \rsanchez\Entries\Collection;
 use \rsanchez\Entries\DbInterface;
 
 class Entries extends Collection
@@ -22,7 +22,7 @@ class Entries extends Collection
 
     public function __construct(
         Channels $channels,
-        EntriesModel $model,
+        Model $model,
         EntryFactory $factory,
         FieldFactory $fieldFactory
     ) {

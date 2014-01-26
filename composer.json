@@ -1,6 +1,5 @@
 {
     "require": {
-        "pimple/pimple": "dev-master",
-        "nesbot/Carbon": "*"
+        "pimple/pimple": "dev-master"
     }
 }

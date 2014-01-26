@@ -2,8 +2,8 @@
 
 namespace rsanchez\Entries;
 
-use \rsanchez\Entries\Entries\Field;
-use \rsanchez\Entries\Entries\Entry;
+use \rsanchez\Entries\Entry\Field;
+use \rsanchez\Entries\Entry;
 use \rsanchez\Entries\EE\Template;
 
 class EE

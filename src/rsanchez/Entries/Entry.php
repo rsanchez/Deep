@@ -1,11 +1,11 @@
 <?php
 
-namespace rsanchez\Entries\Entries;
+namespace rsanchez\Entries;
 
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entries;
-use rsanchez\Entries\Entries\Field;
-use rsanchez\Entries\Entries\Field\Factory as FieldFactory;
+use rsanchez\Entries\Entry\Field;
+use rsanchez\Entries\Entry\Field\Factory as FieldFactory;
 use Carbon\Carbon;
 use \stdClass;
 
@@ -52,6 +52,7 @@ class Entry
      * @var \rsanchez\Entries\Channel
      */
     public $channel;
+    public $fields = array();
     protected $entries;
 
     public function __construct(Entries $entries, Channel $channel, FieldFactory $fieldFactory, stdClass $result)
@@ -67,28 +68,12 @@ class Entry
             }
         }
 
-        $this->entry_date = Carbon::createFromFormat('U', $this->entry_date);
-
-        if ($this->expiration_date) {
-            $this->expiration_date = Carbon::createFromFormat('U', $this->expiration_date);
-        }
-
-        if ($this->comment_expiration_date) {
-            $this->comment_expiration_date = Carbon::createFromFormat('U', $this->comment_expiration_date);
-        }
-
-        if ($this->recent_comment_date) {
-            $this->recent_comment_date = Carbon::createFromFormat('U', $this->recent_comment_date);
-        }
-
-        if ($this->edit_date) {
-            $this->edit_date = Carbon::createFromFormat('YmdHis', $this->edit_date);
-        }
-
-        foreach ($this->channel->fields as $field) {
-            $property = 'field_id_'.$field->field_id;
+        foreach ($this->channel->fields as $channelField) {
+            $property = 'field_id_'.$channelField->field_id;
             $value = property_exists($result, $property) ? $result->$property : '';
-            $this->{$field->field_name} = $fieldFactory->createField($channel, $field, $this, $value);
+            $field = $fieldFactory->createField($channel, $channelField, $this, $value);
+            $this->fields[$channelField->field_name] = $field;
+            $this->{$channelField->field_name} = $field;
         }
     }
 
@@ -108,47 +93,37 @@ class Entry
         if (array_key_exists($name, $this->methodAliases)) {
             return call_user_func_array(array($this, $this->methodAliases[$name]), $args);
         }
+
+        if (array_key_exists($name, $this->fields)) {
+            return call_user_func_array(array($this->fields[$name], '__invoke'), $args);
+        }
     }
 
     public function entryDate($format = 'U')
     {
-        return $this->entry_date->format($format);
+        return date($format, $this->entry_date);
     }
 
     public function expirationDate($format = 'U')
     {
-        if (! $this->expiration_date) {
-            return null;
-        }
-
-        return $this->expiration_date->format($format);
+        return $this->expiration_date ? date($format, $this->expiration_date) : null;
     }
 
     public function editDate($format = 'U')
     {
-        if (! $this->edit_date) {
-            return null;
-        }
+        $editDate = \DateTime::createFromFormat('YmdHis', $this->edit_date);
 
-        return $this->edit_date->format($format);
+        return $editDate->format($format);
     }
 
     public function commentExpirationDate($format = 'U')
     {
-        if (! $this->comment_expiration_date) {
-            return null;
-        }
-
-        return $this->comment_expiration_date->format($format);
+        return $this->comment_expiration_date ? date($format, $this->comment_expiration_date) : null;
     }
 
     public function recentCommentDate($format = 'U')
     {
-        if (! $this->recent_comment_date) {
-            return null;
-        }
-
-        return $this->recent_comment_date->format($format);
+        return $this->recent_comment_date ? date($format, $this->recent_comment_date) : null;
     }
 
     public function urlTitlePath($path)

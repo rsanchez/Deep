@@ -6,16 +6,19 @@ use rsanchez\Entries\Db;
 use rsanchez\Entries\Channel\Factory as ChannelFactory;
 use rsanchez\Entries\Channel\Field as ChannelField;
 use rsanchez\Entries\Channel\Field\Group as FieldGroup;
+use rsanchez\Entries\FilePath;
+use rsanchez\Entries\FilePath\Factory as FilePathFactory;
+use rsanchez\Entries\FilePath\Storage as FilePathStorage;
 use rsanchez\Entries\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Fields;
 use rsanchez\Entries\Channel\Storage as ChannelStorage;
 use rsanchez\Entries\Channel\Field\Storage as FieldStorage;
-use rsanchez\Entries\Entries\Entry;
-use rsanchez\Entries\Entries\Field as EntryField;
-use rsanchez\Entries\Entries\Model as EntryModel;
-use rsanchez\Entries\Entries\Field\Factory as EntryFieldFactory;
-use rsanchez\Entries\Entries\Factory as EntryFactory;
+use rsanchez\Entries\Entry;
+use rsanchez\Entries\Entry\Field as EntryField;
+use rsanchez\Entries\Model;
+use rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
+use rsanchez\Entries\Entry\Factory as EntryFactory;
 use \Pimple;
 
 class IoC extends Pimple
@@ -33,6 +36,10 @@ class IoC extends Pimple
             ));
         });
 
+        $this['filePathStorage'] = function ($container) {
+            return new FilePathStorage($container['db'], ee()->config->item('upload_prefs'));
+        };
+
         $this['fieldStorage'] = function ($container) {
             return new FieldStorage($container['db']);
         };
@@ -41,12 +48,23 @@ class IoC extends Pimple
             return new ChannelStorage($container['db']);
         };
 
+        $this['filePathFactory'] = function ($container) {
+            return new FilePathFactory();
+        };
+
         $this['fieldGroupFactory'] = function ($container) {
             return new FieldGroupFactory();
         };
 
         $this['channelFieldFactory'] = function ($container) {
             return new ChannelFieldFactory();
+        };
+
+        $this['filePaths'] = function ($container) {
+            return new FilePaths(
+                $container['filePathStorage'],
+                $container['filePathFactory']
+            );
         };
 
         $this['fields'] = function ($container) {
@@ -70,12 +88,12 @@ class IoC extends Pimple
             );
         };
 
-        $this['entryModel'] = $this->factory(function ($container) {
-            return new EntryModel($container['db'], $container['channels'], $container['fields'], $_REQUEST);
+        $this['model'] = $this->factory(function ($container) {
+            return new Model($container['db'], $container['channels'], $container['fields'], $_REQUEST);
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntryFieldFactory();
+            return new EntryFieldFactory($container['filePaths']);
         };
 
         $this['entryFactory'] = function ($container) {
@@ -85,7 +103,7 @@ class IoC extends Pimple
         $this['entries'] = $this->factory(function ($container) {
             $entries = new Entries(
                 $container['channels'],
-                $container['entryModel'],
+                $container['model'],
                 $container['entryFactory'],
                 $container['entryFieldFactory']
             );

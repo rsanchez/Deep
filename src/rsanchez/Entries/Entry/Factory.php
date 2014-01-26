@@ -1,11 +1,11 @@
 <?php
 
-namespace rsanchez\Entries\Entries;
+namespace rsanchez\Entries\Entry;
 
-use rsanchez\Entries\Entries\Entry;
+use rsanchez\Entries\Entry;
 use rsanchez\Entries\Entries;
 use rsanchez\Entries\Channel;
-use rsanchez\Entries\Entries\Field\Factory as FieldFactory;
+use rsanchez\Entries\Entry\Field\Factory as FieldFactory;
 use \stdClass;
 
 class Factory
