@@ -40,6 +40,11 @@ class Entries extends Collection
         $this->channelFieldFactory = $channelFieldFactory;
     }
 
+    public function push(Entry $entry)
+    {
+        parent::push($entry);
+    }
+
     /**
      * Register Field Preloader
      *

@@ -2,6 +2,8 @@
 
 namespace rsanchez\Entries;
 
+use rsanchez\Entries\Entity;
+
 use \Iterator;
 
 class Collection implements Iterator
@@ -9,11 +11,11 @@ class Collection implements Iterator
     public $total_results = 0;
     public $count = 1;
 
-    protected $entries = array();
+    protected $entities = array();
 
-    public function push(Entry $entry)
+    public function push(Entity $entity)
     {
-        array_push($this->entries, $entry);
+        array_push($this->entities, $entity);
         $this->total_results++;
     }
 
@@ -24,7 +26,7 @@ class Collection implements Iterator
 
     public function current()
     {
-        return $this->entries[$this->count - 1];
+        return $this->entities[$this->count - 1];
     }
 
     public function key()
@@ -39,6 +41,6 @@ class Collection implements Iterator
 
     public function valid()
     {
-        return array_key_exists($this->count - 1, $this->entries);
+        return array_key_exists($this->count - 1, $this->entities);
     }
 }
