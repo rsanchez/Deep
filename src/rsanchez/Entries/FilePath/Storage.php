@@ -3,8 +3,9 @@
 namespace rsanchez\Entries\FilePath;
 
 use rsanchez\Entries\DbInterface;
+use rsanchez\Entries\StorageInterface;
 
-class Storage
+class Storage implements StorageInterface
 {
     protected $db;
 
