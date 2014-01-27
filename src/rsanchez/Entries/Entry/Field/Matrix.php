@@ -89,11 +89,11 @@ class Matrix extends Field implements \IteratorAggregate
 
         $this->value = array();
 
-        if (! isset($payload[$this->entity->entry_id][$this->channelField->field_id])) {
+        if (! isset($payload[$this->entity->entry_id][$this->channelField->id()])) {
             return;
         }
 
-        $rows = $payload[$this->entity->entry_id][$this->channelField->field_id];
+        $rows = $payload[$this->entity->entry_id][$this->channelField->id()];
 
         foreach ($payload['cols'] as $col) {
             if (! isset($channelFields[$col->col_id])) {

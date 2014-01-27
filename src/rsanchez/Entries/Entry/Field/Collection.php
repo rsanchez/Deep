@@ -47,7 +47,7 @@ class Collection implements IteratorAggregate
     public function filterByType($type)
     {
         $fields = array_filter($this->fields, function ($field) use ($type) {
-            return $field->field_type === $type;
+            return $field->type() === $type;
         });
 
         $collection = new Collection();
@@ -66,8 +66,8 @@ class Collection implements IteratorAggregate
     {
         array_push($this->fields, $field);
 
-        $this->fieldsById[$field->field_id] =& $field;
-        $this->fieldsByName[$field->field_name] =& $field;
+        $this->fieldsById[$field->id()] =& $field;
+        $this->fieldsByName[$field->name()] =& $field;
     }
 
     public function getIterator()

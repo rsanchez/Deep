@@ -26,7 +26,7 @@ class Entity
 
         foreach ($this->fields as $field) {
             $field->setEntity($this);
-            $this->{$field->field_name} = $field;
+            $this->{$field->name()} = $field;
         }
     }
 

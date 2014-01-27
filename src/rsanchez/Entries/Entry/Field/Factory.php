@@ -50,8 +50,8 @@ class Factory extends Pimple
         $this['entry'] = $entry;
         $this['value'] = $value;
 
-        if (isset($this[$channelField->field_type])) {
-            return $this[$channelField->field_type];
+        if (isset($this[$channelField->type()])) {
+            return $this[$channelField->type()];
         }
 
         return $this['field'];

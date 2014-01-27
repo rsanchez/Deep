@@ -3,8 +3,9 @@
 namespace rsanchez\Entries\Channel;
 
 use \rsanchez\Entries\Channel;
+use \rsanchez\Entries\Property;
 
-class Field
+class Field extends Property
 {
     // exp_fieldtypes
     public $fieldtype_id;
@@ -37,6 +38,7 @@ class Field
     public $field_content_type;
     public $field_settings;
 
+   /*
     // exp_matrix_cols
     public $col_id;
     public $col_name;
@@ -48,16 +50,11 @@ class Field
     public $col_order;
     public $col_width;
     public $col_settings;
+    */
 
-    public function __construct(\stdClass $result)
+    public function __construct(\stdClass $row)
     {
-        $properties = get_class_vars(__CLASS__);
-
-        foreach ($properties as $property => $value) {
-            if (property_exists($result, $property)) {
-                $this->$property = $result->$property;
-            }
-        }
+        parent::__construct($row);
 
         if ($this->field_settings) {
             $this->field_settings = unserialize(base64_decode($this->field_settings));
@@ -69,10 +66,32 @@ class Field
             $this->field_settings = array_merge(unserialize(base64_decode($this->settings)), $this->field_settings);
         }
 
+        /*
         if ($this->col_settings) {
             $this->col_settings = unserialize(base64_decode($this->col_settings));
         } else {
             $this->col_settings = array();
         }
+        */
+    }
+
+    public function settings()
+    {
+        return $this->field_settings;
+    }
+
+    public function id()
+    {
+        return $this->field_id;
+    }
+
+    public function type()
+    {
+        return $this->field_type;
+    }
+
+    public function name()
+    {
+        return $this->field_name;
     }
 }

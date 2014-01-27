@@ -84,7 +84,7 @@ class Channel
         }
 
         foreach ($this->fields as $field) {
-            $this->fieldNames[] = $field->field_name;
+            $this->fieldNames[] = $field->name();
         }
     }
 

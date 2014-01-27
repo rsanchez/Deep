@@ -37,7 +37,7 @@ class Field
         }
 
         if ($this->preload) {
-            $entries->registerFieldPreloader($this->channelField->field_type, $this, $this->preloadHighPriority);
+            $entries->registerFieldPreloader($this->channelField->type(), $this, $this->preloadHighPriority);
         }
     }
 
@@ -46,9 +46,24 @@ class Field
         $this->entity = $entity;
     }
 
-    public function __get($name)
+    public function settings()
     {
-        return $this->channelField->$name;
+        return $this->channelField->settings();
+    }
+
+    public function id()
+    {
+        return $this->channelField->id();
+    }
+
+    public function type()
+    {
+        return $this->channelField->type();
+    }
+
+    public function name()
+    {
+        return $this->channelField->name();
     }
 
     public function __toString()

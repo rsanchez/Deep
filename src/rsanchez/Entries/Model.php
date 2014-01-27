@@ -407,7 +407,7 @@ class Model
                     $glue = 'OR';
                         
                     foreach ($values as $value) {
-                        $query = "`".$this->db->dbprefix('channel_data')."`.`field_id_{$field->field_id}` ";
+                        $query = "`".$this->db->dbprefix('channel_data')."`.`field_id_{$field->id()}` ";
                         
                         $query .= "LIKE ".$this->db->escape('%'.$value.'%');
                         

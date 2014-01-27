@@ -25,7 +25,7 @@ class Factory
         $fieldCollection = $this->fieldCollectionFactory->createCollection();
 
         foreach ($channel->fields as $channelField) {
-            $property = 'field_id_'.$channelField->field_id;
+            $property = 'field_id_'.$channelField->id();
             $value = property_exists($row, $property) ? $row->$property : '';
             $field = $this->fieldFactory->createField($value, $channel, $channelField, $entries);
             $fieldCollection->push($field);
