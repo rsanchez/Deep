@@ -7,7 +7,7 @@ use rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Field as ChannelField;
 use rsanchez\Entries\Entity;
-use rsanchez\Entries\Collection as EntryCollection;
+use rsanchez\Entries\EntityCollection;
 
 class Field
 {
@@ -24,7 +24,7 @@ class Field
         $value,
         Channel $channel,
         ChannelField $channelField,
-        EntryCollection $entries,
+        EntityCollection $entries,
         $entity = null
     ) {
         $this->channel = $channel;

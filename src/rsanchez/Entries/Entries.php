@@ -22,7 +22,7 @@ class Entries extends Collection
 
     protected $fieldPreloaders = array();
     protected $fieldPostloaders = array();
-    protected static $baseUrl;
+    protected $baseUrl = '/';
 
     public function __construct(
         Channels $channels,
@@ -81,7 +81,7 @@ class Entries extends Collection
 
     public function setBaseUrl($url)
     {
-        self::$baseUrl = $url;
+        $this->baseUrl = $url;
 
         return $this;
     }
@@ -93,11 +93,11 @@ class Entries extends Collection
 
     public function baseUrl()
     {
-        if (is_null(self::$baseUrl)) {
+        if (is_null($this->baseUrl)) {
             throw new \Exception('You must set a baseUrl: Entries::setBaseUrl("http://yoursite.com/")');
         }
 
-        return self::$baseUrl;
+        return $this->baseUrl;
     }
 
     public function __call($name, $args)

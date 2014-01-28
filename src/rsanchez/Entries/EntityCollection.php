@@ -6,7 +6,7 @@ use rsanchez\Entries\Entity;
 
 use \Iterator;
 
-class Collection implements Iterator
+class EntityCollection implements Iterator
 {
     public $total_results = 0;
     public $count = 1;

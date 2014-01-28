@@ -7,7 +7,7 @@ use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entry\Field;
 use rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
-use rsanchez\Entries\Collection as EntryCollection;
+use rsanchez\Entries\EntityCollection;
 use rsanchez\Entries\Channel\Field as ChannelField;
 use rsanchez\Entries\Entity;
 
@@ -21,7 +21,7 @@ class Matrix extends Field implements \IteratorAggregate
         $value,
         Channel $channel,
         ChannelField $channelField,
-        EntryCollection $entries,
+        EntityCollection $entries,
         $entity = null,
         EntryFieldFactory $entryFieldFactory,
         ChannelFieldFactory $channelFieldFactory

@@ -6,7 +6,7 @@ use rsanchez\Entries\DbInterface;
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\FilePaths;
 use rsanchez\Entries\Entry\Field;
-use rsanchez\Entries\Collection as EntryCollection;
+use rsanchez\Entries\EntityCollection;
 use rsanchez\Entries\Channel\Field as ChannelField;
 use rsanchez\Entries\Entity;
 
@@ -16,7 +16,7 @@ class File extends Field
         $value,
         Channel $channel,
         ChannelField $channelField,
-        EntryCollection $entries,
+        EntityCollection $entries,
         $entity = null,
         FilePaths $filePaths
     ) {

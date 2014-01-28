@@ -52,7 +52,7 @@ class IoC extends Pimple
         });
 
         $this['filePathStorage'] = function ($container) {
-            return new FilePathStorage($container['db'], ee()->config->item('upload_prefs'));
+            return new FilePathStorage($container['db'], $container['ee']->config->item('upload_prefs'));
         };
 
         $this['fieldStorage'] = function ($container) {
@@ -129,7 +129,7 @@ class IoC extends Pimple
                 $container['channelFieldFactory']
             );
 
-            $entries->setBaseUrl($container['baseUrl']);
+            $entries->setBaseUrl($container['ee']->config->item('site_url'));
 
             return $entries;
         });
