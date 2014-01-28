@@ -9,7 +9,7 @@
         }
     ],
     "autoload": {
-        "psr-0": { "Entries": "src/" }
+        "psr-0": { "rsanchez\\Entries": "src/" }
     },
     "require": {
         "pimple/pimple": "2.0.*-dev"
