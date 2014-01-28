@@ -1,5 +1,13 @@
 {
+    "name": "rsanchez/entries",
+    "description": "A pure PHP implementation of the ExpressionEngine {exp:channel:entries} tag.",
+    "authors": [
+        {
+            "name": "Rob Sanchez",
+            "email": "info@robsanchez.com"
+        }
+    ],
     "require": {
-        "pimple/pimple": "dev-master"
+        "pimple/pimple": "2.0.*-dev"
     }
 }
