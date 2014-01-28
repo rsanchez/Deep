@@ -28,23 +28,25 @@ class IoC extends Pimple
     {
         parent::__construct();
 
-        $this['baseUrl'] = ee()->config->item('site_url');
+        $this['ee'] = function ($container) {
+            return ee();
+        };
 
-        $this['db'] = $this->factory(function () {
+        $this['db'] = $this->factory(function ($container) {
             static $count = 1;
 
             $db = new Db(array(
                 'dbdriver' => 'mysql',
-                'conn_id'  => ee()->db->conn_id,
-                'database' => ee()->db->database,
-                'dbprefix' => ee()->db->dbprefix,
+                'conn_id'  => $container['ee']->db->conn_id,
+                'database' => $container['ee']->db->database,
+                'dbprefix' => $container['ee']->db->dbprefix,
             ));
 
             // log queries
-            $db->save_queries = ee()->config->item('show_profiler') === 'y' || DEBUG === 1;
+            $db->save_queries = $container['ee']->config->item('show_profiler') === 'y' || DEBUG === 1;
 
             // attach back to ee so the profiler knows to show these queries
-            ee()->{'db'.$count} = $db;
+            $container['ee']->{'db'.$count} = $db;
 
             $count++;
 
