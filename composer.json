@@ -8,6 +8,9 @@
             "email": "info@robsanchez.com"
         }
     ],
+    "autoload": {
+        "psr-0": { "Entries": "src/" }
+    },
     "require": {
         "pimple/pimple": "2.0.*-dev"
     }
