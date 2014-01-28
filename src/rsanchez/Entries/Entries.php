@@ -9,10 +9,10 @@ use \rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use \rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
 use \rsanchez\Entries\Entry\Field as EntryField;
 use \rsanchez\Entries\Model;
-use \rsanchez\Entries\Collection;
+use \rsanchez\Entries\EntityCollection;
 use \rsanchez\Entries\DbInterface;
 
-class Entries extends Collection
+class Entries extends EntityCollection
 {
     protected $model;
     protected $channels;
