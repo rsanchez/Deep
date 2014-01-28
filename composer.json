@@ -1,7 +1,7 @@
 {
     "name": "rsanchez/entries",
     "description": "A pure PHP implementation of the ExpressionEngine {exp:channel:entries} tag.",
-    "version": "0.0.0",
+    "version": "0.0.0-alpha0",
     "authors": [
         {
             "name": "Rob Sanchez",
