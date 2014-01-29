@@ -9,16 +9,16 @@ use rsanchez\Entries\Channel\Field\Group as FieldGroup;
 use rsanchez\Entries\FilePath;
 use rsanchez\Entries\FilePath\Factory as FilePathFactory;
 use rsanchez\Entries\FilePath\Storage as FilePathStorage;
-use rsanchez\Entries\Entry\Field\CollectionFactory as EntryFieldCollectionFactory;
+use rsanchez\Entries\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
 use rsanchez\Entries\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Fields;
 use rsanchez\Entries\Channel\Storage as ChannelStorage;
 use rsanchez\Entries\Channel\Field\Storage as FieldStorage;
 use rsanchez\Entries\Entry;
-use rsanchez\Entries\Entry\Field as EntryField;
+use rsanchez\Entries\Entity\Field as EntityField;
 use rsanchez\Entries\Model;
-use rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
+use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Entry\Factory as EntryFactory;
 use \Pimple;
 
@@ -110,11 +110,11 @@ class IoC extends Pimple
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntryFieldFactory($container['filePaths'], $container['channelFieldFactory']);
+            return new EntityFieldFactory($container['filePaths'], $container['channelFieldFactory']);
         };
 
         $this['entryFieldCollectionFactory'] = function ($container) {
-            return new EntryFieldCollectionFactory();
+            return new EntityFieldCollectionFactory();
         };
 
         $this['entryFactory'] = function ($container) {

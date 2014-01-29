@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries;
 
-use \rsanchez\Entries\Entry\Field;
+use \rsanchez\Entries\Entity\Field;
 use \rsanchez\Entries\Entry;
 use \rsanchez\Entries\EE\Template;
 

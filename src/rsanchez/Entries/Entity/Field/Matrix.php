@@ -1,11 +1,11 @@
 <?php
 
-namespace rsanchez\Entries\Entry\Field;
+namespace rsanchez\Entries\Entity\Field;
 
 use rsanchez\Entries\DbInterface;
 use rsanchez\Entries\Channel;
-use rsanchez\Entries\Entry\Field;
-use rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
+use rsanchez\Entries\Entity\Field;
+use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\EntityCollection;
 use rsanchez\Entries\Channel\Field as ChannelField;
@@ -23,7 +23,7 @@ class Matrix extends Field implements \IteratorAggregate
         ChannelField $channelField,
         EntityCollection $entries,
         $entity = null,
-        EntryFieldFactory $entryFieldFactory,
+        EntityFieldFactory $entryFieldFactory,
         ChannelFieldFactory $channelFieldFactory
     ) {
         parent::__construct($value, $channel, $channelField, $entries, $entity);

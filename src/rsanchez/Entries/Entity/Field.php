@@ -1,9 +1,9 @@
 <?php
 
-namespace rsanchez\Entries\Entry;
+namespace rsanchez\Entries\Entity;
 
 use rsanchez\Entries\Channel;
-use rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
+use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Field as ChannelField;
 use rsanchez\Entries\Entity;
@@ -80,7 +80,7 @@ class Field
     {
     }
 
-    public function postload($payload, EntryFieldFactory $entryFieldFactory, ChannelFieldFactory $channelFieldFactory)
+    public function postload($payload, EntityFieldFactory $entryFieldFactory, ChannelFieldFactory $channelFieldFactory)
     {
     }
 }

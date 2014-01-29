@@ -2,8 +2,8 @@
 
 namespace rsanchez\Entries;
 
-use rsanchez\Entries\Entry\Field;
-use rsanchez\Entries\Entry\Field\Collection as FieldCollection;
+use rsanchez\Entries\Entity\Field;
+use rsanchez\Entries\Entity\Field\Collection as FieldCollection;
 use \stdClass;
 
 class Entity

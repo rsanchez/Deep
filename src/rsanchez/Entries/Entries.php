@@ -6,8 +6,8 @@ use \rsanchez\Entries\ChannelsInterface;
 use \rsanchez\Entries\Entry;
 use \rsanchez\Entries\Entry\Factory as EntryFactory;
 use \rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
-use \rsanchez\Entries\Entry\Field\Factory as EntryFieldFactory;
-use \rsanchez\Entries\Entry\Field as EntryField;
+use \rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
+use \rsanchez\Entries\Entity\Field as EntityField;
 use \rsanchez\Entries\Model;
 use \rsanchez\Entries\EntityCollection;
 use \rsanchez\Entries\DbInterface;
@@ -29,7 +29,7 @@ class Entries extends EntityCollection
         Model $model,
         DbInterface $db,
         EntryFactory $factory,
-        EntryFieldFactory $entryFieldFactory,
+        EntityFieldFactory $entryFieldFactory,
         ChannelFieldFactory $channelFieldFactory
     ) {
         $this->channels = $channels;
@@ -60,7 +60,7 @@ class Entries extends EntityCollection
      * @param  [type] $callback  [description]
      * @return [type]            [description]
      */
-    public function registerFieldPreloader($fieldType, EntryField $entryField, $highPriority = false)
+    public function registerFieldPreloader($fieldType, EntityField $entryField, $highPriority = false)
     {
         // preload only once
         if (! array_key_exists($fieldType, $this->fieldPreloaders)) {

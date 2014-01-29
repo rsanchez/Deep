@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Entries\Entry\Field;
+namespace rsanchez\Entries\Entity\Field;
 
-use rsanchez\Entries\Entry\Field;
+use rsanchez\Entries\Entity\Field;
 use \IteratorAggregate;
 use \ArrayIterator;
 

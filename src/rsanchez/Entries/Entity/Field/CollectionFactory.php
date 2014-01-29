@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Entries\Entry\Field;
+namespace rsanchez\Entries\Entity\Field;
 
-use rsanchez\Entries\Entry\Field\Collection;
+use rsanchez\Entries\Entity\Field\Collection;
 
 class CollectionFactory
 {

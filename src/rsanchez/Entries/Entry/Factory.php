@@ -2,24 +2,14 @@
 
 namespace rsanchez\Entries\Entry;
 
-use rsanchez\Entries\Entry;
 use rsanchez\Entries\Entries;
 use rsanchez\Entries\Channel;
-use rsanchez\Entries\Entry\Field\Factory as FieldFactory;
-use rsanchez\Entries\Entry\Field\CollectionFactory as FieldCollectionFactory;
+use rsanchez\Entries\Entry;
+use rsanchez\Entries\Entity\Factory as EntityFactory;
 use \stdClass;
 
-class Factory
+class Factory extends EntityFactory
 {
-    protected $fieldFactory;
-    protected $fieldCollectionFactory;
-
-    public function __construct(FieldFactory $fieldFactory, FieldCollectionFactory $fieldCollectionFactory)
-    {
-        $this->fieldFactory = $fieldFactory;
-        $this->fieldCollectionFactory = $fieldCollectionFactory;
-    }
-
     public function createEntry(stdClass $row, Entries $entries, Channel $channel)
     {
         $fieldCollection = $this->fieldCollectionFactory->createCollection();
