@@ -14,13 +14,12 @@ class File extends Field
 {
     public function __construct(
         $value,
-        Channel $channel,
         ChannelField $channelField,
         EntityCollection $entries,
         $entity = null,
         FilePaths $filePaths
     ) {
-        parent::__construct($value, $channel, $channelField, $entries, $entity);
+        parent::__construct($value, $channelField, $entries, $entity);
 
         $this->filePaths = $filePaths;
     }

@@ -3,75 +3,28 @@
 namespace rsanchez\Entries\Channel\Field;
 
 use rsanchez\Entries\Channel\Field;
-use \IteratorAggregate;
-use \ArrayIterator;
+use rsanchez\Entries\PropertyCollection;
 
-class Collection implements IteratorAggregate
+class Collection extends PropertyCollection
 {
-    protected $fields = array();
-    protected $fieldsByName = array();
-    protected $fieldsById = array();
-
-    /**
-     * A shortcut to the field by name
-     * @param  string $name the field_name attribute of the field
-     * @return Field;
-     */
-    public function __get($name)
-    {
-        if (isset($this->fieldsByName[$name])) {
-            return $this->fieldsByName[$name];
-        }
-
-        throw new \Exception('invalid field name');//@TODO
-    }
-
-    public function find($id)
-    {
-        if (is_numeric($id)) {
-            //@TODO custom exception
-            if (! array_key_exists($id, $this->fieldsById)) {
-                throw new \Exception('invalid field id');
-            }
-
-            return $this->fieldsById[$id];
-        }
-
-        if (! array_key_exists($id, $this->fieldsByName)) {
-            throw new \Exception('invalid field name');
-        }
-
-        return $this->fieldsByName[$id];
-    }
-
     public function filterByType($type)
     {
-        $fields = array_filter($this->fields, function ($field) use ($type) {
+        $properties = array_filter($this->properties, function ($field) use ($type) {
             return $field->type() === $type;
         });
 
         $collection = new Collection();
 
-        array_walk($fields, array($collection, 'push'));
+        array_walk($properties, array($collection, 'push'));
 
         return $collection;
     }
 
-    public function fieldIds()
-    {
-        return array_keys($this->fieldsById);
-    }
-
     public function push(Field $field)
     {
-        array_push($this->fields, $field);
+        array_push($this->properties, $field);
 
-        $this->fieldsById[$field->field_id] =& $field;
-        $this->fieldsByName[$field->field_name] =& $field;
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->fields);
+        $this->propertiesById[$field->field_id] =& $field;
+        $this->propertiesByName[$field->field_name] =& $field;
     }
 }

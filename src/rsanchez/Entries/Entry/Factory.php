@@ -17,7 +17,7 @@ class Factory extends EntityFactory
         foreach ($channel->fields as $channelField) {
             $property = 'field_id_'.$channelField->id();
             $value = property_exists($row, $property) ? $row->$property : '';
-            $field = $this->fieldFactory->createField($value, $channel, $channelField, $entries);
+            $field = $this->fieldFactory->createField($value, $channelField, $entries);
             $fieldCollection->push($field);
         }
 

@@ -21,30 +21,28 @@ class Factory extends Pimple
         $this['channelFieldFactory'] = $channelFieldFactory;
 
         $this['date'] = $this->factory(function ($container) {
-            return new Date($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry']);
+            return new Date($container['value'], $container['channelField'], $container['entries'], $container['entry']);
         });
 
         $this['file'] = $this->factory(function ($container) {
-            return new File($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry'], $container['filePaths']);
+            return new File($container['value'], $container['channelField'], $container['entries'], $container['entry'], $container['filePaths']);
         });
 
         $this['matrix'] = $this->factory(function ($container) {
-            return new Matrix($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry'], $container, $container['channelFieldFactory']);
+            return new Matrix($container['value'], $container['channelField'], $container['entries'], $container['entry'], $container, $container['channelFieldFactory']);
         });
 
         $this['field'] = $this->factory(function ($container) {
-            return new Field($container['value'], $container['channel'], $container['channelField'], $container['entries'], $container['entry']);
+            return new Field($container['value'], $container['channelField'], $container['entries'], $container['entry']);
         });
     }
 
     public function createField(
         $value,
-        Channel $channel,
         ChannelField $channelField,
         Entries $entries,
         $entry = null
     ) {
-        $this['channel'] = $channel;
         $this['channelField'] = $channelField;
         $this['entries'] = $entries;
         $this['entry'] = $entry;

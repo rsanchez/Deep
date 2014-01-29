@@ -19,14 +19,13 @@ class Matrix extends Field implements \IteratorAggregate
 
     public function __construct(
         $value,
-        Channel $channel,
         ChannelField $channelField,
         EntityCollection $entries,
         $entity = null,
         EntityFieldFactory $entryFieldFactory,
         ChannelFieldFactory $channelFieldFactory
     ) {
-        parent::__construct($value, $channel, $channelField, $entries, $entity);
+        parent::__construct($value, $channelField, $entries, $entity);
 
         $this->entryFieldFactory = $entryFieldFactory;
         $this->channelFieldFactory = $channelFieldFactory;
@@ -105,7 +104,7 @@ class Matrix extends Field implements \IteratorAggregate
             foreach ($payload['cols'] as $col) {
                 $property = 'col_id_'.$col->col_id;
                 $value = property_exists($row, $property) ? $row->$property : '';
-                $field = $this->entryFieldFactory->createField($value, $this->channel, $channelFields[$col->col_id], $this->entries, $this->entity);
+                $field = $this->entryFieldFactory->createField($value, $channelFields[$col->col_id], $this->entries, $this->entity);
                 $row->{$col->col_name} = $field;
             }
 

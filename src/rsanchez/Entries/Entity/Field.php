@@ -22,12 +22,10 @@ class Field
 
     public function __construct(
         $value,
-        Channel $channel,
         ChannelField $channelField,
         EntityCollection $entries,
         $entity = null
     ) {
-        $this->channel = $channel;
         $this->channelField = $channelField;
         $this->entries = $entries;
         $this->value = $value;
