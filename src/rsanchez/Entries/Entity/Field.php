@@ -5,14 +5,14 @@ namespace rsanchez\Entries\Entity;
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
-use rsanchez\Entries\Channel\Field as ChannelField;
+use rsanchez\Entries\Property;
 use rsanchez\Entries\Entity;
 use rsanchez\Entries\EntityCollection;
 
 class Field
 {
     protected $channel;
-    protected $channelField;
+    protected $property;
     protected $entity;
     protected $entries;
     public $value;
@@ -22,11 +22,11 @@ class Field
 
     public function __construct(
         $value,
-        ChannelField $channelField,
+        Property $property,
         EntityCollection $entries,
         $entity = null
     ) {
-        $this->channelField = $channelField;
+        $this->property = $property;
         $this->entries = $entries;
         $this->value = $value;
 
@@ -35,7 +35,7 @@ class Field
         }
 
         if ($this->preload) {
-            $entries->registerFieldPreloader($this->channelField->type(), $this, $this->preloadHighPriority);
+            $entries->registerFieldPreloader($this->property->type(), $this, $this->preloadHighPriority);
         }
     }
 
@@ -46,22 +46,22 @@ class Field
 
     public function settings()
     {
-        return $this->channelField->settings();
+        return $this->property->settings();
     }
 
     public function id()
     {
-        return $this->channelField->id();
+        return $this->property->id();
     }
 
     public function type()
     {
-        return $this->channelField->type();
+        return $this->property->type();
     }
 
     public function name()
     {
-        return $this->channelField->name();
+        return $this->property->name();
     }
 
     public function __toString()

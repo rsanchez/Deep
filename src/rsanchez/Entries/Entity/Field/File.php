@@ -7,19 +7,19 @@ use rsanchez\Entries\Channel;
 use rsanchez\Entries\FilePaths;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\EntityCollection;
-use rsanchez\Entries\Channel\Field as ChannelField;
+use rsanchez\Entries\Property;
 use rsanchez\Entries\Entity;
 
 class File extends Field
 {
     public function __construct(
         $value,
-        ChannelField $channelField,
+        Property $property,
         EntityCollection $entries,
         $entity = null,
         FilePaths $filePaths
     ) {
-        parent::__construct($value, $channelField, $entries, $entity);
+        parent::__construct($value, $property, $entries, $entity);
 
         $this->filePaths = $filePaths;
     }

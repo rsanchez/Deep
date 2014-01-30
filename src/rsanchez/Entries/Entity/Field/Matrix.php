@@ -8,7 +8,7 @@ use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\EntityCollection;
-use rsanchez\Entries\Channel\Field as ChannelField;
+use rsanchez\Entries\Property;
 use rsanchez\Entries\Entity;
 
 class Matrix extends Field implements \IteratorAggregate
@@ -19,13 +19,13 @@ class Matrix extends Field implements \IteratorAggregate
 
     public function __construct(
         $value,
-        ChannelField $channelField,
+        Property $property,
         EntityCollection $entries,
         $entity = null,
         EntityFieldFactory $entryFieldFactory,
         ChannelFieldFactory $channelFieldFactory
     ) {
-        parent::__construct($value, $channelField, $entries, $entity);
+        parent::__construct($value, $property, $entries, $entity);
 
         $this->entryFieldFactory = $entryFieldFactory;
         $this->channelFieldFactory = $channelFieldFactory;
@@ -88,11 +88,11 @@ class Matrix extends Field implements \IteratorAggregate
 
         $this->value = array();
 
-        if (! isset($payload[$this->entity->entry_id][$this->channelField->id()])) {
+        if (! isset($payload[$this->entity->entry_id][$this->property->id()])) {
             return;
         }
 
-        $rows = $payload[$this->entity->entry_id][$this->channelField->id()];
+        $rows = $payload[$this->entity->entry_id][$this->property->id()];
 
         foreach ($payload['cols'] as $col) {
             if (! isset($channelFields[$col->col_id])) {
