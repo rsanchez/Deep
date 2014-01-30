@@ -5,10 +5,11 @@ namespace rsanchez\Entries;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entry\Entry;
 use rsanchez\Entries\EE\Template;
+use CI_Controller;
 
-class EE
+class FieldtypeHandler
 {
-    public function callFieldtype(\CI_Controller $ee, Entry $entry, Field $field, $params = array(), $modifier = 'tag')
+    public function call(CI_Controller $ee, Entry $entry, Field $field, $params = array(), $modifier = 'tag')
     {
         $ee->load->library('api');
         $ee->load->helper('custom_field');
