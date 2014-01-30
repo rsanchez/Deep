@@ -15,6 +15,7 @@ use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Fields;
 use rsanchez\Entries\Channel\Storage as ChannelStorage;
 use rsanchez\Entries\Channel\Field\Storage as FieldStorage;
+use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entry;
 use rsanchez\Entries\Entity\Field as EntityField;
 use rsanchez\Entries\Model;
@@ -77,6 +78,10 @@ class IoC extends Pimple
             return new ChannelFieldFactory();
         };
 
+        $this['colFactory'] = function ($container) {
+            return new ColFactory();
+        };
+
         $this['filePaths'] = function ($container) {
             return new FilePaths(
                 $container['filePathStorage'],
@@ -110,7 +115,7 @@ class IoC extends Pimple
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntityFieldFactory($container['filePaths'], $container['channelFieldFactory']);
+            return new EntityFieldFactory($container['filePaths'], $container['colFactory']);
         };
 
         $this['entryFieldCollectionFactory'] = function ($container) {
@@ -127,8 +132,7 @@ class IoC extends Pimple
                 $container['model'],
                 $container['db'],
                 $container['entryFactory'],
-                $container['entryFieldFactory'],
-                $container['channelFieldFactory']
+                $container['entryFieldFactory']
             );
 
             $entries->setBaseUrl($container['ee']->config->item('site_url'));

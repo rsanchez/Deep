@@ -22,7 +22,7 @@ class Fields extends Collection
             $group = $groupFactory->createGroup($id);
 
             foreach ($fieldData as $fieldRow) {
-                $field = $fieldFactory->createField($fieldRow);
+                $field = $fieldFactory->createProperty($fieldRow);
 
                 $this->push($field);
 

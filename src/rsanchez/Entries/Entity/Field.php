@@ -4,7 +4,7 @@ namespace rsanchez\Entries\Entity;
 
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
-use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
+use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Property;
 use rsanchez\Entries\Entity;
 use rsanchez\Entries\EntityCollection;
@@ -78,7 +78,7 @@ class Field
     {
     }
 
-    public function postload($payload, EntityFieldFactory $entryFieldFactory, ChannelFieldFactory $channelFieldFactory)
+    public function postload($payload, EntityFieldFactory $entryFieldFactory, ColFactory $colFactory)
     {
     }
 }

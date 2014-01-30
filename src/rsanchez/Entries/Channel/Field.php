@@ -7,13 +7,6 @@ use \rsanchez\Entries\Property;
 
 class Field extends Property
 {
-    // exp_fieldtypes
-    public $fieldtype_id;
-    public $name;
-    public $version;
-    public $settings;
-    public $has_global_settings;
-
     // exp_channel_fields
     public $field_id;
     public $site_id;
@@ -37,20 +30,6 @@ class Field extends Property
     public $field_order;
     public $field_content_type;
     public $field_settings;
-
-   /*
-    // exp_matrix_cols
-    public $col_id;
-    public $col_name;
-    public $col_label;
-    public $col_instructions;
-    public $col_type;
-    public $col_required;
-    public $col_search;
-    public $col_order;
-    public $col_width;
-    public $col_settings;
-    */
 
     public function __construct(\stdClass $row)
     {

@@ -7,18 +7,18 @@ use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entries;
 use rsanchez\Entries\Property;
-use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
+use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entity;
 use \Pimple;
 
 class Factory extends Pimple
 {
-    public function __construct(FilePaths $filePaths, ChannelFieldFactory $channelFieldFactory)
+    public function __construct(FilePaths $filePaths, ColFactory $colFactory)
     {
         parent::__construct();
 
         $this['filePaths'] = $filePaths;
-        $this['channelFieldFactory'] = $channelFieldFactory;
+        $this['colFactory'] = $colFactory;
 
         $this['date'] = $this->factory(function ($container) {
             return new Date($container['value'], $container['property'], $container['entries'], $container['entry']);
@@ -29,7 +29,7 @@ class Factory extends Pimple
         });
 
         $this['matrix'] = $this->factory(function ($container) {
-            return new Matrix($container['value'], $container['property'], $container['entries'], $container['entry'], $container, $container['channelFieldFactory']);
+            return new Matrix($container['value'], $container['property'], $container['entries'], $container['entry'], $container, $container['colFactory']);
         });
 
         $this['field'] = $this->factory(function ($container) {

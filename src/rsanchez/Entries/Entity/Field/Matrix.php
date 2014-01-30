@@ -6,7 +6,7 @@ use rsanchez\Entries\DbInterface;
 use rsanchez\Entries\Channel;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
-use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
+use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\EntityCollection;
 use rsanchez\Entries\Property;
 use rsanchez\Entries\Entity;
@@ -23,12 +23,12 @@ class Matrix extends Field implements \IteratorAggregate
         EntityCollection $entries,
         $entity = null,
         EntityFieldFactory $entryFieldFactory,
-        ChannelFieldFactory $channelFieldFactory
+        ColFactory $colFactory
     ) {
         parent::__construct($value, $property, $entries, $entity);
 
         $this->entryFieldFactory = $entryFieldFactory;
-        $this->channelFieldFactory = $channelFieldFactory;
+        $this->colFactory = $colFactory;
     }
 
     public function __invoke()
@@ -96,7 +96,7 @@ class Matrix extends Field implements \IteratorAggregate
 
         foreach ($payload['cols'] as $col) {
             if (! isset($channelFields[$col->col_id])) {
-                $channelFields[$col->col_id] = $this->channelFieldFactory->createField($col);
+                $channelFields[$col->col_id] = $this->colFactory->createProperty($col);
             }
         }
 
