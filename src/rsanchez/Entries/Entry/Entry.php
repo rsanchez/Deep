@@ -1,13 +1,13 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Entry;
 
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entries;
 use rsanchez\Entries\Entity\Entity;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Collection as FieldCollection;
-use \stdClass;
+use stdClass;
 
 class Entry extends Entity
 {
@@ -49,7 +49,7 @@ class Entry extends Entity
     );
 
     /**
-     * @var \rsanchez\Entries\Channel
+     * @var rsanchez\Entries\Channel
      */
     public $channel;
     protected $entries;

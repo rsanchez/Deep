@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\EE;
 
-use \CI_Controller;
+use CI_Controller;
 
 class Template
 {

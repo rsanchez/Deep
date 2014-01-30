@@ -4,8 +4,8 @@ namespace rsanchez\Entries\Channel\Field;
 
 use rsanchez\Entries\Channel\Field;
 use rsanchez\Entries\Channel\Field\Collection;
-use \IteratorAggregate;
-use \ArrayIterator;
+use IteratorAggregate;
+use ArrayIterator;
 
 class Group extends Collection
 {

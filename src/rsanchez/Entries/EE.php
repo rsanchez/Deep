@@ -2,9 +2,9 @@
 
 namespace rsanchez\Entries;
 
-use \rsanchez\Entries\Entity\Field;
-use \rsanchez\Entries\Entry;
-use \rsanchez\Entries\EE\Template;
+use rsanchez\Entries\Entity\Field;
+use rsanchez\Entries\Entry\Entry;
+use rsanchez\Entries\EE\Template;
 
 class EE
 {

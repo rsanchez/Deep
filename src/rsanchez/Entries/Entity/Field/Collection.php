@@ -3,8 +3,8 @@
 namespace rsanchez\Entries\Entity\Field;
 
 use rsanchez\Entries\Entity\Field;
-use \IteratorAggregate;
-use \ArrayIterator;
+use IteratorAggregate;
+use ArrayIterator;
 
 class Collection implements IteratorAggregate
 {

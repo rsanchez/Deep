@@ -5,7 +5,7 @@ namespace rsanchez\Entries;
 use rsanchez\Entries\Channel\ChannelsInterface;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Channel\Channels;
-use rsanchez\Entries\Entry;
+use rsanchez\Entries\Entry\Entry;
 use rsanchez\Entries\Entry\Factory as EntryFactory;
 use rsanchez\Entries\Entity\Field as EntityField;
 use rsanchez\Entries\Entry\Model;

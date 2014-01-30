@@ -4,7 +4,7 @@ namespace rsanchez\Entries\Channel;
 
 use rsanchez\Entries\Channel\Field\Group as FieldGroup;
 use rsanchez\Entries\Channel\Channel;
-use \stdClass;
+use stdClass;
 
 class Factory
 {

@@ -9,7 +9,7 @@ use rsanchez\Entries\Entries;
 use rsanchez\Entries\Property\AbstractProperty;
 use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entity\Entity;
-use \Pimple;
+use Pimple;
 
 class Factory extends Pimple
 {
