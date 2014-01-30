@@ -15,11 +15,11 @@ abstract class Property
         }
     }
 
-    abstract function settings();
+    abstract public function settings();
 
-    abstract function id();
+    abstract public function id();
 
-    abstract function type();
+    abstract public function type();
 
-    abstract function name();
+    abstract public function name();
 }

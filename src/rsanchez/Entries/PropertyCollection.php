@@ -8,6 +8,8 @@ use \ArrayIterator;
 
 class PropertyCollection implements IteratorAggregate
 {
+    protected $filterClass;
+
     protected $properties = array();
     protected $propertiesByName = array();
     protected $propertiesById = array();
@@ -46,11 +48,13 @@ class PropertyCollection implements IteratorAggregate
 
     public function filterByType($type)
     {
+        $collectionClass = $this->filterClass ?: get_class($this);
+
+        $collection = new $collectionClass();
+
         $properties = array_filter($this->properties, function ($field) use ($type) {
             return $field->type() === $type;
         });
-
-        $collection = new PropertyCollection();
 
         array_walk($properties, array($collection, 'push'));
 
@@ -66,8 +70,8 @@ class PropertyCollection implements IteratorAggregate
     {
         array_push($this->properties, $field);
 
-        $this->propertiesById[$field->field_id] =& $field;
-        $this->propertiesByName[$field->field_name] =& $field;
+        $this->propertiesById[$field->id()] =& $field;
+        $this->propertiesByName[$field->name()] =& $field;
     }
 
     public function getIterator()
