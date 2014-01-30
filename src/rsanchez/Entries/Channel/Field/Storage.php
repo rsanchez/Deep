@@ -3,7 +3,7 @@
 namespace rsanchez\Entries\Channel\Field;
 
 use rsanchez\Entries\Db\DbInterface;
-use rsanchez\Entries\StorageInterface;
+use rsanchez\Entries\Common\StorageInterface;
 
 class Storage implements StorageInterface
 {
