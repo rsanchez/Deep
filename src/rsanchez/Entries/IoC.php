@@ -20,7 +20,7 @@ use rsanchez\Entries\Channel\Field\Storage as FieldStorage;
 use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entry;
 use rsanchez\Entries\Entity\Field as EntityField;
-use rsanchez\Entries\Model;
+use rsanchez\Entries\Entry\Model;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Entry\Factory as EntryFactory;
 use \Pimple;

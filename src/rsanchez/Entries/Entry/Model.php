@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Entry;
 
 use rsanchez\Entries\Channel\Channels;
 use rsanchez\Entries\Db\DbInterface;
