@@ -5,7 +5,7 @@ namespace rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\FilePath\FilePaths;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field;
-use rsanchez\Entries\Entries;
+use rsanchez\Entries\Entry\Entries;
 use rsanchez\Entries\Property\AbstractProperty;
 use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entity\Entity;

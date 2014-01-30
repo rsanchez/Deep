@@ -61,17 +61,6 @@ class Channel
     public $fields;
     public $fieldNames = array();
 
-    public static function entries()
-    {
-        static $ioc;
-
-        if (is_null($ioc)) {
-            $ioc = new IoC();
-        }
-
-        return $ioc['entries'];
-    }
-
     public function __construct(FieldGroup $fieldGroup, stdClass $row)
     {
         $this->fields = $fieldGroup;

@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Entry;
 
 use rsanchez\Entries\Channel\ChannelsInterface;
 use rsanchez\Entries\Channel\Channel;

@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\Entry;
 
-use rsanchez\Entries\Entries;
+use rsanchez\Entries\Entry\Entries;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entry\Entry;
 use rsanchez\Entries\Entity\Factory as EntityFactory;
