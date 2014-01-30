@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\Entity;
 
-use rsanchez\Entries\Channel;
+use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Property;

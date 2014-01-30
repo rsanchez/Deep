@@ -13,6 +13,7 @@ use rsanchez\Entries\Entity\Field\CollectionFactory as EntityFieldCollectionFact
 use rsanchez\Entries\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Entries\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Entries\Channel\Fields;
+use rsanchez\Entries\Channel\Channels;
 use rsanchez\Entries\Channel\Storage as ChannelStorage;
 use rsanchez\Entries\Channel\Field\Storage as FieldStorage;
 use rsanchez\Entries\Col\Factory as ColFactory;

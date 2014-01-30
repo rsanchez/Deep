@@ -1,9 +1,10 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Channel;
 
 use rsanchez\Entries\Channel\Field\Group as FieldGroup;
-use \stdClass;
+use rsanchez\Entries\IoC;
+use stdClass;
 
 class Channel
 {

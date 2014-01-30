@@ -3,7 +3,7 @@
 namespace rsanchez\Entries\Entity\Field;
 
 use rsanchez\Entries\DbInterface;
-use rsanchez\Entries\Channel;
+use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Col\Factory as ColFactory;

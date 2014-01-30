@@ -3,7 +3,7 @@
 namespace rsanchez\Entries\Entry;
 
 use rsanchez\Entries\Entries;
-use rsanchez\Entries\Channel;
+use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entry;
 use rsanchez\Entries\Entity\Factory as EntityFactory;
 use \stdClass;

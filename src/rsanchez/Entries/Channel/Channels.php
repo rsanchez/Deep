@@ -1,13 +1,14 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Channel;
 
 use rsanchez\Entries\Channel\Storage as ChannelStorage;
 use rsanchez\Entries\Channel\Field\Group as FieldGroup;
 use rsanchez\Entries\Channel\Fields;
+use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Entries\Channel\Factory as ChannelFactory;
-use \IteratorAggregate;
+use IteratorAggregate;
 
 class Channels implements IteratorAggregate
 {

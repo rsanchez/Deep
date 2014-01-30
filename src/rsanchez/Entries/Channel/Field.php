@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\Channel;
 
-use \rsanchez\Entries\Channel;
+use rsanchez\Entries\Channel\Channel;
 use \rsanchez\Entries\Property;
 
 class Field extends Property

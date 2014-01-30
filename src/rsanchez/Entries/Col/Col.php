@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Col;
 
 use rsanchez\Entries\Property;
 use stdClass;

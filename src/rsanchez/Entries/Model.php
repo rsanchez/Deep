@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries;
 
-use rsanchez\Entries\Channels;
+use rsanchez\Entries\Channel\Channels;
 use rsanchez\Entries\DbInterface;
 use rsanchez\Entries\Channel\Fields;
 
