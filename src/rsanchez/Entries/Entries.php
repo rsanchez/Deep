@@ -5,7 +5,6 @@ namespace rsanchez\Entries;
 use \rsanchez\Entries\ChannelsInterface;
 use \rsanchez\Entries\Entry;
 use \rsanchez\Entries\Entry\Factory as EntryFactory;
-use \rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use \rsanchez\Entries\Entity\Field as EntityField;
 use \rsanchez\Entries\Model;
 use \rsanchez\Entries\EntityCollection;
@@ -27,14 +26,12 @@ class Entries extends EntityCollection
         Channels $channels,
         Model $model,
         DbInterface $db,
-        EntryFactory $factory,
-        EntityFieldFactory $entryFieldFactory
+        EntryFactory $factory
     ) {
         $this->channels = $channels;
         $this->model = $model;
         $this->db = $db;
         $this->factory = $factory;
-        $this->entryFieldFactory = $entryFieldFactory;
     }
 
     public function push(Entry $entry)

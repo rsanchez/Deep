@@ -131,8 +131,7 @@ class IoC extends Pimple
                 $container['channels'],
                 $container['model'],
                 $container['db'],
-                $container['entryFactory'],
-                $container['entryFieldFactory']
+                $container['entryFactory']
             );
 
             $entries->setBaseUrl($container['ee']->config->item('site_url'));
