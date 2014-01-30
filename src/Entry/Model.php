@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Entry;
 
 use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Db\DbInterface;
-use rsanchez\Deep\Channel\Fields;
+use rsanchez\Deep\Channel\Field\Repository as ChannelFieldRepository;
 
 class Model
 {
@@ -62,11 +62,12 @@ class Model
     protected $db;
     protected $channelRepository;
     protected $request;
+    protected $channelFieldRepository;
 
-    public function __construct(DbInterface $db, ChannelRepository $channelRepository, Fields $fields, $request = array())
+    public function __construct(DbInterface $db, ChannelRepository $channelRepository, ChannelFieldRepository $channelFieldRepository, $request = array())
     {
         $this->db = $db;
-        $this->fields = $fields;
+        $this->channelFieldRepository = $channelFieldRepository;
         $this->channelRepository = $channelRepository;
         $this->request = $request;
     }
@@ -402,7 +403,7 @@ class Model
             
             foreach ($this->search as $fieldName => $values) {
                 try {
-                    $field = $this->fields->find($fieldName);
+                    $field = $this->channelFieldRepository->find($fieldName);
 
                     $glue = 'OR';
                         

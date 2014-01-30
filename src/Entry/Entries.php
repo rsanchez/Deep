@@ -167,7 +167,7 @@ class Entries extends EntityCollection
 
             // pre-load any fieldtype data, eg. Matrix
             foreach ($this->fieldPreloaders as $fieldType => $entryField) {
-                $fieldIds = $this->channelRepository->fields->filterByType($fieldType)->fieldIds();
+                $fieldIds = $this->channelRepository->fieldRepository->filterByType($fieldType)->fieldIds();
                 $payloads[$fieldType] = $entryField->preload($this->db, $this->entryIds, $fieldIds);
             }
 

@@ -13,7 +13,7 @@ use rsanchez\Deep\FilePath\Storage as FilePathStorage;
 use rsanchez\Deep\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
 use rsanchez\Deep\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Deep\Channel\Field\Factory as ChannelFieldFactory;
-use rsanchez\Deep\Channel\Fields;
+use rsanchez\Deep\Channel\Field\Repository as ChannelFieldRepository;
 use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Channel\Storage as ChannelStorage;
 use rsanchez\Deep\Channel\Field\Storage as FieldStorage;
@@ -92,8 +92,8 @@ class IoC extends Pimple
             );
         };
 
-        $this['fields'] = function ($container) {
-            return new Fields(
+        $this['channelFieldRepository'] = function ($container) {
+            return new ChannelFieldRepository(
                 $container['fieldStorage'],
                 $container['fieldGroupFactory'],
                 $container['channelFieldFactory']
@@ -107,14 +107,14 @@ class IoC extends Pimple
         $this['channelRepository'] = function ($container) {
             return new ChannelRepository(
                 $container['channelStorage'],
-                $container['fields'],
+                $container['channelFieldRepository'],
                 $container['channelFactory'],
                 $container['fieldGroupFactory']
             );
         };
 
         $this['model'] = $this->factory(function ($container) {
-            return new Model($container['db'], $container['channelRepository'], $container['fields'], $_REQUEST);
+            return new Model($container['db'], $container['channelRepository'], $container['channelFieldRepository'], $_REQUEST);
         });
 
         $this['entryFieldFactory'] = function ($container) {

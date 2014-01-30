@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Channel;
 
 use rsanchez\Deep\Channel\Storage as ChannelStorage;
 use rsanchez\Deep\Channel\Field\Group as FieldGroup;
-use rsanchez\Deep\Channel\Fields;
+use rsanchez\Deep\Channel\Field\Repository as FieldRepository;
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Deep\Channel\Factory as ChannelFactory;
@@ -12,21 +12,21 @@ use IteratorAggregate;
 
 class Repository implements IteratorAggregate
 {
-    public $fields;
+    public $fieldRepository;
     private $channels = array();
 
     public function __construct(
         ChannelStorage $storage,
-        Fields $fields,
+        FieldRepository $fieldRepository,
         ChannelFactory $factory,
         FieldGroupFactory $fieldGroupFactory
     ) {
-        $this->fields = $fields;
+        $this->fieldRepository = $fieldRepository;
 
         foreach ($storage() as $channelRow) {
 
             // provide an empty fieldGroup if one isn't found
-            if (!$channelRow->field_group || ! $fieldGroup = $fields->findGroup($channelRow->field_group)) {
+            if (!$channelRow->field_group || ! $fieldGroup = $fieldRepository->findGroup($channelRow->field_group)) {
                 $fieldGroup = $fieldGroupFactory->createGroup(0);
             }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Channel;
+namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Channel\Field\Field;
 use rsanchez\Deep\Channel\Field\Group;
@@ -11,7 +11,7 @@ use rsanchez\Deep\Channel\Field\Storage as FieldStorage;
 use IteratorAggregate;
 use ArrayIterator;
 
-class Fields extends Collection
+class Repository extends Collection
 {
     private $groups = array();
     private $groupsById = array();
