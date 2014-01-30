@@ -1,10 +1,10 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Entity;
 
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Collection as FieldCollection;
-use \stdClass;
+use stdClass;
 
 class Entity
 {

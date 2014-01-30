@@ -8,7 +8,7 @@ use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entries;
 use rsanchez\Entries\Property;
 use rsanchez\Entries\Col\Factory as ColFactory;
-use rsanchez\Entries\Entity;
+use rsanchez\Entries\Entity\Entity;
 use \Pimple;
 
 class Factory extends Pimple

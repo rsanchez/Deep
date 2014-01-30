@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries;
 
-use rsanchez\Entries\Db;
+use rsanchez\Entries\Db\Db;
 use rsanchez\Entries\Channel\Factory as ChannelFactory;
 use rsanchez\Entries\Channel\Field as ChannelField;
 use rsanchez\Entries\Channel\Field\Group as FieldGroup;

@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\Channel\Field;
 
-use rsanchez\Entries\DbInterface;
+use rsanchez\Entries\Db\DbInterface;
 use rsanchez\Entries\Channel\Field\Group;
 
 class GroupFactory

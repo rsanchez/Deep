@@ -1,12 +1,11 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Entity;
 
-use rsanchez\Entries\Entity;
+use rsanchez\Entries\Entity\Entity;
+use Iterator;
 
-use \Iterator;
-
-class EntityCollection implements Iterator
+class Collection implements Iterator
 {
     public $total_results = 0;
     public $count = 1;

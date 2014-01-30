@@ -9,8 +9,8 @@ use rsanchez\Entries\Entry;
 use rsanchez\Entries\Entry\Factory as EntryFactory;
 use rsanchez\Entries\Entity\Field as EntityField;
 use rsanchez\Entries\Model;
-use rsanchez\Entries\EntityCollection;
-use rsanchez\Entries\DbInterface;
+use rsanchez\Entries\Entity\Collection as EntityCollection;
+use rsanchez\Entries\Db\DbInterface;
 
 class Entries extends EntityCollection
 {

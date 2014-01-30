@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\Channel;
 
-use rsanchez\Entries\DbInterface;
+use rsanchez\Entries\Db\DbInterface;
 use rsanchez\Entries\StorageInterface;
 
 class Storage implements StorageInterface

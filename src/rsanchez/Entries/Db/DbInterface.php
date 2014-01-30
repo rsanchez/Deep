@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Db;
 
 interface DbInterface
 {

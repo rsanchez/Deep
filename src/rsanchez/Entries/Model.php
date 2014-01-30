@@ -3,7 +3,7 @@
 namespace rsanchez\Entries;
 
 use rsanchez\Entries\Channel\Channels;
-use rsanchez\Entries\DbInterface;
+use rsanchez\Entries\Db\DbInterface;
 use rsanchez\Entries\Channel\Fields;
 
 class Model

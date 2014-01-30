@@ -4,7 +4,7 @@ namespace rsanchez\Entries;
 
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entries;
-use rsanchez\Entries\Entity;
+use rsanchez\Entries\Entity\Entity;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Collection as FieldCollection;
 use \stdClass;

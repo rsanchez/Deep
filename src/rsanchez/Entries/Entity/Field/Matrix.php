@@ -2,14 +2,14 @@
 
 namespace rsanchez\Entries\Entity\Field;
 
-use rsanchez\Entries\DbInterface;
+use rsanchez\Entries\Db\DbInterface;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Col\Factory as ColFactory;
-use rsanchez\Entries\EntityCollection;
+use rsanchez\Entries\Entity\Collection as EntityCollection;
 use rsanchez\Entries\Property;
-use rsanchez\Entries\Entity;
+use rsanchez\Entries\Entity\Entity;
 
 class Matrix extends Field implements \IteratorAggregate
 {
