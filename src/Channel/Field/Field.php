@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Channel;
+namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Property\AbstractProperty;

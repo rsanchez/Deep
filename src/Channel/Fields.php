@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Channel;
 
-use rsanchez\Deep\Channel\Field;
+use rsanchez\Deep\Channel\Field\Field;
 use rsanchez\Deep\Channel\Field\Group;
 use rsanchez\Deep\Channel\Field\Collection;
 use rsanchez\Deep\Channel\Field\GroupFactory;

@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Property\FactoryInterface as PropertyFactoryInterface;
-use rsanchez\Deep\Channel\Field;
+use rsanchez\Deep\Channel\Field\Field;
 use stdClass;
 
 class Factory implements PropertyFactoryInterface

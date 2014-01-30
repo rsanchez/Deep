@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Channel\Field;
 
-use rsanchez\Deep\Channel\Field;
+use rsanchez\Deep\Channel\Field\Field;
 use rsanchez\Deep\Channel\Field\Collection;
 use IteratorAggregate;
 use ArrayIterator;
