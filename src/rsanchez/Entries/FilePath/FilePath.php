@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\FilePath;
 
-use \stdClass;
+use stdClass;
 
 class FilePath
 {

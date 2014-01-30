@@ -2,8 +2,8 @@
 
 namespace rsanchez\Entries\FilePath;
 
-use rsanchez\Entries\FilePath;
-use \stdClass;
+use rsanchez\Entries\FilePath\FilePath;
+use stdClass;
 
 class Factory
 {

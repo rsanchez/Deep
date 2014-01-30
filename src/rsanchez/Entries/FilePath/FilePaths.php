@@ -1,11 +1,11 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\FilePath;
 
-use rsanchez\Entries\FilePath;
+use rsanchez\Entries\FilePath\FilePath;
 use rsanchez\Entries\FilePath\Storage;
 use rsanchez\Entries\FilePath\Factory;
-use \IteratorAggregate;
+use IteratorAggregate;
 
 class FilePaths implements IteratorAggregate
 {

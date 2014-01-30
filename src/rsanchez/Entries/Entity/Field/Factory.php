@@ -2,7 +2,7 @@
 
 namespace rsanchez\Entries\Entity\Field;
 
-use rsanchez\Entries\FilePaths;
+use rsanchez\Entries\FilePath\FilePaths;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entries;
