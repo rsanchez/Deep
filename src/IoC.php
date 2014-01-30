@@ -7,7 +7,7 @@ use rsanchez\Deep\Channel\Factory as ChannelFactory;
 use rsanchez\Deep\Channel\Field as ChannelField;
 use rsanchez\Deep\Channel\Field\Group as FieldGroup;
 use rsanchez\Deep\FilePath\FilePath;
-use rsanchez\Deep\FilePath\FilePaths;
+use rsanchez\Deep\FilePath\Repository;
 use rsanchez\Deep\FilePath\Factory as FilePathFactory;
 use rsanchez\Deep\FilePath\Storage as FilePathStorage;
 use rsanchez\Deep\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
@@ -85,8 +85,8 @@ class IoC extends Pimple
             return new ColFactory();
         };
 
-        $this['filePaths'] = function ($container) {
-            return new FilePaths(
+        $this['filePathRepository'] = function ($container) {
+            return new Repository(
                 $container['filePathStorage'],
                 $container['filePathFactory']
             );
@@ -118,7 +118,7 @@ class IoC extends Pimple
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntityFieldFactory($container['filePaths'], $container['colFactory']);
+            return new EntityFieldFactory($container['filePathRepository'], $container['colFactory']);
         };
 
         $this['entryFieldCollectionFactory'] = function ($container) {

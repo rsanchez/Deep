@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Entity\Field;
 
 use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Channel\Channel;
-use rsanchez\Deep\FilePath\FilePaths;
+use rsanchez\Deep\FilePath\Repository as FilePathRepository;
 use rsanchez\Deep\Entity\Field;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Property\AbstractProperty;
@@ -17,11 +17,11 @@ class File extends Field
         AbstractProperty $property,
         EntityCollection $entries,
         $entity = null,
-        FilePaths $filePaths
+        FilePathRepository $filePathRepository
     ) {
         parent::__construct($value, $property, $entries, $entity);
 
-        $this->filePaths = $filePaths;
+        $this->filePathRepository = $filePathRepository;
     }
 
     public function __toString()
@@ -34,7 +34,7 @@ class File extends Field
 
         if (preg_match('/^{filedir_(\d+)}/', $this->value, $match)) {
             try {
-                $filePath = $this->filePaths->find($match[1]);
+                $filePath = $this->filePathRepository->find($match[1]);
 
                 return str_replace($match[0], $filePath->url, $this->value);
             } catch (Exception $e) {

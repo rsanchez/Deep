@@ -7,7 +7,7 @@ use rsanchez\Deep\FilePath\Storage;
 use rsanchez\Deep\FilePath\Factory;
 use IteratorAggregate;
 
-class FilePaths implements IteratorAggregate
+class Repository implements IteratorAggregate
 {
     private $filePaths = array();
     private $filePathsById = array();

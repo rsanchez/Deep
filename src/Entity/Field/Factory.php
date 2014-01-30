@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Entity\Field;
 
-use rsanchez\Deep\FilePath\FilePaths;
+use rsanchez\Deep\FilePath\Repository as FilePathRepository;
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Entity\Field;
 use rsanchez\Deep\Entry\Entries;
@@ -13,11 +13,11 @@ use Pimple;
 
 class Factory extends Pimple
 {
-    public function __construct(FilePaths $filePaths, ColFactory $colFactory)
+    public function __construct(FilePathRepository $filePathRepository, ColFactory $colFactory)
     {
         parent::__construct();
 
-        $this['filePaths'] = $filePaths;
+        $this['filePathRepository'] = $filePathRepository;
         $this['colFactory'] = $colFactory;
 
         $this['date'] = $this->factory(function ($container) {
@@ -25,7 +25,7 @@ class Factory extends Pimple
         });
 
         $this['file'] = $this->factory(function ($container) {
-            return new File($container['value'], $container['property'], $container['entries'], $container['entry'], $container['filePaths']);
+            return new File($container['value'], $container['property'], $container['entries'], $container['entry'], $container['filePathRepository']);
         });
 
         $this['matrix'] = $this->factory(function ($container) {
