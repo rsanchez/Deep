@@ -1,12 +1,12 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Property;
 
-use rsanchez\Entries\Property;
-use \IteratorAggregate;
-use \ArrayIterator;
+use rsanchez\Entries\Property\AbstractProperty;
+use IteratorAggregate;
+use ArrayIterator;
 
-class PropertyCollection implements IteratorAggregate
+abstract class AbstractCollection implements IteratorAggregate
 {
     protected $filterClass;
 
@@ -66,7 +66,7 @@ class PropertyCollection implements IteratorAggregate
         return array_keys($this->propertiesById);
     }
 
-    public function push(Property $field)
+    public function push(AbstractProperty $field)
     {
         array_push($this->properties, $field);
 

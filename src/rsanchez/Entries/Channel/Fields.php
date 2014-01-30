@@ -8,8 +8,8 @@ use rsanchez\Entries\Channel\Field\Collection;
 use rsanchez\Entries\Channel\Field\GroupFactory;
 use rsanchez\Entries\Channel\Field\Factory as FieldFactory;
 use rsanchez\Entries\Channel\Field\Storage as FieldStorage;
-use \IteratorAggregate;
-use \ArrayIterator;
+use IteratorAggregate;
+use ArrayIterator;
 
 class Fields extends Collection
 {

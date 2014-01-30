@@ -1,8 +1,10 @@
 <?php
 
-namespace rsanchez\Entries;
+namespace rsanchez\Entries\Property;
 
-abstract class Property
+use stdClass;
+
+abstract class AbstractProperty
 {
     // exp_fieldtypes
     public $fieldtype_id;
@@ -10,8 +12,8 @@ abstract class Property
     public $version;
     public $settings;
     public $has_global_settings;
-    
-    public function __construct(\stdClass $row)
+
+    public function __construct(stdClass $row)
     {
         $properties = get_class_vars(get_class($this));
 

@@ -2,10 +2,10 @@
 
 namespace rsanchez\Entries\Col;
 
-use rsanchez\Entries\Property;
+use rsanchez\Entries\Property\AbstractProperty;
 use stdClass;
 
-class Col extends Property
+class Col extends AbstractProperty
 {
     // exp_matrix_cols
     public $col_id;

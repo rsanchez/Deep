@@ -3,9 +3,9 @@
 namespace rsanchez\Entries\Channel;
 
 use rsanchez\Entries\Channel\Channel;
-use \rsanchez\Entries\Property;
+use rsanchez\Entries\Property\AbstractProperty;
 
-class Field extends Property
+class Field extends AbstractProperty
 {
     // exp_channel_fields
     public $field_id;

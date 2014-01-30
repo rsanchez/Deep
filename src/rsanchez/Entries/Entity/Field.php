@@ -5,7 +5,7 @@ namespace rsanchez\Entries\Entity;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Col\Factory as ColFactory;
-use rsanchez\Entries\Property;
+use rsanchez\Entries\Property\AbstractProperty;
 use rsanchez\Entries\Entity\Entity;
 use rsanchez\Entries\Entity\Collection as EntityCollection;
 
@@ -22,7 +22,7 @@ class Field
 
     public function __construct(
         $value,
-        Property $property,
+        AbstractProperty $property,
         EntityCollection $entries,
         $entity = null
     ) {

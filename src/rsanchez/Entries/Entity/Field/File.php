@@ -7,14 +7,14 @@ use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\FilePath\FilePaths;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Collection as EntityCollection;
-use rsanchez\Entries\Property;
+use rsanchez\Entries\Property\AbstractProperty;
 use rsanchez\Entries\Entity\Entity;
 
 class File extends Field
 {
     public function __construct(
         $value,
-        Property $property,
+        AbstractProperty $property,
         EntityCollection $entries,
         $entity = null,
         FilePaths $filePaths

@@ -6,7 +6,7 @@ use rsanchez\Entries\FilePath\FilePaths;
 use rsanchez\Entries\Channel\Channel;
 use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entries;
-use rsanchez\Entries\Property;
+use rsanchez\Entries\Property\AbstractProperty;
 use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entity\Entity;
 use \Pimple;
@@ -39,7 +39,7 @@ class Factory extends Pimple
 
     public function createField(
         $value,
-        Property $property,
+        AbstractProperty $property,
         Entries $entries,
         $entry = null
     ) {

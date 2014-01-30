@@ -8,10 +8,11 @@ use rsanchez\Entries\Entity\Field;
 use rsanchez\Entries\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Entries\Col\Factory as ColFactory;
 use rsanchez\Entries\Entity\Collection as EntityCollection;
-use rsanchez\Entries\Property;
+use rsanchez\Entries\Property\AbstractProperty;
 use rsanchez\Entries\Entity\Entity;
+use IteratorAggregate;
 
-class Matrix extends Field implements \IteratorAggregate
+class Matrix extends Field implements IteratorAggregate
 {
     public $total_rows = 0;
     protected $preload = true;
@@ -19,7 +20,7 @@ class Matrix extends Field implements \IteratorAggregate
 
     public function __construct(
         $value,
-        Property $property,
+        AbstractProperty $property,
         EntityCollection $entries,
         $entity = null,
         EntityFieldFactory $entryFieldFactory,
