@@ -164,8 +164,10 @@ class Model
         return $this;
     }
 
-    protected function setArrayRegexParam(&$property, $value, $pattern, $default = null)
+    protected function setArrayRegexParam(&$property, $value, $pattern)
     {
+        $property = array();
+
         if (! is_array($value)) {
             $value = explode('|', $value);
         }
@@ -173,8 +175,6 @@ class Model
         foreach ($value as $v) {
             if (preg_match($pattern, $v)) {
                 $property[] = $v;
-            } elseif ($default !== null) {
-                $property[] = $default;
             }
         }
 
@@ -222,7 +222,7 @@ class Model
                 $channel = $this->channelRepository->find($channelName);
 
                 $channelId[] = $channel->channel_id;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 //$e->getMessage();
             }
         }
@@ -443,6 +443,8 @@ class Model
         if ($this->day) {
             $this->db->where('channel_titles.day', $this->day);
         }
+
+        #exit($this->db->_compile_select());
 
         return $this->db->get();
     }
@@ -686,7 +688,7 @@ class Model
 
     public function orderby($value)
     {
-        $this->setStringParam($this->orderby, $value);
+        $this->setArrayParam($this->orderby, $value);
 
         return $this;
     }
@@ -703,7 +705,7 @@ class Model
         $this->setArrayParam($this->exactSearch[$fieldName], $exactSearch);
     }
 
-    public function search($field, $value)
+    public function search($fieldName, $value)
     {
         $this->setArrayParam($this->search[$fieldName], $search);
 
@@ -744,7 +746,7 @@ class Model
 
     public function sort($value)
     {
-        $this->setArrayRegexParam($this->sort, $value, '/^asc|desc$/i', 'asc');
+        $this->setArrayRegexParam($this->sort, $value, '/^asc|desc$/i');
 
         return $this;
     }
