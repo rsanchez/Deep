@@ -35,6 +35,17 @@ class Entries extends EntityCollection
         $this->factory = $factory;
     }
 
+    public function applyParams(array $params)
+    {
+        foreach ($params as $key => $value) {
+            if (strncmp($key, 'search:', 7) === 0) {
+                $this->__call('search', array(substr($key, 7), $value));
+            } else {
+                $this->__call($key, array($value));
+            }
+        }
+    }
+
     public function push(Entry $entry)
     {
         parent::push($entry);

@@ -4,23 +4,28 @@ namespace rsanchez\Deep;
 
 use rsanchez\Deep\IoC;
 
+/**
+ * A static interface to the IoC
+ */
 class Deep
 {
-    private static $ioc;
-
-    private static function ioc()
+    public static function __callStatic($name, $args)
     {
-        if (is_null(self::$ioc)) {
-            self::$ioc = new IoC();
+        static $ioc;
+
+        if (is_null($ioc)) {
+            $ioc = new IoC();
         }
 
-        return self::$ioc;
+        return $ioc[$name];
     }
 
-    public static function entries()
+    public static function entries($params = array())
     {
-        $ioc = self::ioc();
+        $entries = self::__callStatic('entries', null);
 
-        return $ioc[__FUNCTION__];
+        $entries->applyParams($params);
+
+        return $entries;
     }
 }
