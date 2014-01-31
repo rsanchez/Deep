@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep;
 
-use rsanchez\Deep\Entity\Field;
+use rsanchez\Deep\Entity\Field\Field;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\EE\Template;
 use CI_Controller;

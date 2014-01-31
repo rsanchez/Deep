@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Entry;
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Entity\Entity;
-use rsanchez\Deep\Entity\Field;
+use rsanchez\Deep\Entity\Field\Field;
 use rsanchez\Deep\Entity\Field\Collection as FieldCollection;
 use stdClass;
 

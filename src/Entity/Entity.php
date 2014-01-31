@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Entity;
 
-use rsanchez\Deep\Entity\Field;
+use rsanchez\Deep\Entity\Field\Field;
 use rsanchez\Deep\Entity\Field\Collection as FieldCollection;
 use stdClass;
 

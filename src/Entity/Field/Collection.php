@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Entity\Field;
 
-use rsanchez\Deep\Entity\Field;
+use rsanchez\Deep\Entity\Field\Field;
 use IteratorAggregate;
 use ArrayIterator;
 

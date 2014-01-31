@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Entity;
+namespace rsanchez\Deep\Entity\Field;
 
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
