@@ -14,28 +14,8 @@ use rsanchez\Deep\Entry\Collection as EntryCollection;
 
 class Field extends EntityField
 {
-    protected $entry;
-
-    public function __construct(
-        $value,
-        ChannelField $channelField,
-        Entries $entries,
-        $entry = null
-    ) {
-        parent::__construct($value, $channelField, $entries, $entry);
-
-        $this->channelField = $this->property;
-        $this->entry = $this->entity;
-        $this->entries = $this->collection;
-    }
-
-    public function setEntity(Entry $entry)
+    public function __construct($value, ChannelField $channelField)
     {
-        $this->entity = $entry;
-    }
-
-    public function setEntry(Entry $entry)
-    {
-        $this->setEntity($entry);
+        parent::__construct($value, $channelField);
     }
 }

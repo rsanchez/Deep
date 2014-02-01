@@ -13,12 +13,8 @@ use rsanchez\Deep\Common\Field\AbstractFactory;
 
 class Factory extends AbstractFactory
 {
-    public function createField(
-        $value,
-        AbstractProperty $property,
-        Entries $entries,
-        $entry = null
-    ) {
-        return new Field($value, $property, $entries, $entry);
+    public function createField($value, AbstractProperty $property)
+    {
+        return new Field($value, $property);
     }
 }

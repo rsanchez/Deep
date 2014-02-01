@@ -1,54 +1,42 @@
 <?php
 
-namespace rsanchez\Deep\Entity\Field;
+namespace rsanchez\Deep\Fieldtype;
 
 use rsanchez\Deep\Db\DbInterface;
-use rsanchez\Deep\Channel\Channel;
-use rsanchez\Deep\Entity\Field\Field;
+use rsanchez\Deep\Common\Field\Field;
 use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Property\AbstractProperty;
 use rsanchez\Deep\Entity\Entity;
 use IteratorAggregate;
+use stdClass;
 
-class Matrix extends Field implements IteratorAggregate
+class Matrix extends Fieldtype
 {
-    public $total_rows = 0;
     protected $preload = true;
     protected $preloadHighPriority = true;
 
     public function __construct(
-        $value,
-        AbstractProperty $property,
-        EntityCollection $entries,
-        $entity = null,
-        EntityFieldFactory $entryFieldFactory,
-        ColFactory $colFactory
+        stdClass $row,
+        RowFieldFactory $rowFieldFactory,
+        ColRepository $colRepository,
+        MatrixStorage $matrixStorage
     ) {
-        parent::__construct($value, $property, $entries, $entity);
+        parent::__construct($row);
 
-        $this->entryFieldFactory = $entryFieldFactory;
-        $this->colFactory = $colFactory;
+        $this->rowFieldFactory = $rowFieldFactory;
+        $this->colRepository = $colRepository;
+        $this->matrixStorage = $matrixStorage;
     }
 
-    public function __invoke()
+    public function __invoke($value)
     {
-        return $this;
-    }
 
-    public function __toString()
-    {
-        return $this->total_rows ? (string) $this->total_rows : '';
-    }
-
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->value);
     }
 
     //@TODO move this to channelField
-    public function preload(DbInterface $db, $entryIds, $fieldIds)
+    public function preload($entryIds, $fieldIds)
     {
         $query = $db->where_in('field_id', $fieldIds)
                     ->get('matrix_cols');
@@ -83,11 +71,11 @@ class Matrix extends Field implements IteratorAggregate
         return $payload;
     }
 
-    public function hydrate($payload)
+    public function hydrate($payload, Field $field)
     {
         static $channelFields = array();
 
-        $this->value = array();
+        $field->value = array();
 
         if (! isset($payload[$this->entity->entry_id][$this->property->id()])) {
             return;

@@ -85,7 +85,10 @@ class IoC extends Pimple
         };
 
         $this['fieldtypeFactory'] = function ($container) {
-            return new FieldtypeFactory();
+            return new FieldtypeFactory(
+                $container['filePathRepository'],
+                $container['colFactory']
+            );
         };
 
         $this['fieldGroupFactory'] = function ($container) {
@@ -140,7 +143,7 @@ class IoC extends Pimple
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntryFieldFactory($container['filePathRepository'], $container['colFactory']);
+            return new EntryFieldFactory();
         };
 
         $this['entryFieldCollectionFactory'] = function ($container) {

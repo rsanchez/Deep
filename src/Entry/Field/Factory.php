@@ -10,12 +10,8 @@ use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
 
 class Factory extends EntityFieldFactory
 {
-    public function createField(
-        $value,
-        ChannelField $channelField,
-        Entries $entries,
-        $entry = null
-    ) {
-        return new Field($value, $channelField, $entries, $entry);
+    public function createField($value, ChannelField $channelField)
+    {
+        return new Field($value, $channelField);
     }
 }

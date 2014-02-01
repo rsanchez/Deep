@@ -12,6 +12,9 @@ class Fieldtype
     public $settings;
     public $has_global_settings;
 
+    protected $preload = false;
+    protected $preloadHighPriority = false;
+
     public function __construct(stdClass $row)
     {
         $properties = get_class_vars(__CLASS__);
@@ -27,5 +30,17 @@ class Fieldtype
         } else {
             $this->settings = array();
         }
+
+        if ($this->preload) {
+            $collection->registerFieldPreloader($this->property->type(), $this, $this->preloadHighPriority);
+        }
+    }
+
+    public function preload(DbInterface $db, array $entryIds, array $fieldIds)
+    {
+    }
+
+    public function postload($payload, EntityFieldFactory $entryFieldFactory, ColFactory $colFactory)
+    {
     }
 }
