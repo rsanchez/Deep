@@ -25,6 +25,11 @@ abstract class AbstractProperty
         $this->fieldtype = $fieldtype;
     }
 
+    public function fieldtype()
+    {
+        return call_user_func_array(array($this->fieldtype, '__invoke'), func_get_args());
+    }
+
     abstract public function settings();
 
     abstract public function id();
