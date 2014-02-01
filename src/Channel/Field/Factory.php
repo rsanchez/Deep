@@ -2,23 +2,13 @@
 
 namespace rsanchez\Deep\Channel\Field;
 
-use rsanchez\Deep\Property\FactoryInterface as PropertyFactoryInterface;
+use rsanchez\Deep\Property\AbstractFactory as AbstractPropertyFactory;
 use rsanchez\Deep\Channel\Field\Field;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use stdClass;
 
-class Factory implements PropertyFactoryInterface
+class Factory extends AbstractPropertyFactory
 {
-    /**
-     * @var rsanchez\Deep\Fieldtype\Repository
-     */
-    private $fieldtypeRepository;
-
-    public function __construct(FieldtypeRepository $fieldtypeRepository)
-    {
-        $this->fieldtypeRepository = $fieldtypeRepository;
-    }
-
     /**
      * @inheritdoc
      * @return rsanchez\Deep\Channel\Field
