@@ -3,8 +3,9 @@
 namespace rsanchez\Deep\Entity\Field;
 
 use rsanchez\Deep\Entity\Field\Collection;
+use rsanchez\Deep\Common\Field\CollectionFactoryInterface;
 
-class CollectionFactory
+class CollectionFactory implements CollectionFactoryInterface
 {
     public function createCollection()
     {
