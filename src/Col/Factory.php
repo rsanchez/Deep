@@ -2,11 +2,11 @@
 
 namespace rsanchez\Deep\Col;
 
-use rsanchez\Deep\Property\FactoryInterface as PropertyFactoryInterface;
+use rsanchez\Deep\Property\AbstractFactory;
 use rsanchez\Deep\Col\Col;
 use stdClass;
 
-class Factory implements PropertyFactoryInterface
+class Factory extends AbstractFactory
 {
     /**
      * @inheritdoc
@@ -14,6 +14,6 @@ class Factory implements PropertyFactoryInterface
      */
     public function createProperty(stdClass $row)
     {
-        return new Col($row);
+        return new Col($row, $this->fieldtypeRepository->find($row->col_type));
     }
 }

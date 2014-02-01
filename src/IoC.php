@@ -10,7 +10,6 @@ use rsanchez\Deep\FilePath\FilePath;
 use rsanchez\Deep\FilePath\Repository as FilePathRepository;
 use rsanchez\Deep\FilePath\Factory as FilePathFactory;
 use rsanchez\Deep\FilePath\Storage as FilePathStorage;
-use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\Factory as FieldtypeFactory;
 use rsanchez\Deep\Fieldtype\Storage as FieldtypeStorage;
@@ -31,7 +30,12 @@ use rsanchez\Deep\Entry\Field\Field as EntryField;
 use rsanchez\Deep\Entry\Field\Factory as EntryFieldFactory;
 use rsanchez\Deep\Entry\Field\CollectionFactory as EntryFieldCollectionFactory;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
+use rsanchez\Deep\Fieldtype\Fieldtype;
+use rsanchez\Deep\Fieldtype\Date as DateFieldtype;
+use rsanchez\Deep\Fieldtype\File as FileFieldtype;
+use rsanchez\Deep\Fieldtype\Matrix as MatrixFieldtype;
 use Pimple;
+use stdClass;
 
 class IoC extends Pimple
 {
@@ -85,10 +89,7 @@ class IoC extends Pimple
         };
 
         $this['fieldtypeFactory'] = function ($container) {
-            return new FieldtypeFactory(
-                $container['filePathRepository'],
-                $container['colFactory']
-            );
+            return new FieldtypeFactory();
         };
 
         $this['fieldGroupFactory'] = function ($container) {
@@ -102,12 +103,12 @@ class IoC extends Pimple
             );
         };
 
-        $this['channelFieldFactory'] = function ($container) {
-            return new ChannelFieldFactory($container['fieldtypeRepository']);
+        $this['colFactory'] = function ($container) {
+            return new ColFactory($container['fieldtypeRepository']);
         };
 
-        $this['colFactory'] = function ($container) {
-            return new ColFactory();
+        $this['channelFieldFactory'] = function ($container) {
+            return new ChannelFieldFactory($container['fieldtypeRepository']);
         };
 
         $this['filePathRepository'] = function ($container) {
@@ -166,5 +167,27 @@ class IoC extends Pimple
 
             return $entries;
         });
+
+        //register the core fieldtypes
+        $this['dateFieldtypeClosure'] = $this->protect(function (stdClass $row) {
+            return new DateFieldtype($row);
+        });
+
+        $filePathRepository = $this['filePathRepository'];
+
+        $this['fileFieldtypeClosure'] = $this->protect(function (stdClass $row) use ($filePathRepository) {
+            return new FileFieldtype($row, $filePathRepository);
+        });
+
+        $fieldtypeRepository = $this['fieldtypeRepository'];
+        $colFactory = $this['colFactory'];
+
+        $this['matrixFieldtypeClosure'] = $this->protect(function (stdClass $row) use ($fieldtypeRepository, $colFactory) {
+            return new MatrixFieldtype($row, $fieldtypeRepository, $colFactory);
+        });
+        
+        $this['fieldtypeFactory']->registerFieldtype('date', $this['dateFieldtypeClosure']);
+        $this['fieldtypeFactory']->registerFieldtype('file', $this['fileFieldtypeClosure']);
+        $this['fieldtypeFactory']->registerFieldtype('matrix', $this['matrixFieldtypeClosure']);
     }
 }

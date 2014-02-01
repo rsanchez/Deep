@@ -3,50 +3,30 @@
 namespace rsanchez\Deep\Fieldtype;
 
 use rsanchez\Deep\Fieldtype\Fieldtype;
-use rsanchez\Deep\Common\Field\AbstractField;
-use rsanchez\Deep\Property\AbstractProperty;
-use rsanchez\Deep\FilePath\Repository as FilePathRepository;
-use rsanchez\Deep\Col\Factory as ColFactory;
-use Pimple;
+use Closure;
 use stdClass;
 
-class Factory extends Pimple
+class Factory
 {
-    public function __construct(FilePathRepository $filePathRepository, ColFactory $colFactory)
+    protected $registeredFieldtypes = array();
+
+    /**
+     * Register new fieldtypes that can be instantiated by this factory
+     * @param  string  $type    the short name of the fieldtype (eg. matrix)
+     * @param  Closure $closure a closure that returns rsanchez\Deep\Fieldtype\Fieldtype or descendant
+     * @return void
+     */
+    public function registerFieldtype($type, Closure $closure)
     {
-        parent::__construct();
-
-        $this['filePathRepository'] = $filePathRepository;
-        $this['colFactory'] = $colFactory;
-
-        $this['date'] = $this->factory(function ($container) {
-            return new Date($container['row']);
-        });
-
-        $this['file'] = $this->factory(function ($container) {
-            return new File($container['row'], $container['filePathRepository']);
-        });
-
-        //@TODO enable this
-        /*
-        $this['matrix'] = $this->factory(function ($container) {
-            return new Matrix($container['row'], $container, $container['colFactory']);
-        });
-        */
-
-        $this['fieldtype'] = $this->factory(function ($container) {
-            return new Fieldtype($container['row']);
-        });
+        $this->registeredFieldtypes[$type] = $closure;
     }
 
     public function createFieldtype(stdClass $row)
     {
-        $this['row'] = $row;
-
-        if (isset($this[$row->name])) {
-            return $this[$row->name];
+        if (isset($this->registeredFieldtypes[$row->name])) {
+            return call_user_func($this->registeredFieldtypes[$row->name], $row);
         }
 
-        return $this['fieldtype'];
+        return new Fieldtype($row);
     }
 }
