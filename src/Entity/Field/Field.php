@@ -3,19 +3,18 @@
 namespace rsanchez\Deep\Entity\Field;
 
 use rsanchez\Deep\Channel\Channel;
+use rsanchez\Deep\Common\Field\AbstractField;
 use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Property\AbstractProperty;
 use rsanchez\Deep\Entity\Entity;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 
-class Field
+class Field extends AbstractField
 {
     protected $channel;
-    protected $property;
     protected $entity;
     protected $entries;
-    public $value;
 
     protected $preload = false;
     protected $preloadHighPriority = false;
@@ -26,9 +25,9 @@ class Field
         EntityCollection $entries,
         $entity = null
     ) {
-        $this->property = $property;
+        parent::__construct($value, $property);
+
         $this->entries = $entries;
-        $this->value = $value;
 
         if ($entity instanceof Entity) {
             $this->entity = $entity;
@@ -42,36 +41,6 @@ class Field
     public function setEntity(Entity $entity)
     {
         $this->entity = $entity;
-    }
-
-    public function settings()
-    {
-        return $this->property->settings();
-    }
-
-    public function id()
-    {
-        return $this->property->id();
-    }
-
-    public function type()
-    {
-        return $this->property->type();
-    }
-
-    public function name()
-    {
-        return $this->property->name();
-    }
-
-    public function __toString()
-    {
-        return (string) $this->value;
-    }
-
-    public function __invoke()
-    {
-        return $this->__toString();
     }
 
     public function preload(DbInterface $db, array $entryIds, array $fieldIds)
