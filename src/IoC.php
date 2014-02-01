@@ -156,16 +156,12 @@ class IoC extends Pimple
         };
 
         $this['entries'] = $this->factory(function ($container) {
-            $entries = new Entries(
+            return new Entries(
                 $container['channelRepository'],
                 $container['model'],
                 $container['db'],
                 $container['entryFactory']
             );
-
-            $entries->setBaseUrl($container['ee']->config->item('site_url'));
-
-            return $entries;
         });
 
         //register the core fieldtypes
@@ -189,5 +185,6 @@ class IoC extends Pimple
         $this['fieldtypeFactory']->registerFieldtype('date', $this['dateFieldtypeClosure']);
         $this['fieldtypeFactory']->registerFieldtype('file', $this['fileFieldtypeClosure']);
         $this['fieldtypeFactory']->registerFieldtype('matrix', $this['matrixFieldtypeClosure']);
+        Entry::$baseUrl = $this['ee']->config->item('site_url');
     }
 }
