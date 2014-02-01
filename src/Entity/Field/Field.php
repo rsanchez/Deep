@@ -12,9 +12,8 @@ use rsanchez\Deep\Entity\Collection as EntityCollection;
 
 class Field extends AbstractField
 {
-    protected $channel;
     protected $entity;
-    protected $entries;
+    protected $collection;
 
     protected $preload = false;
     protected $preloadHighPriority = false;
@@ -22,19 +21,19 @@ class Field extends AbstractField
     public function __construct(
         $value,
         AbstractProperty $property,
-        EntityCollection $entries,
+        EntityCollection $collection,
         $entity = null
     ) {
         parent::__construct($value, $property);
 
-        $this->entries = $entries;
+        $this->collection = $collection;
 
         if ($entity instanceof Entity) {
             $this->entity = $entity;
         }
 
         if ($this->preload) {
-            $entries->registerFieldPreloader($this->property->type(), $this, $this->preloadHighPriority);
+            $collection->registerFieldPreloader($this->property->type(), $this, $this->preloadHighPriority);
         }
     }
 

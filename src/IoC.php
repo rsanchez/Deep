@@ -14,7 +14,6 @@ use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\Factory as FieldtypeFactory;
 use rsanchez\Deep\Fieldtype\Storage as FieldtypeStorage;
-use rsanchez\Deep\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
 use rsanchez\Deep\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Deep\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Deep\Channel\Field\Repository as ChannelFieldRepository;
@@ -27,6 +26,10 @@ use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Entity\Field\Field as EntityField;
 use rsanchez\Deep\Entry\Model;
 use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
+use rsanchez\Deep\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
+use rsanchez\Deep\Entry\Field\Field as EntryField;
+use rsanchez\Deep\Entry\Field\Factory as EntryFieldFactory;
+use rsanchez\Deep\Entry\Field\CollectionFactory as EntryFieldCollectionFactory;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
 use Pimple;
 
@@ -137,11 +140,11 @@ class IoC extends Pimple
         });
 
         $this['entryFieldFactory'] = function ($container) {
-            return new EntityFieldFactory($container['filePathRepository'], $container['colFactory']);
+            return new EntryFieldFactory($container['filePathRepository'], $container['colFactory']);
         };
 
         $this['entryFieldCollectionFactory'] = function ($container) {
-            return new EntityFieldCollectionFactory();
+            return new EntryFieldCollectionFactory();
         };
 
         $this['entryFactory'] = function ($container) {

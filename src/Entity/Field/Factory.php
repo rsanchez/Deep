@@ -9,49 +9,15 @@ use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Property\AbstractProperty;
 use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Entity\Entity;
-use Pimple;
 
-class Factory extends Pimple
+class Factory
 {
-    public function __construct(FilePathRepository $filePathRepository, ColFactory $colFactory)
-    {
-        parent::__construct();
-
-        $this['filePathRepository'] = $filePathRepository;
-        $this['colFactory'] = $colFactory;
-
-        $this['date'] = $this->factory(function ($container) {
-            return new Date($container['value'], $container['property'], $container['entries'], $container['entry']);
-        });
-
-        $this['file'] = $this->factory(function ($container) {
-            return new File($container['value'], $container['property'], $container['entries'], $container['entry'], $container['filePathRepository']);
-        });
-
-        $this['matrix'] = $this->factory(function ($container) {
-            return new Matrix($container['value'], $container['property'], $container['entries'], $container['entry'], $container, $container['colFactory']);
-        });
-
-        $this['field'] = $this->factory(function ($container) {
-            return new Field($container['value'], $container['property'], $container['entries'], $container['entry']);
-        });
-    }
-
     public function createField(
         $value,
         AbstractProperty $property,
         Entries $entries,
         $entry = null
     ) {
-        $this['property'] = $property;
-        $this['entries'] = $entries;
-        $this['entry'] = $entry;
-        $this['value'] = $value;
-
-        if (isset($this[$property->type()])) {
-            return $this[$property->type()];
-        }
-
-        return $this['field'];
+        return new Field($value, $property, $entries, $entry);
     }
 }
