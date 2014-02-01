@@ -7,9 +7,13 @@ use rsanchez\Deep\Channel\Factory as ChannelFactory;
 use rsanchez\Deep\Channel\Field as ChannelField;
 use rsanchez\Deep\Channel\Field\Group as FieldGroup;
 use rsanchez\Deep\FilePath\FilePath;
-use rsanchez\Deep\FilePath\Repository;
+use rsanchez\Deep\FilePath\Repository as FilePathRepository;
 use rsanchez\Deep\FilePath\Factory as FilePathFactory;
 use rsanchez\Deep\FilePath\Storage as FilePathStorage;
+use rsanchez\Deep\Fieldtype\Fieldtype;
+use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
+use rsanchez\Deep\Fieldtype\Factory as FieldtypeFactory;
+use rsanchez\Deep\Fieldtype\Storage as FieldtypeStorage;
 use rsanchez\Deep\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
 use rsanchez\Deep\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Deep\Channel\Field\Factory as ChannelFieldFactory;
@@ -57,6 +61,10 @@ class IoC extends Pimple
             return $db;
         });
 
+        $this['fieldtypeStorage'] = function ($container) {
+            return new FieldtypeStorage($container['db']);
+        };
+
         $this['filePathStorage'] = function ($container) {
             return new FilePathStorage($container['db'], $container['ee']->config->item('upload_prefs'));
         };
@@ -73,12 +81,23 @@ class IoC extends Pimple
             return new FilePathFactory();
         };
 
+        $this['fieldtypeFactory'] = function ($container) {
+            return new FieldtypeFactory();
+        };
+
         $this['fieldGroupFactory'] = function ($container) {
             return new FieldGroupFactory();
         };
 
+        $this['fieldtypeRepository'] = function ($container) {
+            return new FieldtypeRepository(
+                $container['fieldtypeStorage'],
+                $container['fieldtypeFactory']
+            );
+        };
+
         $this['channelFieldFactory'] = function ($container) {
-            return new ChannelFieldFactory();
+            return new ChannelFieldFactory($container['fieldtypeRepository']);
         };
 
         $this['colFactory'] = function ($container) {
@@ -86,7 +105,7 @@ class IoC extends Pimple
         };
 
         $this['filePathRepository'] = function ($container) {
-            return new Repository(
+            return new FilePathRepository(
                 $container['filePathStorage'],
                 $container['filePathFactory']
             );
