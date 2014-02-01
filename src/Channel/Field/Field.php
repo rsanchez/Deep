@@ -33,16 +33,9 @@ class Field extends AbstractProperty
     public $field_content_type;
     public $field_settings;
 
-    /**
-     * @var Fieldtype $fieldtype
-     */
-    public $fieldtype;
-
     public function __construct(stdClass $row, Fieldtype $fieldtype)
     {
-        parent::__construct($row);
-
-        $this->fieldtype = $fieldtype;
+        parent::__construct($row, $fieldtype);
 
         if ($this->field_settings) {
             $this->field_settings = unserialize(base64_decode($this->field_settings));

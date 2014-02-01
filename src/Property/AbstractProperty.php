@@ -2,18 +2,17 @@
 
 namespace rsanchez\Deep\Property;
 
+use rsanchez\Deep\Fieldtype\Fieldtype;
 use stdClass;
 
 abstract class AbstractProperty
 {
-    // exp_fieldtypes
-    public $fieldtype_id;
-    public $name;
-    public $version;
-    public $settings;
-    public $has_global_settings;
+    /**
+     * @var Fieldtype $fieldtype
+     */
+    public $fieldtype;
 
-    public function __construct(stdClass $row)
+    public function __construct(stdClass $row, Fieldtype $fieldtype)
     {
         $properties = get_class_vars(get_class($this));
 
@@ -22,6 +21,8 @@ abstract class AbstractProperty
                 $this->$property = $row->$property;
             }
         }
+
+        $this->fieldtype = $fieldtype;
     }
 
     abstract public function settings();

@@ -2,6 +2,7 @@
 
 namespace rsanchez\Deep\Col;
 
+use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Property\AbstractProperty;
 use stdClass;
 
@@ -19,9 +20,9 @@ class Col extends AbstractProperty
     public $col_width;
     public $col_settings;
 
-    public function __construct(stdClass $row)
+    public function __construct(stdClass $row, Fieldtype $fieldtype)
     {
-        parent::__construct($row);
+        parent::__construct($row, $fieldtype);
 
         if ($this->col_settings) {
             $this->col_settings = unserialize(base64_decode($this->col_settings));
@@ -30,7 +31,7 @@ class Col extends AbstractProperty
         }
 
         if ($this->has_global_settings === 'y') {
-            $this->col_settings = array_merge(unserialize(base64_decode($this->settings)), $this->col_settings);
+            $this->col_settings = array_merge($this->fieldtype->settings, $this->col_settings);
         }
     }
 
