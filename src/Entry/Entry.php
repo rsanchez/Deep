@@ -3,10 +3,13 @@
 namespace rsanchez\Deep\Entry;
 
 use rsanchez\Deep\Channel\Channel;
+use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
 use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Entity\Entity;
-use rsanchez\Deep\Entity\Field\Field;
-use rsanchez\Deep\Entity\Field\Collection as FieldCollection;
+use rsanchez\Deep\Entry\Field\Field;
+use rsanchez\Deep\Entry\Field\Collection as FieldCollection;
+use rsanchez\Deep\Entry\Field\Factory as FieldFactory;
+use rsanchez\Deep\Entry\Field\CollectionFactory as FieldCollectionFactory;
 use stdClass;
 
 class Entry extends Entity
@@ -52,14 +55,14 @@ class Entry extends Entity
      * @var rsanchez\Deep\Channel
      */
     public $channel;
-    protected $entries;
 
-    public function __construct(stdClass $row, FieldCollection $fieldCollection, Entries $entries, Channel $channel)
+    public static $baseUrl = '/';
+
+    public function __construct(stdClass $row, ChannelFieldCollection $propertyCollection, FieldFactory $fieldFactory, FieldCollectionFactory $fieldCollectionFactory, Channel $channel)
     {
-        parent::__construct($row, $fieldCollection, $entries, $channel);
+        parent::__construct($row, $propertyCollection, $fieldFactory, $fieldCollectionFactory);
 
         $this->channel = $channel;
-        $this->entries = $entries;
     }
 
     public function entryDate($format = 'U')
@@ -91,16 +94,16 @@ class Entry extends Entity
 
     public function urlTitlePath($path)
     {
-        return $this->entries->baseUrl().$path.'/'.$this->url_title;
+        return self::$baseUrl.$path.'/'.$this->url_title;
     }
 
     public function titlePermalink($path)
     {
-        return $this->entries->baseUrl().$path.'/'.$this->url_title;
+        return self::$baseUrl.$path.'/'.$this->url_title;
     }
 
     public function entryIdPath($path)
     {
-        return $this->entries->baseUrl().$path.'/'.$this->entry_id;
+        return self::$baseUrl.$path.'/'.$this->entry_id;
     }
 }

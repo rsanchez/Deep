@@ -30,6 +30,8 @@ abstract class AbstractProperty
         return call_user_func_array(array($this->fieldtype, '__invoke'), func_get_args());
     }
 
+    abstract public function prefix();
+
     abstract public function settings();
 
     abstract public function id();

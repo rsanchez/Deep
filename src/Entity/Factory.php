@@ -4,8 +4,9 @@ namespace rsanchez\Deep\Entity;
 
 use rsanchez\Deep\Entity\Field\Factory as FieldFactory;
 use rsanchez\Deep\Entity\Field\CollectionFactory as FieldCollectionFactory;
+use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
 
-abstract class Factory
+class Factory
 {
     protected $fieldFactory;
     protected $fieldCollectionFactory;
@@ -14,5 +15,10 @@ abstract class Factory
     {
         $this->fieldFactory = $fieldFactory;
         $this->fieldCollectionFactory = $fieldCollectionFactory;
+    }
+
+    public function createEntity(stdClass $row, PropertyCollection $propertyCollection)
+    {
+        return new Entity($row, $propertyCollection, $this->fieldFactory, $this->fieldCollectionFactory);
     }
 }

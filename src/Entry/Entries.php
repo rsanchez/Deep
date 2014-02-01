@@ -167,7 +167,7 @@ class Entries extends EntityCollection
             foreach ($query->result() as $row) {
                 $this->entryIds[] = $row->entry_id;
 
-                $entry = $this->factory->createEntry($row, $this, $this->channelRepository->find($row->channel_id));
+                $entry = $this->factory->createEntry($row, $this->channelRepository->find($row->channel_id));
 
                 $this->push($entry);
             }

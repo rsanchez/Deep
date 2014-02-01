@@ -35,6 +35,11 @@ class Col extends AbstractProperty
         }
     }
 
+    public function prefix()
+    {
+        return 'field_id_';
+    }
+
     public function settings()
     {
         return $this->col_settings;

@@ -48,6 +48,11 @@ class Field extends AbstractProperty
         }
     }
 
+    public function prefix()
+    {
+        return 'field_id_';
+    }
+
     public function settings()
     {
         return $this->field_settings;

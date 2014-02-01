@@ -3,7 +3,9 @@
 namespace rsanchez\Deep\Entity;
 
 use rsanchez\Deep\Entity\Field\Field;
-use rsanchez\Deep\Entity\Field\Collection as FieldCollection;
+use rsanchez\Deep\Entity\Field\Factory as FieldFactory;
+use rsanchez\Deep\Entity\Field\CollectionFactory as FieldCollectionFactory;
+use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
 use stdClass;
 
 class Entity
@@ -12,7 +14,7 @@ class Entity
 
     protected $methodAliases = array();
 
-    public function __construct(stdClass $row, FieldCollection $fieldCollection)
+    public function __construct(stdClass $row, PropertyCollection $propertyCollection, FieldFactory $fieldFactory, FieldCollectionFactory $fieldCollectionFactory)
     {
         $properties = get_class_vars(get_class($this));
 
@@ -22,10 +24,14 @@ class Entity
             }
         }
 
-        $this->fields = $fieldCollection;
+        $this->fields = $fieldCollectionFactory->createCollection();
 
-        foreach ($this->fields as $field) {
-            $this->{$field->name()} = $field;
+        foreach ($propertyCollection as $property) {
+            $column = $property->prefix().$property->id();
+            $value = property_exists($row, $column) ? $row->$column : '';
+            $field = $fieldFactory->createField($value, $property);
+            $this->fields->push($field);
+            $this->{$property->name()} = $field;
         }
     }
 
