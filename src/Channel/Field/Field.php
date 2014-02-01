@@ -3,7 +3,9 @@
 namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Channel\Channel;
+use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Property\AbstractProperty;
+use stdClass;
 
 class Field extends AbstractProperty
 {
@@ -31,9 +33,16 @@ class Field extends AbstractProperty
     public $field_content_type;
     public $field_settings;
 
-    public function __construct(\stdClass $row)
+    /**
+     * @var Fieldtype $fieldtype
+     */
+    public $fieldtype;
+
+    public function __construct(stdClass $row, Fieldtype $fieldtype)
     {
         parent::__construct($row);
+
+        $this->fieldtype = $fieldtype;
 
         if ($this->field_settings) {
             $this->field_settings = unserialize(base64_decode($this->field_settings));
@@ -41,17 +50,9 @@ class Field extends AbstractProperty
             $this->field_settings = array();
         }
 
-        if ($this->has_global_settings === 'y') {
-            $this->field_settings = array_merge(unserialize(base64_decode($this->settings)), $this->field_settings);
+        if ($this->fieldtype->has_global_settings === 'y') {
+            $this->field_settings = array_merge($this->fieldtype->settings, $this->field_settings);
         }
-
-        /*
-        if ($this->col_settings) {
-            $this->col_settings = unserialize(base64_decode($this->col_settings));
-        } else {
-            $this->col_settings = array();
-        }
-        */
     }
 
     public function settings()

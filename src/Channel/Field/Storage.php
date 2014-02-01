@@ -23,9 +23,7 @@ class Storage implements StorageInterface
         }
 
         $this->data = array();
-
-        $this->db->join('fieldtypes', 'fieldtypes.name = channel_fields.field_type');
-
+        
         $this->db->order_by('field_order', 'ASC');
 
         $query = $this->db->get('channel_fields');
