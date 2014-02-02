@@ -24,14 +24,21 @@ class Factory
     {
         if (isset($this->registeredFieldtypes[$row->name])) {
             $closure = $this->registeredFieldtypes[$row->name];
+            $fieldtype = null;
 
             if (is_callable($closure)) {
-                return call_user_func($this->registeredFieldtypes[$row->name], $row);
+                $fieldtype = call_user_func($this->registeredFieldtypes[$row->name], $row);
             }
 
             if (is_string($closure) && class_exists($closure)) {
-                return new $closure($row);
+                $fieldtype = new $closure($row);
             }
+
+            if (! $fieldtype instanceof Fieldtype) {
+                throw new \Exception('class must extend Fieldtype');//@TODO real exception
+            }
+
+            return $fieldtype;
         }
 
         return new Fieldtype($row);
