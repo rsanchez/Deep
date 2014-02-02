@@ -16,6 +16,7 @@ use rsanchez\Deep\Fieldtype\Storage as FieldtypeStorage;
 use rsanchez\Deep\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Deep\Channel\Field\Factory as ChannelFieldFactory;
 use rsanchez\Deep\Channel\Field\Repository as ChannelFieldRepository;
+use rsanchez\Deep\Channel\Field\CollectionFactory as ChannelFieldCollectionFactory;
 use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Channel\Storage as ChannelStorage;
 use rsanchez\Deep\Channel\Field\Storage as FieldStorage;
@@ -97,6 +98,10 @@ class IoC extends Pimple
 
         $this['fieldGroupFactory'] = function ($container) {
             return new FieldGroupFactory();
+        };
+
+        $this['channelFieldCollectionFactory'] = function ($container) {
+            return new ChannelFieldCollectionFactory();
         };
 
         $this['fieldtypeRepository'] = function ($container) {
