@@ -32,6 +32,7 @@ use rsanchez\Deep\Entry\Field\Factory as EntryFieldFactory;
 use rsanchez\Deep\Entry\Field\CollectionFactory as EntryFieldCollectionFactory;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
 use rsanchez\Deep\Fieldtype\Fieldtype;
+use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Fieldtype\Date as DateFieldtype;
 use rsanchez\Deep\Fieldtype\File as FileFieldtype;
 use rsanchez\Deep\Fieldtype\FileGenerator as FileFieldtypeGenerator;
@@ -109,6 +110,10 @@ class IoC extends Pimple
                 $container['fieldtypeStorage'],
                 $container['fieldtypeFactory']
             );
+        };
+
+        $this['fieldtypeCollectionFactory'] = function ($container) {
+            return new FieldtypeCollectionFactory();
         };
 
         $this['colFactory'] = function ($container) {
