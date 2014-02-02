@@ -36,6 +36,11 @@ class Fieldtype
         }
     }
 
+    public function __invoke($value)
+    {
+        return $value;
+    }
+
     public function preload(DbInterface $db, array $entryIds, array $fieldIds)
     {
     }

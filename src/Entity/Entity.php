@@ -31,7 +31,7 @@ class Entity
             $value = property_exists($row, $column) ? $row->$column : '';
             $field = $fieldFactory->createField($value, $property);
             $this->fields->push($field);
-            $this->{$property->name()} = $field;
+            $this->{$property->name()} = $property->fieldtype($field->value);
         }
     }
 
