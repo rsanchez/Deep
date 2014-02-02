@@ -85,25 +85,9 @@ class Entries extends EntityCollection
         $this->fieldPostloaders[$fieldType][] = $entryField;
     }
 
-    public function setBaseUrl($url)
-    {
-        $this->baseUrl = $url;
-
-        return $this;
-    }
-
     public function entryIds()
     {
         return $this->entryIds;
-    }
-
-    public function baseUrl()
-    {
-        if (is_null($this->baseUrl)) {
-            throw new \Exception('You must set a baseUrl: Entries::setBaseUrl("http://yoursite.com/")');
-        }
-
-        return $this->baseUrl;
     }
 
     public function __call($name, $args)
