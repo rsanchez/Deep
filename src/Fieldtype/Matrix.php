@@ -19,15 +19,15 @@ class Matrix extends Fieldtype
 
     public function __construct(
         stdClass $row,
-        RowFieldFactory $rowFieldFactory,
-        ColRepository $colRepository,
-        MatrixStorage $matrixStorage
+        FieldtypeRepository $fieldtypeRepository,
+        ColFactory $colFactory
+        //,MatrixStorage $matrixStorage
     ) {
         parent::__construct($row);
 
-        $this->rowFieldFactory = $rowFieldFactory;
-        $this->colRepository = $colRepository;
-        $this->matrixStorage = $matrixStorage;
+        $this->fieldtypeRepository = $fieldtypeRepository;
+        $this->colFactory = $colFactory;
+        //$this->matrixStorage = $matrixStorage;
     }
 
     public function __invoke($value)

@@ -33,7 +33,10 @@ use rsanchez\Deep\Entry\Factory as EntryFactory;
 use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Fieldtype\Date as DateFieldtype;
 use rsanchez\Deep\Fieldtype\File as FileFieldtype;
+use rsanchez\Deep\Fieldtype\FileGenerator as FileFieldtypeGenerator;
 use rsanchez\Deep\Fieldtype\Matrix as MatrixFieldtype;
+use rsanchez\Deep\Fieldtype\MatrixGenerator as MatrixFieldtypeGenerator;
+
 use Pimple;
 use stdClass;
 
@@ -164,27 +167,17 @@ class IoC extends Pimple
             );
         });
 
-        //register the core fieldtypes
-        $this['dateFieldtypeClosure'] = $this->protect(function (stdClass $row) {
-            return new DateFieldtype($row);
-        });
+        $this['fileFieldtypeGenerator'] = function ($container) {
+            return new FileFieldtypeGenerator($container['filePathRepository']);
+        };
 
-        $filePathRepository = $this['filePathRepository'];
-
-        $this['fileFieldtypeClosure'] = $this->protect(function (stdClass $row) use ($filePathRepository) {
-            return new FileFieldtype($row, $filePathRepository);
-        });
-
-        $fieldtypeRepository = $this['fieldtypeRepository'];
-        $colFactory = $this['colFactory'];
-
-        $this['matrixFieldtypeClosure'] = $this->protect(function (stdClass $row) use ($fieldtypeRepository, $colFactory) {
-            return new MatrixFieldtype($row, $fieldtypeRepository, $colFactory);
-        });
+        $this['matrixFieldtypeGenerator'] = function ($container) {
+            return new MatrixFieldtypeGenerator($container['fieldtypeRepository'], $container['colFactory']);
+        };
         
-        $this['fieldtypeFactory']->registerFieldtype('date', $this['dateFieldtypeClosure']);
-        $this['fieldtypeFactory']->registerFieldtype('file', $this['fileFieldtypeClosure']);
-        $this['fieldtypeFactory']->registerFieldtype('matrix', $this['matrixFieldtypeClosure']);
+        $this['fieldtypeFactory']->registerFieldtype('date', '\\rsanchez\\Deep\\Fieldtype\\Date');
+        $this['fieldtypeFactory']->registerFieldtype('file', $this['fileFieldtypeGenerator']);
+        $this['fieldtypeFactory']->registerFieldtype('matrix', $this['matrixFieldtypeGenerator']);
         Entry::$baseUrl = $this['ee']->config->item('site_url');
     }
 }
