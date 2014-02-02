@@ -4,6 +4,7 @@ namespace rsanchez\Deep\Fieldtype;
 
 use rsanchez\Deep\Fieldtype\Fieldtype;
 use IteratorAggregate;
+use ArrayIterator;
 
 class Collection implements IteratorAggregate
 {
@@ -13,6 +14,12 @@ class Collection implements IteratorAggregate
     public function push(Fieldtype $fieldtype)
     {
         array_push($this->fieldtypes, $fieldtype);
+        $this->fieldtypesByName[$fieldtype->name] =& $fieldtype;
+    }
+
+    public function unshift(Fieldtype $fieldtype)
+    {
+        array_unshift($this->fieldtypes, $fieldtype);
         $this->fieldtypesByName[$fieldtype->name] =& $fieldtype;
     }
 
@@ -28,6 +35,6 @@ class Collection implements IteratorAggregate
 
     public function getIterator()
     {
-        return new ArrayIterator($this->fieldtype);
+        return new ArrayIterator($this->fieldtypes);
     }
 }

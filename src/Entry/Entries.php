@@ -10,6 +10,9 @@ use rsanchez\Deep\Entity\Field\Field as EntityField;
 use rsanchez\Deep\Entry\Model;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
+use rsanchez\Deep\Channel\Field\CollectionFactory as ChannelFieldCollectionFactory;
+use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 
 class Entries extends EntityCollection
 {
@@ -27,12 +30,18 @@ class Entries extends EntityCollection
         ChannelRepository $channelRepository,
         Model $model,
         DbInterface $db,
-        EntryFactory $factory
+        EntryFactory $factory,
+        ChannelFieldCollectionFactory $channelFieldCollectionFactory,
+        FieldtypeCollectionFactory $fieldtypeCollectionFactory,
+        FieldtypeRepository $fieldtypeRepository
     ) {
         $this->channelRepository = $channelRepository;
         $this->model = $model;
         $this->db = $db;
         $this->factory = $factory;
+        $this->fieldtypeCollectionFactory = $fieldtypeCollectionFactory;
+        $this->channelFieldCollectionFactory = $channelFieldCollectionFactory;
+        $this->fieldtypeRepository= $fieldtypeRepository;
     }
 
     public function applyParams(array $params)
@@ -49,40 +58,6 @@ class Entries extends EntityCollection
     public function push(Entry $entry)
     {
         parent::push($entry);
-    }
-
-    /**
-     * Register Field Preloader
-     *
-     * Some field types store data in their own DB table(s),
-     * e.g. Matrix, Grid, etc.
-     *
-     * This allows you to add a callback where your fieldtype
-     * can query the database for additional data. The callback
-     * is called after the entries are loaded, and is only called
-     * ONCE per namespace. In your callback, you should load
-     * all of the fieldtype
-     * @param  [type] $namespace [description]
-     * @param  [type] $callback  [description]
-     * @return [type]            [description]
-     */
-    public function registerFieldPreloader($fieldType, EntityField $entryField, $highPriority = false)
-    {
-        // preload only once
-        if (! array_key_exists($fieldType, $this->fieldPreloaders)) {
-            if ($highPriority) {
-                $this->fieldPreloaders = array($fieldType => $entryField) + $this->fieldPreloaders;
-            } else {
-                $this->fieldPreloaders[$fieldType] = $entryField;
-            }
-        }
-
-        // postload each field
-        if (! isset($this->fieldPostloaders[$fieldType])) {
-            $this->fieldPostloaders[$fieldType] = array();
-        }
-
-        $this->fieldPostloaders[$fieldType][] = $entryField;
     }
 
     public function entryIds()
@@ -148,31 +123,56 @@ class Entries extends EntityCollection
 
             $executed = true;
 
+            $fieldGroupsCollected = array();
+            $fieldtypesCollected = array();
+
+            $channelFields = $this->channelFieldCollectionFactory->createCollection();
+            $preloadingFieldtypes = $this->fieldtypeCollectionFactory->createCollection();
+
             foreach ($query->result() as $row) {
+                $channel = $this->channelRepository->find($row->channel_id);
+
+                if ($channel->field_group && ! in_array($channel->field_group, $fieldGroupsCollected)) {
+                    $fieldGroupsCollected[] = $channel->field_group;
+
+                    foreach ($channel->fields as $channelField) {
+                        $channelFields->push($channelField);
+
+                        if (! in_array($channelField->field_type, $fieldtypesCollected)) {
+                            $fieldtypesCollected[] = $channelField->field_type;
+
+                            $fieldtype = $this->fieldtypeRepository->find($channelField->field_type);
+
+                            if ($fieldtype->preload) {
+                                if ($fieldtype->preloadHighPriority) {
+                                    $preloadingFieldtypes->unshift($fieldtype);
+                                } else {
+                                    $preloadingFieldtypes->push($fieldtype);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $this->entryIds[] = $row->entry_id;
 
-                $entry = $this->factory->createEntry($row, $this->channelRepository->find($row->channel_id));
+                $entry = $this->factory->createEntry($row, $channel);
 
                 $this->push($entry);
             }
 
             $query->free_result();
 
-            $payloads = array();
-
             // pre-load any fieldtype data, eg. Matrix
-            foreach ($this->fieldPreloaders as $fieldType => $entryField) {
-                $fieldIds = $this->channelRepository->fieldRepository->filterByType($fieldType)->fieldIds();
-                $payloads[$fieldType] = $entryField->preload($this->db, $this->entryIds, $fieldIds);
-            }
+            foreach ($preloadingFieldtypes as $fieldtype) {
+                $fields = $channelFields->filterByType($fieldtype->name);
 
-            foreach ($this->fieldPostloaders as $fieldType => $entryFields) {
-                foreach ($entryFields as $entryField) {
-                    $entryField->hydrate($payloads[$fieldType]);
-                }
-            }
+                $payload = $fieldtype->preload($this, $fields);
 
-            unset($payloads);
+                array_walk($this->entities, function ($entry) use ($fieldtype, $fields, $payload) {
+                    $fieldtype->hydrate($entry, $fields, $payload);
+                });
+            }
         }
 
         return $this;

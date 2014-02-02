@@ -8,7 +8,10 @@ use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Property\AbstractProperty;
-use rsanchez\Deep\Entity\Entity;
+use rsanchez\Deep\Entry\Entry;
+use rsanchez\Deep\Entry\Entries;
+use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
+use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
 use IteratorAggregate;
 use stdClass;
 
@@ -36,17 +39,17 @@ class Matrix extends Fieldtype
     }
 
     //@TODO move this to channelField
-    public function preload($entryIds, $fieldIds)
+    public function preload(Entries $entries, ChannelFieldCollection $channelFields)
     {
-        $query = $db->where_in('field_id', $fieldIds)
+        $query = ee()->db->where_in('field_id', $channelFields->fieldIds())
                     ->get('matrix_cols');
 
         $cols = $query->result();
 
         $query->free_result();
 
-        $query = $db->where_in('field_id', $fieldIds)
-                    ->where_in('entry_id', $entryIds)
+        $query = ee()->db->where_in('field_id', $channelFields->fieldIds())
+                    ->where_in('entry_id', $entries->entryIds())
                     ->order_by('entry_id asc, field_id asc, row_order asc')
                     ->get('matrix_data');
 
@@ -71,35 +74,37 @@ class Matrix extends Fieldtype
         return $payload;
     }
 
-    public function hydrate($payload, Field $field)
+    public function hydrate(Entry $entry, ChannelFieldCollection $channelFields, $payload)
     {
-        static $channelFields = array();
-
-        $field->value = array();
-
-        if (! isset($payload[$this->entity->entry_id][$this->property->id()])) {
-            return;
-        }
-
-        $rows = $payload[$this->entity->entry_id][$this->property->id()];
+        /*
+        static $cols;
 
         foreach ($payload['cols'] as $col) {
-            if (! isset($channelFields[$col->col_id])) {
-                $channelFields[$col->col_id] = $this->colFactory->createProperty($col);
+            if (! isset($cols[$col->col_id])) {
+                $cols[$col->col_id] = $this->colFactory->createProperty($col);
             }
         }
-
+ 
         foreach ($rows as &$row) {
             foreach ($payload['cols'] as $col) {
                 $property = 'col_id_'.$col->col_id;
                 $value = property_exists($row, $property) ? $row->$property : '';
-                $field = $this->entryFieldFactory->createField($value, $channelFields[$col->col_id], $this->entries, $this->entity);
+                $field = $this->entryFieldFactory->createField($value, $cols[$col->col_id], $this->entries, $this->entity);
                 $row->{$col->col_name} = $field;
             }
-
+ 
             $this->total_rows++;
-
+ 
             $this->value[] = $row;
+        }
+        */
+
+        foreach ($channelFields as $channelField) {
+            if (! isset($payload[$entry->entry_id][$channelField->id()])) {
+                $entry->{$channelField->name()} = array();
+            } else {
+                $entry->{$channelField->name()} = $payload[$entry->entry_id][$channelField->id()];
+            }
         }
     }
 }

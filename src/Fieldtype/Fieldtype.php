@@ -2,6 +2,9 @@
 
 namespace rsanchez\Deep\Fieldtype;
 
+use rsanchez\Deep\Entry\Entry;
+use rsanchez\Deep\Entry\Entries;
+use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
 use stdClass;
 
 class Fieldtype
@@ -30,10 +33,6 @@ class Fieldtype
         } else {
             $this->settings = array();
         }
-
-        if ($this->preload) {
-            $collection->registerFieldPreloader($this->property->type(), $this, $this->preloadHighPriority);
-        }
     }
 
     public function __invoke($value)
@@ -41,11 +40,11 @@ class Fieldtype
         return $value;
     }
 
-    public function preload(DbInterface $db, array $entryIds, array $fieldIds)
+    public function preload(Entries $entries, ChannelFieldCollection $channelFields)
     {
     }
 
-    public function postload($payload, EntityFieldFactory $entryFieldFactory, ColFactory $colFactory)
+    public function hydrate(Entry $entry, ChannelFieldCollection $channelFields, $payload)
     {
     }
 }

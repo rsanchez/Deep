@@ -173,7 +173,10 @@ class IoC extends Pimple
                 $container['channelRepository'],
                 $container['model'],
                 $container['db'],
-                $container['entryFactory']
+                $container['entryFactory'],
+                $container['channelFieldCollectionFactory'],
+                $container['fieldtypeCollectionFactory'],
+                $container['fieldtypeRepository']
             );
         });
 
@@ -185,9 +188,9 @@ class IoC extends Pimple
             return new MatrixFieldtypeGenerator($container['fieldtypeRepository'], $container['colFactory']);
         };
         
-        $this['fieldtypeFactory']->registerFieldtype('date', '\\rsanchez\\Deep\\Fieldtype\\Date');
-        $this['fieldtypeFactory']->registerFieldtype('file', $this['fileFieldtypeGenerator']);
-        $this['fieldtypeFactory']->registerFieldtype('matrix', $this['matrixFieldtypeGenerator']);
+        $this['fieldtypeRepository']->registerFieldtype('matrix', $this['matrixFieldtypeGenerator']);
+        $this['fieldtypeRepository']->registerFieldtype('file', $this['fileFieldtypeGenerator']);
+        $this['fieldtypeRepository']->registerFieldtype('date', '\\rsanchez\\Deep\\Fieldtype\\Date');
         Entry::$baseUrl = $this['ee']->config->item('site_url');
     }
 }
