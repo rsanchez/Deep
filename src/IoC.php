@@ -37,6 +37,7 @@ use rsanchez\Deep\Fieldtype\Date as DateFieldtype;
 use rsanchez\Deep\Fieldtype\File as FileFieldtype;
 use rsanchez\Deep\Fieldtype\FileGenerator as FileFieldtypeGenerator;
 use rsanchez\Deep\Fieldtype\Matrix as MatrixFieldtype;
+use rsanchez\Deep\Fieldtype\Storage\Matrix as MatrixStorage;
 use rsanchez\Deep\Fieldtype\MatrixGenerator as MatrixFieldtypeGenerator;
 
 use Pimple;
@@ -180,12 +181,16 @@ class IoC extends Pimple
             );
         });
 
+        $this['matrixStorage'] = function ($container) {
+            return new MatrixStorage($container['db']);
+        };
+
         $this['fileFieldtypeGenerator'] = function ($container) {
             return new FileFieldtypeGenerator($container['filePathRepository']);
         };
 
         $this['matrixFieldtypeGenerator'] = function ($container) {
-            return new MatrixFieldtypeGenerator($container['fieldtypeRepository'], $container['colFactory']);
+            return new MatrixFieldtypeGenerator($container['fieldtypeRepository'], $container['colFactory'], $container['matrixStorage']);
         };
         
         $this['fieldtypeRepository']->registerFieldtype('matrix', $this['matrixFieldtypeGenerator']);

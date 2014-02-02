@@ -12,6 +12,7 @@ use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
+use rsanchez\Deep\Fieldtype\Storage\Matrix as MatrixStorage;
 use IteratorAggregate;
 use stdClass;
 
@@ -23,14 +24,14 @@ class Matrix extends Fieldtype
     public function __construct(
         stdClass $row,
         FieldtypeRepository $fieldtypeRepository,
-        ColFactory $colFactory
-        //,MatrixStorage $matrixStorage
+        ColFactory $colFactory,
+        MatrixStorage $storage
     ) {
         parent::__construct($row);
 
         $this->fieldtypeRepository = $fieldtypeRepository;
         $this->colFactory = $colFactory;
-        //$this->matrixStorage = $matrixStorage;
+        $this->storage = $storage;
     }
 
     public function __invoke($value)
@@ -41,37 +42,7 @@ class Matrix extends Fieldtype
     //@TODO move this to channelField
     public function preload(Entries $entries, ChannelFieldCollection $channelFields)
     {
-        $query = ee()->db->where_in('field_id', $channelFields->fieldIds())
-                    ->get('matrix_cols');
-
-        $cols = $query->result();
-
-        $query->free_result();
-
-        $query = ee()->db->where_in('field_id', $channelFields->fieldIds())
-                    ->where_in('entry_id', $entries->entryIds())
-                    ->order_by('entry_id asc, field_id asc, row_order asc')
-                    ->get('matrix_data');
-
-        $payload = array(
-            'cols' => $cols,
-        );
-
-        foreach ($query->result() as $row) {
-            if (! isset($payload[$row->entry_id])) {
-                $payload[$row->entry_id] = array();
-            }
-
-            if (! isset($payload[$row->entry_id][$row->field_id])) {
-                $payload[$row->entry_id][$row->field_id] = array();
-            }
-
-            $payload[$row->entry_id][$row->field_id][] = $row;
-        }
-
-        $query->free_result();
-
-        return $payload;
+        return call_user_func($this->storage, $entries->entryIds(), $channelFields->fieldIds());
     }
 
     public function hydrate(Entry $entry, ChannelFieldCollection $channelFields, $payload)
