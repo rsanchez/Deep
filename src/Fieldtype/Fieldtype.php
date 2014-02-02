@@ -12,8 +12,8 @@ class Fieldtype
     public $settings;
     public $has_global_settings;
 
-    protected $preload = false;
-    protected $preloadHighPriority = false;
+    public $preload = false;
+    public $preloadHighPriority = false;
 
     public function __construct(stdClass $row)
     {

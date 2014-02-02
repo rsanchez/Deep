@@ -14,8 +14,8 @@ use stdClass;
 
 class Matrix extends Fieldtype
 {
-    protected $preload = true;
-    protected $preloadHighPriority = true;
+    public $preload = true;
+    public $preloadHighPriority = true;
 
     public function __construct(
         stdClass $row,
