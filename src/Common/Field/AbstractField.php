@@ -37,13 +37,8 @@ class AbstractField
         return $this->property->name();
     }
 
-    public function __toString()
-    {
-        return (string) $this->value;
-    }
-
     public function __invoke()
     {
-        return $this->__toString();
+        return $this->property->fieldtype($this->value);
     }
 }

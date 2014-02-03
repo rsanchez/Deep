@@ -27,17 +27,29 @@ class Entity
         $this->fields = $fieldCollectionFactory->createCollection();
 
         foreach ($propertyCollection as $property) {
-            $column = $property->prefix().$property->id();
+            $column = $property->inputName();
             $value = property_exists($row, $column) ? $row->$column : '';
             $field = $fieldFactory->createField($value, $property);
             $this->fields->push($field);
-            $this->{$property->name()} = $property->fieldtype($field->value);
         }
     }
 
     public function toArray()
     {
         return (array) $this;
+    }
+
+    public function __get($name)
+    {
+        try {
+            $field = $this->fields->find($name);
+
+            return $this->{$name} = $field();
+        } catch (\Exception $e) {
+            //$e->getMessage();
+        }
+
+        throw new \Exception('invalid field name');
     }
 
     public function __call($name, $args)

@@ -48,6 +48,11 @@ class Field extends AbstractProperty
         }
     }
 
+    public function inputName()
+    {
+        return $this->prefix() . $this->id();
+    }
+
     public function prefix()
     {
         return 'field_id_';
