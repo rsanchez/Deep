@@ -16,4 +16,12 @@ class Factory extends AbstractFactory
     {
         return new Col($row, $this->fieldtypeRepository->find($row->col_type));
     }
+
+    /**
+     * @return rsanchez\Deep\Col\Col
+     */
+    public function createCol(stdClass $row)
+    {
+        return $this->createProperty($row);
+    }
 }
