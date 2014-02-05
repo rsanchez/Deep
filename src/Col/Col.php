@@ -8,7 +8,7 @@ use stdClass;
 
 class Col extends AbstractProperty
 {
-    // exp_matrix_cols
+    // exp_matrix_cols / exp_grid_columns
     public $col_id;
     public $col_name;
     public $col_label;
@@ -19,6 +19,7 @@ class Col extends AbstractProperty
     public $col_order;
     public $col_width;
     public $col_settings;
+    public $field_id;
 
     public function __construct(stdClass $row, Fieldtype $fieldtype)
     {
@@ -30,7 +31,7 @@ class Col extends AbstractProperty
             $this->col_settings = array();
         }
 
-        if ($this->has_global_settings === 'y') {
+        if ($this->fieldtype->has_global_settings === 'y') {
             $this->col_settings = array_merge($this->fieldtype->settings, $this->col_settings);
         }
     }
