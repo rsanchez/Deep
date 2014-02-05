@@ -23,13 +23,7 @@ use rsanchez\Deep\Channel\Field\Storage as FieldStorage;
 use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Entries;
-use rsanchez\Deep\Entity\Field\Field as EntityField;
 use rsanchez\Deep\Entry\Model;
-use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
-use rsanchez\Deep\Entity\Field\CollectionFactory as EntityFieldCollectionFactory;
-use rsanchez\Deep\Entry\Field\Field as EntryField;
-use rsanchez\Deep\Entry\Field\Factory as EntryFieldFactory;
-use rsanchez\Deep\Entry\Field\CollectionFactory as EntryFieldCollectionFactory;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
 use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
@@ -157,16 +151,8 @@ class IoC extends Pimple
             return new Model($container['db'], $container['channelRepository'], $container['channelFieldRepository'], $_REQUEST);
         });
 
-        $this['entryFieldFactory'] = function ($container) {
-            return new EntryFieldFactory();
-        };
-
-        $this['entryFieldCollectionFactory'] = function ($container) {
-            return new EntryFieldCollectionFactory();
-        };
-
         $this['entryFactory'] = function ($container) {
-            return new EntryFactory($container['entryFieldFactory'], $container['entryFieldCollectionFactory']);
+            return new EntryFactory();
         };
 
         $this['entries'] = $this->factory(function ($container) {

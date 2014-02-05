@@ -6,7 +6,6 @@ use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
-use rsanchez\Deep\Entity\Field\Field as EntityField;
 use rsanchez\Deep\Entry\Model;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Db\DbInterface;

@@ -3,8 +3,6 @@
 namespace rsanchez\Deep\Fieldtype;
 
 use rsanchez\Deep\Db\DbInterface;
-use rsanchez\Deep\Common\Field\Field;
-use rsanchez\Deep\Entity\Field\Factory as EntityFieldFactory;
 use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Property\AbstractProperty;

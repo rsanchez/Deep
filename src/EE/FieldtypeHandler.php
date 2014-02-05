@@ -2,14 +2,14 @@
 
 namespace rsanchez\Deep;
 
-use rsanchez\Deep\Entity\Field\Field;
+use rsanchez\Deep\Channel\Field\Field;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\EE\Template;
 use CI_Controller;
 
 class FieldtypeHandler
 {
-    public function call(CI_Controller $ee, Entry $entry, Field $field, $params = array(), $modifier = 'tag')
+    public function call(CI_Controller $ee, Entry $entry, Channel $field, $params = array(), $modifier = 'tag')
     {
         $ee->load->library('api');
         $ee->load->helper('custom_field');
@@ -35,7 +35,7 @@ class FieldtypeHandler
 
         $ft->row = array_merge($entry->toArray(), $entry->channel->toArray());
 
-        $data = $api->apply('pre_process', array($field->value));
+        $data = $api->apply('pre_process', array($entry->{$field->name()}));
 
         if (! isset($ee->TMPL)) {
             $ee->load->library('template', null, 'TMPL');

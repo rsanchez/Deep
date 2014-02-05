@@ -13,7 +13,7 @@ class Factory extends EntityFactory
 {
     public function createEntity(stdClass $row, PropertyCollection $propertyCollection, Channel $channel)
     {
-        return new Entry($row, $propertyCollection, $this->fieldFactory, $this->fieldCollectionFactory, $channel);
+        return new Entry($row, $propertyCollection, $channel);
     }
 
     public function createEntry(stdClass $row, Channel $channel)

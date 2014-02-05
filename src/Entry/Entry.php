@@ -6,10 +6,6 @@ use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
 use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Entity\Entity;
-use rsanchez\Deep\Entry\Field\Field;
-use rsanchez\Deep\Entry\Field\Collection as FieldCollection;
-use rsanchez\Deep\Entry\Field\Factory as FieldFactory;
-use rsanchez\Deep\Entry\Field\CollectionFactory as FieldCollectionFactory;
 use stdClass;
 
 class Entry extends Entity
@@ -58,9 +54,9 @@ class Entry extends Entity
 
     public static $baseUrl = '/';
 
-    public function __construct(stdClass $row, ChannelFieldCollection $propertyCollection, FieldFactory $fieldFactory, FieldCollectionFactory $fieldCollectionFactory, Channel $channel)
+    public function __construct(stdClass $row, ChannelFieldCollection $propertyCollection, Channel $channel)
     {
-        parent::__construct($row, $propertyCollection, $fieldFactory, $fieldCollectionFactory);
+        parent::__construct($row, $propertyCollection);
 
         $this->channel = $channel;
     }
