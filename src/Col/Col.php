@@ -43,7 +43,7 @@ class Col extends AbstractProperty
 
     public function prefix()
     {
-        return 'field_id_';
+        return 'col_id_';
     }
 
     public function settings()

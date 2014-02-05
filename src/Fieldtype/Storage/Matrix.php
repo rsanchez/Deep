@@ -14,20 +14,9 @@ class Matrix
     public function __invoke(array $entryIds, array $fieldIds)
     {
         $query = $this->db->where_in('field_id', $fieldIds)
-                    ->get('matrix_cols');
-
-        $cols = $query->result();
-
-        $query->free_result();
-
-        $query = $this->db->where_in('field_id', $fieldIds)
                     ->where_in('entry_id', $entryIds)
                     ->order_by('entry_id asc, field_id asc, row_order asc')
                     ->get('matrix_data');
-
-        $payload = array(
-            'cols' => $cols,
-        );
 
         foreach ($query->result() as $row) {
             if (! isset($payload[$row->entry_id])) {

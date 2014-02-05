@@ -6,6 +6,8 @@ use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Channel\Factory as ChannelFactory;
 use rsanchez\Deep\Channel\Field as ChannelField;
 use rsanchez\Deep\Channel\Field\Group as FieldGroup;
+use rsanchez\Deep\Row\Factory as RowFactory;
+use rsanchez\Deep\Row\CollectionFactory as RowCollectionFactory;
 use rsanchez\Deep\FilePath\FilePath;
 use rsanchez\Deep\FilePath\Repository as FilePathRepository;
 use rsanchez\Deep\FilePath\Factory as FilePathFactory;
@@ -31,8 +33,12 @@ use rsanchez\Deep\Fieldtype\Date as DateFieldtype;
 use rsanchez\Deep\Fieldtype\File as FileFieldtype;
 use rsanchez\Deep\Fieldtype\FileGenerator as FileFieldtypeGenerator;
 use rsanchez\Deep\Fieldtype\Matrix as MatrixFieldtype;
-use rsanchez\Deep\Fieldtype\Storage\Matrix as MatrixStorage;
 use rsanchez\Deep\Fieldtype\MatrixGenerator as MatrixFieldtypeGenerator;
+use rsanchez\Deep\Fieldtype\Storage\Matrix as MatrixStorage;
+use rsanchez\Deep\Col\Storage\Matrix as MatrixColStorage;
+use rsanchez\Deep\Col\Storage\Grid as GridColStorage;
+use rsanchez\Deep\Col\Repository\Matrix as MatrixColRepository;
+use rsanchez\Deep\Col\Repository\Grid as GridColRepository;
 
 use Pimple;
 use stdClass;
@@ -151,6 +157,14 @@ class IoC extends Pimple
             return new Model($container['db'], $container['channelRepository'], $container['channelFieldRepository'], $_REQUEST);
         });
 
+        $this['rowFactory'] = function ($container) {
+            return new RowFactory();
+        };
+
+        $this['rowCollectionFactory'] = function ($container) {
+            return new RowCollectionFactory();
+        };
+
         $this['entryFactory'] = function ($container) {
             return new EntryFactory();
         };
@@ -171,12 +185,34 @@ class IoC extends Pimple
             return new MatrixStorage($container['db']);
         };
 
+        $this['matrixColStorage'] = function ($container) {
+            return new MatrixColStorage($container['db']);
+        };
+
+        $this['gridColStorage'] = function ($container) {
+            return new GridColStorage($container['db']);
+        };
+
+        $this['matrixColRepository'] = function ($container) {
+            return new MatrixColRepository($container['matrixColStorage'], $container['colFactory']);
+        };
+
+        $this['gridColRepository'] = function ($container) {
+            return new GridColRepository($container['gridColStorage'], $container['colFactory']);
+        };
+
         $this['fileFieldtypeGenerator'] = function ($container) {
             return new FileFieldtypeGenerator($container['filePathRepository']);
         };
 
         $this['matrixFieldtypeGenerator'] = function ($container) {
-            return new MatrixFieldtypeGenerator($container['fieldtypeRepository'], $container['colFactory'], $container['matrixStorage']);
+            return new MatrixFieldtypeGenerator(
+                $container['fieldtypeRepository'],
+                $container['matrixColRepository'],
+                $container['matrixStorage'],
+                $container['rowFactory'],
+                $container['rowCollectionFactory']
+            );
         };
         
         $this['fieldtypeRepository']->registerFieldtype('matrix', $this['matrixFieldtypeGenerator']);

@@ -3,6 +3,7 @@
 namespace rsanchez\Deep\Entity;
 
 use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
+use stdClass;
 
 class Factory
 {
