@@ -7,9 +7,9 @@ A pure PHP implementation of the ExpressionEngine {exp:channel:entries} tag.
 ```
 <?php
 
-use rsanchez\Entries\Channel;
+use rsanchez\Deep\Deep;
 
-$entries = Channel::entries()
+$entries = Deep::entries()
 		->channel('blog')
 		->limit(1)
 		->show_future_entries();
@@ -26,17 +26,25 @@ $entries = Channel::entries()
 <?php endforeach; ?>
 ```
 
-## Autoloading
+## Installation
 
-Add this to your composer.json and then `composer install`
+Add this to your `composer.json`:
 
-```
-    "autoload": {
-        "psr-0": {
-            "rsanchez\\Entries\\": "/path/to/Entries/src/"
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/rsanchez/Deep"
         }
-    },
-```
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "rsanchez/deep": "dev-develop"
+    }
+
+Make sure you load composer's autoloader at the top of your `config.php` (your actual vendor path may vary):
+
+    require_once FCPATH.'vendor/autoload.php';
+
 
 ##Todo
 
