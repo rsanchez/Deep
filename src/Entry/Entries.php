@@ -27,16 +27,14 @@ class Entries extends EntityCollection
 
     public function __construct(
         ChannelRepository $channelRepository,
-        Model $model,
-        DbInterface $db,
         EntryFactory $factory,
         ChannelFieldCollectionFactory $channelFieldCollectionFactory,
         FieldtypeCollectionFactory $fieldtypeCollectionFactory,
-        FieldtypeRepository $fieldtypeRepository
+        FieldtypeRepository $fieldtypeRepository,
+        Model $model
     ) {
         $this->channelRepository = $channelRepository;
         $this->model = $model;
-        $this->db = $db;
         $this->factory = $factory;
         $this->fieldtypeCollectionFactory = $fieldtypeCollectionFactory;
         $this->channelFieldCollectionFactory = $channelFieldCollectionFactory;

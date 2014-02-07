@@ -172,12 +172,11 @@ class IoC extends Pimple
         $this['entries'] = $this->factory(function ($container) {
             return new Entries(
                 $container['channelRepository'],
-                $container['model'],
-                $container['db'],
                 $container['entryFactory'],
                 $container['channelFieldCollectionFactory'],
                 $container['fieldtypeCollectionFactory'],
-                $container['fieldtypeRepository']
+                $container['fieldtypeRepository'],
+                $container['model']
             );
         });
 
