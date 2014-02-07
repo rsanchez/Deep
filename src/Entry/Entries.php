@@ -26,19 +26,19 @@ class Entries extends EntityCollection
     protected $baseUrl = '/';
 
     public function __construct(
-        ChannelRepository $channelRepository,
         EntryFactory $factory,
-        ChannelFieldCollectionFactory $channelFieldCollectionFactory,
-        FieldtypeCollectionFactory $fieldtypeCollectionFactory,
         FieldtypeRepository $fieldtypeRepository,
+        FieldtypeCollectionFactory $fieldtypeCollectionFactory,
+        ChannelFieldCollectionFactory $channelFieldCollectionFactory,
+        ChannelRepository $channelRepository,
         Model $model
     ) {
         $this->channelRepository = $channelRepository;
-        $this->model = $model;
         $this->factory = $factory;
         $this->fieldtypeCollectionFactory = $fieldtypeCollectionFactory;
         $this->channelFieldCollectionFactory = $channelFieldCollectionFactory;
         $this->fieldtypeRepository= $fieldtypeRepository;
+        $this->model = $model;
     }
 
     public function applyParams(array $params)
