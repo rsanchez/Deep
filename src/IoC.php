@@ -23,6 +23,7 @@ use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Channel\Storage as ChannelStorage;
 use rsanchez\Deep\Channel\Field\Storage as FieldStorage;
 use rsanchez\Deep\Col\Factory as ColFactory;
+use rsanchez\Deep\Col\CollectionFactory as ColCollectionFactory;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Entry\Model;
@@ -162,12 +163,21 @@ class IoC extends Pimple
             );
         });
 
+        $this['colCollectionFactory'] = function ($container) {
+            return new ColCollectionFactory();
+        };
+
         $this['rowFactory'] = function ($container) {
             return new RowFactory();
         };
 
         $this['rowCollectionFactory'] = function ($container) {
-            return new RowCollectionFactory();
+            return new RowCollectionFactory(
+                $container['rowFactory'],
+                $container['fieldtypeRepository'],
+                $container['fieldtypeCollectionFactory'],
+                $container['colCollectionFactory']
+            );
         };
 
         $this['entryFactory'] = function ($container) {

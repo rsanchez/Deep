@@ -10,7 +10,7 @@ use rsanchez\Deep\Entry\Model;
 use rsanchez\Deep\Entity\Collection as EntityCollection;
 use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
-use rsanchez\Deep\Channel\Field\CollectionFactory as ChannelFieldCollectionFactory;
+use rsanchez\Deep\Channel\Field\CollectionFactory as FieldCollectionFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 
 class Entries extends EntityCollection
@@ -29,15 +29,14 @@ class Entries extends EntityCollection
         EntryFactory $factory,
         FieldtypeRepository $fieldtypeRepository,
         FieldtypeCollectionFactory $fieldtypeCollectionFactory,
-        ChannelFieldCollectionFactory $channelFieldCollectionFactory,
+        FieldCollectionFactory $fieldCollectionFactory,
         ChannelRepository $channelRepository,
         Model $model
     ) {
+        parent::__construct($factory, $fieldtypeRepository, $fieldtypeCollectionFactory, $fieldCollectionFactory);
+
         $this->channelRepository = $channelRepository;
-        $this->factory = $factory;
-        $this->fieldtypeCollectionFactory = $fieldtypeCollectionFactory;
-        $this->channelFieldCollectionFactory = $channelFieldCollectionFactory;
-        $this->fieldtypeRepository= $fieldtypeRepository;
+        $this->fieldCollectionFactory = $fieldCollectionFactory;
         $this->model = $model;
     }
 
@@ -123,7 +122,7 @@ class Entries extends EntityCollection
             $fieldGroupsCollected = array();
             $fieldtypesCollected = array();
 
-            $channelFields = $this->channelFieldCollectionFactory->createCollection();
+            $fields = $this->fieldCollectionFactory->createCollection();
             $preloadingFieldtypes = $this->fieldtypeCollectionFactory->createCollection();
 
             foreach ($query->result() as $row) {
@@ -132,13 +131,13 @@ class Entries extends EntityCollection
                 if ($channel->field_group && ! in_array($channel->field_group, $fieldGroupsCollected)) {
                     $fieldGroupsCollected[] = $channel->field_group;
 
-                    foreach ($channel->fields as $channelField) {
-                        $channelFields->push($channelField);
+                    foreach ($channel->fields as $field) {
+                        $fields->push($field);
 
-                        if (! in_array($channelField->field_type, $fieldtypesCollected)) {
-                            $fieldtypesCollected[] = $channelField->field_type;
+                        if (! in_array($field->field_type, $fieldtypesCollected)) {
+                            $fieldtypesCollected[] = $field->field_type;
 
-                            $fieldtype = $this->fieldtypeRepository->find($channelField->field_type);
+                            $fieldtype = $this->fieldtypeRepository->find($field->field_type);
 
                             if ($fieldtype->preload) {
                                 if ($fieldtype->preloadHighPriority) {
@@ -162,7 +161,7 @@ class Entries extends EntityCollection
 
             // pre-load any fieldtype data, eg. Matrix
             foreach ($preloadingFieldtypes as $fieldtype) {
-                $fields = $channelFields->filterByType($fieldtype->name);
+                $fields = $fields->filterByType($fieldtype->name);
 
                 $payload = $fieldtype->preload($this, $fields);
 
