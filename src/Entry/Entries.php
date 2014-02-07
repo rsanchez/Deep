@@ -19,7 +19,7 @@ class Entries extends EntityCollection
     protected $channelRepository;
     protected $factory;
 
-    protected $entryIds = array();
+    protected $entryIds;
 
     protected $fieldPreloaders = array();
     protected $fieldPostloaders = array();
@@ -38,6 +38,8 @@ class Entries extends EntityCollection
         $this->channelRepository = $channelRepository;
         $this->fieldCollectionFactory = $fieldCollectionFactory;
         $this->model = $model;
+
+        $this->entryIds =& $this->entityIds;
     }
 
     public function applyParams(array $params)
@@ -119,59 +121,67 @@ class Entries extends EntityCollection
 
             $executed = true;
 
-            $fieldGroupsCollected = array();
-            $fieldtypesCollected = array();
+            $this->fill($query->result());
 
-            $fields = $this->fieldCollectionFactory->createCollection();
-            $preloadingFieldtypes = $this->fieldtypeCollectionFactory->createCollection();
+            $query->free_result();
+        }
 
-            foreach ($query->result() as $row) {
-                $channel = $this->channelRepository->find($row->channel_id);
+        return $this;
+    }
 
-                if ($channel->field_group && ! in_array($channel->field_group, $fieldGroupsCollected)) {
-                    $fieldGroupsCollected[] = $channel->field_group;
+    /**
+     * @inheritdoc
+     */
+    public function fill(array $result)
+    {
+        $fieldGroupsCollected = array();
+        $fieldtypesCollected = array();
 
-                    foreach ($channel->fields as $field) {
-                        $fields->push($field);
+        $fields = $this->fieldCollectionFactory->createCollection();
+        $preloadingFieldtypes = $this->fieldtypeCollectionFactory->createCollection();
 
-                        if (! in_array($field->field_type, $fieldtypesCollected)) {
-                            $fieldtypesCollected[] = $field->field_type;
+        foreach ($result as $row) {
+            $channel = $this->channelRepository->find($row->channel_id);
 
-                            $fieldtype = $this->fieldtypeRepository->find($field->field_type);
+            if ($channel->field_group && ! in_array($channel->field_group, $fieldGroupsCollected)) {
+                $fieldGroupsCollected[] = $channel->field_group;
 
-                            if ($fieldtype->preload) {
-                                if ($fieldtype->preloadHighPriority) {
-                                    $preloadingFieldtypes->unshift($fieldtype);
-                                } else {
-                                    $preloadingFieldtypes->push($fieldtype);
-                                }
+                foreach ($channel->fields as $field) {
+                    $fields->push($field);
+
+                    if (! in_array($field->field_type, $fieldtypesCollected)) {
+                        $fieldtypesCollected[] = $field->field_type;
+
+                        $fieldtype = $this->fieldtypeRepository->find($field->field_type);
+
+                        if ($fieldtype->preload) {
+                            if ($fieldtype->preloadHighPriority) {
+                                $preloadingFieldtypes->unshift($fieldtype);
+                            } else {
+                                $preloadingFieldtypes->push($fieldtype);
                             }
                         }
                     }
                 }
-
-                $this->entryIds[] = $row->entry_id;
-
-                $entry = $this->factory->createEntry($row, $channel);
-
-                $this->push($entry);
             }
 
-            $query->free_result();
+            $this->entryIds[] = $row->entry_id;
 
-            // pre-load any fieldtype data, eg. Matrix
-            foreach ($preloadingFieldtypes as $fieldtype) {
-                $fields = $fields->filterByType($fieldtype->name);
+            $entry = $this->factory->createEntry($row, $channel);
 
-                $payload = $fieldtype->preload($this, $fields);
-
-                array_walk($this->entities, function ($entry) use ($fieldtype, $fields, $payload) {
-                    $fieldtype->hydrate($entry, $fields, $payload);
-                });
-            }
+            $this->push($entry);
         }
 
-        return $this;
+        // pre-load any fieldtype data, eg. Matrix
+        foreach ($preloadingFieldtypes as $fieldtype) {
+            $fields = $fields->filterByType($fieldtype->name);
+
+            $payload = $fieldtype->preload($this, $fields);
+
+            array_walk($this->entities, function ($entry) use ($fieldtype, $fields, $payload) {
+                $fieldtype->hydrate($entry, $fields, $payload);
+            });
+        }
     }
 
     public function valid()

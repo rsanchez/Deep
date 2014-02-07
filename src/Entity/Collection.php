@@ -14,6 +14,8 @@ class Collection implements Iterator
     public $total_results = 0;
     public $count = 1;
 
+    protected $entityIds = array();
+
     /**
      * @var rsanchez\Deep\Entity\Factory
      */
@@ -48,9 +50,13 @@ class Collection implements Iterator
         $this->propertyCollectionFactory = $propertyCollectionFactory;
     }
 
-    public function fill()
+    /**
+     * Fill this collection with entries created from a DB result set
+     * @param stdClass[] $result 
+     * @return void
+     */
+    public function fill(array $result)
     {
-        
     }
 
     public function push(Entity $entity)
