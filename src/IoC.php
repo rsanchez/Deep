@@ -154,7 +154,12 @@ class IoC extends Pimple
         };
 
         $this['model'] = $this->factory(function ($container) {
-            return new Model($container['db'], $container['channelRepository'], $container['channelFieldRepository'], $_REQUEST);
+            return new Model(
+                $container['db'],
+                $container['channelRepository'],
+                $container['channelFieldRepository'],
+                $_REQUEST
+            );
         });
 
         $this['rowFactory'] = function ($container) {
