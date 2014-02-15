@@ -20,7 +20,7 @@ abstract class AbstractFactory
 
     /**
      * Create a class that inherits AbstractProperty
-     * @param  stdClass $row
+     * @param  stdClass                                $row
      * @return rsanchez\Deep\Property\AbstractProperty
      */
     abstract public function createProperty(stdClass $row);

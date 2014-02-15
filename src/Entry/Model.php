@@ -607,7 +607,7 @@ class Model
 
     /**
      * Filter out entries before this ID
-     * @param  int $entryIdFrom
+     * @param  int  $entryIdFrom
      * @return this
      */
     public function entryIdFrom($entryIdFrom)
@@ -619,7 +619,7 @@ class Model
 
     /**
      * Filter out entries after this ID
-     * @param  int $entryIdTo
+     * @param  int  $entryIdTo
      * @return this
      */
     public function entryIdTo($entryIdTo)
@@ -631,7 +631,7 @@ class Model
 
     /**
      * Return the results in order of the specified entry IDs
-     * @param  array $fixedOrder  entry IDs, in order
+     * @param  array $fixedOrder entry IDs, in order
      * @return this
      */
     public function fixedOrder($fixedOrder)
@@ -760,7 +760,7 @@ class Model
 
     /**
      * Exclude entries after this date
-     * @param  int $stopBefore unix timestap
+     * @param  int  $stopBefore unix timestap
      * @return this
      */
     public function startOn($startOn)
@@ -772,7 +772,7 @@ class Model
 
     /**
      * Exclude entries after this date
-     * @param  int $stopBefore unix timestap
+     * @param  int  $stopBefore unix timestap
      * @return this
      */
     public function stopBefore($stopBefore)
@@ -822,7 +822,7 @@ class Model
 
     /**
      * Filter by Year
-     * @param  int $year
+     * @param  int  $year
      * @return this
      */
     public function year($year)
@@ -834,7 +834,7 @@ class Model
 
     /**
      * Filter by Month
-     * @param  int $month
+     * @param  int  $month
      * @return this
      */
     public function month($month)
@@ -846,7 +846,7 @@ class Model
 
     /**
      * Filter by Day
-     * @param  int $day
+     * @param  int  $day
      * @return this
      */
     public function day($day)

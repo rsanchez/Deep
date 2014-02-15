@@ -47,7 +47,7 @@ abstract class AbstractCollection extends SplObjectStorage
 
     /**
      * Fill this collection with entries created from a DB result set
-     * @param stdClass[] $result
+     * @param  stdClass[] $result
      * @return void
      */
     public function fill(array $result)

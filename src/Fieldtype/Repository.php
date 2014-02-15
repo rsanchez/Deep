@@ -13,7 +13,7 @@ class Repository extends Collection
 
     /**
      * Register new fieldtypes that can be instantiated by this factory
-     * @param  string  $type    the short name of the fieldtype (eg. matrix)
+     * @param  string   $type    the short name of the fieldtype (eg. matrix)
      * @param  callable $closure a closure that returns rsanchez\Deep\Fieldtype\Fieldtype or descendant
      * @return void
      */
