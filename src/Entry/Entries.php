@@ -12,6 +12,7 @@ use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Channel\Field\CollectionFactory as FieldCollectionFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
+use SplObjectStorage;
 
 class Entries extends EntityCollection
 {
@@ -140,6 +141,8 @@ class Entries extends EntityCollection
         $fields = $this->fieldCollectionFactory->createCollection();
         $preloadingFieldtypes = $this->fieldtypeCollectionFactory->createCollection();
 
+        $entries = new SplObjectStorage();
+
         foreach ($result as $row) {
             $channel = $this->channelRepository->find($row->channel_id);
 
@@ -165,11 +168,11 @@ class Entries extends EntityCollection
                 }
             }
 
-            $this->entryIds[] = $row->entry_id;
-
             $entry = $this->factory->createEntry($row, $channel);
 
-            $this->attach($entry);
+            $this->entryIds[] = $entry->entry_id;
+
+            $entries->attach($entry);
         }
 
         // pre-load any fieldtype data, eg. Matrix
@@ -178,10 +181,12 @@ class Entries extends EntityCollection
 
             $payload = $fieldtype->preload($this, $fields);
 
-            foreach($this->entities as $entry) {
+            foreach($entries as $entry) {
                 $fieldtype->hydrate($entry, $fields, $payload);
             }
         }
+
+        $this->addAll($entries);
     }
 
     public function valid()
@@ -189,5 +194,12 @@ class Entries extends EntityCollection
         $this->get();
 
         return parent::valid();
+    }
+
+    public function rewind()
+    {
+        $this->get();
+
+        return parent::rewind();
     }
 }

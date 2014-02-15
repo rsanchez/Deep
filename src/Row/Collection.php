@@ -9,6 +9,6 @@ class Collection extends EntityCollection
 {
     public function attach(Row $row)
     {
-        parent::attach($row);
+        return parent::attach($row);
     }
 }

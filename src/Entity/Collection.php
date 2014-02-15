@@ -7,13 +7,10 @@ use rsanchez\Deep\Entity\Factory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Property\CollectionFactoryInterface as PropertyCollectionFactory;
-use Iterator;
+use SplObjectStorage;
 
-class Collection implements Iterator
+class Collection extends SplObjectStorage
 {
-    public $total_results = 0;
-    public $count = 1;
-
     protected $entityIds = array();
 
     /**
@@ -35,8 +32,6 @@ class Collection implements Iterator
      * @var rsanchez\Deep\Property\CollectionFactoryInterface
      */
     protected $propertyCollectionFactory;
-
-    protected $entities = array();
 
     public function __construct(
         EntityFactory $factory,
@@ -61,32 +56,7 @@ class Collection implements Iterator
 
     public function attach(Entity $entity)
     {
-        array_push($this->entities, $entity);
-        $this->total_results++;
-    }
-
-    public function rewind()
-    {
-        $this->count = 1;
-    }
-
-    public function current()
-    {
-        return $this->entities[$this->count - 1];
-    }
-
-    public function key()
-    {
-        return $this->count - 1;
-    }
-
-    public function next()
-    {
-        ++$this->count;
-    }
-
-    public function valid()
-    {
-        return array_key_exists($this->count - 1, $this->entities);
+        $this->entityIds[] = $entity->id();
+        return parent::attach($entity);
     }
 }
