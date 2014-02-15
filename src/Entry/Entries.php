@@ -180,7 +180,7 @@ class Entries extends EntityCollection
 
             $payload = $fieldtype->preload($this, $fields);
 
-            foreach($entries as $entry) {
+            foreach ($entries as $entry) {
                 $fieldtype->hydrate($entry, $fields, $payload);
             }
         }
