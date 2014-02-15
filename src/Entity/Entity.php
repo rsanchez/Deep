@@ -30,6 +30,11 @@ class Entity
         }
     }
 
+    public function id()
+    {
+        return $this->id;
+    }
+
     public function toArray()
     {
         return (array) $this;

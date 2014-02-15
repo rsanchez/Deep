@@ -61,6 +61,11 @@ class Entry extends Entity
         $this->channel = $channel;
     }
 
+    public function id()
+    {
+        return $this->entry_id;
+    }
+
     public function entryDate($format = 'U')
     {
         return date($format, $this->entry_date);
