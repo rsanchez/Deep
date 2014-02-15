@@ -456,7 +456,7 @@ class Model
      */
     public function authorId($authorId)
     {
-        $this->setArrayIntegerParam($this->authorId, $value);
+        $this->setArrayIntegerParam($this->authorId, $authorId);
 
         return $this;
     }
@@ -667,35 +667,35 @@ class Model
 
     public function limit($limit)
     {
-        $this->setIntegerParam($this->limit, $value);
+        $this->setIntegerParam($this->limit, $limit);
 
         return $this;
     }
 
-    public function monthLimit($value)
+    public function monthLimit($monthLimit)
     {
-        $this->setIntegerParam($this->monthLimit, $value);
+        $this->setIntegerParam($this->monthLimit, $monthLimit);
 
         return $this;
     }
 
-    public function offset($value)
+    public function offset($offset)
     {
-        $this->setIntegerParam($this->offset, $value);
+        $this->setIntegerParam($this->offset, $offset);
 
         return $this;
     }
 
-    public function orderby($value)
+    public function orderby($orderby)
     {
-        $this->setArrayParam($this->orderby, $value);
+        $this->setArrayParam($this->orderby, $orderby);
 
         return $this;
     }
 
-    public function requireEntry($value)
+    public function requireEntry($requireEntry)
     {
-        $this->setBoolParam($this->requireEntry, $value);
+        $this->setBoolParam($this->requireEntry, $requireEntry);
 
         return $this;
     }
@@ -705,16 +705,16 @@ class Model
         $this->setArrayParam($this->exactSearch[$fieldName], $exactSearch);
     }
 
-    public function search($fieldName, $value)
+    public function search($fieldName, $search)
     {
         $this->setArrayParam($this->search[$fieldName], $search);
 
         return $this;
     }
 
-    public function showCurrentWeek($value)
+    public function showCurrentWeek($showCurrentWeek = true)
     {
-        $this->setBoolParam($this->showCurrentWeek, $value);
+        $this->setBoolParam($this->showCurrentWeek, $showCurrentWeek);
 
         return $this;
 
@@ -744,16 +744,16 @@ class Model
         return $this;
     }
 
-    public function sort($value)
+    public function sort($sort)
     {
-        $this->setArrayRegexParam($this->sort, $value, '/^asc|desc$/i');
+        $this->setArrayRegexParam($this->sort, $sort, '/^asc|desc$/i');
 
         return $this;
     }
 
-    public function startDay($value)
+    public function startDay($startDay)
     {
-        $this->setRegexParam($this->startDay, $value, '/^Monday|Sunday$/i');
+        $this->setRegexParam($this->startDay, $startDay, '/^Monday|Sunday$/i');
 
         return $this;
     }
@@ -782,9 +782,9 @@ class Model
         return $this;
     }
 
-    public function uncategorizedEntries($value)
+    public function uncategorizedEntries($uncategorizedEntries = true)
     {
-        $this->setBoolParam($this->uncategorizedEntries, $value);
+        $this->setBoolParam($this->uncategorizedEntries, $uncategorizedEntries);
 
         return $this;
     }
@@ -813,9 +813,9 @@ class Model
         return $this;
     }
 
-    public function weekSort($value)
+    public function weekSort($weekSort)
     {
-        $this->setRegexParam($this->weekSort, $value, '/^asc|desc$/i');
+        $this->setRegexParam($this->weekSort, $weekSort, '/^asc|desc$/i');
 
         return $this;
     }
