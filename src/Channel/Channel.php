@@ -3,7 +3,6 @@
 namespace rsanchez\Deep\Channel;
 
 use rsanchez\Deep\Channel\Field\Group as FieldGroup;
-use rsanchez\Deep\IoC;
 use stdClass;
 
 class Channel

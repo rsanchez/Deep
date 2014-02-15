@@ -8,7 +8,6 @@ use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
 use rsanchez\Deep\Entry\Model;
 use rsanchez\Deep\Entity\AbstractCollection as EntityCollection;
-use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Channel\Field\CollectionFactory as FieldCollectionFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;

@@ -3,7 +3,6 @@
 namespace rsanchez\Deep\Col\Storage;
 
 use rsanchez\Deep\Db\DbInterface;
-use rsanchez\Deep\Common\StorageInterface;
 
 abstract class AbstractStorage
 {

@@ -2,7 +2,6 @@
 
 namespace rsanchez\Deep\Channel\Field;
 
-use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Channel\Field\Group;
 
 class GroupFactory

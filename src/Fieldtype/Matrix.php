@@ -2,11 +2,9 @@
 
 namespace rsanchez\Deep\Fieldtype;
 
-use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Col\Repository\Matrix as ColRepository;
 use rsanchez\Deep\Row\Factory as RowFactory;
 use rsanchez\Deep\Row\CollectionFactory as RowCollectionFactory;
-use rsanchez\Deep\Property\AbstractProperty;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;

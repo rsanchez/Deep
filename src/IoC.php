@@ -4,8 +4,6 @@ namespace rsanchez\Deep;
 
 use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Channel\Factory as ChannelFactory;
-use rsanchez\Deep\Channel\Field as ChannelField;
-use rsanchez\Deep\Channel\Field\Group as FieldGroup;
 use rsanchez\Deep\Row\Factory as RowFactory;
 use rsanchez\Deep\Row\CollectionFactory as RowCollectionFactory;
 use rsanchez\Deep\FilePath\FilePath;
@@ -30,10 +28,7 @@ use rsanchez\Deep\Entry\Model;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
 use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
-use rsanchez\Deep\Fieldtype\Date as DateFieldtype;
-use rsanchez\Deep\Fieldtype\File as FileFieldtype;
 use rsanchez\Deep\Fieldtype\FileGenerator as FileFieldtypeGenerator;
-use rsanchez\Deep\Fieldtype\Matrix as MatrixFieldtype;
 use rsanchez\Deep\Fieldtype\MatrixGenerator as MatrixFieldtypeGenerator;
 use rsanchez\Deep\Fieldtype\Storage\Matrix as MatrixStorage;
 use rsanchez\Deep\Col\Storage\Matrix as MatrixColStorage;
@@ -42,7 +37,6 @@ use rsanchez\Deep\Col\Repository\Matrix as MatrixColRepository;
 use rsanchez\Deep\Col\Repository\Grid as GridColRepository;
 
 use Pimple;
-use stdClass;
 
 class IoC extends Pimple
 {

@@ -2,7 +2,6 @@
 
 namespace rsanchez\Deep\Entity;
 
-use rsanchez\Deep\Entity\AbstractCollection;
 use rsanchez\Deep\Entity\AbstractEntity;
 use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;

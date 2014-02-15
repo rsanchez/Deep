@@ -6,7 +6,6 @@ use rsanchez\Deep\Col\Col;
 use rsanchez\Deep\Col\Collection;
 use rsanchez\Deep\Col\Storage\AbstractStorage;
 use rsanchez\Deep\Col\Factory;
-use rsanchez\Deep\Fieldtype\Fieldtype;
 
 abstract class AbstractRepository extends Collection
 {

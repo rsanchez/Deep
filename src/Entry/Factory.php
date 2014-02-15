@@ -2,7 +2,6 @@
 
 namespace rsanchez\Deep\Entry;
 
-use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;

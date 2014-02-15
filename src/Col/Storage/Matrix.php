@@ -2,7 +2,6 @@
 
 namespace rsanchez\Deep\Col\Storage;
 
-use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Col\Storage\AbstractStorage;
 
 class Matrix extends AbstractStorage
