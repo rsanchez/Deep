@@ -9,7 +9,7 @@ use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Property\CollectionFactoryInterface as PropertyCollectionFactory;
 use SplObjectStorage;
 
-class Collection extends SplObjectStorage
+abstract class AbstractCollection extends SplObjectStorage
 {
     protected $entityIds = array();
 

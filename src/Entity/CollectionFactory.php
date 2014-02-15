@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Entity;
 
-use rsanchez\Deep\Entity\Collection;
+use rsanchez\Deep\Entity\AbstractCollection;
 use rsanchez\Deep\Entity\Factory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
@@ -44,7 +44,7 @@ class CollectionFactory
 
     public function createCollection()
     {
-        return new Collection(
+        return new AbstractCollection(
             $this->factory,
             $this->fieldtypeRepository,
             $this->fieldtypeCollectionFactory,

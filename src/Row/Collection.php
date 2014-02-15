@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Row;
 
 use rsanchez\Deep\Row\Row;
-use rsanchez\Deep\Entity\Collection as EntityCollection;
+use rsanchez\Deep\Entity\AbstractCollection as EntityCollection;
 
 class Collection extends EntityCollection
 {
