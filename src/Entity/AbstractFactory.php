@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Entity;
 use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
 use stdClass;
 
-class Factory
+abstract class AbstractFactory
 {
     public function createEntity(stdClass $row, PropertyCollection $propertyCollection)
     {

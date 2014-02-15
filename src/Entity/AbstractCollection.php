@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Entity;
 
 use rsanchez\Deep\Entity\AbstractEntity;
-use rsanchez\Deep\Entity\Factory as EntityFactory;
+use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Property\CollectionFactoryInterface as PropertyCollectionFactory;

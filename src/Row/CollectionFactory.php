@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Row;
 
-use rsanchez\Deep\Entity\CollectionFactory as EntityCollectionFactory;
+use rsanchez\Deep\Entity\AbstractCollectionFactory as EntityCollectionFactory;
 use rsanchez\Deep\Row\Collection;
 use rsanchez\Deep\Row\Factory as RowFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;

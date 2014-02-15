@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Row;
 
 use rsanchez\Deep\Col\Collection as ColCollection;
-use rsanchez\Deep\Entity\Factory as EntityFactory;
+use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;
 use rsanchez\Deep\Row\Row;
 use stdClass;
 

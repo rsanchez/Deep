@@ -3,12 +3,13 @@
 namespace rsanchez\Deep\Entity;
 
 use rsanchez\Deep\Entity\AbstractCollection;
-use rsanchez\Deep\Entity\Factory as EntityFactory;
+use rsanchez\Deep\Entity\AbstractEntity;
+use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Property\CollectionFactoryInterface as PropertyCollectionFactory;
 
-class CollectionFactory
+abstract class AbstractCollectionFactory
 {
     /**
      * @var rsanchez\Deep\Entity\Factory
@@ -42,13 +43,8 @@ class CollectionFactory
         $this->propertyCollectionFactory = $propertyCollectionFactory;
     }
 
-    public function createCollection()
-    {
-        return new AbstractCollection(
-            $this->factory,
-            $this->fieldtypeRepository,
-            $this->fieldtypeCollectionFactory,
-            $this->propertyCollectionFactory
-        );
-    }
+    /**
+     * @return AbstractEntity
+     */
+    abstract public function createCollection();
 }
