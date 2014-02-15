@@ -3,9 +3,9 @@
 namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Channel\Field\Field;
-use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
+use rsanchez\Deep\Property\AbstractCollection;
 
-class Collection extends PropertyCollection
+class Collection extends AbstractCollection
 {
     protected $filterClass = __CLASS__;
 

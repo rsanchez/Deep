@@ -3,14 +3,12 @@
 namespace rsanchez\Deep\Property;
 
 use rsanchez\Deep\Property\AbstractProperty;
-use IteratorAggregate;
-use ArrayIterator;
+use SplObjectStorage;
 
-abstract class AbstractCollection implements IteratorAggregate
+abstract class AbstractCollection extends SplObjectStorage
 {
     protected $filterClass;
 
-    protected $properties = array();
     protected $propertiesByName = array();
     protected $propertiesById = array();
 
@@ -21,11 +19,7 @@ abstract class AbstractCollection implements IteratorAggregate
      */
     public function __get($name)
     {
-        if (isset($this->propertiesByName[$name])) {
-            return $this->propertiesByName[$name];
-        }
-
-        throw new \Exception('invalid field name');//@TODO
+        return $this->find($name);
     }
 
     public function find($id)
@@ -52,9 +46,9 @@ abstract class AbstractCollection implements IteratorAggregate
 
         $collection = new $collectionClass();
 
-        foreach ($this->properties as $field) {
-            if ($field->type() === $type) {
-                $collection->attach($field);
+        foreach ($this as $property) {
+            if ($property->type() === $type) {
+                $collection->attach($property);
             }
         }
 
@@ -66,16 +60,10 @@ abstract class AbstractCollection implements IteratorAggregate
         return array_keys($this->propertiesById);
     }
 
-    public function attach(AbstractProperty $field)
+    public function attach(AbstractProperty $property)
     {
-        array_push($this->properties, $field);
-
-        $this->propertiesById[$field->id()] =& $field;
-        $this->propertiesByName[$field->name()] =& $field;
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->properties);
+        $this->propertiesById[$property->id()] =& $property;
+        $this->propertiesByName[$property->name()] =& $property;
+        return parent::attach($property);
     }
 }

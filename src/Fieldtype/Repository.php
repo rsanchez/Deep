@@ -53,11 +53,18 @@ class Repository extends Collection
         return parent::find($name);
     }
 
-    public function getIterator()
+    public function valid()
     {
         $this->initialize();
 
-        return parent::getIterator();
+        return parent::valid();
+    }
+
+    public function rewind()
+    {
+        $this->initialize();
+
+        return parent::rewind();
     }
 
     public function __construct(Storage $storage, Factory $factory)

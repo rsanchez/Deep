@@ -5,11 +5,10 @@ namespace rsanchez\Deep\FilePath;
 use rsanchez\Deep\FilePath\FilePath;
 use rsanchez\Deep\FilePath\Storage;
 use rsanchez\Deep\FilePath\Factory;
-use IteratorAggregate;
+use SplObjectStorage;
 
-class Repository implements IteratorAggregate
+class Repository extends SplObjectStorage
 {
-    private $filePaths = array();
     private $filePathsById = array();
 
     public function __construct(Storage $storage, Factory $factory)
@@ -24,8 +23,8 @@ class Repository implements IteratorAggregate
 
     public function attach(FilePath $filePath)
     {
-        array_push($this->filePaths, $filePath);
         $this->filePathsById[$filePath->id] =& $filePath;
+        return parent::attach($filePath);
     }
 
     public function find($id)
@@ -36,10 +35,5 @@ class Repository implements IteratorAggregate
         }
 
         return $this->filePathsById[$id];
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->filePaths);
     }
 }

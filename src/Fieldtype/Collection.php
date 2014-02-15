@@ -3,23 +3,26 @@
 namespace rsanchez\Deep\Fieldtype;
 
 use rsanchez\Deep\Fieldtype\Fieldtype;
-use IteratorAggregate;
-use ArrayIterator;
+use SplObjectStorage;
 
-class Collection implements IteratorAggregate
+class Collection extends SplObjectStorage
 {
-    protected $fieldtypes = array();
     protected $fieldtypesByName = array();
 
     public function attach(Fieldtype $fieldtype)
     {
-        array_push($this->fieldtypes, $fieldtype);
         $this->fieldtypesByName[$fieldtype->name] =& $fieldtype;
+        return parent::attach($fieldtype);
     }
 
     public function unshift(Fieldtype $fieldtype)
     {
-        array_unshift($this->fieldtypes, $fieldtype);
+        $fieldtypes = new SplObjectStorage();
+        $fieldtypes->attach($fieldtype);
+        $fieldtypes->addAll($this);
+        $this->removeAll($this);
+        $this->addAll($fieldtypes);
+
         $this->fieldtypesByName[$fieldtype->name] =& $fieldtype;
     }
 
@@ -31,10 +34,5 @@ class Collection implements IteratorAggregate
         }
 
         return $this->fieldtypesByName[$name];
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->fieldtypes);
     }
 }

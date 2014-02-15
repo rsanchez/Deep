@@ -49,13 +49,10 @@ abstract class AbstractRepository extends Collection
 
         $collection = new $collectionClass();
 
-        $properties = array_filter($this->properties, function ($col) use ($fieldIds) {
-            return in_array($col->field_id, $fieldIds);
-        });
-
-        foreach ($properties as $property)
-        {
-            $collection->attach($property);
+        foreach ($this as $col) {
+            if (in_array($col->field_id, $fieldIds)) {
+                $collection->attach($col);
+            }
         }
 
         return $collection;

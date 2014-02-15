@@ -8,16 +8,17 @@ use rsanchez\Deep\Channel\Field\Collection;
 use rsanchez\Deep\Channel\Field\GroupFactory;
 use rsanchez\Deep\Channel\Field\Factory as FieldFactory;
 use rsanchez\Deep\Channel\Field\Storage as FieldStorage;
-use IteratorAggregate;
-use ArrayIterator;
+use SplObjectStorage;
 
 class Repository extends Collection
 {
-    private $groups = array();
+    private $groups;
     private $groupsById = array();
 
     public function __construct(FieldStorage $storage, GroupFactory $groupFactory, FieldFactory $fieldFactory)
     {
+        $this->groups = new SplObjectStorage();
+
         foreach ($storage() as $id => $fieldData) {
             $group = $groupFactory->createGroup($id);
 
@@ -35,7 +36,7 @@ class Repository extends Collection
 
     public function attachGroup(Group $group)
     {
-        array_push($this->groups, $group);
+        $this->groups->attach($group);
 
         $this->groupsById[$group->group_id] =& $group;
     }

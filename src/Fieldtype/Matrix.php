@@ -12,7 +12,6 @@ use rsanchez\Deep\Entry\Entries;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
 use rsanchez\Deep\Fieldtype\Storage\Matrix as MatrixStorage;
-use IteratorAggregate;
 use stdClass;
 
 class Matrix extends Fieldtype
