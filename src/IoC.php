@@ -228,7 +228,7 @@ class IoC extends Pimple
                 $container['rowCollectionFactory']
             );
         };
-        
+
         $this['fieldtypeRepository']->registerFieldtype('matrix', $this['matrixFieldtypeGenerator']);
         $this['fieldtypeRepository']->registerFieldtype('file', $this['fileFieldtypeGenerator']);
         $this['fieldtypeRepository']->registerFieldtype('date', '\\rsanchez\\Deep\\Fieldtype\\Date');

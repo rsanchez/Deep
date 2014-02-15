@@ -134,7 +134,7 @@ class Model
         }
 
         $property = array();
-        
+
         foreach ($value as $v) {
             if (ctype_digit($v)) {
                 $property[] = intval($v);
@@ -190,13 +190,13 @@ class Model
             'channel_data' => 'channel_data.entry_id = channel_titles.entry_id',
             'channels' => 'channels.channel_id = channel_titles.channel_id',
         );
-        
+
         if (in_array($which, $joined) || ! isset($tables[$which])) {
             return;
         }
-        
+
         $this->db->join($which, $tables[$which]);
-        
+
         $joined[] = $which;
     }
 
@@ -211,7 +211,7 @@ class Model
 
         /**
          * Channel and Channel ID
-         * 
+         *
          * loop through the requested channel namess and
          * convert to ID, avoiding a join with the channels table
          */
@@ -239,7 +239,7 @@ class Model
 
             $this->db->select('channel_data.*');
         }
-        
+
         /**
          * Member Data
          */
@@ -338,7 +338,7 @@ class Model
          */
         if ($this->groupId) {
             $this->requireTable('members');
-        
+
             $this->db->where_in('members.group_id', $this->groupId);
         }
 
@@ -391,7 +391,7 @@ class Model
          */
         if ($this->username) {
             $this->requireTable('members');
-            
+
             $this->db->where('members.username', $this->username);
         }
 
@@ -400,21 +400,21 @@ class Model
          */
         if ($this->search) {
             $this->requireTable('channel_data');
-            
+
             foreach ($this->search as $fieldName => $values) {
                 try {
                     $field = $this->channelFieldRepository->find($fieldName);
 
                     $glue = 'OR';
-                        
+
                     foreach ($values as $value) {
                         $query = "`".$this->db->dbprefix('channel_data')."`.`field_id_{$field->id()}` ";
-                        
+
                         $query .= "LIKE ".$this->db->escape('%'.$value.'%');
-                        
+
                         $queries[] = $query;
                     }
-                    
+
                     $this->db->where('('.implode($glue, $queries).')', null, false);
 
                 } catch (Exception $e) {
@@ -521,7 +521,7 @@ class Model
         $this->setBoolParam($this->dynamic, $value);
 
         return $this;
-        
+
         //entry_id, url_title, month/year/day
     }
 
@@ -530,7 +530,7 @@ class Model
         if (! $this->dynamicParameters) {
             return;
         }
-        
+
         $validParameters = array(
             'author_id'           => 'authorId',
             'cat_limit'           => 'catLimit',
@@ -577,7 +577,7 @@ class Model
 
     public function dynamicStart()
     {
-        
+
     }
 
     /**
@@ -594,7 +594,7 @@ class Model
 
     /**
      * Filter by not Entry ID
-     * 
+     *
      * @param  int|array $entryId one or more entry IDs
      * @return this
      */

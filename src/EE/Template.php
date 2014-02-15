@@ -34,7 +34,7 @@ class Template
         if ($name === 'parse_variables' || $name === 'parse_variables_row') {
             $this->variables = isset($args[1]) ? $args[1] : array();
         }
-        
+
         return $output;
     }
 
