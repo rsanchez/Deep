@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Deep\Property;
+namespace rsanchez\Deep\Common\Property;
 
-use rsanchez\Deep\Property\AbstractProperty;
+use rsanchez\Deep\Common\Property\AbstractProperty;
 use SplObjectStorage;
 
 abstract class AbstractCollection extends SplObjectStorage

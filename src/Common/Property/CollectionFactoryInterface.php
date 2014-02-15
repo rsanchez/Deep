@@ -1,11 +1,11 @@
 <?php
 
-namespace rsanchez\Deep\Property;
+namespace rsanchez\Deep\Common\Property;
 
 interface CollectionFactoryInterface
 {
     /**
-     * @return rsanchez\Deep\Property\AbstractCollection
+     * @return rsanchez\Deep\Common\Property\AbstractCollection
      */
     public function createCollection();
 }

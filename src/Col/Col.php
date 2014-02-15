@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Col;
 
 use rsanchez\Deep\Fieldtype\Fieldtype;
-use rsanchez\Deep\Property\AbstractProperty;
+use rsanchez\Deep\Common\Property\AbstractProperty;
 use stdClass;
 
 class Col extends AbstractProperty

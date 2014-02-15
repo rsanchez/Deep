@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Row;
 
-use rsanchez\Deep\Entity\AbstractEntity;
+use rsanchez\Deep\Common\Entity\AbstractEntity;
 
 class Row extends AbstractEntity
 {

@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Channel\Field;
 
-use rsanchez\Deep\Property\AbstractFactory as AbstractPropertyFactory;
+use rsanchez\Deep\Common\Property\AbstractFactory as AbstractPropertyFactory;
 use rsanchez\Deep\Channel\Field\Field;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use stdClass;

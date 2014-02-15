@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Deep\Entity;
+namespace rsanchez\Deep\Common\Entity;
 
-use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
+use rsanchez\Deep\Common\Property\AbstractCollection as PropertyCollection;
 use stdClass;
 
 abstract class AbstractEntity

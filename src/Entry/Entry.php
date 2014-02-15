@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Entry;
 
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
-use rsanchez\Deep\Entity\AbstractEntity;
+use rsanchez\Deep\Common\Entity\AbstractEntity;
 use stdClass;
 
 class Entry extends AbstractEntity

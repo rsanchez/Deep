@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Col;
 
 use rsanchez\Deep\Col\Col;
-use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
+use rsanchez\Deep\Common\Property\AbstractCollection as PropertyCollection;
 
 class Collection extends PropertyCollection
 {

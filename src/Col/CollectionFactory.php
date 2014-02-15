@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Col;
 
 use rsanchez\Deep\Col\Collection;
-use rsanchez\Deep\Property\CollectionFactoryInterface;
+use rsanchez\Deep\Common\Property\CollectionFactoryInterface;
 
 class CollectionFactory implements CollectionFactoryInterface
 {

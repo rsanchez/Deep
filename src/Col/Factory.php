@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Col;
 
-use rsanchez\Deep\Property\AbstractFactory;
+use rsanchez\Deep\Common\Property\AbstractFactory;
 use rsanchez\Deep\Col\Col;
 use stdClass;
 

@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Channel\Field\Field;
-use rsanchez\Deep\Property\AbstractCollection;
+use rsanchez\Deep\Common\Property\AbstractCollection;
 
 class Collection extends AbstractCollection
 {

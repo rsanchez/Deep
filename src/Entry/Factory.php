@@ -4,8 +4,8 @@ namespace rsanchez\Deep\Entry;
 
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Entry\Entry;
-use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;
-use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
+use rsanchez\Deep\Common\Entity\AbstractFactory as EntityFactory;
+use rsanchez\Deep\Common\Property\AbstractCollection as PropertyCollection;
 use stdClass;
 
 class Factory extends EntityFactory

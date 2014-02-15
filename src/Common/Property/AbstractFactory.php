@@ -1,8 +1,8 @@
 <?php
 
-namespace rsanchez\Deep\Property;
+namespace rsanchez\Deep\Common\Property;
 
-use rsanchez\Deep\Property\AbstractProperty;
+use rsanchez\Deep\Common\Property\AbstractProperty;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use stdClass;
 
@@ -21,7 +21,7 @@ abstract class AbstractFactory
     /**
      * Create a class that inherits AbstractProperty
      * @param  stdClass                                $row
-     * @return rsanchez\Deep\Property\AbstractProperty
+     * @return rsanchez\Deep\Common\Property\AbstractProperty
      */
     abstract public function createProperty(stdClass $row);
 }

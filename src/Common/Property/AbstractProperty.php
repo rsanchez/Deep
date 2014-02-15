@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Property;
+namespace rsanchez\Deep\Common\Property;
 
 use rsanchez\Deep\Fieldtype\Fieldtype;
 use stdClass;

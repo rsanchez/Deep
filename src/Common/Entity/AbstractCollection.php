@@ -1,12 +1,12 @@
 <?php
 
-namespace rsanchez\Deep\Entity;
+namespace rsanchez\Deep\Common\Entity;
 
-use rsanchez\Deep\Entity\AbstractEntity;
-use rsanchez\Deep\Entity\AbstractFactory as EntityFactory;
+use rsanchez\Deep\Common\Entity\AbstractEntity;
+use rsanchez\Deep\Common\Entity\AbstractFactory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
-use rsanchez\Deep\Property\CollectionFactoryInterface as PropertyCollectionFactory;
+use rsanchez\Deep\Common\Property\CollectionFactoryInterface as PropertyCollectionFactory;
 use SplObjectStorage;
 
 abstract class AbstractCollection extends SplObjectStorage
@@ -14,7 +14,7 @@ abstract class AbstractCollection extends SplObjectStorage
     protected $entityIds = array();
 
     /**
-     * @var rsanchez\Deep\Entity\Factory
+     * @var rsanchez\Deep\Common\Entity\Factory
      */
     protected $factory;
 
@@ -29,7 +29,7 @@ abstract class AbstractCollection extends SplObjectStorage
     protected $fieldtypeCollectionFactory;
 
     /**
-     * @var rsanchez\Deep\Property\CollectionFactoryInterface
+     * @var rsanchez\Deep\Common\Property\CollectionFactoryInterface
      */
     protected $propertyCollectionFactory;
 

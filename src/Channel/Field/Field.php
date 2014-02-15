@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Channel\Field;
 
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Fieldtype\Fieldtype;
-use rsanchez\Deep\Property\AbstractProperty;
+use rsanchez\Deep\Common\Property\AbstractProperty;
 use stdClass;
 
 class Field extends AbstractProperty
