@@ -8,12 +8,11 @@ use rsanchez\Deep\Channel\Field\Repository as FieldRepository;
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Field\GroupFactory as FieldGroupFactory;
 use rsanchez\Deep\Channel\Factory as ChannelFactory;
-use IteratorAggregate;
+use SplObjectStorage;
 
-class Repository implements IteratorAggregate
+class Repository extends SplObjectStorage
 {
     public $fieldRepository;
-    private $channels = array();
 
     public function __construct(
         ChannelStorage $storage,
@@ -38,9 +37,9 @@ class Repository implements IteratorAggregate
 
     public function attach(Channel $channel)
     {
-        array_push($this->channels, $channel);
         $this->channelsById[$channel->channel_id] =& $channel;
         $this->channelsByName[$channel->channel_name] =& $channel;
+        return parent::attach($channel);
     }
 
     public function find($id)
@@ -59,10 +58,5 @@ class Repository implements IteratorAggregate
         }
 
         return $this->channelsByName[$id];
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->channels);
     }
 }
