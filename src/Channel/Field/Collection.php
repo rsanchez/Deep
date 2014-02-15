@@ -9,8 +9,8 @@ class Collection extends PropertyCollection
 {
     protected $filterClass = __CLASS__;
 
-    public function push(Field $field)
+    public function attach(Field $field)
     {
-        parent::push($field);
+        parent::attach($field);
     }
 }

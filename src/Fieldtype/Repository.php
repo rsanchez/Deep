@@ -40,7 +40,7 @@ class Repository extends Collection
 
             $fieldtype = $this->factory->createFieldtype($row, $closure);
 
-            $this->push($fieldtype);
+            $this->attach($fieldtype);
         }
 
         $initialized = true;

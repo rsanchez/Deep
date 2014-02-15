@@ -32,11 +32,11 @@ class Repository implements IteratorAggregate
 
             $channel = $factory->createChannel($fieldGroup, $channelRow);
 
-            $this->push($channel);
+            $this->attach($channel);
         }
     }
 
-    public function push(Channel $channel)
+    public function attach(Channel $channel)
     {
         array_push($this->channels, $channel);
         $this->channelsById[$channel->channel_id] =& $channel;

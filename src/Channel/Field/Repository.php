@@ -24,16 +24,16 @@ class Repository extends Collection
             foreach ($fieldData as $fieldRow) {
                 $field = $fieldFactory->createProperty($fieldRow);
 
-                $this->push($field);
+                $this->attach($field);
 
-                $group->push($field);
+                $group->attach($field);
             }
 
-            $this->pushGroup($group);
+            $this->attachGroup($group);
         }
     }
 
-    public function pushGroup(Group $group)
+    public function attachGroup(Group $group)
     {
         array_push($this->groups, $group);
 

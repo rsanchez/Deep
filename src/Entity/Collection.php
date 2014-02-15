@@ -59,7 +59,7 @@ class Collection implements Iterator
     {
     }
 
-    public function push(Entity $entity)
+    public function attach(Entity $entity)
     {
         array_push($this->entities, $entity);
         $this->total_results++;

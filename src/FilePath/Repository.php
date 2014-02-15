@@ -18,11 +18,11 @@ class Repository implements IteratorAggregate
 
             $filePath = $factory->createFilePath($row);
 
-            $this->push($filePath);
+            $this->attach($filePath);
         }
     }
 
-    public function push(FilePath $filePath)
+    public function attach(FilePath $filePath)
     {
         array_push($this->filePaths, $filePath);
         $this->filePathsById[$filePath->id] =& $filePath;

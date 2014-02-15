@@ -31,7 +31,7 @@ abstract class AbstractRepository extends Collection
             foreach ($this->storage->getByFieldIds($missingFieldIds) as $row) {
                 $col = $this->factory->createCol($row);
 
-                $this->push($col);
+                $this->attach($col);
             }
         }
 
@@ -55,7 +55,7 @@ abstract class AbstractRepository extends Collection
 
         foreach ($properties as $property)
         {
-            $collection->push($property);
+            $collection->attach($property);
         }
 
         return $collection;

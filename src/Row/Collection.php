@@ -7,8 +7,8 @@ use rsanchez\Deep\Entity\Collection as EntityCollection;
 
 class Collection extends EntityCollection
 {
-    public function push(Row $row)
+    public function attach(Row $row)
     {
-        parent::push($row);
+        parent::attach($row);
     }
 }

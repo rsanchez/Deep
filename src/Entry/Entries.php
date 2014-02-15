@@ -53,9 +53,9 @@ class Entries extends EntityCollection
         }
     }
 
-    public function push(Entry $entry)
+    public function attach(Entry $entry)
     {
-        parent::push($entry);
+        parent::attach($entry);
     }
 
     public function entryIds()
@@ -147,7 +147,7 @@ class Entries extends EntityCollection
                 $fieldGroupsCollected[] = $channel->field_group;
 
                 foreach ($channel->fields as $field) {
-                    $fields->push($field);
+                    $fields->attach($field);
 
                     if (! in_array($field->field_type, $fieldtypesCollected)) {
                         $fieldtypesCollected[] = $field->field_type;
@@ -158,7 +158,7 @@ class Entries extends EntityCollection
                             if ($fieldtype->preloadHighPriority) {
                                 $preloadingFieldtypes->unshift($fieldtype);
                             } else {
-                                $preloadingFieldtypes->push($fieldtype);
+                                $preloadingFieldtypes->attach($fieldtype);
                             }
                         }
                     }
@@ -169,7 +169,7 @@ class Entries extends EntityCollection
 
             $entry = $this->factory->createEntry($row, $channel);
 
-            $this->push($entry);
+            $this->attach($entry);
         }
 
         // pre-load any fieldtype data, eg. Matrix
@@ -178,9 +178,9 @@ class Entries extends EntityCollection
 
             $payload = $fieldtype->preload($this, $fields);
 
-            array_walk($this->entities, function ($entry) use ($fieldtype, $fields, $payload) {
+            foreach($this->entities as $entry) {
                 $fieldtype->hydrate($entry, $fields, $payload);
-            });
+            }
         }
     }
 

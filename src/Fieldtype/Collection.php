@@ -11,7 +11,7 @@ class Collection implements IteratorAggregate
     protected $fieldtypes = array();
     protected $fieldtypesByName = array();
 
-    public function push(Fieldtype $fieldtype)
+    public function attach(Fieldtype $fieldtype)
     {
         array_push($this->fieldtypes, $fieldtype);
         $this->fieldtypesByName[$fieldtype->name] =& $fieldtype;

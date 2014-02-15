@@ -63,7 +63,7 @@ class Matrix extends Fieldtype
                 foreach ($payload[$entry->entry_id][$channelField->id()] as $row) {
                     $row = $this->rowFactory->createRow($row, $cols);
 
-                    $rowCollection->push($row);
+                    $rowCollection->attach($row);
                 }
 
                 $entry->{$channelField->name()} = $rowCollection;

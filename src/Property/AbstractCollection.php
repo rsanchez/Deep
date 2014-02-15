@@ -52,11 +52,11 @@ abstract class AbstractCollection implements IteratorAggregate
 
         $collection = new $collectionClass();
 
-        $properties = array_filter($this->properties, function ($field) use ($type) {
-            return $field->type() === $type;
-        });
-
-        array_walk($properties, array($collection, 'push'));
+        foreach ($this->properties as $field) {
+            if ($field->type() === $type) {
+                $collection->attach($field);
+            }
+        }
 
         return $collection;
     }
@@ -66,7 +66,7 @@ abstract class AbstractCollection implements IteratorAggregate
         return array_keys($this->propertiesById);
     }
 
-    public function push(AbstractProperty $field)
+    public function attach(AbstractProperty $field)
     {
         array_push($this->properties, $field);
 
