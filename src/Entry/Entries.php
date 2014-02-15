@@ -117,13 +117,11 @@ class Entries extends EntityCollection
 
         if (! $executed) {
 
-            $query = $this->queryBuilder->get();
+            $result = $this->queryBuilder->get();
 
             $executed = true;
 
-            $this->fill($query->result());
-
-            $query->free_result();
+            $this->fill($result);
         }
 
         return $this;

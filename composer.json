@@ -12,6 +12,7 @@
         "psr-4": { "rsanchez\\Deep\\": "src/" }
     },
     "require": {
-        "pimple/pimple": "2.0.*-dev"
+        "pimple/pimple": "2.0.*-dev",
+        "expressodev/laravel-codeigniter-db": "dev-master"
     }
 }

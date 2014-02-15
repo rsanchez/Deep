@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Channel;
 
-use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Common\StorageInterface;
 
 class Storage implements StorageInterface
@@ -10,7 +10,7 @@ class Storage implements StorageInterface
     protected $db;
     protected $data;
 
-    public function __construct(DbInterface $db)
+    public function __construct(Db $db)
     {
         $this->db = $db;
     }
@@ -21,12 +21,6 @@ class Storage implements StorageInterface
             return $this->data;
         }
 
-        $query = $this->db->get('exp_channels');
-
-        $this->data = $query->result();
-
-        $query->free_result();
-
-        return $this->data;
+        return $this->db->table('channels')->get();
     }
 }

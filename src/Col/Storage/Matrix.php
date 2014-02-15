@@ -8,27 +8,15 @@ class Matrix extends AbstractStorage
 {
     public function getByFieldIds(array $ids)
     {
-        $this->db->where_in('field_id', $ids);
-
-        $query = $this->db->get('exp_matrix_cols');
-
-        $result = $query->result();
-
-        $query->free_result();
-
-        return $result;
+        return $this->db->table('matrix_cols')
+                           ->whereIn('field_id', $ids)
+                           ->get();
     }
 
     public function getByColIds(array $ids)
     {
-        $this->db->where_in('col_id', $ids);
-
-        $query = $this->db->get('exp_matrix_cols');
-
-        $result = $query->result();
-
-        $query->free_result();
-
-        return $result;
+        return $this->db->table('matrix_cols')
+                           ->whereIn('col_id', $ids)
+                           ->get();
     }
 }

@@ -2,13 +2,13 @@
 
 namespace rsanchez\Deep\Col\Storage;
 
-use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Db\Db;
 
 abstract class AbstractStorage
 {
     protected $db;
 
-    public function __construct(DbInterface $db)
+    public function __construct(Db $db)
     {
         $this->db = $db;
     }

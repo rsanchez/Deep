@@ -35,7 +35,8 @@ use rsanchez\Deep\Col\Storage\Matrix as MatrixColStorage;
 use rsanchez\Deep\Col\Storage\Grid as GridColStorage;
 use rsanchez\Deep\Col\Repository\Matrix as MatrixColRepository;
 use rsanchez\Deep\Col\Repository\Grid as GridColRepository;
-
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
 use Pimple;
 
 class IoC extends Pimple
@@ -48,25 +49,14 @@ class IoC extends Pimple
             return ee();
         };
 
+        $this['dbConnectionResolver'] = function ($container) {
+            $resolver = new CodeIgniterConnectionResolver($container['ee']);
+            EloquentModel::setConnectionResolver($resolver);
+            return $resolver;
+        };
+
         $this['db'] = $this->factory(function ($container) {
-            static $count = 1;
-
-            $db = new Db(array(
-                'dbdriver' => 'mysql',
-                'conn_id'  => $container['ee']->db->conn_id,
-                'database' => $container['ee']->db->database,
-                'dbprefix' => $container['ee']->db->dbprefix,
-            ));
-
-            // log queries
-            $db->save_queries = $container['ee']->config->item('show_profiler') === 'y' || DEBUG === 1;
-
-            // attach back to ee so the profiler knows to show these queries
-            $container['ee']->{'db'.$count} = $db;
-
-            $count++;
-
-            return $db;
+            return new Db($container['dbConnectionResolver']);
         });
 
         $this['fieldtypeStorage'] = function ($container) {

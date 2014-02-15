@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Channel\Field;
 
-use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Common\StorageInterface;
 
 class Storage implements StorageInterface
@@ -11,7 +11,7 @@ class Storage implements StorageInterface
 
     protected $data;
 
-    public function __construct(DbInterface $db)
+    public function __construct(Db $db)
     {
         $this->db = $db;
     }
@@ -24,19 +24,17 @@ class Storage implements StorageInterface
 
         $this->data = array();
 
-        $this->db->order_by('field_order', 'ASC');
+        $result = $this->db->table('channel_fields')
+                           ->orderBy('field_order', 'asc')
+                           ->get();
 
-        $query = $this->db->get('channel_fields');
-
-        foreach ($query->result() as $row) {
+        foreach ($result as $row) {
             if (! isset($this->data[$row->group_id])) {
                 $this->data[$row->group_id] = array();
             }
 
             $this->data[$row->group_id][] = $row;
         }
-
-        $query->free_result();
 
         return $this->data;
     }

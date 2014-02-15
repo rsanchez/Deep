@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Fieldtype;
 
-use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Common\StorageInterface;
 
 class Storage implements StorageInterface
@@ -11,7 +11,7 @@ class Storage implements StorageInterface
 
     protected $data;
 
-    public function __construct(DbInterface $db)
+    public function __construct(Db $db)
     {
         $this->db = $db;
     }
@@ -22,16 +22,6 @@ class Storage implements StorageInterface
             return $this->data;
         }
 
-        $this->data = array();
-
-        $query = $this->db->get('fieldtypes');
-
-        foreach ($query->result() as $row) {
-            $this->data[$row->name] = $row;
-        }
-
-        $query->free_result();
-
-        return $this->data;
+        return $this->data = $this->db->table('fieldtypes')->get();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\FilePath;
 
-use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Common\StorageInterface;
 
 class Storage implements StorageInterface
@@ -11,7 +11,7 @@ class Storage implements StorageInterface
 
     protected $uploadPrefs;
 
-    public function __construct(DbInterface $db, $uploadPrefs = array())
+    public function __construct(Db $db, $uploadPrefs = array())
     {
         $this->db = $db;
 
@@ -32,14 +32,8 @@ class Storage implements StorageInterface
             return $this->uploadPrefs;
         }
 
-        $this->db->select('id, server_path, url');
-
-        $query = $this->db->get('upload_prefs');
-
-        $this->uploadPrefs = $query->result();
-
-        $query->free_result();
-
-        return $this->uploadPrefs;
+        return $this->uploadPrefs = $this->db->table('upload_prefs')
+                                        ->select('id', 'server_path', 'url')
+                                        ->get();
     }
 }

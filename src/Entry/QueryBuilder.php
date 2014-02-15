@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Entry;
 
 use rsanchez\Deep\Channel\Repository as ChannelRepository;
-use rsanchez\Deep\Db\DbInterface;
+use rsanchez\Deep\Db\Db;
 use rsanchez\Deep\Channel\Field\Repository as ChannelFieldRepository;
 
 class QueryBuilder
@@ -64,7 +64,7 @@ class QueryBuilder
     protected $request;
     protected $channelFieldRepository;
 
-    public function __construct(DbInterface $db, ChannelRepository $channelRepository, ChannelFieldRepository $channelFieldRepository, $request = array())
+    public function __construct(Db $db, ChannelRepository $channelRepository, ChannelFieldRepository $channelFieldRepository, $request = array())
     {
         $this->db = $db;
         $this->channelFieldRepository = $channelFieldRepository;
@@ -181,33 +181,35 @@ class QueryBuilder
         return $this;
     }
 
-    protected function requireTable($which)
+    protected function requireTable($query, $which)
     {
         static $joined = array();
 
         $tables = array(
-            'members' => 'members.member_id = channel_titles.author_id',
-            'channel_data' => 'channel_data.entry_id = channel_titles.entry_id',
-            'channels' => 'channels.channel_id = channel_titles.channel_id',
+            'members' => array('members.member_id', 'channel_titles.author_id'),
+            'channel_data' => array('channel_data.entry_id', 'channel_titles.entry_id'),
+            'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
         );
 
         if (in_array($which, $joined) || ! isset($tables[$which])) {
             return;
         }
 
-        $this->db->join($which, $tables[$which]);
+        $query->join($which, $tables[$which][0], '=', $tables[$which][1]);
 
         $joined[] = $which;
     }
 
     public function get()
     {
+        $prefix = $this->db->getTablePrefix();
+
         /**
          * Start a-queryin'
          **/
-        $this->db->select('channel_titles.*');
+        $query = $this->db->table('channel_titles');
 
-        $this->db->from('channel_titles');
+        $query->addSelect('channel_titles.*');
 
         /**
          * Channel and Channel ID
@@ -228,47 +230,45 @@ class QueryBuilder
         }
 
         if ($channelId) {
-            $this->db->where_in('channel_titles.channel_id', $channelId);
+            $query->whereIn('channel_titles.channel_id', $channelId);
         }
 
         /**
          * Custom Fields
          */
         if (! in_array('custom_fields', $this->disable)) {
-            $this->requireTable('channel_data');
+            $this->requireTable($query, 'channel_data');
 
-            $this->db->select('channel_data.*');
+            $query->addSelect('channel_data.*');
         }
 
         /**
          * Member Data
          */
         if (! in_array('member_data', $this->disable)) {
-            $this->requireTable('members');
+            $this->requireTable($query, 'members');
 
-            $this->db->select('members.*');
+            $query->addSelect('members.*');
         }
 
         /**
          * Status
          */
-        $this->db->where_in('channel_titles.status', $this->status);
+        $query->whereIn('channel_titles.status', $this->status);
 
         /**
          * Author ID
          */
         if ($this->authorId) {
-            $this->db->where_in('channel_titles.author_id', $this->authorId);
+            $query->whereIn('channel_titles.author_id', $this->authorId);
         }
 
         /**
          * Expired Entries
          */
         if ($this->showExpired !== true) {
-            $this->db->where(
-                "(`".$this->db->dbprefix('channel_titles')."`.`expiration_date` = '' OR  `".$this->db->dbprefix('channel_titles')."`.`expiration_date` > NOW())",
-                null,
-                false
+            $query->whereRaw(
+                "(`{$prefix}channel_titles`.`expiration_date` = '' OR  `{$prefix}channel_titles`.`expiration_date` > NOW())"
             );
         }
 
@@ -276,7 +276,7 @@ class QueryBuilder
          * Future Entries
          */
         if ($this->showFutureEntries !== true) {
-            $this->db->where('channel_titles.entry_date <=', time());
+            $query->where('channel_titles.entry_date', '<=', time());
         }
 
         /**
@@ -285,9 +285,9 @@ class QueryBuilder
         if ($this->fixedOrder) {
             $this->entryIds = $this->fixedOrder;
 
-            $this->db->where_in('channel_titles.entry_id', $entryIds);
+            $query->whereIn('channel_titles.entry_id', $entryIds);
 
-            $this->db->order_by('FIELD('.implode(', ', $entryIds).')', 'ASC', false);
+            $query->orderBy('FIELD('.implode(', ', $entryIds).')', 'asc');
         } else {
             /**
              * Sticky
@@ -301,7 +301,7 @@ class QueryBuilder
              */
             foreach ($this->orderby as $i => $order_by) {
                 $sort = isset($this->sort[$i]) ? $this->sort[$i] : '';
-                $this->db->order_by($order_by, $sort);
+                $query->orderBy($order_by, $sort);
             }
         }
 
@@ -309,97 +309,97 @@ class QueryBuilder
          * Entry ID
          */
         if ($this->entryId) {
-            $this->db->where_in('channel_titles.entry_id', $this->entryId);
+            $query->whereIn('channel_titles.entry_id', $this->entryId);
         }
 
         /**
          * Not Entry ID
          */
         if ($this->notEntryId) {
-            $this->db->where_not_in('channel_titles.entry_id', $this->notEntryId);
+            $query->whereNotIn('channel_titles.entry_id', $this->notEntryId);
         }
 
         /**
          * Entry ID From
          */
         if ($this->entryIdFrom) {
-            $this->db->where('channel_titles.entry_id >=', $this->entryIdFrom);
+            $query->where('channel_titles.entry_id >=', $this->entryIdFrom);
         }
 
         /**
          * Entry ID To
          */
         if ($this->entryIdTo) {
-            $this->db->where('channel_titles.entry_id <=', $this->entryIdTo);
+            $query->where('channel_titles.entry_id <=', $this->entryIdTo);
         }
 
         /**
          * Member Group ID
          */
         if ($this->groupId) {
-            $this->requireTable('members');
+            $this->requireTable($query, 'members');
 
-            $this->db->where_in('members.group_id', $this->groupId);
+            $query->whereIn('members.group_id', $this->groupId);
         }
 
         /**
          * Not Member Group ID
          */
         if ($this->notGroupId) {
-            $this->requireTable('members');
+            $this->requireTable($query, 'members');
 
-            $this->db->where_not_in('members.group_id', $this->notGroupId);
+            $query->whereNotIn('members.group_id', $this->notGroupId);
         }
 
         /**
          * Limit
          */
         if ($this->limit) {
-            $this->db->limit($this->limit);
+            $query->take($this->limit);
         }
 
         /**
          * Offset
          */
         if ($this->offset) {
-            $this->db->offset($this->offset);
+            $query->skip($this->offset);
         }
 
         /**
          * Start On
          */
         if ($this->startOn) {
-            $this->db->where('channel_titles.entry_date >=', $this->startOn);
+            $query->where('channel_titles.entry_date', '>=', $this->startOn);
         }
 
         /**
          * Stop Before
          */
         if ($this->stopBefore) {
-            $this->db->where('channel_titles.entry_date <', $this->stopBefore);
+            $query->where('channel_titles.entry_date', '<', $this->stopBefore);
         }
 
         /**
          * URL Title
          */
         if ($this->urlTitle) {
-            $this->db->where_in('channel_titles.url_title', $this->urlTitle);
+            $query->whereIn('channel_titles.url_title', $this->urlTitle);
         }
 
         /**
          * Username
          */
         if ($this->username) {
-            $this->requireTable('members');
+            $this->requireTable($query, 'members');
 
-            $this->db->where('members.username', $this->username);
+            $query->where('members.username', $this->username);
         }
 
         /**
          * Search
          */
         if ($this->search) {
-            $this->requireTable('channel_data');
+            $this->requireTable($query, 'channel_data');
 
             foreach ($this->search as $fieldName => $values) {
                 try {
@@ -408,14 +408,14 @@ class QueryBuilder
                     $glue = 'OR';
 
                     foreach ($values as $value) {
-                        $query = "`".$this->db->dbprefix('channel_data')."`.`field_id_{$field->id()}` ";
+                        $query = "`{$prefix}channel_data`.`field_id_{$field->id()}` ";
 
                         $query .= "LIKE ".$this->db->escape('%'.$value.'%');
 
                         $queries[] = $query;
                     }
 
-                    $this->db->where('('.implode($glue, $queries).')', null, false);
+                    $query->whereRaw('('.implode($glue, $queries).')');
 
                 } catch (Exception $e) {
                     //$e->getMessage();
@@ -427,26 +427,26 @@ class QueryBuilder
          * Year
          */
         if ($this->year) {
-            $this->db->where('channel_titles.year', $this->year);
+            $query->where('channel_titles.year', $this->year);
         }
 
         /**
          * Month
          */
         if ($this->month) {
-            $this->db->where('channel_titles.month', $this->month);
+            $query->where('channel_titles.month', $this->month);
         }
 
         /**
          * Day
          */
         if ($this->day) {
-            $this->db->where('channel_titles.day', $this->day);
+            $query->where('channel_titles.day', $this->day);
         }
 
         #exit($this->db->_compile_select());
 
-        return $this->db->get();
+        return $query->get();
     }
 
     /**

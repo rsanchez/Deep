@@ -8,27 +8,15 @@ class Grid extends AbstractStorage
 {
     public function getByFieldIds(array $ids)
     {
-        $this->db->where_in('field_id', $ids);
-
-        $query = $this->db->get('exp_grid_columns');
-
-        $result = $query->result();
-
-        $query->free_result();
-
-        return $result;
+        return $this->db->table('grid_columns')
+                            ->whereIn('field_id', $ids)
+                            ->get();
     }
 
     public function getByColIds(array $ids)
     {
-        $this->db->where_in('col_id', $ids);
-
-        $query = $this->db->get('exp_grid_columns');
-
-        $result = $query->result();
-
-        $query->free_result();
-
-        return $result;
+        return $this->db->table('grid_columns')
+                           ->whereIn('col_id', $ids)
+                           ->get();
     }
 }
