@@ -64,6 +64,7 @@ abstract class AbstractCollection extends SplObjectStorage
     {
         $this->propertiesById[$property->id()] =& $property;
         $this->propertiesByName[$property->name()] =& $property;
+
         return parent::attach($property);
     }
 }

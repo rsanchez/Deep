@@ -24,6 +24,7 @@ class Repository extends SplObjectStorage
     public function attach(FilePath $filePath)
     {
         $this->filePathsById[$filePath->id] =& $filePath;
+
         return parent::attach($filePath);
     }
 

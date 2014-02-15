@@ -39,6 +39,7 @@ class Repository extends SplObjectStorage
     {
         $this->channelsById[$channel->channel_id] =& $channel;
         $this->channelsByName[$channel->channel_name] =& $channel;
+
         return parent::attach($channel);
     }
 

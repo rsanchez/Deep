@@ -12,6 +12,7 @@ class Collection extends SplObjectStorage
     public function attach(Fieldtype $fieldtype)
     {
         $this->fieldtypesByName[$fieldtype->name] =& $fieldtype;
+
         return parent::attach($fieldtype);
     }
 

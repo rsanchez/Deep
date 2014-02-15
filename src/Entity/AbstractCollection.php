@@ -57,6 +57,7 @@ abstract class AbstractCollection extends SplObjectStorage
     public function attach(AbstractEntity $entity)
     {
         $this->entityIds[] = $entity->id();
+
         return parent::attach($entity);
     }
 }
