@@ -5,10 +5,10 @@ namespace rsanchez\Deep\Entry;
 use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Field\Collection as ChannelFieldCollection;
 use rsanchez\Deep\Entry\Entries;
-use rsanchez\Deep\Entity\Entity;
+use rsanchez\Deep\Entity\AbstractEntity;
 use stdClass;
 
-class Entry extends Entity
+class Entry extends AbstractEntity
 {
     public $entry_id;
     public $site_id;

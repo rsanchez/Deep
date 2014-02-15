@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Entity;
 use rsanchez\Deep\Property\AbstractCollection as PropertyCollection;
 use stdClass;
 
-class Entity
+abstract class AbstractEntity
 {
     public $fieldData = array();
 
@@ -30,10 +30,7 @@ class Entity
         }
     }
 
-    public function id()
-    {
-        return $this->id;
-    }
+    abstract public function id();
 
     public function toArray()
     {

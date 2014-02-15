@@ -2,7 +2,7 @@
 
 namespace rsanchez\Deep\Entity;
 
-use rsanchez\Deep\Entity\Entity;
+use rsanchez\Deep\Entity\AbstractEntity;
 use rsanchez\Deep\Entity\Factory as EntityFactory;
 use rsanchez\Deep\Fieldtype\Repository as FieldtypeRepository;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
@@ -54,7 +54,7 @@ abstract class AbstractCollection extends SplObjectStorage
     {
     }
 
-    public function attach(Entity $entity)
+    public function attach(AbstractEntity $entity)
     {
         $this->entityIds[] = $entity->id();
         return parent::attach($entity);

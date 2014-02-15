@@ -2,9 +2,9 @@
 
 namespace rsanchez\Deep\Row;
 
-use rsanchez\Deep\Entity\Entity;
+use rsanchez\Deep\Entity\AbstractEntity;
 
-class Row extends Entity
+class Row extends AbstractEntity
 {
     public $row_id;
     public $site_id;
