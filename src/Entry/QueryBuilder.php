@@ -6,7 +6,7 @@ use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Db\DbInterface;
 use rsanchez\Deep\Channel\Field\Repository as ChannelFieldRepository;
 
-class Model
+class QueryBuilder
 {
     protected $authorId = array();
     protected $cache = false;

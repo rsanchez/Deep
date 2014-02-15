@@ -24,7 +24,7 @@ use rsanchez\Deep\Col\Factory as ColFactory;
 use rsanchez\Deep\Col\CollectionFactory as ColCollectionFactory;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Entries;
-use rsanchez\Deep\Entry\Model;
+use rsanchez\Deep\Entry\QueryBuilder;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
 use rsanchez\Deep\Fieldtype\Fieldtype;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
@@ -148,8 +148,8 @@ class IoC extends Pimple
             );
         };
 
-        $this['model'] = $this->factory(function ($container) {
-            return new Model(
+        $this['queryBuilder'] = $this->factory(function ($container) {
+            return new QueryBuilder(
                 $container['db'],
                 $container['channelRepository'],
                 $container['channelFieldRepository'],
@@ -185,7 +185,7 @@ class IoC extends Pimple
                 $container['fieldtypeCollectionFactory'],
                 $container['channelFieldCollectionFactory'],
                 $container['channelRepository'],
-                $container['model']
+                $container['queryBuilder']
             );
         });
 

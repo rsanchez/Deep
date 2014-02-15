@@ -6,7 +6,7 @@ use rsanchez\Deep\Channel\Channel;
 use rsanchez\Deep\Channel\Repository as ChannelRepository;
 use rsanchez\Deep\Entry\Entry;
 use rsanchez\Deep\Entry\Factory as EntryFactory;
-use rsanchez\Deep\Entry\Model;
+use rsanchez\Deep\Entry\QueryBuilder;
 use rsanchez\Deep\Common\Entity\AbstractCollection as EntityCollection;
 use rsanchez\Deep\Fieldtype\CollectionFactory as FieldtypeCollectionFactory;
 use rsanchez\Deep\Channel\Field\CollectionFactory as FieldCollectionFactory;
@@ -15,7 +15,7 @@ use SplObjectStorage;
 
 class Entries extends EntityCollection
 {
-    protected $model;
+    protected $queryBuilder;
     protected $channelRepository;
     protected $factory;
 
@@ -31,13 +31,13 @@ class Entries extends EntityCollection
         FieldtypeCollectionFactory $fieldtypeCollectionFactory,
         FieldCollectionFactory $fieldCollectionFactory,
         ChannelRepository $channelRepository,
-        Model $model
+        QueryBuilder $queryBuilder
     ) {
         parent::__construct($factory, $fieldtypeRepository, $fieldtypeCollectionFactory, $fieldCollectionFactory);
 
         $this->channelRepository = $channelRepository;
         $this->fieldCollectionFactory = $fieldCollectionFactory;
-        $this->model = $model;
+        $this->queryBuilder = $queryBuilder;
 
         $this->entryIds =& $this->entityIds;
     }
@@ -104,8 +104,8 @@ class Entries extends EntityCollection
             $name = $methodMap[$name];
         }
 
-        if (method_exists($this->model, $name) && is_callable(array($this->model, $name))) {
-            return call_user_func_array(array($this->model, $name), $args);
+        if (method_exists($this->queryBuilder, $name) && is_callable(array($this->queryBuilder, $name))) {
+            return call_user_func_array(array($this->queryBuilder, $name), $args);
         }
 
         throw new \Exception('invalid method '.$name);
@@ -117,7 +117,7 @@ class Entries extends EntityCollection
 
         if (! $executed) {
 
-            $query = $this->model->get();
+            $query = $this->queryBuilder->get();
 
             $executed = true;
 
