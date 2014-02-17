@@ -18,7 +18,7 @@ class AssetsHydrator implements HydratorInterface
             return;
         }
 
-        $selections = AssetsFiles::entryId($collection->modelKeys())->get();
+        $selections = AssetsFiles::with('uploadPref')->entryId($collection->modelKeys())->get();
 
         $collection->each(function ($entry) use ($selections) {
 

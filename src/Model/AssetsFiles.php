@@ -10,6 +10,11 @@ class AssetsFiles extends Model
     protected $table = 'assets_files';
     protected $primaryKey = 'file_id';
 
+    public function uploadPref()
+    {
+        return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'filedir_id');
+    }
+
     public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
