@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
 use rsanchez\Deep\Model\Hydrator\HydratorInterface;
-use rsanchez\Deep\Model\AssetsFiles;
-use rsanchez\Deep\Model\AssetsSelections;
+use rsanchez\Deep\Model\AssetsFile;
+use rsanchez\Deep\Model\AssetsSelection;
 
 class AssetsHydrator implements HydratorInterface
 {
@@ -18,7 +18,7 @@ class AssetsHydrator implements HydratorInterface
             return;
         }
 
-        $selections = AssetsFiles::with('uploadPref')->entryId($collection->modelKeys())->get();
+        $selections = AssetsFile::with('uploadPref')->entryId($collection->modelKeys())->get();
 
         $collection->each(function ($entry) use ($selections) {
 

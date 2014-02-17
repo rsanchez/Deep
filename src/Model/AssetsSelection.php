@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AssetsSelections extends Model
+class AssetsSelection extends Model
 {
     protected $table = 'assets_selections';
     protected $primaryKey = 'entry_id';
@@ -13,6 +13,6 @@ class AssetsSelections extends Model
 
     public function files()
     {
-        return $this->belongsTo('\\rsanchez\\Deep\\Model\\AssetsFiles', 'file_id', 'file_id');
+        return $this->belongsTo('\\rsanchez\\Deep\\Model\\AssetsFile', 'file_id', 'file_id');
     }
 }

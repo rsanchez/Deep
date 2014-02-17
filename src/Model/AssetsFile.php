@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class AssetsFiles extends Model
+class AssetsFile extends Model
 {
     protected $table = 'assets_files';
     protected $primaryKey = 'file_id';
@@ -13,6 +13,16 @@ class AssetsFiles extends Model
     public function uploadPref()
     {
         return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'filedir_id');
+    }
+
+    public function getUrlAttribute()
+    {
+        return $this->uploadPref->url.$this->file_name;
+    }
+
+    public function getServerPathAttribute()
+    {
+        return $this->uploadPref->server_path.$this->file_name;
     }
 
     public function scopeEntryId(Builder $query, $entryId)
