@@ -12,7 +12,7 @@ use rsanchez\Deep\Model\AssetsSelection;
 
 class AssetsHydrator implements HydratorInterface
 {
-    public function __invoke(Collection $collection)
+    public function hydrateCollection(Collection $collection)
     {
         if ($collection->isEmpty()) {
             return;

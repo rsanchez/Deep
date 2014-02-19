@@ -3,10 +3,8 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use stdClass;
 
-class ChannelField extends Model
+class Field extends Model
 {
     protected $table = 'channel_fields';
     protected $primaryKey = 'group_id';

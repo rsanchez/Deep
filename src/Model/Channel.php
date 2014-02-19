@@ -13,6 +13,6 @@ class Channel extends Model
 
     public function fields()
     {
-        return $this->hasMany('\\rsanchez\\Deep\\Model\\ChannelField', 'group_id', 'field_group');
+        return $this->hasMany('\\rsanchez\\Deep\\Model\\Field', 'group_id', 'field_group');
     }
 }

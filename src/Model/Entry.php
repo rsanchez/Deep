@@ -5,7 +5,6 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
-use rsanchez\Deep\Model\ChannelField;
 use stdClass;
 
 class Entry extends Model
@@ -14,6 +13,11 @@ class Entry extends Model
     protected $primaryKey = 'entry_id';
 
     protected $fieldsByName = array();
+
+    protected static $hydrators = array(
+        'matrix' => '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
+        'assets' => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
+    );
 
     public function channel()
     {
@@ -37,16 +41,15 @@ class Entry extends Model
         // return new EntryCollection($models);
         $collection = parent::newCollection($models);
 
-        $fieldtypes = new \SplObjectStorage();
+        if ($collection->isEmpty()) {
+            return $collection;
+        }
 
-        $collection->each(function ($entry) use ($fieldtypes) {
-            $entry->channel->fields->each(function ($field) use ($fieldtypes) {
-                $fieldtypes->attach($field->fieldtype);
-            });
-        });
+        foreach (self::$hydrators as $class) {
 
-        foreach ($fieldtypes as $fieldtype) {
-            $fieldtype->hydrateCollection($collection);
+            $hydrator = new $class();
+
+            $hydrator->hydrateCollection($collection);
         }
 
         return $collection;
