@@ -4,6 +4,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class MatrixRow extends Model
 {
@@ -15,5 +16,18 @@ class MatrixRow extends Model
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->whereIn('matrix_data.entry_id', $entryId);
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        foreach ($array as &$row) {
+            if (method_exists($row, 'toArray')) {
+                $row = $row->toArray();
+            }
+        }
+
+        return $array;
     }
 }

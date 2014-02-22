@@ -36,19 +36,40 @@ class Entry extends Model
 
     public function newCollection(array $models = array())
     {
-        //@TODO override the collection class
-        // return new EntryCollection($models);
-        $collection = parent::newCollection($models);
+        $collection = new EntryCollection($models);
+
+        $fieldtypes = array();
+
+        $collection->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes) {
+            foreach ($rows as $row) {
+                $fieldtypes[$row['field_type']][] = $row['field_id'];
+            }
+        });
 
         if (! $models) {
             return $collection;
+        }
+
+        if (array_key_exists('matrix', $fieldtypes)) {
+            $fieldIds = array_unique($fieldtypes['matrix']);
+            $collection->setMatrixCols(MatrixCol::fieldId($fieldIds)->get());
+        }
+
+        if (array_key_exists('grid', $fieldtypes)) {
+            $fieldIds = array_unique($fieldtypes['grid']);
+
+            foreach ($fieldIds as $fieldId) {
+                #$collection->addGridCols(GridCol::fieldId($fieldId)->setTable('channel_grid_field_'.$fieldId)->get());
+            }
         }
 
         foreach (self::$hydrators as $class) {
 
             $hydrator = new $class();
 
-            $hydrator->hydrateCollection($collection);
+            if (array_key_exists($hydrator->getFieldtype(), $fieldtypes)) {
+                $hydrator->hydrateCollection($collection);
+            }
         }
 
         return $collection;
