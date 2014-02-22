@@ -14,27 +14,18 @@ class AssetsHydrator implements HydratorInterface
 {
     public function hydrateCollection(Collection $collection)
     {
-        if ($collection->isEmpty()) {
-            return;
-        }
-
         $selections = AssetsFile::with('uploadPref')->entryId($collection->modelKeys())->get();
 
         $collection->each(function ($entry) use ($selections) {
 
             // loop through all assets fields
-            $entry->channel->fields->filter(function ($field) {
-
-                return $field->field_type === 'assets';
-
-            })->each(function ($field) use ($entry, $selections) {
+            $entry->channel->fieldsByType('assets')->each(function ($field) use ($entry, $selections) {
 
                 $entry->setAttribute($field->field_name, $selections->filter(function ($selection) use ($entry, $field) {
                     return $entry->getKey() === $selection->getKey() && $field->field_id === $selection->field_id;
                 }));
 
             });
-
 
         });
     }

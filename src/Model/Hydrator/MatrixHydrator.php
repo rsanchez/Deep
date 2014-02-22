@@ -14,10 +14,6 @@ class MatrixHydrator implements HydratorInterface
 {
     public function hydrateCollection(Collection $collection)
     {
-        if ($collection->isEmpty()) {
-            return;
-        }
-
         $entryIds = $collection->modelKeys();
 
         $fields = $collection->fetch('channel.fields');
@@ -30,11 +26,7 @@ class MatrixHydrator implements HydratorInterface
 
         $collection->each(function ($entry) use ($cols, $rows) {
 
-            $entry->channel->fields->filter(function ($field) {
-
-                return $field->field_type === 'matrix';
-
-            })->each(function ($field) use ($entry, $cols, $rows) {
+            $entry->channel->fieldsByType('matrix')->each(function ($field) use ($entry, $cols, $rows) {
 
                 // get the cols associated with thsi field
                 $fieldCols = $cols->filter(function ($col) use ($field) {

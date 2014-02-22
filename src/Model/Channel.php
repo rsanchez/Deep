@@ -15,4 +15,11 @@ class Channel extends Model
     {
         return $this->hasMany('\\rsanchez\\Deep\\Model\\Field', 'group_id', 'field_group');
     }
+
+    public function fieldsByType($type)
+    {
+        return $this->fields->filter(function ($field) use ($type) {
+            return $field->field_type === $type;
+        });
+    }
 }

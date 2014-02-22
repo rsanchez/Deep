@@ -5,7 +5,6 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
-use stdClass;
 
 class Entry extends Model
 {
@@ -15,8 +14,8 @@ class Entry extends Model
     protected $fieldsByName = array();
 
     protected static $hydrators = array(
-        'matrix' => '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
-        'assets' => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
+        '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
+        '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
     );
 
     public function channel()
@@ -41,7 +40,7 @@ class Entry extends Model
         // return new EntryCollection($models);
         $collection = parent::newCollection($models);
 
-        if ($collection->isEmpty()) {
+        if (! $models) {
             return $collection;
         }
 
