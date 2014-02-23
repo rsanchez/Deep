@@ -9,6 +9,13 @@ class EntryCollection extends Collection
     protected $matrixCols;
     protected $gridCols;
 
+    protected static $hydrators = array(
+        'matrix' => '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
+        'grid'   => '\\rsanchez\\Deep\\Model\\Hydrator\\GridHydrator',
+        'playa'  => '\\rsanchez\\Deep\\Model\\Hydrator\\PlayaHydrator',
+        'assets' => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
+    );
+
     /**
      * Map of fieldtypes to field IDs:
      *    'fieldtype_name' => array(1, 2, 3),
@@ -16,7 +23,7 @@ class EntryCollection extends Collection
      */
     protected $fieldtypes = array();
 
-    public function registerFieldtypes()
+    public function hydrate()
     {
         $this->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes) {
             foreach ($rows as $row) {
@@ -35,6 +42,17 @@ class EntryCollection extends Collection
 
             $this->setGridCols(GridCol::fieldId($fieldIds)->get());
         }
+
+        foreach (self::$hydrators as $fieldtype => $class) {
+
+            if ($this->hasFieldtype($fieldtype)) {
+                $hydrator = new $class();
+
+                $hydrator->hydrateCollection($this);
+            }
+            
+        }
+
     }
 
     public function hasFieldtype($fieldtype)

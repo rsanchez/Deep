@@ -12,13 +12,11 @@ use rsanchez\Deep\Model\GridRow;
 
 class GridHydrator implements HydratorInterface
 {
-    const FIELDTYPE = 'grid';
-
     public function hydrateCollection(Collection $collection)
     {
         $entryIds = $collection->modelKeys();
 
-        $fieldIds = $collection->getFieldIdsByFieldtype(self::FIELDTYPE);
+        $fieldIds = $collection->getFieldIdsByFieldtype('grid');
 
         if (! $fieldIds) {
             return;
@@ -55,10 +53,5 @@ class GridHydrator implements HydratorInterface
             });
 
         });
-    }
-
-    public function getFieldtype()
-    {
-        return self::FIELDTYPE;
     }
 }

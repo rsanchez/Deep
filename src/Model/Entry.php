@@ -13,10 +13,9 @@ class Entry extends Model
 
     protected $fieldsByName = array();
 
-    protected static $hydrators = array(
-        '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
-        '\\rsanchez\\Deep\\Model\\Hydrator\\GridHydrator',
-        '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
+    protected static $tables = array(
+        'members' => array('members.member_id', 'channel_titles.author_id'),
+        'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
     );
 
     public function channel()
@@ -39,19 +38,8 @@ class Entry extends Model
     {
         $collection = new EntryCollection($models);
 
-        if (! $models) {
-            return $collection;
-        }
-
-        $collection->registerFieldtypes();
-
-        foreach (self::$hydrators as $class) {
-
-            $hydrator = new $class();
-
-            if ($collection->hasFieldtype($hydrator->getFieldtype())) {
-                $hydrator->hydrateCollection($collection);
-            }
+        if ($models) {
+            $collection->hydrate();
         }
 
         return $collection;
@@ -349,12 +337,7 @@ class Entry extends Model
 
     protected function requireTable(Builder $query, $which)
     {
-        static $tables = array(
-            'members' => array('members.member_id', 'channel_titles.author_id'),
-            'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
-        );
-
-        if (! isset($tables[$which])) {
+        if (! isset(static::$tables[$which])) {
             return $query;
         }
 
@@ -364,6 +347,6 @@ class Entry extends Model
             }
         }
 
-        return $query->join($which, $tables[$which][0], '=', $tables[$which][1]);
+        return $query->join($which, static::$tables[$which][0], '=', static::$tables[$which][1]);
     }
 }

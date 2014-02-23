@@ -8,12 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
 use rsanchez\Deep\Model\Hydrator\HydratorInterface;
 use rsanchez\Deep\Model\AssetsFile;
-use rsanchez\Deep\Model\AssetsSelection;
 
 class AssetsHydrator implements HydratorInterface
 {
-    const FIELDTYPE = 'assets';
-    
     public function hydrateCollection(Collection $collection)
     {
         $selections = AssetsFile::with('uploadPref')->entryId($collection->modelKeys())->get();
@@ -69,10 +66,5 @@ class AssetsHydrator implements HydratorInterface
             });
 
         });
-    }
-
-    public function getFieldtype()
-    {
-        return self::FIELDTYPE;
     }
 }
