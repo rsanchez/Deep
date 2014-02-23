@@ -15,6 +15,7 @@ class Entry extends Model
 
     protected static $hydrators = array(
         '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
+        '\\rsanchez\\Deep\\Model\\Hydrator\\GridHydrator',
         '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
     );
 
@@ -38,36 +39,17 @@ class Entry extends Model
     {
         $collection = new EntryCollection($models);
 
-        $fieldtypes = array();
-
-        $collection->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes) {
-            foreach ($rows as $row) {
-                $fieldtypes[$row['field_type']][] = $row['field_id'];
-            }
-        });
-
         if (! $models) {
             return $collection;
         }
 
-        if (array_key_exists('matrix', $fieldtypes)) {
-            $fieldIds = array_unique($fieldtypes['matrix']);
-            $collection->setMatrixCols(MatrixCol::fieldId($fieldIds)->get());
-        }
-
-        if (array_key_exists('grid', $fieldtypes)) {
-            $fieldIds = array_unique($fieldtypes['grid']);
-
-            foreach ($fieldIds as $fieldId) {
-                #$collection->addGridCols(GridCol::fieldId($fieldId)->setTable('channel_grid_field_'.$fieldId)->get());
-            }
-        }
+        $collection->registerFieldtypes();
 
         foreach (self::$hydrators as $class) {
 
             $hydrator = new $class();
 
-            if (array_key_exists($hydrator->getFieldtype(), $fieldtypes)) {
+            if ($collection->hasFieldtype($hydrator->getFieldtype())) {
                 $hydrator->hydrateCollection($collection);
             }
         }

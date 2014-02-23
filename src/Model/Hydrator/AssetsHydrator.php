@@ -48,6 +48,26 @@ class AssetsHydrator implements HydratorInterface
 
             });
 
+            // loop through all grid fields
+            $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $selections) {
+
+                $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $selections, $field) {
+
+                    $cols = $collection->getGridCols()->filter(function ($col) use ($field) {
+                        return $col->field_id === $field->field_id && $col->col_type === 'assets';
+                    });
+
+                    $cols->each(function ($col) use ($entry, $field, $row, $selections) {
+                        $value = $selections->filter(function ($selection) use ($entry, $field, $row, $col) {
+                            return $entry->getKey() === $selection->getKey() && $col->col_id === $selection->col_id;
+                        });
+                        $row->setAttribute($col->col_name, $value);
+                    });
+
+                });
+
+            });
+
         });
     }
 
