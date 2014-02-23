@@ -7,44 +7,44 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
 use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
-use rsanchez\Deep\Model\PlayaEntry;
+use rsanchez\Deep\Model\RelationshipEntry;
 
-class PlayaHydrator extends AbstractHydrator
+class RelationshipHydrator extends AbstractHydrator
 {
     public function preload(Collection $collection)
     {
-        $entries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+        $entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
-        $collection->setPlayaEntries($entries);
+        $collection->setRelationshipEntries($entries);
     }
 
     public function hydrateCollection(Collection $collection)
     {
-        $relatedEntries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+        $relatedEntries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
         $collection->each(function ($entry) use ($collection, $relatedEntries) {
 
-            // loop through all playa fields
-            $entry->channel->fieldsByType('playa')->each(function ($field) use ($entry, $relatedEntries) {
+            // loop through all relationship fields
+            $entry->channel->fieldsByType('relationship')->each(function ($field) use ($entry, $relatedEntries) {
 
                 $entry->setAttribute($field->field_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field) {
-                    return $entry->getKey() === $relatedEntry->parent_entry_id && $field->field_id === $relatedEntry->parent_field_id;
+                    return $entry->getKey() === $relatedEntry->parent_id && $field->field_id === $relatedEntry->field_id;
                 }));
 
             });
 
-            // loop through all matrix fields
-            $entry->channel->fieldsByType('matrix')->each(function ($field) use ($collection, $entry, $relatedEntries) {
+            // loop through all grid fields
+            $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $relatedEntries) {
 
                 $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $relatedEntries, $field) {
 
-                    $cols = $collection->getMatrixCols()->filter(function ($col) use ($field) {
-                        return $col->field_id === $field->field_id && $col->col_type === 'playa';
+                    $cols = $collection->getGridCols()->filter(function ($col) use ($field) {
+                        return $col->field_id === $field->field_id;
                     });
 
                     $cols->each(function ($col) use ($entry, $field, $row, $relatedEntries) {
                         $row->setAttribute($col->col_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field, $row, $col) {
-                            return $entry->getKey() === $relatedEntry->parent_field_id && $col->col_id === $relatedEntry->parent_col_id;
+                            return $entry->getKey() === $relatedEntry->parent_id && $col->col_id === $relatedEntry->grid_col_id;
                         }));
                     });
 

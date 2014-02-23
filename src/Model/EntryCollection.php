@@ -10,10 +10,11 @@ class EntryCollection extends Collection
     protected $gridCols;
 
     protected static $hydrators = array(
-        'matrix' => '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
-        'grid'   => '\\rsanchez\\Deep\\Model\\Hydrator\\GridHydrator',
-        'playa'  => '\\rsanchez\\Deep\\Model\\Hydrator\\PlayaHydrator',
-        'assets' => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
+        'matrix'       => '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
+        'grid'         => '\\rsanchez\\Deep\\Model\\Hydrator\\GridHydrator',
+        'playa'        => '\\rsanchez\\Deep\\Model\\Hydrator\\PlayaHydrator',
+        'relationship' => '\\rsanchez\\Deep\\Model\\Hydrator\\RelationshipHydrator',
+        'assets'       => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
     );
 
     /**
@@ -52,14 +53,13 @@ class EntryCollection extends Collection
 
         $hydrators = array();
 
-        // loop through the hydrators for preloading
         foreach (self::$hydrators as $fieldtype => $class) {
             if ($this->hasFieldtype($fieldtype)) {
                 $hydrators[$fieldtype] = new $class();
             }
         }
 
-        // loop again to preload
+        // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
             $hydrator->preload($this);
         }
