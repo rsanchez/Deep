@@ -6,12 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
-use rsanchez\Deep\Model\Hydrator\HydratorInterface;
+use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\MatrixCol;
 use rsanchez\Deep\Model\MatrixRow;
 
-class MatrixHydrator implements HydratorInterface
+class MatrixHydrator extends AbstractHydrator
 {
+    public function preload(Collection $collection)
+    {
+        $fieldIds = $collection->getFieldIdsByFieldtype('matrix');
+
+        $matrixCols = MatrixCol::fieldId($fieldIds)->get();
+
+        $collection->setMatrixCols($matrixCols);
+    }
+
     public function hydrateCollection(Collection $collection)
     {
         $entryIds = $collection->modelKeys();

@@ -6,11 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
-use rsanchez\Deep\Model\Hydrator\HydratorInterface;
+use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\PlayaEntry;
 
-class PlayaHydrator implements HydratorInterface
+class PlayaHydrator extends AbstractHydrator
 {
+    public function preload(Collection $collection)
+    {
+        $playaEntries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+
+        $collection->setPlayaEntries($playaEntries);
+    }
+
     public function hydrateCollection(Collection $collection)
     {
         $relatedEntries = PlayaEntry::parentEntryId($collection->modelKeys())->get();

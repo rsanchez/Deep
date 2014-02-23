@@ -11,7 +11,7 @@ class RelationshipEntry extends Entry
     protected static $tables = array(
         'members' => array('members.member_id', 'channel_titles.author_id'),
         'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
-        'relationships' => array('playa_relationships.child_id', 'channel_titles.entry_id'),
+        'relationships' => array('relationships.child_id', 'channel_titles.entry_id'),
     );
 
     /**

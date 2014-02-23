@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
-use rsanchez\Deep\Model\Hydrator\HydratorInterface;
+use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\AssetsFile;
 
-class AssetsHydrator implements HydratorInterface
+class AssetsHydrator extends AbstractHydrator
 {
+    public function preload(Collection $collection)
+    {
+    }
+
     public function hydrateCollection(Collection $collection)
     {
         $selections = AssetsFile::with('uploadPref')->entryId($collection->modelKeys())->get();

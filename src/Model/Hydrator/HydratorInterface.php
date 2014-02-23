@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface HydratorInterface
 {
+    public function preload(Collection $collection);
+
     public function hydrateCollection(Collection $collection);
 }

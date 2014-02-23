@@ -6,12 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
-use rsanchez\Deep\Model\Hydrator\HydratorInterface;
+use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\GridCol;
 use rsanchez\Deep\Model\GridRow;
 
-class GridHydrator implements HydratorInterface
+class GridHydrator extends AbstractHydrator
 {
+    public function preload(Collection $collection)
+    {
+        $fieldIds = $collection->getFieldIdsByFieldtype('grid');
+
+        $gridCols = GridCol::fieldId($fieldIds)->get();
+
+        $collection->setGridCols($gridCols);
+    }
+
     public function hydrateCollection(Collection $collection)
     {
         $entryIds = $collection->modelKeys();

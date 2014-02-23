@@ -22,42 +22,79 @@ class EntryCollection extends Collection
      * @var array
      */
     protected $fieldtypes = array();
+    public $matrixFieldtypes = array();
+    public $gridFieldtypes = array();
+
+    /**
+     * Playa related entries
+     * @var \rsanchez\Deep\Model\EntryCollection
+     */
+    protected $playaEntries;
+
+    /**
+     * Relationship related entries
+     * @var \rsanchez\Deep\Model\EntryCollection
+     */
+    protected $relationshipEntries;
 
     public function hydrate()
     {
+        $fieldtypes =& $this->fieldtypes;
+
+        $this->allEntryIds = $entryIds = $this->modelKeys();
+
+        // loop through all the fields used in this collection to gather a list of fieldtypes used
         $this->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes) {
             foreach ($rows as $row) {
-                $this->fieldtypes[$row['field_type']][] = $row['field_id'];
+                $fieldtypes[$row['field_type']][] = $row['field_id'];
             }
         });
 
-        if ($this->hasFieldtype('matrix')) {
-            $fieldIds = array_unique($this->fieldtypes['matrix']);
+        $hydrators = array();
 
-            $this->setMatrixCols(MatrixCol::fieldId($fieldIds)->get());
-        }
-
-        if ($this->hasFieldtype('grid')) {
-            $fieldIds = array_unique($this->fieldtypes['grid']);
-
-            $this->setGridCols(GridCol::fieldId($fieldIds)->get());
-        }
-
+        // loop through the hydrators for preloading
         foreach (self::$hydrators as $fieldtype => $class) {
-
             if ($this->hasFieldtype($fieldtype)) {
-                $hydrator = new $class();
-
-                $hydrator->hydrateCollection($this);
+                $hydrators[$fieldtype] = new $class();
             }
-            
+        }
+
+        // loop again to preload
+        foreach ($hydrators as $hydrator) {
+            $hydrator->preload($this);
+        }
+
+        // loop again to actually hydrate
+        foreach ($hydrators as $hydrator) {
+            $hydrator->hydrateCollection($this);
         }
 
     }
 
+    /**
+     * Get all the entry Ids from this collection.
+     * This includes both the entries directly in this collection,
+     * and entries found in Playa/Relationship fields
+     * @return array
+     */
+    public function allEntryIds()
+    {
+        return $this->allEntryIds();
+    }
+
     public function hasFieldtype($fieldtype)
     {
-        return array_key_exists($fieldtype, $this->fieldtypes);
+        return array_key_exists($fieldtype, $this->fieldtypes) || $this->hasMatrixCol($fieldtype) || $this->hasGridCol($fieldtype);
+    }
+
+    public function hasMatrixCol($fieldtype)
+    {
+        return array_key_exists($fieldtype, $this->matrixFieldtypes);
+    }
+
+    public function hasGridCol($fieldtype)
+    {
+        return array_key_exists($fieldtype, $this->gridFieldtypes);
     }
 
     public function getFieldIdsByFieldtype($fieldtype)
@@ -70,6 +107,12 @@ class EntryCollection extends Collection
      */
     public function setMatrixCols(Collection $matrixCols)
     {
+        $matrixFieldtypes =& $this->matrixFieldtypes;
+
+        $matrixCols->each(function ($col) use ($matrixFieldtypes) {
+            $matrixFieldtypes[$col->col_type][] = $col->col_id;
+        });
+
         $this->matrixCols = $matrixCols;
     }
 
@@ -80,11 +123,41 @@ class EntryCollection extends Collection
 
     public function setGridCols(Collection $gridCols)
     {
+        $gridFieldtypes =& $this->gridFieldtypes;
+
+        $gridCols->each(function ($col) use (&$gridFieldtypes) {
+            $gridFieldtypes[$col->col_type][] = $col->col_id;
+        });
+
         $this->gridCols = $gridCols;
     }
 
     public function getGridCols()
     {
         return $this->gridCols;
+    }
+
+    public function setPlayaEntries(Collection $playaEntries)
+    {
+        $this->playaEntries = $playaEntries;
+
+        $this->allEntryIds += $playaEntries->modelKeys();
+    }
+
+    public function getPlayaEntries()
+    {
+        return $this->playaEntries;
+    }
+
+    public function setRelationshipEntries(Collection $relationshipEntries)
+    {
+        $this->relationshipEntries = $relationshipEntries;
+
+        $this->allEntryIds += $relationshipEntries->modelKeys();
+    }
+
+    public function getRelationshipEntries()
+    {
+        return $this->relationshipEntries;
     }
 }
