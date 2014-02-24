@@ -16,6 +16,7 @@ class EntryCollection extends Collection
         'relationship' => '\\rsanchez\\Deep\\Model\\Hydrator\\RelationshipHydrator',
         'assets'       => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
         'file'         => '\\rsanchez\\Deep\\Model\\Hydrator\\FileHydrator',
+        'date'         => '\\rsanchez\\Deep\\Model\\Hydrator\\DateHydrator',
     );
 
     /**

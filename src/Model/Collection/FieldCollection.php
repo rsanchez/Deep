@@ -24,6 +24,6 @@ class FieldCollection extends Collection
 
     public function hasField($field)
     {
-        return array_key_exists($field, $fieldsByName);
+        return array_key_exists($field, $this->fieldsByName);
     }
 }
