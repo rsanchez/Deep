@@ -29,18 +29,6 @@ class EntryCollection extends Collection
      */
     protected $fieldIdsByFieldtype = array();
 
-    /**
-     * Playa related entries
-     * @var \rsanchez\Deep\Model\Collection\EntryCollection
-     */
-    protected $playaEntries;
-
-    /**
-     * Relationship related entries
-     * @var \rsanchez\Deep\Model\Collection\EntryCollection
-     */
-    protected $relationshipEntries;
-
     public function hydrate()
     {
         $fieldtypes =& $this->fieldtypes;
@@ -137,29 +125,5 @@ class EntryCollection extends Collection
     public function getGridCols()
     {
         return $this->gridCols;
-    }
-
-    public function setPlayaEntries(Collection $playaEntries)
-    {
-        $this->playaEntries = $playaEntries;
-
-        $this->entryIds += $playaEntries->modelKeys();
-    }
-
-    public function getPlayaEntries()
-    {
-        return $this->playaEntries;
-    }
-
-    public function setRelationshipEntries(Collection $relationshipEntries)
-    {
-        $this->relationshipEntries = $relationshipEntries;
-
-        $this->entryIds += $relationshipEntries->modelKeys();
-    }
-
-    public function getRelationshipEntries()
-    {
-        return $this->relationshipEntries;
     }
 }

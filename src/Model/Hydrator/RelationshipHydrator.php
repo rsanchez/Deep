@@ -15,7 +15,7 @@ class RelationshipHydrator extends AbstractHydrator
     {
         $this->entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
-        $collection->setRelationshipEntries($this->entries);
+        $collection->addEntryIds($this->entries->modelKeys());
     }
 
     public function hydrate(Collection $collection)
