@@ -4,8 +4,9 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Model\FileInterface;
 
-class AssetsFile extends Model
+class AssetsFile extends Model implements FileInterface
 {
     protected $table = 'assets_files';
     protected $primaryKey = 'file_id';
@@ -30,6 +31,11 @@ class AssetsFile extends Model
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'assets_selections')->whereIn('assets_selections.entry_id', $entryId);
+    }
+
+    public function __toString()
+    {
+        return $this->getUrlAttribute();
     }
 
     protected function requireTable(Builder $query, $which)
