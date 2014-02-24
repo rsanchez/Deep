@@ -11,10 +11,6 @@ use rsanchez\Deep\Model\Assets;
 
 class AssetsHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
-    {
-    }
-
     public function hydrate(Collection $collection)
     {
         $selections = Assets::with('uploadPref')->entryId($collection->modelKeys())->get();

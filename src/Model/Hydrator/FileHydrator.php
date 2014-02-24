@@ -11,10 +11,6 @@ use rsanchez\Deep\Model\File;
 
 class FileHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
-    {
-    }
-
     public function hydrate(Collection $collection)
     {
         $files = File::with('uploadPref')->fromEntryCollection($collection)->get();

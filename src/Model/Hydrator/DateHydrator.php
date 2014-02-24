@@ -11,10 +11,6 @@ use DateTime;
 
 class DateHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
-    {
-    }
-
     public function hydrate(Collection $collection)
     {
         $collection->each(function ($entry) use ($collection) {
