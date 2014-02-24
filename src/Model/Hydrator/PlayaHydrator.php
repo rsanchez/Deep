@@ -13,14 +13,14 @@ class PlayaHydrator extends AbstractHydrator
 {
     public function __construct(Collection $collection)
     {
-        $entries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+        $this->entries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
 
-        $collection->setPlayaEntries($entries);
+        $collection->setPlayaEntries($this->entries);
     }
 
     public function hydrate(Collection $collection)
     {
-        $relatedEntries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+        $relatedEntries = $this->entries;
 
         $collection->each(function ($entry) use ($collection, $relatedEntries) {
 

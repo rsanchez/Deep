@@ -12,6 +12,8 @@ use rsanchez\Deep\Model\GridRow;
 
 class GridHydrator extends AbstractHydrator
 {
+    protected $rows = array();
+
     public function __construct(Collection $collection)
     {
         $fieldIds = $collection->getFieldIdsByFieldtype('grid');
@@ -21,21 +23,20 @@ class GridHydrator extends AbstractHydrator
         $collection->setGridCols($gridCols);
     }
 
-    public function hydrate(Collection $collection)
+    public function preload(Collection $collection)
     {
         $entryIds = $collection->allEntryIds();
 
         $fieldIds = $collection->getFieldIdsByFieldtype('grid');
 
-        if (! $fieldIds) {
-            return;
-        }
-
-        $rowsByFieldId = array();
-
         foreach ($fieldIds as $fieldId) {
-            $rowsByFieldId[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->get();
+            $this->rows[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->get();
         }
+    }
+
+    public function hydrate(Collection $collection)
+    {
+        $rowsByFieldId = $this->rows;
 
         $collection->each(function ($entry) use ($rowsByFieldId, $collection) {
 

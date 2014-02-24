@@ -13,14 +13,14 @@ class RelationshipHydrator extends AbstractHydrator
 {
     public function __construct(Collection $collection)
     {
-        $entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
+        $this->entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
-        $collection->setRelationshipEntries($entries);
+        $collection->setRelationshipEntries($this->entries);
     }
 
     public function hydrate(Collection $collection)
     {
-        $relatedEntries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
+        $relatedEntries = $this->entries;
 
         $collection->each(function ($entry) use ($collection, $relatedEntries) {
 

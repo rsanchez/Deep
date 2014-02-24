@@ -12,6 +12,8 @@ use rsanchez\Deep\Model\MatrixRow;
 
 class MatrixHydrator extends AbstractHydrator
 {
+    protected $rows;
+
     public function __construct(Collection $collection)
     {
         $fieldIds = $collection->getFieldIdsByFieldtype('matrix');
@@ -21,11 +23,16 @@ class MatrixHydrator extends AbstractHydrator
         $collection->setMatrixCols($matrixCols);
     }
 
-    public function hydrate(Collection $collection)
+    public function preload(Collection $collection)
     {
         $entryIds = $collection->allEntryIds();
 
-        $rows = MatrixRow::entryId($entryIds)->get();
+        $this->rows = MatrixRow::entryId($entryIds)->get();
+    }
+
+    public function hydrate(Collection $collection)
+    {
+        $rows = $this->rows;
 
         $collection->each(function ($entry) use ($rows, $collection) {
 
