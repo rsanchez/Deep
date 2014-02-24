@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Collection\EntryCollection;
+use DateTime;
 
 class Entry extends Model
 {
@@ -81,6 +82,21 @@ class Entry extends Model
         }
 
         return parent::getAttribute($key);
+    }
+
+    public function getEntryDateAttribute($value)
+    {
+        return DateTime::createFromFormat('U', $value);
+    }
+
+    public function getExpirationDateAttribute($value)
+    {
+        return $value ? DateTime::createFromFormat('U', $value) : null;
+    }
+
+    public function getEditDateAttribute($value)
+    {
+        return DateTime::createFromFormat('YmdHis', $value);
     }
 
     protected function registerFields()
