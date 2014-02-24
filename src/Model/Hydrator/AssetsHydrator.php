@@ -13,7 +13,7 @@ class AssetsHydrator extends AbstractHydrator
 {
     public function hydrate(Collection $collection)
     {
-        $selections = Assets::with('uploadPref')->entryId($collection->modelKeys())->get();
+        $selections = Assets::with('uploadPref')->entryId($collection->allEntryIds())->get();
 
         $collection->each(function ($entry) use ($collection, $selections) {
 

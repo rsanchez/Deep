@@ -23,7 +23,7 @@ class GridHydrator extends AbstractHydrator
 
     public function hydrate(Collection $collection)
     {
-        $entryIds = $collection->modelKeys();
+        $entryIds = $collection->allEntryIds();
 
         $fieldIds = $collection->getFieldIdsByFieldtype('grid');
 

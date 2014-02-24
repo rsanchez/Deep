@@ -81,7 +81,7 @@ class EntryCollection extends Collection
      */
     public function allEntryIds()
     {
-        return $this->allEntryIds();
+        return $this->allEntryIds;
     }
 
     public function hasFieldtype($fieldtype)

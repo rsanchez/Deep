@@ -23,7 +23,7 @@ class MatrixHydrator extends AbstractHydrator
 
     public function hydrate(Collection $collection)
     {
-        $entryIds = $collection->modelKeys();
+        $entryIds = $collection->allEntryIds();
 
         $rows = MatrixRow::entryId($entryIds)->get();
 
