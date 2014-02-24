@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Fieldtype;
 use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
-use rsanchez\Deep\Model\AssetsFile;
+use rsanchez\Deep\Model\Assets;
 
 class AssetsHydrator extends AbstractHydrator
 {
@@ -17,7 +17,7 @@ class AssetsHydrator extends AbstractHydrator
 
     public function hydrate(Collection $collection)
     {
-        $selections = AssetsFile::with('uploadPref')->entryId($collection->modelKeys())->get();
+        $selections = Assets::with('uploadPref')->entryId($collection->modelKeys())->get();
 
         $collection->each(function ($entry) use ($collection, $selections) {
 

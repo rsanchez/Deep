@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Model\Collection\AssetsCollection;
 
-class AssetsFile extends Model implements FileInterface
+class Assets extends Model implements FileInterface
 {
     protected $table = 'assets_files';
     protected $primaryKey = 'file_id';
