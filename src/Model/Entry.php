@@ -5,6 +5,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
+use rsanchez\Deep\Model\Collection\EntryCollection;
 
 class Entry extends Model
 {

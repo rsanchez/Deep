@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Model;
+namespace rsanchez\Deep\Model\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 
@@ -29,13 +29,13 @@ class EntryCollection extends Collection
 
     /**
      * Playa related entries
-     * @var \rsanchez\Deep\Model\EntryCollection
+     * @var \rsanchez\Deep\Model\Collection\EntryCollection
      */
     protected $playaEntries;
 
     /**
      * Relationship related entries
-     * @var \rsanchez\Deep\Model\EntryCollection
+     * @var \rsanchez\Deep\Model\Collection\EntryCollection
      */
     protected $relationshipEntries;
 

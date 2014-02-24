@@ -3,6 +3,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\Collection\FieldCollection;
 
 class Field extends Model
 {

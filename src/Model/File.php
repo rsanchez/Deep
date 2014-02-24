@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\EntryCollection;
+use rsanchez\Deep\Model\Collection\EntryCollection;
 
 class File extends Model implements FileInterface
 {
