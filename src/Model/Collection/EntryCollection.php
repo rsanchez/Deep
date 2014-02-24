@@ -60,10 +60,11 @@ class EntryCollection extends Collection
         }
 
         // loop again to actually hydrate
-        foreach ($hydrators as $hydrator) {
-            $hydrator->hydrate($this);
+        foreach ($this as $entry) {
+            foreach ($hydrators as $hydrator) {
+                $hydrator->hydrate($this, $entry);
+            }
         }
-
     }
 
     /**
