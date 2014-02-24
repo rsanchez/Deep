@@ -44,7 +44,7 @@ class RelationshipHydrator extends AbstractHydrator
 
                     $cols->each(function ($col) use ($entry, $field, $row, $relatedEntries) {
                         $row->setAttribute($col->col_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field, $row, $col) {
-                            return $entry->getKey() === $relatedEntry->parent_id && $col->col_id === $relatedEntry->grid_col_id;
+                            return $entry->getKey() === $relatedEntry->parent_id && $relatedEntry->field_id === $field->field_id && $col->col_id === $relatedEntry->grid_col_id;
                         }));
                     });
 
