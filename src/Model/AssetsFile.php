@@ -5,6 +5,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\FileInterface;
+use rsanchez\Deep\Model\Collection\AssetsCollection;
 
 class AssetsFile extends Model implements FileInterface
 {
@@ -14,6 +15,11 @@ class AssetsFile extends Model implements FileInterface
     public function uploadPref()
     {
         return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'filedir_id');
+    }
+
+    public function newCollection(array $assets = array())
+    {
+        return new AssetsCollection($assets);
     }
 
     public function getUrlAttribute()
