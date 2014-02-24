@@ -10,5 +10,5 @@ abstract class AbstractHydrator implements HydratorInterface
     {
     }
 
-    abstract public function hydrateCollection(Collection $collection);
+    abstract public function hydrate(Collection $collection);
 }

@@ -15,7 +15,7 @@ class AssetsHydrator extends AbstractHydrator
     {
     }
 
-    public function hydrateCollection(Collection $collection)
+    public function hydrate(Collection $collection)
     {
         $selections = AssetsFile::with('uploadPref')->entryId($collection->modelKeys())->get();
 

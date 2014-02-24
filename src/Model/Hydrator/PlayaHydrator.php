@@ -18,7 +18,7 @@ class PlayaHydrator extends AbstractHydrator
         $collection->setPlayaEntries($entries);
     }
 
-    public function hydrateCollection(Collection $collection)
+    public function hydrate(Collection $collection)
     {
         $relatedEntries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
 

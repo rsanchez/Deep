@@ -67,7 +67,7 @@ class EntryCollection extends Collection
 
         // loop again to actually hydrate
         foreach ($hydrators as $hydrator) {
-            $hydrator->hydrateCollection($this);
+            $hydrator->hydrate($this);
         }
 
     }

@@ -21,7 +21,7 @@ class MatrixHydrator extends AbstractHydrator
         $collection->setMatrixCols($matrixCols);
     }
 
-    public function hydrateCollection(Collection $collection)
+    public function hydrate(Collection $collection)
     {
         $entryIds = $collection->modelKeys();
 

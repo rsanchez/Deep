@@ -8,5 +8,5 @@ interface HydratorInterface
 {
     public function preload(Collection $collection);
 
-    public function hydrateCollection(Collection $collection);
+    public function hydrate(Collection $collection);
 }

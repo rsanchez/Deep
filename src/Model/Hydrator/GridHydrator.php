@@ -21,7 +21,7 @@ class GridHydrator extends AbstractHydrator
         $collection->setGridCols($gridCols);
     }
 
-    public function hydrateCollection(Collection $collection)
+    public function hydrate(Collection $collection)
     {
         $entryIds = $collection->modelKeys();
 
