@@ -19,14 +19,15 @@ class EntryCollection extends Collection
         'date'         => '\\rsanchez\\Deep\\Model\\Hydrator\\DateHydrator',
     );
 
+    protected $entryIds = array();
+    protected $fieldtypes = array();
+
     /**
      * Map of fieldtypes to field IDs:
      *    'fieldtype_name' => array(1, 2, 3),
      * @var array
      */
-    protected $fieldtypes = array();
-    public $matrixFieldtypes = array();
-    public $gridFieldtypes = array();
+    protected $fieldIdsByFieldtype = array();
 
     /**
      * Playa related entries
@@ -43,13 +44,17 @@ class EntryCollection extends Collection
     public function hydrate()
     {
         $fieldtypes =& $this->fieldtypes;
+        $fieldIdsByFieldtype =& $this->fieldIdsByFieldtype;
 
-        $this->allEntryIds = $entryIds = $this->modelKeys();
+        $entryIds = $this->modelKeys();
+
+        $this->entryIds = $entryIds;
 
         // loop through all the fields used in this collection to gather a list of fieldtypes used
-        $this->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes) {
+        $this->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes, &$fieldIdsByFieldtype) {
             foreach ($rows as $row) {
-                $fieldtypes[$row['field_type']][] = $row['field_id'];
+                $fieldtypes[] = $row['field_type'];
+                $fieldIdsByFieldtype[$row['field_type']][] = $row['field_id'];
             }
         });
 
@@ -79,29 +84,24 @@ class EntryCollection extends Collection
      * and entries found in Playa/Relationship fields
      * @return array
      */
-    public function allEntryIds()
+    public function entryIds()
     {
-        return $this->allEntryIds;
+        return $this->entryIds;
+    }
+
+    public function addEntryIds(array $entryIds)
+    {
+        $this->entryIds = array_unique(array_merge($this->entryIds, $entryIds));
     }
 
     public function hasFieldtype($fieldtype)
     {
-        return array_key_exists($fieldtype, $this->fieldtypes) || $this->hasMatrixCol($fieldtype) || $this->hasGridCol($fieldtype);
-    }
-
-    public function hasMatrixCol($fieldtype)
-    {
-        return array_key_exists($fieldtype, $this->matrixFieldtypes);
-    }
-
-    public function hasGridCol($fieldtype)
-    {
-        return array_key_exists($fieldtype, $this->gridFieldtypes);
+        return in_array($fieldtype, $this->fieldtypes);
     }
 
     public function getFieldIdsByFieldtype($fieldtype)
     {
-        return isset($this->fieldtypes[$fieldtype]) ? $this->fieldtypes[$fieldtype] : array();
+        return isset($this->fieldIdsByFieldtype[$fieldtype]) ? $this->fieldIdsByFieldtype[$fieldtype] : array();
     }
 
     /**
@@ -109,10 +109,10 @@ class EntryCollection extends Collection
      */
     public function setMatrixCols(Collection $matrixCols)
     {
-        $matrixFieldtypes =& $this->matrixFieldtypes;
+        $fieldtypes =& $this->fieldtypes;
 
-        $matrixCols->each(function ($col) use ($matrixFieldtypes) {
-            $matrixFieldtypes[$col->col_type][] = $col->col_id;
+        $matrixCols->each(function ($col) use (&$fieldtypes) {
+            $fieldtypes[] = $col->col_type;
         });
 
         $this->matrixCols = $matrixCols;
@@ -125,10 +125,10 @@ class EntryCollection extends Collection
 
     public function setGridCols(Collection $gridCols)
     {
-        $gridFieldtypes =& $this->gridFieldtypes;
+        $fieldtypes =& $this->fieldtypes;
 
-        $gridCols->each(function ($col) use (&$gridFieldtypes) {
-            $gridFieldtypes[$col->col_type][] = $col->col_id;
+        $gridCols->each(function ($col) use (&$fieldtypes) {
+            $fieldtypes[] = $col->col_type;
         });
 
         $this->gridCols = $gridCols;
@@ -143,7 +143,7 @@ class EntryCollection extends Collection
     {
         $this->playaEntries = $playaEntries;
 
-        $this->allEntryIds += $playaEntries->modelKeys();
+        $this->entryIds += $playaEntries->modelKeys();
     }
 
     public function getPlayaEntries()
@@ -155,7 +155,7 @@ class EntryCollection extends Collection
     {
         $this->relationshipEntries = $relationshipEntries;
 
-        $this->allEntryIds += $relationshipEntries->modelKeys();
+        $this->entryIds += $relationshipEntries->modelKeys();
     }
 
     public function getRelationshipEntries()

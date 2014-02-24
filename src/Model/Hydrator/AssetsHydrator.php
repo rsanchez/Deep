@@ -15,7 +15,7 @@ class AssetsHydrator extends AbstractHydrator
 
     public function preload(Collection $collection)
     {
-        $this->selections = Assets::with('uploadPref')->entryId($collection->allEntryIds())->get();
+        $this->selections = Assets::with('uploadPref')->entryId($collection->entryIds())->get();
     }
 
     public function hydrate(Collection $collection)

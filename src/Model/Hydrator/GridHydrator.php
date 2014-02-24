@@ -25,7 +25,7 @@ class GridHydrator extends AbstractHydrator
 
     public function preload(Collection $collection)
     {
-        $entryIds = $collection->allEntryIds();
+        $entryIds = $collection->entryIds();
 
         $fieldIds = $collection->getFieldIdsByFieldtype('grid');
 

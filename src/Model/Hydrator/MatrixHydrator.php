@@ -25,7 +25,7 @@ class MatrixHydrator extends AbstractHydrator
 
     public function preload(Collection $collection)
     {
-        $entryIds = $collection->allEntryIds();
+        $entryIds = $collection->entryIds();
 
         $this->rows = MatrixRow::entryId($entryIds)->get();
     }
