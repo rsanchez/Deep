@@ -72,10 +72,11 @@ class Entry extends Model
     */
     public function getAttribute($key)
     {
-        $this->registerFields();
+        $hasAttribute = array_key_exists($key, $this->attributes);
+        $hasChannel = isset($this->channel) && isset($this->channel->fields);
 
-        if (! array_key_exists($key, $this->attributes) && array_key_exists($key, $this->fieldsByName)) {
-            $this->attributes[$key] = $this->fieldsByName[$key]->fieldtype->mutate($this, $this->fieldsByName[$key]);
+        if (! $hasAttribute && $hasChannel && $this->channel->fields->hasField($key)) {
+            $this->attributes[$key] = $this->attributes['field_id_'.$this->channel->fields->getFieldId($key)];
         }
 
         return parent::getAttribute($key);

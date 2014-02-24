@@ -13,9 +13,4 @@ class Fieldtype extends Model
 {
     protected $table = 'fieldtypes';
     protected $primaryKey = 'fieldtype_id';
-
-    public function mutate(Entry $entry, Field $field)
-    {
-        return $entry->getAttribute('field_id_'.$field->field_id);
-    }
 }

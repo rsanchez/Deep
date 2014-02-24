@@ -13,4 +13,9 @@ class Field extends Model
     {
         return $this->hasOne('\\rsanchez\\Deep\\Model\\Fieldtype', 'name', 'field_type');
     }
+
+    public function newCollection(array $fields = array())
+    {
+        return new FieldCollection($fields);
+    }
 }
