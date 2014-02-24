@@ -12,7 +12,7 @@ use rsanchez\Deep\Model\GridRow;
 
 class GridHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
+    public function __construct(Collection $collection)
     {
         $fieldIds = $collection->getFieldIdsByFieldtype('grid');
 

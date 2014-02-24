@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 abstract class AbstractHydrator implements HydratorInterface
 {
+    public function __construct(Collection $collection)
+    {
+    }
+
     public function preload(Collection $collection)
     {
     }

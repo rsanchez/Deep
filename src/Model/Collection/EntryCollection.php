@@ -57,7 +57,7 @@ class EntryCollection extends Collection
 
         foreach (self::$hydrators as $fieldtype => $class) {
             if ($this->hasFieldtype($fieldtype)) {
-                $hydrators[$fieldtype] = new $class();
+                $hydrators[$fieldtype] = new $class($this);
             }
         }
 

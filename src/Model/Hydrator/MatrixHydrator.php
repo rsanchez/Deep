@@ -12,7 +12,7 @@ use rsanchez\Deep\Model\MatrixRow;
 
 class MatrixHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
+    public function __construct(Collection $collection)
     {
         $fieldIds = $collection->getFieldIdsByFieldtype('matrix');
 

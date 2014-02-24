@@ -11,7 +11,7 @@ use rsanchez\Deep\Model\PlayaEntry;
 
 class PlayaHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
+    public function __construct(Collection $collection)
     {
         $entries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
 

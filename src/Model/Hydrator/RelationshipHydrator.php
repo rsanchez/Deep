@@ -11,7 +11,7 @@ use rsanchez\Deep\Model\RelationshipEntry;
 
 class RelationshipHydrator extends AbstractHydrator
 {
-    public function preload(Collection $collection)
+    public function __construct(Collection $collection)
     {
         $entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
