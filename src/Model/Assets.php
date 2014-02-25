@@ -9,14 +9,35 @@ use rsanchez\Deep\Collection\AssetsCollection;
 
 class Assets extends Model implements FileInterface
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $table = 'assets_files';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $primaryKey = 'file_id';
 
+    /**
+     * Define the Upload Preferences Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function uploadPref()
     {
         return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'filedir_id');
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                     $assets
+     * @return \rsanchez\Deep\Collection\AssetsCollection
+     */
     public function newCollection(array $assets = array())
     {
         return new AssetsCollection($assets);

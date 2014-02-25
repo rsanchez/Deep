@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class GridRow extends Model
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $primaryKey = 'row_id';
 
     public function scopeEntryId(Builder $query, $entryId)

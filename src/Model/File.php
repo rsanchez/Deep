@@ -8,9 +8,24 @@ use rsanchez\Deep\Collection\EntryCollection;
 
 class File extends Model implements FileInterface
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $table = 'files';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $primaryKey = 'file_id';
 
+    /**
+     * Define the Upload Preferences Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function uploadPref()
     {
         return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'upload_location_id');

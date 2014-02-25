@@ -41,7 +41,7 @@ class Entry extends Model
     );
 
     /**
-     * Define the channel Eloquent relationship
+     * Define the Channel Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function channel()
@@ -53,6 +53,7 @@ class Entry extends Model
      * {@inheritdoc}
      *
      * Joins with the channel data table, and eager load channels, fields and fieldtypes
+     *
      * @param  boolean                               $excludeDeleted
      * @return \Illuminate\Database\Eloquent\Builder
      */

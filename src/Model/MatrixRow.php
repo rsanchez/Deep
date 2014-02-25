@@ -7,7 +7,18 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MatrixRow extends Model
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $table = 'matrix_data';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @var string
+     */
     protected $primaryKey = 'row_id';
 
     public function scopeEntryId(Builder $query, $entryId)
