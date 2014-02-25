@@ -1,25 +1,23 @@
-# Entries
+# Deep
 
-**THIS IS A WORK IN PROGRESS, IT DOES NOT ACTUALLY WORK YET**
-
-A pure PHP implementation of the ExpressionEngine {exp:channel:entries} tag.
+A set of Eloquent models for ExpressionEngine Channel Entries.
 
 ```
 <?php
 
-use rsanchez\Deep\Deep;
+use rsanchez\Deep\Model\Entry;
 
-$entries = Deep::entries()
-		->channel('blog')
-		->limit(1)
-		->show_future_entries();
+$entries = Entry::channelName('blog')
+        		->limit(1)
+        		->show_future_entries()
+                ->get();
 ?>
 
 <?php foreach ($entries as $entry) : ?>
 <article>
 	<h1><?php echo $entry->title; ?></h1>
 	
-	<p class="date"><?php echo $entry->entry_date('F j, Y'); ?></p>
+	<p class="date"><?php echo $entry->entry_date->format('F j, Y'); ?></p>
 
 	<?php echo $entry->description; ?>
 </article>
