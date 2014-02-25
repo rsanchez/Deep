@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Model\Collection;
+namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 

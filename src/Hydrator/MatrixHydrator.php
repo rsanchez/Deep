@@ -1,13 +1,13 @@
 <?php
 
-namespace rsanchez\Deep\Model\Hydrator;
+namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Fieldtype;
-use rsanchez\Deep\Model\Hydrator\AbstractHydrator;
+use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\MatrixCol;
 use rsanchez\Deep\Model\MatrixRow;
 

@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
-use rsanchez\Deep\Model\Collection\EntryCollection;
+use rsanchez\Deep\Collection\EntryCollection;
 use DateTime;
 
 class Entry extends Model
@@ -69,7 +69,7 @@ class Entry extends Model
      * Create the EntryCollection and hydrate it
      * 
      * @param  array  $models
-     * @return \rsanchez\Deep\Model\Collection\EntryCollection
+     * @return \rsanchez\Deep\Collection\EntryCollection
      */
     public function newCollection(array $models = array())
     {

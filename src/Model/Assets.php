@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\FileInterface;
-use rsanchez\Deep\Model\Collection\AssetsCollection;
+use rsanchez\Deep\Collection\AssetsCollection;
 
 class Assets extends Model implements FileInterface
 {

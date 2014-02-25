@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Model\Collection;
+namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 
@@ -10,13 +10,13 @@ class EntryCollection extends Collection
     protected $gridCols;
 
     protected static $hydrators = array(
-        'matrix'       => '\\rsanchez\\Deep\\Model\\Hydrator\\MatrixHydrator',
-        'grid'         => '\\rsanchez\\Deep\\Model\\Hydrator\\GridHydrator',
-        'playa'        => '\\rsanchez\\Deep\\Model\\Hydrator\\PlayaHydrator',
-        'relationship' => '\\rsanchez\\Deep\\Model\\Hydrator\\RelationshipHydrator',
-        'assets'       => '\\rsanchez\\Deep\\Model\\Hydrator\\AssetsHydrator',
-        'file'         => '\\rsanchez\\Deep\\Model\\Hydrator\\FileHydrator',
-        'date'         => '\\rsanchez\\Deep\\Model\\Hydrator\\DateHydrator',
+        'matrix'       => '\\rsanchez\\Deep\\Hydrator\\MatrixHydrator',
+        'grid'         => '\\rsanchez\\Deep\\Hydrator\\GridHydrator',
+        'playa'        => '\\rsanchez\\Deep\\Hydrator\\PlayaHydrator',
+        'relationship' => '\\rsanchez\\Deep\\Hydrator\\RelationshipHydrator',
+        'assets'       => '\\rsanchez\\Deep\\Hydrator\\AssetsHydrator',
+        'file'         => '\\rsanchez\\Deep\\Hydrator\\FileHydrator',
+        'date'         => '\\rsanchez\\Deep\\Hydrator\\DateHydrator',
     );
 
     protected $entryIds = array();

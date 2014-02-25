@@ -1,6 +1,6 @@
 <?php
 
-namespace rsanchez\Deep\Model\Hydrator;
+namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Entry;
