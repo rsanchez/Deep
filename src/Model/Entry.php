@@ -51,7 +51,7 @@ class Entry extends Model
 
     /**
      * Create the query builder object, ensure necessary relationships and joins
-     * @param  boolean $excludeDeleted
+     * @param  boolean                               $excludeDeleted
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function newQuery($excludeDeleted = true)
@@ -67,8 +67,8 @@ class Entry extends Model
 
     /**
      * Create the EntryCollection and hydrate it
-     * 
-     * @param  array  $models
+     *
+     * @param  array                                     $models
      * @return \rsanchez\Deep\Collection\EntryCollection
      */
     public function newCollection(array $models = array())
@@ -86,7 +86,7 @@ class Entry extends Model
      * {@inheritdoc}
      *
      * Get custom field value, if key is a custom field name
-     * 
+     *
      * @param  string $key
      * @return mixed
      */
@@ -104,7 +104,7 @@ class Entry extends Model
 
     /**
      * Get the entry_date column as a DateTime object
-     * @param  int $value unix time
+     * @param  int       $value unix time
      * @return \DateTime
      */
     public function getEntryDateAttribute($value)
@@ -114,7 +114,7 @@ class Entry extends Model
 
     /**
      * Get the expiration_date column as a DateTime object, or null if there is no expiration date
-     * @param  int $value unix time
+     * @param  int            $value unix time
      * @return \DateTime|null
      */
     public function getExpirationDateAttribute($value)
@@ -124,7 +124,7 @@ class Entry extends Model
 
     /**
      * Get the edit_date column as a DateTime object
-     * @param  int $value unix time
+     * @param  int       $value unix time
      * @return \DateTime
      */
     public function getEditDateAttribute($value)
@@ -134,7 +134,7 @@ class Entry extends Model
 
     /**
      * Save the entry (not yet supported)
-     * @param  array  $options
+     * @param  array $options
      * @return void
      */
     public function save(array $options = array())
@@ -145,8 +145,8 @@ class Entry extends Model
     /**
      * Filter by Entry Status
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array $status
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $status
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, $status)
@@ -159,50 +159,50 @@ class Entry extends Model
     /**
      * Filter by Channel Name
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array $channelName
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $channelName
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeChannelName(Builder $query, $channelName)
     {
         $channelName = is_array($channelName) ? $channelName : array($channelName);
-        
+
         return $this->requireTable($query, 'channels')->whereIn('channels.channel_name', $channelName);
     }
 
     /**
      * Filter by Channel ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|array $channelId
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|array                             $channelId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeChannelId(Builder $query, $channelId)
     {
         $channelId = is_array($channelId) ? $channelId : array($channelId);
-        
+
         return $query->whereIn('channel_titles.channel_id', $channelId);
     }
 
     /**
      * Filter by Author ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|array $authorId
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|array                             $authorId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAuthorId(Builder $query, $authorId)
     {
         $authorId = is_array($authorId) ? $authorId : array($authorId);
-        
+
         return $query->whereIn('channel_titles.author_id', $authorId);
     }
 
     /**
      * Filter out Expired Entries
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param bool $showExpired
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool                                  $showExpired
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeShowExpired(Builder $query, $showExpired = true)
@@ -219,8 +219,8 @@ class Entry extends Model
     /**
      * Filter out Future Entries
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param bool $showFutureEntries
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool                                  $showFutureEntries
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeShowFutureEntries(Builder $query, $showFutureEntries = true)
@@ -235,8 +235,8 @@ class Entry extends Model
     /**
      * Set a Fixed Order
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $fixedOrder
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  array                                 $fixedOrder
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFixedOrder(Builder $query, array $fixedOrder)
@@ -248,8 +248,8 @@ class Entry extends Model
     /**
      * Set Sticky Entries to appear first
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param bool $sticky
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool                                  $sticky
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSticky(Builder $query, $sticky = true)
@@ -264,8 +264,8 @@ class Entry extends Model
     /**
      * Filter by Entry ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array $entryId
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $entryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryId(Builder $query, $entryId)
@@ -278,8 +278,8 @@ class Entry extends Model
     /**
      * Filter by Not Entry ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array $notEntryId
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $notEntryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeNotEntryId(Builder $query, $notEntryId)
@@ -292,8 +292,8 @@ class Entry extends Model
     /**
      * Filter out entries before the specified Entry ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $entryIdFrom
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $entryIdFrom
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryIdFrom(Builder $query, $entryIdFrom)
@@ -304,8 +304,8 @@ class Entry extends Model
     /**
      * Filter out entries after the specified Entry ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $entryIdTo
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $entryIdTo
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryIdTo(Builder $query, $entryIdTo)
@@ -316,8 +316,8 @@ class Entry extends Model
     /**
      * Filter by Member Group ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|array $groupId
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|array                             $groupId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeGroupId(Builder $query, $groupId)
@@ -330,8 +330,8 @@ class Entry extends Model
     /**
      * Filter by Not Member Group ID
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|array $notGroupId
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|array                             $notGroupId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeNotGroupId(Builder $query, $notGroupId)
@@ -344,8 +344,8 @@ class Entry extends Model
     /**
      * Limit the number of results
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $limit
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $limit
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeLimit(Builder $query, $limit)
@@ -356,8 +356,8 @@ class Entry extends Model
     /**
      * Offset the results
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $offset
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $offset
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOffset(Builder $query, $offset)
@@ -368,8 +368,8 @@ class Entry extends Model
     /**
      * Filter out entries before the specified date
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|DateTime $startOn unix time
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|DateTime                          $startOn unix time
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStartOn(Builder $query, $startOn)
@@ -384,8 +384,8 @@ class Entry extends Model
     /**
      * Filter out entries after the specified date
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|DateTime $startOn unix time
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|DateTime                          $startOn unix time
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStopBefore(Builder $query, $stopBefore)
@@ -400,8 +400,8 @@ class Entry extends Model
     /**
      * Filter by URL Title
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array $urlTitle
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $urlTitle
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUrlTitle(Builder $query, $urlTitle)
@@ -414,8 +414,8 @@ class Entry extends Model
     /**
      * Filter by Member Username
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array $username
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $username
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUsername(Builder $query, $username)
@@ -456,8 +456,8 @@ class Entry extends Model
     /**
      * Filter by Year
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $year
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $year
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeYear(Builder $query, $year)
@@ -468,8 +468,8 @@ class Entry extends Model
     /**
      * Filter by Month
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $month
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $month
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeMonth(Builder $query, $month)
@@ -480,8 +480,8 @@ class Entry extends Model
     /**
      * Filter by Day
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $day
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $day
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeDay(Builder $query, $day)
@@ -499,7 +499,7 @@ class Entry extends Model
 
         if ($fieldsRegistered === false && isset($this->channel) && isset($this->channel->fields)) {
             $fieldsRegistered = true;
-            
+
             $fieldsByName =& $this->fieldsByName;
 
             $this->channel->fields->each(function ($field) use (&$fieldsByName) {
@@ -510,9 +510,9 @@ class Entry extends Model
 
     /**
      * Join the required table, once
-     * 
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param  string  $which table name
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $which table name
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
     protected function requireTable(Builder $query, $which)
