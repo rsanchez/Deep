@@ -11,14 +11,14 @@ use DateTime;
 class Entry extends Model
 {
     /**
-     * The table associated with the model.
+     * {@inheritdoc}
      *
      * @var string
      */
     protected $table = 'channel_titles';
 
     /**
-     * The primary key associated with the model.
+     * {@inheritdoc}
      *
      * @var string
      */
@@ -50,7 +50,9 @@ class Entry extends Model
     }
 
     /**
-     * Create the query builder object, ensure necessary relationships and joins
+     * {@inheritdoc}
+     *
+     * Joins with the channel data table, and eager load channels, fields and fieldtypes
      * @param  boolean                               $excludeDeleted
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -66,7 +68,9 @@ class Entry extends Model
     }
 
     /**
-     * Create the EntryCollection and hydrate it
+     * {@inheritdoc}
+     *
+     * Hydrate the collection after creation
      *
      * @param  array                                     $models
      * @return \rsanchez\Deep\Collection\EntryCollection
@@ -104,6 +108,7 @@ class Entry extends Model
 
     /**
      * Get the entry_date column as a DateTime object
+     *
      * @param  int       $value unix time
      * @return \DateTime
      */
@@ -114,6 +119,7 @@ class Entry extends Model
 
     /**
      * Get the expiration_date column as a DateTime object, or null if there is no expiration date
+     *
      * @param  int            $value unix time
      * @return \DateTime|null
      */
@@ -124,6 +130,7 @@ class Entry extends Model
 
     /**
      * Get the edit_date column as a DateTime object
+     *
      * @param  int       $value unix time
      * @return \DateTime
      */
@@ -134,6 +141,7 @@ class Entry extends Model
 
     /**
      * Save the entry (not yet supported)
+     *
      * @param  array $options
      * @return void
      */
