@@ -10,21 +10,50 @@ use DateTime;
 
 class Entry extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'channel_titles';
+
+    /**
+     * The primary key associated with the model.
+     *
+     * @var string
+     */
     protected $primaryKey = 'entry_id';
 
+    /**
+     * Custom fields, keyed by name
+     *   field_name => \rsanchez\Deep\Model\Field
+     * @var array
+     */
     protected $fieldsByName = array();
 
+    /**
+     * Join tables
+     * @var array
+     */
     protected static $tables = array(
         'members' => array('members.member_id', 'channel_titles.author_id'),
         'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
     );
 
+    /**
+     * Define the channel Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function channel()
     {
         return $this->belongsTo('\\rsanchez\\Deep\\Model\\Channel');
     }
 
+    /**
+     * Create the query builder object, ensure necessary relationships and joins
+     * @param  boolean $excludeDeleted
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function newQuery($excludeDeleted = true)
     {
         $query = parent::newQuery($excludeDeleted);
@@ -36,6 +65,12 @@ class Entry extends Model
         return $query;
     }
 
+    /**
+     * Create the EntryCollection and hydrate it
+     * 
+     * @param  array  $models
+     * @return \rsanchez\Deep\Model\Collection\EntryCollection
+     */
     public function newCollection(array $models = array())
     {
         $collection = new EntryCollection($models);
@@ -48,30 +83,13 @@ class Entry extends Model
     }
 
     /**
-     * if you need to make custom classes
+     * {@inheritdoc}
+     *
+     * Get custom field value, if key is a custom field name
+     * 
+     * @param  string $key
+     * @return mixed
      */
-    /*
-    public function newInstance($attributes = array(), $exists = false)
-    {
-        // This method just provides a convenient way for us to generate fresh model
-        // instances of this current model. It is particularly useful during the
-        // hydration of new objects via the Eloquent query builder instances.
-        $model = new static((array) $attributes);
-
-        $model->exists = $exists;
-
-        return $model;
-    }
-
-    public static function create(array $attributes)
-    {
-        $model = new static($attributes);
-
-        $model->save();
-
-        return $model;
-    }
-    */
     public function getAttribute($key)
     {
         $hasAttribute = array_key_exists($key, $this->attributes);
@@ -84,42 +102,53 @@ class Entry extends Model
         return parent::getAttribute($key);
     }
 
+    /**
+     * Get the entry_date column as a DateTime object
+     * @param  int $value unix time
+     * @return \DateTime
+     */
     public function getEntryDateAttribute($value)
     {
         return DateTime::createFromFormat('U', $value);
     }
 
+    /**
+     * Get the expiration_date column as a DateTime object, or null if there is no expiration date
+     * @param  int $value unix time
+     * @return \DateTime|null
+     */
     public function getExpirationDateAttribute($value)
     {
         return $value ? DateTime::createFromFormat('U', $value) : null;
     }
 
+    /**
+     * Get the edit_date column as a DateTime object
+     * @param  int $value unix time
+     * @return \DateTime
+     */
     public function getEditDateAttribute($value)
     {
         return DateTime::createFromFormat('YmdHis', $value);
     }
 
-    protected function registerFields()
-    {
-        static $fieldsRegistered = false;
-
-        if ($fieldsRegistered === false && isset($this->channel) && isset($this->channel->fields)) {
-            $fieldsRegistered = true;
-            
-            $fieldsByName =& $this->fieldsByName;
-
-            $this->channel->fields->each(function ($field) use (&$fieldsByName) {
-                $this->fieldsByName[$field->field_name] = $field;
-            });
-        }
-    }
-
+    /**
+     * Save the entry (not yet supported)
+     * @param  array  $options
+     * @return void
+     */
     public function save(array $options = array())
     {
         throw new \Exception('Saving is not supported');
     }
 
-
+    /**
+     * Filter by Entry Status
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeStatus(Builder $query, $status)
     {
         $status = is_array($status) ? $status : array($status);
@@ -128,7 +157,11 @@ class Entry extends Model
     }
 
     /**
-     * Channel
+     * Filter by Channel Name
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $channelName
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeChannelName(Builder $query, $channelName)
     {
@@ -138,7 +171,11 @@ class Entry extends Model
     }
 
     /**
-     * Channel ID
+     * Filter by Channel ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|array $channelId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeChannelId(Builder $query, $channelId)
     {
@@ -148,7 +185,11 @@ class Entry extends Model
     }
 
     /**
-     * Author ID
+     * Filter by Author ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|array $authorId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAuthorId(Builder $query, $authorId)
     {
@@ -158,25 +199,45 @@ class Entry extends Model
     }
 
     /**
-     * Expired Entries
+     * Filter out Expired Entries
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool $showExpired
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeShowExpired(Builder $query, $showExpired = true)
     {
-        return $query->whereRaw(
-            "(`{$prefix}channel_titles`.`expiration_date` = '' OR  `{$prefix}channel_titles`.`expiration_date` > NOW())"
-        );
+        if (! $showExpired) {
+            $query->whereRaw(
+                "(`{$prefix}channel_titles`.`expiration_date` = '' OR  `{$prefix}channel_titles`.`expiration_date` > NOW())"
+            );
+        }
+
+        return $query;
     }
 
     /**
-     * Future Entries
+     * Filter out Future Entries
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool $showFutureEntries
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeShowFutureEntries(Builder $query, $showFutureEntries = true)
     {
-        return $query->where('channel_titles.entry_date', '<=', time());
+        if (! $showFutureEntries) {
+            $query->where('channel_titles.entry_date', '<=', time());
+        }
+
+        return $query;
     }
 
     /**
-     * Fixed Order
+     * Set a Fixed Order
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $fixedOrder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFixedOrder(Builder $query, array $fixedOrder)
     {
@@ -185,17 +246,27 @@ class Entry extends Model
     }
 
     /**
-     * Sticky
+     * Set Sticky Entries to appear first
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool $sticky
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSticky(Builder $query, $sticky)
+    public function scopeSticky(Builder $query, $sticky = true)
     {
-        array_unshift($query->getQuery()->orders, array('channel_titles.sticky', 'desc'));
+        if ($sticky) {
+            array_unshift($query->getQuery()->orders, array('channel_titles.sticky', 'desc'));
+        }
 
         return $query;
     }
 
     /**
-     * Entry ID
+     * Filter by Entry ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $entryId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryId(Builder $query, $entryId)
     {
@@ -205,7 +276,11 @@ class Entry extends Model
     }
 
     /**
-     * Not Entry ID
+     * Filter by Not Entry ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $notEntryId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeNotEntryId(Builder $query, $notEntryId)
     {
@@ -215,7 +290,11 @@ class Entry extends Model
     }
 
     /**
-     * Entry ID From
+     * Filter out entries before the specified Entry ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $entryIdFrom
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryIdFrom(Builder $query, $entryIdFrom)
     {
@@ -223,7 +302,11 @@ class Entry extends Model
     }
 
     /**
-     * Entry ID To
+     * Filter out entries after the specified Entry ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $entryIdTo
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryIdTo(Builder $query, $entryIdTo)
     {
@@ -231,7 +314,11 @@ class Entry extends Model
     }
 
     /**
-     * Member Group ID
+     * Filter by Member Group ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|array $groupId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeGroupId(Builder $query, $groupId)
     {
@@ -241,7 +328,11 @@ class Entry extends Model
     }
 
     /**
-     * Not Member Group ID
+     * Filter by Not Member Group ID
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|array $notGroupId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeNotGroupId(Builder $query, $notGroupId)
     {
@@ -251,7 +342,11 @@ class Entry extends Model
     }
 
     /**
-     * Limit
+     * Limit the number of results
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeLimit(Builder $query, $limit)
     {
@@ -259,7 +354,11 @@ class Entry extends Model
     }
 
     /**
-     * Offset
+     * Offset the results
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $offset
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOffset(Builder $query, $offset)
     {
@@ -267,23 +366,43 @@ class Entry extends Model
     }
 
     /**
-     * Start On
+     * Filter out entries before the specified date
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|DateTime $startOn unix time
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStartOn(Builder $query, $startOn)
     {
+        if ($startOn instanceof DateTime) {
+            $startOn = $startOn->format('U');
+        }
+
         return $query->where('channel_titles.entry_date', '>=', $startOn);
     }
 
     /**
-     * Stop Before
+     * Filter out entries after the specified date
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|DateTime $startOn unix time
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStopBefore(Builder $query, $stopBefore)
     {
+        if ($stopBefore instanceof DateTime) {
+            $stopBefore = $stopBefore->format('U');
+        }
+
         return $query->where('channel_titles.entry_date', '<', $stopBefore);
     }
 
     /**
-     * URL Title
+     * Filter by URL Title
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $urlTitle
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUrlTitle(Builder $query, $urlTitle)
     {
@@ -293,7 +412,11 @@ class Entry extends Model
     }
 
     /**
-     * Username
+     * Filter by Member Username
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $username
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUsername(Builder $query, $username)
     {
@@ -303,7 +426,8 @@ class Entry extends Model
     }
 
     /**
-     * Search
+     * Filter by Custom Field Search
+     * @TODO how to get custom field names
      */
     public function scopeSearch(Builder $query, array $search)
     {
@@ -330,7 +454,11 @@ class Entry extends Model
     }
 
     /**
-     * Year
+     * Filter by Year
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $year
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeYear(Builder $query, $year)
     {
@@ -338,7 +466,11 @@ class Entry extends Model
     }
 
     /**
-     * Month
+     * Filter by Month
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $month
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeMonth(Builder $query, $month)
     {
@@ -346,13 +478,43 @@ class Entry extends Model
     }
 
     /**
-     * Day
+     * Filter by Day
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $day
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeDay(Builder $query, $day)
     {
         return $query->where('channel_titles.day', $day);
     }
 
+    /**
+     * Register all custom fields with this entry
+     * @return void
+     */
+    protected function registerFields()
+    {
+        static $fieldsRegistered = false;
+
+        if ($fieldsRegistered === false && isset($this->channel) && isset($this->channel->fields)) {
+            $fieldsRegistered = true;
+            
+            $fieldsByName =& $this->fieldsByName;
+
+            $this->channel->fields->each(function ($field) use (&$fieldsByName) {
+                $fieldsByName[$field->field_name] = $field;
+            });
+        }
+    }
+
+    /**
+     * Join the required table, once
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $which table name
+     * @return \Illuminate\Database\Eloquent\Builder $query
+     */
     protected function requireTable(Builder $query, $which)
     {
         if (! isset(static::$tables[$which])) {
