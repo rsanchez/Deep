@@ -241,7 +241,7 @@ class Entry extends Model
      */
     public function scopeFixedOrder(Builder $query, array $fixedOrder)
     {
-        return $this->scopeEntryId($query, $fixedOrder)->whereIn('channel_titles.entry_id', $fixedOrder)
+        return $this->scopeEntryId($query, $fixedOrder)
                     ->orderBy('FIELD('.implode(', ', $fixedOrder).')', 'asc');
     }
 
