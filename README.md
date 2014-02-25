@@ -28,12 +28,6 @@ $entries = Entry::channelName('blog')
 
 Add this to your `composer.json`:
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/rsanchez/Deep"
-        }
-    ],
     "minimum-stability": "dev",
     "require": {
         "rsanchez/deep": "dev-develop"
@@ -44,9 +38,8 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
     require_once FCPATH.'vendor/autoload.php';
 
 
-##Todo
+## Todo
 
-- autoloading
-- composer
+- PHPdoc
+- API docs
 - unit tests
-- fieldtype abstraction
