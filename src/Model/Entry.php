@@ -130,6 +130,28 @@ class Entry extends Model
     }
 
     /**
+     * Get the comment_expiration_date column as a DateTime object, or null if there is no expiration date
+     *
+     * @param  int            $value unix time
+     * @return \DateTime|null
+     */
+    public function getCommentExpirationDateAttribute($value)
+    {
+        return $value ? DateTime::createFromFormat('U', $value) : null;
+    }
+
+    /**
+     * Get the recent_comment_date column as a DateTime object, or null if there is no expiration date
+     *
+     * @param  int            $value unix time
+     * @return \DateTime|null
+     */
+    public function getRecentCommentDateAttribute($value)
+    {
+        return $value ? DateTime::createFromFormat('U', $value) : null;
+    }
+
+    /**
      * Get the edit_date column as a DateTime object
      *
      * @param  int       $value unix time
