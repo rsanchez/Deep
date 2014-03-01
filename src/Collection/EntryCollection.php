@@ -31,11 +31,13 @@ class EntryCollection extends Collection
     );
 
     /**
+     * Matrix columns used by this collection
      * @var \Illuminate\Database\Eloquent\Collection
      */
     protected $matrixCols;
 
     /**
+     * Grid columns used by this collection
      * @var \Illuminate\Database\Eloquent\Collection
      */
     protected $gridCols;
