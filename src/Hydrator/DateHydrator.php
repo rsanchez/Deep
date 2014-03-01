@@ -27,7 +27,7 @@ class DateHydrator extends AbstractHydrator
     {
         $collection = $this->collection;
 
-        // loop through all file fields
+        // loop through all date fields
         $entry->channel->fieldsByType('date')->each(function ($field) use ($entry) {
 
             $date = $entry->getAttribute('field_id_'.$field->field_id);
@@ -42,7 +42,7 @@ class DateHydrator extends AbstractHydrator
             $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $field) {
 
                 $cols = $collection->getMatrixCols()->filter(function ($col) use ($field) {
-                    return $col->field_id === $field->field_id && $col->col_type === 'file';
+                    return $col->field_id === $field->field_id && $col->col_type === 'date';
                 });
 
                 $cols->each(function ($col) use ($row) {
@@ -61,7 +61,7 @@ class DateHydrator extends AbstractHydrator
             $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $field) {
 
                 $cols = $collection->getGridCols()->filter(function ($col) use ($field) {
-                    return $col->field_id === $field->field_id && $col->col_type === 'file';
+                    return $col->field_id === $field->field_id && $col->col_type === 'date';
                 });
 
                 $cols->each(function ($col) use ($row) {

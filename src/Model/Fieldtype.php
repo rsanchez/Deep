@@ -1,9 +1,19 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model for the fieldtypes table
+ */
 class Fieldtype extends Model
 {
     /**

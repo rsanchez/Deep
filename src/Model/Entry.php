@@ -16,7 +16,7 @@ use rsanchez\Deep\Collection\EntryCollection;
 use DateTime;
 
 /**
- * A model for the channel_titles table, joined with channel_data
+ * Model for the channel_titles table, joined with channel_data
  */
 class Entry extends Model
 {
@@ -259,7 +259,7 @@ class Entry extends Model
 
     /**
      * Apply an array of parameters
-     * @param  array  $parameters
+     * @param  array $parameters
      * @return void
      */
     public function applyParameters(array $parameters)

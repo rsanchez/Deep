@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,19 +14,18 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
 
+/**
+ * Model for the files table
+ */
 class File extends Model implements FileInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @var string
      */
     protected $table = 'files';
 
     /**
      * {@inheritdoc}
-     *
-     * @var string
      */
     protected $primaryKey = 'file_id';
 
@@ -32,16 +38,25 @@ class File extends Model implements FileInterface
         return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'upload_location_id');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUrlAttribute()
     {
         return $this->uploadPref->url.$this->file_name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getServerPathAttribute()
     {
         return $this->uploadPref->server_path.$this->file_name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->getUrlAttribute();
@@ -50,7 +65,7 @@ class File extends Model implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @param  array                                     $models
+     * @param  array                                    $models
      * @return \rsanchez\Deep\Collection\FileCollection
      */
     public function newCollection(array $models = array())
@@ -58,6 +73,16 @@ class File extends Model implements FileInterface
         return new FileCollection($models);
     }
 
+    /**
+     * Filter by files belonging to an EntryCollection
+     *
+     * EE doesn't actually have a DB of entries => files, so you have to
+     * look up from the exp_files table based on filename and upload dir
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder     $query
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeFromEntryCollection(Builder $query, EntryCollection $collection)
     {
         // EE isn't PDO, so no prepared statements
@@ -81,5 +106,7 @@ class File extends Model implements FileInterface
             });
 
         });
+
+        return $query;
     }
 }

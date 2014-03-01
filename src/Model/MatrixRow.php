@@ -1,11 +1,21 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\MatrixRowCollection;
 
+/**
+ * Model for the matrix_data table
+ */
 class MatrixRow extends Model
 {
     /**
@@ -25,7 +35,7 @@ class MatrixRow extends Model
     /**
      * {@inheritdoc}
      *
-     * @param  array                                     $models
+     * @param  array                                         $models
      * @return \rsanchez\Deep\Collection\MatrixRowCollection
      */
     public function newCollection(array $models = array())
@@ -33,6 +43,13 @@ class MatrixRow extends Model
         return new MatrixRowCollection($models);
     }
 
+    /**
+     * Filter by Entry ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|array                             $entryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
@@ -40,6 +57,9 @@ class MatrixRow extends Model
         return $query->whereIn('matrix_data.entry_id', $entryId);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toArray()
     {
         $array = parent::toArray();

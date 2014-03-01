@@ -1,9 +1,19 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model for the channels table
+ */
 class Channel extends Model
 {
     /**
@@ -29,6 +39,11 @@ class Channel extends Model
         return $this->hasMany('\\rsanchez\\Deep\\Model\\Field', 'group_id', 'field_group');
     }
 
+    /**
+     * Get channel fields of the specified type
+     * @param  string                                    $type name of a fieldtype
+     * @return \rsanchez\Deep\Collection\FieldCollection
+     */
     public function fieldsByType($type)
     {
         return $this->fields->filter(function ($field) use ($type) {

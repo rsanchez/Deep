@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,6 +14,9 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 
+/**
+ * Model for the assets_files table, joined with assets_selections
+ */
 class Asset extends Model implements FileInterface
 {
     /**
@@ -43,16 +53,29 @@ class Asset extends Model implements FileInterface
         return new AssetCollection($assets);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUrlAttribute()
     {
         return $this->uploadPref->url.$this->file_name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getServerPathAttribute()
     {
         return $this->uploadPref->server_path.$this->file_name;
     }
 
+    /**
+     * Filter by Entry ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $entryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
@@ -60,11 +83,21 @@ class Asset extends Model implements FileInterface
         return $this->requireTable($query, 'assets_selections')->whereIn('assets_selections.entry_id', $entryId);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->getUrlAttribute();
     }
 
+    /**
+     * Join the required table, once
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $which table name
+     * @return \Illuminate\Database\Eloquent\Builder $query
+     */
     protected function requireTable(Builder $query, $which)
     {
         static $tables = array(

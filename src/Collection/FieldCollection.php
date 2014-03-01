@@ -37,7 +37,7 @@ class FieldCollection extends Collection
     /**
      * Get the field_id for the specified field name
      *
-     * @param  string $field name of the field
+     * @param  string                     $field name of the field
      * @return \rsanchez\Deep\Model\Field
      */
     public function getFieldId($field)

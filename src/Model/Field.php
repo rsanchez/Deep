@@ -1,10 +1,20 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\FieldCollection;
 
+/**
+ * Model for the channel_fields table
+ */
 class Field extends Model
 {
     /**

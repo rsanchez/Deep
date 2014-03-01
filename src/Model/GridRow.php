@@ -1,11 +1,21 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\GridRowCollection;
 
+/**
+ * Model for the channel_grid_field_X table(s)
+ */
 class GridRow extends Model
 {
     /**
@@ -18,7 +28,7 @@ class GridRow extends Model
     /**
      * {@inheritdoc}
      *
-     * @param  array                                     $models
+     * @param  array                                       $models
      * @return \rsanchez\Deep\Collection\GridRowCollection
      */
     public function newCollection(array $models = array())
@@ -26,6 +36,13 @@ class GridRow extends Model
         return new GridRowCollection($models);
     }
 
+    /**
+     * Filter by Entry ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|array                             $entryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
@@ -33,11 +50,21 @@ class GridRow extends Model
         return $query->whereIn('entry_id', $entryId);
     }
 
+    /**
+     * Filter by Field ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $fieldId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeFieldId(Builder $query, $fieldId)
     {
         return $query->from('channel_grid_field_'.$fieldId);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toArray()
     {
         $array = parent::toArray();
