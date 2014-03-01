@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,13 +17,22 @@ use rsanchez\Deep\Model\Asset;
 
 class AssetsHydrator extends AbstractHydrator
 {
+    /**
+     * @var \rsanchez\Deep\Collection\AssetCollection
+     */
     protected $selections;
 
+    /**
+     * {@inheritdoc}
+     */
     public function preload(array $entryIds)
     {
         $this->selections = Asset::with('uploadPref')->entryId($entryIds)->get();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hydrate(Entry $entry)
     {
         $collection = $this->collection;

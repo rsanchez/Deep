@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
@@ -12,11 +19,17 @@ class FileHydrator extends AbstractHydrator
 {
     protected $files;
 
+    /**
+     * {@inheritdoc}
+     */
     public function preload(array $entryIds)
     {
         $this->files = File::with('uploadPref')->fromEntryCollection($this->collection)->get();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hydrate(Entry $entry)
     {
         $collection = $this->collection;

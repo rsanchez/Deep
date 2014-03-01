@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +17,9 @@ use DateTime;
 
 class DateHydrator extends AbstractHydrator
 {
+    /**
+     * {@inheritdoc}
+     */
     public function hydrate(Entry $entry)
     {
         $collection = $this->collection;

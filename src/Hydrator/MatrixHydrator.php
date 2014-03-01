@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +22,9 @@ class MatrixHydrator extends AbstractHydrator
 
     protected $rows;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(EntryCollection $collection)
     {
         parent::__construct($collection);
@@ -26,11 +36,17 @@ class MatrixHydrator extends AbstractHydrator
         $collection->setMatrixCols($this->cols);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function preload(array $entryIds)
     {
         $this->rows = MatrixRow::entryId($entryIds)->get();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hydrate(Entry $entry)
     {
         $cols = $this->cols;

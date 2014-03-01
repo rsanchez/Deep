@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +22,9 @@ class GridHydrator extends AbstractHydrator
 
     protected $rows = array();
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(EntryCollection $collection)
     {
         parent::__construct($collection);
@@ -26,6 +36,9 @@ class GridHydrator extends AbstractHydrator
         $collection->setGridCols($this->cols);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function preload(array $entryIds)
     {
         $fieldIds = $this->collection->getFieldIdsByFieldtype('grid');
@@ -35,6 +48,9 @@ class GridHydrator extends AbstractHydrator
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hydrate(Entry $entry)
     {
         $cols = $this->cols;

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +17,9 @@ use rsanchez\Deep\Model\PlayaEntry;
 
 class PlayaHydrator extends AbstractHydrator
 {
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(EntryCollection $collection)
     {
         parent::__construct($collection);
@@ -19,6 +29,9 @@ class PlayaHydrator extends AbstractHydrator
         $collection->addEntryIds($this->entries->modelKeys());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hydrate(Entry $entry)
     {
         $collection = $this->collection;
