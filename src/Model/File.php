@@ -5,6 +5,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Collection\FileCollection;
 
 class File extends Model implements FileInterface
 {
@@ -44,6 +45,17 @@ class File extends Model implements FileInterface
     public function __toString()
     {
         return $this->getUrlAttribute();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\FileCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new FileCollection($models);
     }
 
     public function scopeFromEntryCollection(Builder $query, EntryCollection $collection)

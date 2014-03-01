@@ -22,7 +22,7 @@ class FileHydrator extends AbstractHydrator
 {
     /**
      * All File selections for this collection
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \rsanchez\Deep\Collection\FileCollection
      */
     protected $files;
 

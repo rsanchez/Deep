@@ -4,6 +4,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Collection\MatrixRowCollection;
 
 class MatrixRow extends Model
 {
@@ -20,6 +21,17 @@ class MatrixRow extends Model
      * @var string
      */
     protected $primaryKey = 'row_id';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\MatrixRowCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new MatrixRowCollection($models);
+    }
 
     public function scopeEntryId(Builder $query, $entryId)
     {

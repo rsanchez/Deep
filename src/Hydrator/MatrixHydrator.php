@@ -29,7 +29,7 @@ class MatrixHydrator extends AbstractHydrator
 
     /**
      * Collection of Matrix rows in this collection
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \rsanchez\Deep\Collection\MatrixRowCollection
      */
     protected $rows;
 

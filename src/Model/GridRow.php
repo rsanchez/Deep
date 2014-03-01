@@ -4,6 +4,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Collection\GridRowCollection;
 
 class GridRow extends Model
 {
@@ -13,6 +14,17 @@ class GridRow extends Model
      * @var string
      */
     protected $primaryKey = 'row_id';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\GridRowCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new GridRowCollection($models);
+    }
 
     public function scopeEntryId(Builder $query, $entryId)
     {

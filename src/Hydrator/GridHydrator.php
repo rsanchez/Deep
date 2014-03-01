@@ -28,7 +28,7 @@ class GridHydrator extends AbstractHydrator
     protected $cols;
 
     /**
-     * Array of Grid rows used by this collection
+     * Array of field_id => \rsanchez\Deep\Collection\GridRowCollection
      * @var array
      */
     protected $rows = array();

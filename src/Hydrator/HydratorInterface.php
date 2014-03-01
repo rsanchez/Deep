@@ -12,6 +12,11 @@ namespace rsanchez\Deep\Hydrator;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 
+/**
+ * Hydrator interface
+ *
+ * Hydrators bind custom fields properties to Entry objects
+ */
 interface HydratorInterface
 {
     /**
