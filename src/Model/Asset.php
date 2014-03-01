@@ -5,9 +5,9 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\FileInterface;
-use rsanchez\Deep\Collection\AssetsCollection;
+use rsanchez\Deep\Collection\AssetCollection;
 
-class Assets extends Model implements FileInterface
+class Asset extends Model implements FileInterface
 {
     /**
      * {@inheritdoc}
@@ -36,11 +36,11 @@ class Assets extends Model implements FileInterface
      * {@inheritdoc}
      *
      * @param  array                                     $assets
-     * @return \rsanchez\Deep\Collection\AssetsCollection
+     * @return \rsanchez\Deep\Collection\AssetCollection
      */
     public function newCollection(array $assets = array())
     {
-        return new AssetsCollection($assets);
+        return new AssetCollection($assets);
     }
 
     public function getUrlAttribute()

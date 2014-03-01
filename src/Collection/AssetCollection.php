@@ -4,7 +4,7 @@ namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 
-class AssetsCollection extends Collection
+class AssetCollection extends Collection
 {
     public function __toString()
     {

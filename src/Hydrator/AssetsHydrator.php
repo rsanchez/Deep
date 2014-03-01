@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
-use rsanchez\Deep\Model\Assets;
+use rsanchez\Deep\Model\Asset;
 
 class AssetsHydrator extends AbstractHydrator
 {
@@ -14,7 +14,7 @@ class AssetsHydrator extends AbstractHydrator
 
     public function preload(Collection $collection)
     {
-        $this->selections = Assets::with('uploadPref')->entryId($collection->entryIds())->get();
+        $this->selections = Asset::with('uploadPref')->entryId($collection->entryIds())->get();
     }
 
     public function hydrate(Collection $collection, Entry $entry)
