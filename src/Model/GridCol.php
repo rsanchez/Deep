@@ -4,6 +4,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Collection\GridColCollection;
 
 class GridCol extends Model
 {
@@ -26,5 +27,16 @@ class GridCol extends Model
         $fieldId = is_array($fieldId) ? $fieldId : array($fieldId);
 
         return $this->whereIn('field_id', $fieldId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\GridColCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new GridColCollection($models);
     }
 }

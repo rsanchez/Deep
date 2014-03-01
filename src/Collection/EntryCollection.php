@@ -10,6 +10,8 @@
 namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\MatrixColCollection;
+use rsanchez\Deep\Collection\GridColCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\Entry
@@ -32,13 +34,13 @@ class EntryCollection extends Collection
 
     /**
      * Matrix columns used by this collection
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \rsanchez\Deep\Collection\MatrixColCollection
      */
     protected $matrixCols;
 
     /**
      * Grid columns used by this collection
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \rsanchez\Deep\Collection\GridColCollection
      */
     protected $gridCols;
 
@@ -150,10 +152,10 @@ class EntryCollection extends Collection
     /**
      * Set the Matrix columns for this collection
      *
-     * @param  \Illuminate\Database\Eloquent\Collection $collection
+     * @param  \rsanchez\Deep\Collection\MatrixColCollection $matrixCols
      * @return void
      */
-    public function setMatrixCols(Collection $matrixCols)
+    public function setMatrixCols(MatrixColCollection $matrixCols)
     {
         $fieldtypes =& $this->fieldtypes;
 
@@ -167,7 +169,7 @@ class EntryCollection extends Collection
     /**
      * Get the Matrix columns for this collection
      *
-     * @return \Illuminate\Database\Eloquent\Collection|null
+     * @return \rsanchez\Deep\Collection\MatrixColCollection|null
      */
     public function getMatrixCols()
     {
@@ -177,10 +179,10 @@ class EntryCollection extends Collection
     /**
      * Set the Grid columns for this collection
      *
-     * @param  \Illuminate\Database\Eloquent\Collection $collection
+     * @param  \rsanchez\Deep\Collection\GridColCollection $gridCols
      * @return void
      */
-    public function setGridCols(Collection $gridCols)
+    public function setGridCols(GridColCollection $gridCols)
     {
         $fieldtypes =& $this->fieldtypes;
 
@@ -194,7 +196,7 @@ class EntryCollection extends Collection
     /**
      * Get the Grid columns for this collection
      *
-     * @return \Illuminate\Database\Eloquent\Collection|null
+     * @return \rsanchez\Deep\Collection\GridColCollection|null
      */
     public function getGridCols()
     {
