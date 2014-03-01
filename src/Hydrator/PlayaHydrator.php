@@ -15,6 +15,9 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\PlayaEntry;
 
+/**
+ * Hydrator for the Playa fieldtype
+ */
 class PlayaHydrator extends AbstractHydrator
 {
     /**

@@ -15,6 +15,9 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use DateTime;
 
+/**
+ * Hydrator for the Date fieldtype
+ */
 class DateHydrator extends AbstractHydrator
 {
     /**
@@ -23,7 +26,7 @@ class DateHydrator extends AbstractHydrator
     public function hydrate(Entry $entry)
     {
         $collection = $this->collection;
-        
+
         // loop through all file fields
         $entry->channel->fieldsByType('date')->each(function ($field) use ($entry) {
 

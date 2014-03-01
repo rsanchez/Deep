@@ -15,6 +15,9 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\RelationshipEntry;
 
+/**
+ * Hydrator for the Relationship fieldtype
+ */
 class RelationshipHydrator extends AbstractHydrator
 {
     /**

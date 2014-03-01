@@ -16,10 +16,21 @@ use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\MatrixCol;
 use rsanchez\Deep\Model\MatrixRow;
 
+/**
+ * Hydrator for the Matrix fieldtype
+ */
 class MatrixHydrator extends AbstractHydrator
 {
+    /**
+     * All Matrix cols used by this collection
+     * @var \rsanchez\Deep\Collection\MatrixColCollection
+     */
     protected $cols;
 
+    /**
+     * Collection of Matrix rows in this collection
+     * @var \Illuminate\Database\Eloquent\Collection
+     */
     protected $rows;
 
     /**

@@ -16,10 +16,21 @@ use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\GridCol;
 use rsanchez\Deep\Model\GridRow;
 
+/**
+ * Hydrator for the Grid fieldtype
+ */
 class GridHydrator extends AbstractHydrator
 {
+    /**
+     * All Grid cols used by this collection
+     * @var \rsanchez\Deep\Collection\GridColCollection
+     */
     protected $cols;
 
+    /**
+     * Array of Grid rows used by this collection
+     * @var array
+     */
     protected $rows = array();
 
     /**

@@ -11,6 +11,9 @@ namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * Collection of \rsanchez\Deep\Model\Field
+ */
 class FieldCollection extends Collection
 {
     /**
@@ -19,6 +22,9 @@ class FieldCollection extends Collection
      */
     protected $fieldsByName = array();
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(array $fields = array())
     {
         foreach ($fields as $field) {

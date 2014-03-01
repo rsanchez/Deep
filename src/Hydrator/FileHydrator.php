@@ -15,8 +15,15 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\File;
 
+/**
+ * Hydrator for the File fieldtype
+ */
 class FileHydrator extends AbstractHydrator
 {
+    /**
+     * All File selections for this collection
+     * @var \Illuminate\Database\Eloquent\Collection
+     */
     protected $files;
 
     /**

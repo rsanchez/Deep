@@ -15,9 +15,13 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\Asset;
 
+/**
+ * Hydrator for the Assets fieldtype
+ */
 class AssetsHydrator extends AbstractHydrator
 {
     /**
+     * All Asset selections for this collection
      * @var \rsanchez\Deep\Collection\AssetCollection
      */
     protected $selections;
