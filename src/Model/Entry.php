@@ -145,6 +145,15 @@ class Entry extends Model
     }
 
     /**
+     * Define the Member Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function member()
+    {
+        return $this->belongsTo('\\rsanchez\\Deep\\Model\\Member', 'author_id', 'member_id');
+    }
+
+    /**
      * {@inheritdoc}
      *
      * Joins with the channel data table, and eager load channels, fields and fieldtypes
