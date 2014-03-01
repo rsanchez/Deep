@@ -90,13 +90,13 @@ class EntryCollection extends Collection
 
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
-            $hydrator->preload($this);
+            $hydrator->preload($this->entryIds());
         }
 
         // loop again to actually hydrate
         foreach ($this as $entry) {
             foreach ($hydrators as $hydrator) {
-                $hydrator->hydrate($this, $entry);
+                $hydrator->hydrate($entry);
             }
         }
     }

@@ -2,14 +2,14 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 
 interface HydratorInterface
 {
-    public function __construct(Collection $collection);
+    public function __construct(EntryCollection $collection);
 
-    public function preload(Collection $collection);
+    public function preload(array $entryIds);
 
-    public function hydrate(Collection $collection, Entry $entry);
+    public function hydrate(Entry $entry);
 }

@@ -3,22 +3,25 @@
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\PlayaEntry;
 
 class PlayaHydrator extends AbstractHydrator
 {
-    public function __construct(Collection $collection)
+    public function __construct(EntryCollection $collection)
     {
+        parent::__construct($collection);
+
         $this->entries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
 
         $collection->addEntryIds($this->entries->modelKeys());
     }
 
-    public function hydrate(Collection $collection, Entry $entry)
+    public function hydrate(Entry $entry)
     {
+        $collection = $this->collection;
         $relatedEntries = $this->entries;
 
         // loop through all playa fields

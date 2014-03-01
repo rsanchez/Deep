@@ -10,8 +10,10 @@ use DateTime;
 
 class DateHydrator extends AbstractHydrator
 {
-    public function hydrate(Collection $collection, Entry $entry)
+    public function hydrate(Entry $entry)
     {
+        $collection = $this->collection;
+        
         // loop through all file fields
         $entry->channel->fieldsByType('date')->each(function ($field) use ($entry) {
 

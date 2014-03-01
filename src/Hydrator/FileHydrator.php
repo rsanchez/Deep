@@ -12,13 +12,14 @@ class FileHydrator extends AbstractHydrator
 {
     protected $files;
 
-    public function preload(Collection $collection)
+    public function preload(array $entryIds)
     {
-        $this->files = File::with('uploadPref')->fromEntryCollection($collection)->get();
+        $this->files = File::with('uploadPref')->fromEntryCollection($this->collection)->get();
     }
 
-    public function hydrate(Collection $collection, Entry $entry)
+    public function hydrate(Entry $entry)
     {
+        $collection = $this->collection;
         $files = $this->files;
 
         // loop through all file fields

@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\MatrixCol;
@@ -11,31 +11,34 @@ use rsanchez\Deep\Model\MatrixRow;
 
 class MatrixHydrator extends AbstractHydrator
 {
+    protected $cols;
+
     protected $rows;
 
-    public function __construct(Collection $collection)
+    public function __construct(EntryCollection $collection)
     {
+        parent::__construct($collection);
+
         $fieldIds = $collection->getFieldIdsByFieldtype('matrix');
 
-        $matrixCols = MatrixCol::fieldId($fieldIds)->get();
+        $this->cols = MatrixCol::fieldId($fieldIds)->get();
 
-        $collection->setMatrixCols($matrixCols);
+        $collection->setMatrixCols($this->cols);
     }
 
-    public function preload(Collection $collection)
+    public function preload(array $entryIds)
     {
-        $entryIds = $collection->entryIds();
-
         $this->rows = MatrixRow::entryId($entryIds)->get();
     }
 
-    public function hydrate(Collection $collection, Entry $entry)
+    public function hydrate(Entry $entry)
     {
+        $cols = $this->cols;
         $rows = $this->rows;
 
-        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($entry, $rows, $collection) {
+        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($entry, $rows, $cols) {
 
-            $cols = $collection->getMatrixCols()->filter(function ($col) use ($field) {
+            $fieldCols = $cols->filter(function ($col) use ($field) {
                 return $col->field_id === $field->field_id;
             });
 
@@ -43,7 +46,7 @@ class MatrixHydrator extends AbstractHydrator
                 return $entry->getKey() === $row->getKey() && $field->field_id === $row->field_id;
             });
 
-            $cols->each(function ($col) use ($fieldRows) {
+            $fieldCols->each(function ($col) use ($fieldRows) {
                 $fieldRows->each(function ($row) use ($col) {
                     $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
                 });

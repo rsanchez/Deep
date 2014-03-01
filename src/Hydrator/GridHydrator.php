@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\GridCol;
@@ -11,37 +11,40 @@ use rsanchez\Deep\Model\GridRow;
 
 class GridHydrator extends AbstractHydrator
 {
+    protected $cols;
+
     protected $rows = array();
 
-    public function __construct(Collection $collection)
+    public function __construct(EntryCollection $collection)
     {
+        parent::__construct($collection);
+
         $fieldIds = $collection->getFieldIdsByFieldtype('grid');
 
-        $gridCols = GridCol::fieldId($fieldIds)->get();
+        $this->cols = GridCol::fieldId($fieldIds)->get();
 
-        $collection->setGridCols($gridCols);
+        $collection->setGridCols($this->cols);
     }
 
-    public function preload(Collection $collection)
+    public function preload(array $entryIds)
     {
-        $entryIds = $collection->entryIds();
-
-        $fieldIds = $collection->getFieldIdsByFieldtype('grid');
+        $fieldIds = $this->collection->getFieldIdsByFieldtype('grid');
 
         foreach ($fieldIds as $fieldId) {
             $this->rows[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->get();
         }
     }
 
-    public function hydrate(Collection $collection, Entry $entry)
+    public function hydrate(Entry $entry)
     {
+        $cols = $this->cols;
         $rowsByFieldId = $this->rows;
 
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($entry, $rowsByFieldId, $collection) {
+        $entry->channel->fieldsByType('grid')->each(function ($field) use ($entry, $rowsByFieldId, $cols) {
 
             $rows = $rowsByFieldId[$field->field_id];
 
-            $cols = $collection->getGridCols()->filter(function ($col) use ($field) {
+            $fieldCols = $cols->filter(function ($col) use ($field) {
                 return $col->field_id === $field->field_id;
             });
 
@@ -49,7 +52,7 @@ class GridHydrator extends AbstractHydrator
                 return $entry->getKey() === $row->getKey();
             });
 
-            $cols->each(function ($col) use ($fieldRows) {
+            $fieldCols->each(function ($col) use ($fieldRows) {
                 $fieldRows->each(function ($row) use ($col) {
                     $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
                 });

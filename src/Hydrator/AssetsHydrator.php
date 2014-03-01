@@ -12,13 +12,14 @@ class AssetsHydrator extends AbstractHydrator
 {
     protected $selections;
 
-    public function preload(Collection $collection)
+    public function preload(array $entryIds)
     {
-        $this->selections = Asset::with('uploadPref')->entryId($collection->entryIds())->get();
+        $this->selections = Asset::with('uploadPref')->entryId($entryIds)->get();
     }
 
-    public function hydrate(Collection $collection, Entry $entry)
+    public function hydrate(Entry $entry)
     {
+        $collection = $this->collection;
         $selections = $this->selections;
 
         // loop through all assets fields
