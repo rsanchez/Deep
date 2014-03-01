@@ -1,14 +1,25 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * Collection of \rsanchez\Deep\Model\Entry
+ */
 class EntryCollection extends Collection
 {
-    protected $matrixCols;
-    protected $gridCols;
-
+    /**
+     * Array of fieldtype => hydrator class name
+     * @var array
+     */
     protected static $hydrators = array(
         'matrix'       => '\\rsanchez\\Deep\\Hydrator\\MatrixHydrator',
         'grid'         => '\\rsanchez\\Deep\\Hydrator\\GridHydrator',
@@ -19,7 +30,26 @@ class EntryCollection extends Collection
         'date'         => '\\rsanchez\\Deep\\Hydrator\\DateHydrator',
     );
 
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection
+     */
+    protected $matrixCols;
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection
+     */
+    protected $gridCols;
+
+    /**
+     * All of the entry IDs in this collection (including related entries)
+     * @var array
+     */
     protected $entryIds = array();
+
+    /**
+     * Fieldtypes used by this collection
+     * @var array
+     */
     protected $fieldtypes = array();
 
     /**
@@ -29,6 +59,10 @@ class EntryCollection extends Collection
      */
     protected $fieldIdsByFieldtype = array();
 
+    /**
+     * Loop through all the hydrators to set Entry custom field attributes
+     * @return void
+     */
     public function hydrate()
     {
         $fieldtypes =& $this->fieldtypes;
@@ -71,6 +105,7 @@ class EntryCollection extends Collection
      * Get all the entry Ids from this collection.
      * This includes both the entries directly in this collection,
      * and entries found in Playa/Relationship fields
+     *
      * @return array
      */
     public function entryIds()
@@ -78,16 +113,33 @@ class EntryCollection extends Collection
         return $this->entryIds;
     }
 
+    /**
+     * Add additional entry ids to this collection
+     *
+     * @param array $entryIds
+     */
     public function addEntryIds(array $entryIds)
     {
         $this->entryIds = array_unique(array_merge($this->entryIds, $entryIds));
     }
 
+    /**
+     * Check if this collection uses the specified fieldtype
+     *
+     * @param  string  $fieldtype
+     * @return boolean
+     */
     public function hasFieldtype($fieldtype)
     {
         return in_array($fieldtype, $this->fieldtypes);
     }
 
+    /**
+     * Get the field IDs for the specified fieldtype
+     *
+     * @param  string $fieldtype
+     * @return array
+     */
     public function getFieldIdsByFieldtype($fieldtype)
     {
         return isset($this->fieldIdsByFieldtype[$fieldtype]) ? $this->fieldIdsByFieldtype[$fieldtype] : array();
@@ -95,6 +147,9 @@ class EntryCollection extends Collection
 
     /**
      * Set the Matrix columns for this collection
+     *
+     * @param  \Illuminate\Database\Eloquent\Collection $collection
+     * @return void
      */
     public function setMatrixCols(Collection $matrixCols)
     {
@@ -107,11 +162,22 @@ class EntryCollection extends Collection
         $this->matrixCols = $matrixCols;
     }
 
+    /**
+     * Get the Matrix columns for this collection
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|null
+     */
     public function getMatrixCols()
     {
         return $this->matrixCols;
     }
 
+    /**
+     * Set the Grid columns for this collection
+     *
+     * @param  \Illuminate\Database\Eloquent\Collection $collection
+     * @return void
+     */
     public function setGridCols(Collection $gridCols)
     {
         $fieldtypes =& $this->fieldtypes;
@@ -123,6 +189,11 @@ class EntryCollection extends Collection
         $this->gridCols = $gridCols;
     }
 
+    /**
+     * Get the Grid columns for this collection
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|null
+     */
     public function getGridCols()
     {
         return $this->gridCols;
