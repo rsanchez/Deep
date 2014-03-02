@@ -23,9 +23,9 @@ class RelationshipHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection)
+    public function __construct(EntryCollection $collection, $fieldtype)
     {
-        parent::__construct($collection);
+        parent::__construct($collection, $fieldtype);
 
         $this->entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
@@ -38,11 +38,12 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function hydrate(Entry $entry)
     {
+        $fieldtype = $this->fieldtype;
         $collection = $this->collection;
         $relatedEntries = $this->entries;
 
         // loop through all relationship fields
-        $entry->channel->fieldsByType('relationship')->each(function ($field) use ($entry, $relatedEntries) {
+        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $relatedEntries) {
 
             $entry->setAttribute($field->field_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field) {
                 return $entry->getKey() === $relatedEntry->parent_id && $field->field_id === $relatedEntry->field_id;
@@ -51,12 +52,12 @@ class RelationshipHydrator extends AbstractHydrator
         });
 
         // loop through all grid fields
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $relatedEntries) {
+        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $relatedEntries, $fieldtype) {
 
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $relatedEntries, $field) {
+            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $relatedEntries, $field, $fieldtype) {
 
-                $cols = $collection->getGridCols()->filter(function ($col) use ($field) {
-                    return $col->field_id === $field->field_id;
+                $cols = $collection->getGridCols()->filter(function ($col) use ($field, $fieldtype) {
+                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
                 });
 
                 $cols->each(function ($col) use ($entry, $field, $row, $relatedEntries) {

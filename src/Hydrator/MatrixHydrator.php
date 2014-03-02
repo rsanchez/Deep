@@ -36,11 +36,11 @@ class MatrixHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection)
+    public function __construct(EntryCollection $collection, $fieldtype)
     {
-        parent::__construct($collection);
+        parent::__construct($collection, $fieldtype);
 
-        $fieldIds = $collection->getFieldIdsByFieldtype('matrix');
+        $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
         $this->cols = MatrixCol::fieldId($fieldIds)->get();
 
@@ -63,7 +63,7 @@ class MatrixHydrator extends AbstractHydrator
         $cols = $this->cols;
         $rows = $this->rows;
 
-        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($entry, $rows, $cols) {
+        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $rows, $cols) {
 
             $fieldCols = $cols->filter(function ($col) use ($field) {
                 return $col->field_id === $field->field_id;

@@ -39,11 +39,12 @@ class FileHydrator extends AbstractHydrator
      */
     public function hydrate(Entry $entry)
     {
+        $fieldtype = $this->fieldtype;
         $collection = $this->collection;
         $files = $this->files;
 
         // loop through all file fields
-        $entry->channel->fieldsByType('file')->each(function ($field) use ($entry, $files) {
+        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $files) {
 
             $entry->setAttribute($field->field_name, $files->filter(function ($file) use ($entry, $field) {
                 return $entry->getAttribute('field_id_'.$field->field_id) === '{filedir_'.$file->upload_location_id.'}'.$file->file_name;
@@ -52,12 +53,12 @@ class FileHydrator extends AbstractHydrator
         });
 
         // loop through all matrix fields
-        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($collection, $entry, $files) {
+        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($collection, $entry, $files, $fieldtype) {
 
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $files, $field) {
+            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $files, $field, $fieldtype) {
 
-                $cols = $collection->getMatrixCols()->filter(function ($col) use ($field) {
-                    return $col->field_id === $field->field_id && $col->col_type === 'file';
+                $cols = $collection->getMatrixCols()->filter(function ($col) use ($field, $fieldtype) {
+                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
                 });
 
                 $cols->each(function ($col) use ($entry, $field, $row, $files) {
@@ -71,12 +72,12 @@ class FileHydrator extends AbstractHydrator
         });
 
         // loop through all grid fields
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $files) {
+        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $files, $fieldtype) {
 
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $files, $field) {
+            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $files, $field, $fieldtype) {
 
-                $cols = $collection->getGridCols()->filter(function ($col) use ($field) {
-                    return $col->field_id === $field->field_id && $col->col_type === 'file';
+                $cols = $collection->getGridCols()->filter(function ($col) use ($field, $fieldtype) {
+                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
                 });
 
                 $cols->each(function ($col) use ($entry, $field, $row, $files) {

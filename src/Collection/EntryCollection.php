@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Collection;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Collection\GridColCollection;
+use rsanchez\Deep\Hydrator\DefaultHydrator;
 
 /**
  * Collection of \rsanchez\Deep\Model\Entry
@@ -92,9 +93,11 @@ class EntryCollection extends Collection
 
         foreach (self::$hydrators as $fieldtype => $class) {
             if ($this->hasFieldtype($fieldtype)) {
-                $hydrators[$fieldtype] = new $class($this);
+                $hydrators[$fieldtype] = new $class($this, $fieldtype);
             }
         }
+
+        $fieldtypesWithoutHydrator = array_diff($fieldtypes, array_keys($hydrators));
 
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
@@ -104,6 +107,11 @@ class EntryCollection extends Collection
         // loop again to actually hydrate
         foreach ($this as $entry) {
             foreach ($hydrators as $hydrator) {
+                $hydrator->hydrate($entry);
+            }
+
+            foreach ($fieldtypesWithoutHydrator as $fieldtype) {
+                $hydrator = new DefaultHydrator($this, $fieldtype);
                 $hydrator->hydrate($entry);
             }
         }

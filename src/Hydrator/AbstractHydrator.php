@@ -20,11 +20,24 @@ use rsanchez\Deep\Model\Entry;
 abstract class AbstractHydrator implements HydratorInterface
 {
     /**
+     * The Entry Collection being hydrated
+     * @var \rsanchez\Deep\Collection\EntryCollection
+     */
+    protected $collection;
+
+    /**
+     * The name of the fieldtype
+     * @var string
+     */
+    protected $fieldtype;
+
+    /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection)
+    public function __construct(EntryCollection $collection, $fieldtype)
     {
         $this->collection = $collection;
+        $this->fieldtype = $fieldtype;
     }
 
     /**

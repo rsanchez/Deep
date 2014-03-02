@@ -43,13 +43,6 @@ class Entry extends Model
     protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
 
     /**
-     * Custom fields, keyed by name
-     *   field_name => \rsanchez\Deep\Model\Field
-     * @var array
-     */
-    protected $fieldsByName = array();
-
-    /**
      * Join tables
      * @var array
      */
@@ -283,26 +276,6 @@ class Entry extends Model
         });
 
         return parent::toArray();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Get custom field value, if key is a custom field name
-     *
-     * @param  string $key
-     * @return mixed
-     */
-    public function getAttribute($key)
-    {
-        $hasAttribute = array_key_exists($key, $this->attributes);
-        $hasChannel = isset($this->channel) && isset($this->channel->fields);
-
-        if (! $hasAttribute && $hasChannel && $this->channel->fields->hasField($key)) {
-            $this->attributes[$key] = $this->attributes['field_id_'.$this->channel->fields->getFieldId($key)];
-        }
-
-        return parent::getAttribute($key);
     }
 
     /**
@@ -751,25 +724,6 @@ class Entry extends Model
     public function scopeDay(Builder $query, $day)
     {
         return $query->where('channel_titles.day', $day);
-    }
-
-    /**
-     * Register all custom fields with this entry
-     * @return void
-     */
-    protected function registerFields()
-    {
-        static $fieldsRegistered = false;
-
-        if ($fieldsRegistered === false && isset($this->channel) && isset($this->channel->fields)) {
-            $fieldsRegistered = true;
-
-            $fieldsByName =& $this->fieldsByName;
-
-            $this->channel->fields->each(function ($field) use (&$fieldsByName) {
-                $fieldsByName[$field->field_name] = $field;
-            });
-        }
     }
 
     /**

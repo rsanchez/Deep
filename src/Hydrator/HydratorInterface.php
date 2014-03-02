@@ -24,8 +24,9 @@ interface HydratorInterface
      *
      * Set the EntryCollection and load any global elements the hydrator might need
      * @param EntryCollection $collection
+     * @param string $fieldtype
      */
-    public function __construct(EntryCollection $collection);
+    public function __construct(EntryCollection $collection, $fieldtype);
 
     /**
      * Preload any custom field data that resides in another DB table

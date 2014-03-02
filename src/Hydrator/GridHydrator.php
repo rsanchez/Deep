@@ -36,11 +36,11 @@ class GridHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection)
+    public function __construct(EntryCollection $collection, $fieldtype)
     {
-        parent::__construct($collection);
+        parent::__construct($collection, $fieldtype);
 
-        $fieldIds = $collection->getFieldIdsByFieldtype('grid');
+        $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
         $this->cols = GridCol::fieldId($fieldIds)->get();
 
@@ -52,7 +52,7 @@ class GridHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $fieldIds = $this->collection->getFieldIdsByFieldtype('grid');
+        $fieldIds = $this->collection->getFieldIdsByFieldtype($this->fieldtype);
 
         foreach ($fieldIds as $fieldId) {
             $this->rows[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->get();
@@ -67,7 +67,7 @@ class GridHydrator extends AbstractHydrator
         $cols = $this->cols;
         $rowsByFieldId = $this->rows;
 
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($entry, $rowsByFieldId, $cols) {
+        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $rowsByFieldId, $cols) {
 
             $rows = $rowsByFieldId[$field->field_id];
 
