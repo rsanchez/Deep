@@ -136,6 +136,8 @@ class Entry extends Model
         'username',
     );
 
+    protected static $fieldMap;
+
     /**
      * A link to the Builder's relation cache
      * @var array
@@ -158,6 +160,20 @@ class Entry extends Model
     public function member()
     {
         return $this->belongsTo('\\rsanchez\\Deep\\Model\\Member', 'author_id', 'member_id');
+    }
+
+    public function fetchAllFields()
+    {
+        if (is_null(self::$allFields)) {
+
+            self::$allFields = array();
+
+            $allFields =& self::$allFields;
+
+            Field::select(array('field_id', 'field_name'))->get()->each(function ($field) use ($allFields) {
+                $allFields[$field->field_name] = $field->field_id;
+            });
+        }
     }
 
     /**
@@ -664,26 +680,25 @@ class Entry extends Model
 
     /**
      * Filter by Custom Field Search
-     * @TODO how to get custom field names
      */
     public function scopeSearch(Builder $query, array $search)
     {
         $this->requireTable($query, 'channel_data');
 
-        foreach ($search as $fieldName => $values) {
-            try {
-                $field = $this->channelFieldRepository->find($fieldName);
+        $this->fetchAllFields();
 
-                $query->where(function ($query) use ($field, $values) {
+        foreach ($search as $fieldName => $values) {
+            if (isset(self::$allFields[$fieldName])) {
+
+                $fieldId = self::$allFields[$fieldName];
+
+                $query->where(function ($query) use ($fieldId, $values) {
 
                     foreach ($values as $value) {
-                        $query->orWhere('channel_data.field_id_'.$field->id(), 'LIKE', '%{$value}%');
+                        $query->orWhere('channel_data.field_id_'.$fieldId, 'LIKE', '%{$value}%');
                     }
 
                 });
-
-            } catch (Exception $e) {
-                //$e->getMessage();
             }
         }
 
