@@ -16,6 +16,7 @@ use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use DateTime;
+use DateTimeZone;
 
 /**
  * Model for the channel_titles table, joined with channel_data
@@ -36,6 +37,9 @@ class Entry extends Model
      */
     protected $primaryKey = 'entry_id';
 
+    /**
+     * {@inheritdoc}
+     */
     protected $hidden = array('channel');
 
     /**
@@ -223,6 +227,47 @@ class Entry extends Model
     }
 
     /**
+     * Get an attribute array of all arrayable attributes.
+     *
+     * @return array
+     */
+    protected function getArrayableAttributes()
+    {
+        $attributes = $this->attributes;
+
+        foreach ($attributes as $key => $value)
+        {
+            if ($value instanceof DateTime) {
+                $date = clone $value;
+                $date->setTimezone(new DateTimeZone('UTC'));
+                $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
+            }
+        }
+
+        return $this->getArrayableItems($attributes);
+    }
+
+    /**
+     * Convert the model's attributes to an array.
+     *
+     * @return array
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        foreach (array('entry_date', 'edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date') as $key) {
+            if ($attributes[$key] instanceof DateTime) {
+                $date = clone $attributes[$key];
+                $date->setTimezone(new DateTimeZone('UTC'));
+                $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toArray()
@@ -230,10 +275,12 @@ class Entry extends Model
         $hidden =& $this->hidden;
 
         // remove field_id_X fields from the array
-        $this->channel->fields->each(function ($field) use (&$hidden) {
-            $hidden[] = 'field_id_'.$field->field_id;
-            $hidden[] = 'field_ft_'.$field->field_id;
-            $hidden[] = 'field_dt_'.$field->field_id;
+        $fieldColumns = array_filter(array_keys($this->attributes), function ($key) {
+            return preg_match('#^field_(id|dt|ft)_#', $key) === 1;
+        });
+
+        array_walk($fieldColumns, function ($key) use (&$hidden) {
+            $hidden[] = $key;
         });
 
         return parent::toArray();

@@ -34,6 +34,16 @@ class Asset extends Model implements FileInterface
     protected $primaryKey = 'file_id';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref');
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $appends = array('url');
+
+    /**
      * Define the Upload Preferences Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

@@ -26,4 +26,13 @@ class AssetCollection extends Collection
 
         return $asset ? $asset->url : '';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        // flatten the array keys
+        return array_values(parent::toArray());
+    }
 }

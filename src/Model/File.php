@@ -30,6 +30,16 @@ class File extends Model implements FileInterface
     protected $primaryKey = 'file_id';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $hidden = array('site_id', 'upload_location_id', 'rel_path', 'uploaded_by_member_id', 'modified_by_member_id', 'uploadPref');
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $appends = array('url');
+
+    /**
      * Define the Upload Preferences Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

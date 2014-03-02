@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Collection\RelationshipCollection;
 
 /**
  * {@inheritdoc}
@@ -42,5 +43,26 @@ class RelationshipEntry extends Entry
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'relationships', true)->whereIn('relationships.parent_id', $entryId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Hydrate the collection after creation
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\PlayaCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        $collection = new RelationshipCollection($models);
+
+        $collection->channels = $this->builderRelationCache['channel'];
+
+        if ($models) {
+            $collection->hydrate();
+        }
+
+        return $collection;
     }
 }

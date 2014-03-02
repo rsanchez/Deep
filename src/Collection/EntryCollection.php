@@ -181,6 +181,18 @@ class EntryCollection extends Collection
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function toJson($options = 0)
+    {
+        if (func_num_args() === 0) {
+            $options = JSON_NUMERIC_CHECK;
+        }
+
+        return parent::toJson($options);
+    }
+
+    /**
      * Set the Grid columns for this collection
      *
      * @param  \rsanchez\Deep\Collection\GridColCollection $gridCols

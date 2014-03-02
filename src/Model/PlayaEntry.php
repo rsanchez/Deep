@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Collection\PlayaCollection;
 
 /**
  * {@inheritdoc}
@@ -20,6 +21,10 @@ use rsanchez\Deep\Model\Entry;
  */
 class PlayaEntry extends Entry
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $hidden = array('channel', 'parent_entry_id', 'parent_field_id', 'parent_col_id', 'parent_row_id', 'parent_var_id', 'parent_is_draft', 'child_entry_id', 'rel_order', 'rel_id');
     /**
      * Join tables
      * @var array
@@ -42,5 +47,26 @@ class PlayaEntry extends Entry
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'playa_relationships', true)->whereIn('playa_relationships.parent_entry_id', $entryId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Hydrate the collection after creation
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\PlayaCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        $collection = new PlayaCollection($models);
+
+        $collection->channels = $this->builderRelationCache['channel'];
+
+        if ($models) {
+            $collection->hydrate();
+        }
+
+        return $collection;
     }
 }
