@@ -41,6 +41,6 @@ class PlayaEntry extends Entry
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
-        return $this->requireTable($query, 'playa_relationships')->whereIn('playa_relationships.parent_entry_id', $entryId);
+        return $this->requireTable($query, 'playa_relationships', true)->whereIn('playa_relationships.parent_entry_id', $entryId);
     }
 }

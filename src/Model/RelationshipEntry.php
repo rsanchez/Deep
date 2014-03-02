@@ -41,6 +41,6 @@ class RelationshipEntry extends Entry
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
-        return $this->requireTable($query, 'relationships')->whereIn('relationships.parent_id', $entryId);
+        return $this->requireTable($query, 'relationships', true)->whereIn('relationships.parent_id', $entryId);
     }
 }

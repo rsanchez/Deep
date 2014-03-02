@@ -731,9 +731,10 @@ class Entry extends Model
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param  string                                $which table name
+     * @param  bool                                  $select whether to select this table's columns
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
-    protected function requireTable(Builder $query, $which)
+    protected function requireTable(Builder $query, $which, $select = false)
     {
         if (! isset(static::$tables[$which])) {
             return $query;
@@ -743,6 +744,10 @@ class Entry extends Model
             if ($joinClause->table === $which) {
                 return $query;
             }
+        }
+
+        if ($select) {
+            $query->addSelect($which.'.*');
         }
 
         return $query->join($which, static::$tables[$which][0], '=', static::$tables[$which][1]);
