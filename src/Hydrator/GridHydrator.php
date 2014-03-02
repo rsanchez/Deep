@@ -77,10 +77,10 @@ class GridHydrator extends AbstractHydrator
 
             $fieldRows = $rows->filter(function ($row) use ($entry) {
                 return $entry->getKey() === $row->getKey();
-            });
+            })->each(function ($row) use ($fieldCols) {
+                $row->setCols($fieldCols);
 
-            $fieldCols->each(function ($col) use ($fieldRows) {
-                $fieldRows->each(function ($row) use ($col) {
+                $fieldCols->each(function ($col) use ($row) {
                     $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
                 });
             });

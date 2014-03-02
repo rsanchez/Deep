@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use rsanchez\Deep\Collection\GridRowCollection;
+use rsanchez\Deep\Collection\GridColCollection;
 
 /**
  * Model for the channel_grid_field_X table(s)
@@ -24,6 +25,17 @@ class GridRow extends Model
      * @var string
      */
     protected $primaryKey = 'row_id';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $hidden = array('site_id', 'entry_id', 'field_id', 'row_order');
+
+    /**
+     * Cols associated with this row
+     * @var \rsanchez\Deep\Collection\GridColCollection
+     */
+    protected $cols;
 
     /**
      * {@inheritdoc}
@@ -63,10 +75,27 @@ class GridRow extends Model
     }
 
     /**
+     * Set the Grid columns for this row
+     *
+     * @param  \rsanchez\Deep\Collection\GridColCollection $cols
+     * @return void
+     */
+    public function setCols(GridColCollection $cols)
+    {
+        $this->cols = $cols;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toArray()
     {
+        $hidden =& $this->hidden;
+
+        $this->cols->each(function ($col) use (&$hidden) {
+            $hidden[] = 'col_id_'.$col->col_id;
+        });
+
         $array = parent::toArray();
 
         foreach ($array as &$row) {

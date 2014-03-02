@@ -33,6 +33,9 @@ class MatrixRow extends Model
      */
     protected $primaryKey = 'row_id';
 
+    /**
+     * {@inheritdoc}
+     */
     protected $hidden = array('site_id', 'entry_id', 'field_id', 'var_id', 'is_draft', 'row_order');
 
     /**
@@ -82,8 +85,6 @@ class MatrixRow extends Model
      */
     public function toArray()
     {
-        $fieldId = $this->field_id;
-
         $hidden =& $this->hidden;
 
         $this->cols->each(function ($col) use (&$hidden) {
