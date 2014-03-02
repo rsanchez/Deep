@@ -354,24 +354,26 @@ class Entry extends Model
      * @param  array $parameters
      * @return void
      */
-    public function applyParameters(array $parameters)
+    public function scopeTagparams(Builder $query, array $parameters)
     {
+        $search = array();
+
         foreach ($parameters as $key => $value) {
-            /*
             if (strncmp($key, 'search:', 7) === 0) {
                 $key = 'search';
-            }
-            */
-
-            if (! array_key_exists($key, static::$methodMap)) {
+                $search[substr($key, 7)] = explode('|', $value);
                 continue;
             }
 
-            $method = static::$methodMap[$key];
+            if (! array_key_exists($key, static::$parameterMap)) {
+                continue;
+            }
+
+            $method = 'scope'.ucfirst(static::$parameterMap[$key]);
 
             if (in_array($key, static::$arrayParameters)) {
-                if (array_key_exists('not_'.$key, static::$methodMap) && strncmp($value, 'not ', 4) === 0) {
-                    $method = static::$methodMap['not_'.$key];
+                if (array_key_exists('not_'.$key, static::$parameterMap) && strncmp($value, 'not ', 4) === 0) {
+                    $method = 'scope'.ucfirst(static::$parameterMap['not_'.$key]);
                     $value = explode('|', substr($value, 4));
                 } else {
                     $value = explode('|', $value);
@@ -380,8 +382,14 @@ class Entry extends Model
                 $value = $value === 'yes';
             }
 
-            $this->$method($value);
+            $this->$method($query, $value);
         }
+
+        if ($search) {
+            $this->scopeSearch($query, $search);
+        }
+
+        return $query;
     }
 
     /**
