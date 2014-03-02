@@ -40,7 +40,7 @@ class Entry extends Model
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('channel');
+    protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
 
     /**
      * Custom fields, keyed by name
@@ -235,8 +235,7 @@ class Entry extends Model
     {
         $attributes = $this->attributes;
 
-        foreach ($attributes as $key => $value)
-        {
+        foreach ($attributes as $key => $value) {
             if ($value instanceof DateTime) {
                 $date = clone $value;
                 $date->setTimezone(new DateTimeZone('UTC'));

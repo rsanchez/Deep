@@ -22,6 +22,11 @@ use rsanchez\Deep\Collection\RelationshipCollection;
 class RelationshipEntry extends Entry
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_id', 'field_id', 'grid_field_id', 'grid_col_id', 'grid_row_id', 'child_id', 'order', 'relationship_id');
+
+    /**
      * Join tables
      * @var array
      */

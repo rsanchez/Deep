@@ -24,7 +24,8 @@ class PlayaEntry extends Entry
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('channel', 'parent_entry_id', 'parent_field_id', 'parent_col_id', 'parent_row_id', 'parent_var_id', 'parent_is_draft', 'child_entry_id', 'rel_order', 'rel_id');
+    protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_entry_id', 'parent_field_id', 'parent_col_id', 'parent_row_id', 'parent_var_id', 'parent_is_draft', 'child_entry_id', 'rel_order', 'rel_id');
+
     /**
      * Join tables
      * @var array
