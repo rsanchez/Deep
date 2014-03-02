@@ -291,7 +291,15 @@ class Entry extends Model
             $hidden[] = $key;
         });
 
-        return parent::toArray();
+        $array = parent::toArray();
+
+        $this->channel->fields->each(function ($field) use (&$array) {
+            if (isset($array[$field->field_name]) && method_exists($array[$field->field_name], 'toArray')) {
+                $array[$field->field_name] = $array[$field->field_name]->toArray();
+            }
+        });
+
+        return $array;
     }
 
     /**

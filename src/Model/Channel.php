@@ -33,6 +33,11 @@ class Channel extends Model
     protected $primaryKey = 'channel_id';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $hidden = array('fields');
+
+    /**
      * A link to the Builder's relation cache
      * @var array
      */
