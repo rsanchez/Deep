@@ -71,10 +71,10 @@ class MatrixHydrator extends AbstractHydrator
 
             $fieldRows = $rows->filter(function ($row) use ($entry, $field) {
                 return $entry->getKey() === $row->getKey() && $field->field_id === $row->field_id;
-            });
+            })->each(function ($row) use ($fieldCols) {
+                $row->setCols($fieldCols);
 
-            $fieldCols->each(function ($col) use ($fieldRows) {
-                $fieldRows->each(function ($row) use ($col) {
+                $fieldCols->each(function ($col) use ($row) {
                     $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
                 });
             });

@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use rsanchez\Deep\Collection\MatrixRowCollection;
+use rsanchez\Deep\Collection\MatrixColCollection;
 
 /**
  * Model for the matrix_data table
@@ -31,6 +32,14 @@ class MatrixRow extends Model
      * @var string
      */
     protected $primaryKey = 'row_id';
+
+    protected $hidden = array('site_id', 'entry_id', 'field_id', 'var_id', 'is_draft', 'row_order');
+
+    /**
+     * Cols associated with this row
+     * @var \rsanchez\Deep\Collection\MatrixColCollection
+     */
+    protected $cols;
 
     /**
      * {@inheritdoc}
@@ -58,10 +67,29 @@ class MatrixRow extends Model
     }
 
     /**
+     * Set the Matrix columns for this row
+     *
+     * @param  \rsanchez\Deep\Collection\MatrixColCollection $cols
+     * @return void
+     */
+    public function setCols(MatrixColCollection $cols)
+    {
+        $this->cols = $cols;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toArray()
     {
+        $fieldId = $this->field_id;
+
+        $hidden =& $this->hidden;
+
+        $this->cols->each(function ($col) use (&$hidden) {
+            $hidden[] = 'col_id_'.$col->col_id;
+        });
+
         $array = parent::toArray();
 
         foreach ($array as &$row) {

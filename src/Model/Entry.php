@@ -36,6 +36,8 @@ class Entry extends Model
      */
     protected $primaryKey = 'entry_id';
 
+    protected $hidden = array('channel');
+
     /**
      * Custom fields, keyed by name
      *   field_name => \rsanchez\Deep\Model\Field
@@ -173,6 +175,10 @@ class Entry extends Model
     {
         $query = parent::newQuery($excludeDeleted);
 
+        $query->select('channel_titles.*');
+
+        $query->addSelect('channel_data.*');
+
         $query->with('channel', 'channel.fields', 'channel.fields.fieldtype');
 
         $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
@@ -214,6 +220,23 @@ class Entry extends Model
         }
 
         return $collection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        $hidden =& $this->hidden;
+
+        // remove field_id_X fields from the array
+        $this->channel->fields->each(function ($field) use (&$hidden) {
+            $hidden[] = 'field_id_'.$field->field_id;
+            $hidden[] = 'field_ft_'.$field->field_id;
+            $hidden[] = 'field_dt_'.$field->field_id;
+        });
+
+        return parent::toArray();
     }
 
     /**
