@@ -64,6 +64,12 @@ class EntryCollection extends Collection
     protected $fieldIdsByFieldtype = array();
 
     /**
+     * Channels used by this collection
+     * @var \rsanchez\Deep\Collection\ChannelCollection
+     */
+    public $channels;
+
+    /**
      * Loop through all the hydrators to set Entry custom field attributes
      * @return void
      */
@@ -77,11 +83,9 @@ class EntryCollection extends Collection
         $this->entryIds = $entryIds;
 
         // loop through all the fields used in this collection to gather a list of fieldtypes used
-        $this->fetch('channel.fields')->each(function ($rows) use (&$fieldtypes, &$fieldIdsByFieldtype) {
-            foreach ($rows as $row) {
-                $fieldtypes[] = $row['field_type'];
-                $fieldIdsByFieldtype[$row['field_type']][] = $row['field_id'];
-            }
+        $this->channels->fields->each(function ($field) use (&$fieldtypes, &$fieldIdsByFieldtype) {
+                $fieldtypes[] = $field->field_type;
+                $fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
         });
 
         $hydrators = array();

@@ -10,6 +10,8 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Collection\ChannelCollection;
+use rsanchez\Deep\Model\Builder;
 
 /**
  * Model for the channels table
@@ -31,12 +33,48 @@ class Channel extends Model
     protected $primaryKey = 'channel_id';
 
     /**
+     * A link to the Builder's relation cache
+     * @var array
+     */
+    protected $builderRelationCache;
+
+    /**
      * Define the Channel Fields Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function fields()
     {
         return $this->hasMany('\\rsanchez\\Deep\\Model\\Field', 'group_id', 'field_group');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                     $models
+     * @return \rsanchez\Deep\Collection\ChannelCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        $collection = new ChannelCollection($models);
+
+        $collection->fields = $this->builderRelationCache['fields'];
+
+        return $collection;
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        $builder = new Builder($query);
+
+        $this->builderRelationCache =& $builder->relationCache;
+
+        return $builder;
     }
 
     /**

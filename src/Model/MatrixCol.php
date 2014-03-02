@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use rsanchez\Deep\Collection\MatrixColCollection;
 
 /**
@@ -39,7 +39,7 @@ class MatrixCol extends Model
      * @param  int|array                             $fieldId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFieldId(Builder $query, $fieldId)
+    public function scopeFieldId(EloquentBuilder $query, $fieldId)
     {
         $fieldId = is_array($fieldId) ? $fieldId : array($fieldId);
 

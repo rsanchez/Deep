@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use rsanchez\Deep\Model\Entry;
 
 /**
@@ -37,7 +37,7 @@ class RelationshipEntry extends Entry
      * @param  int|array                             $entryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeParentEntryId(Builder $query, $entryId)
+    public function scopeParentEntryId(EloquentBuilder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
