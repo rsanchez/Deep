@@ -48,7 +48,7 @@ Scopes are how you can filter your query results. They should look familiar, sin
 
 ## Entry objects
 
-Each entry object has the following string properties from the `exp_channel_titles` table. All of the date fields (`entry_date`, `expiration_date`, and `edit_date`) are `DateTime` objects. The rest of these properties are strings.
+Each entry object has the following string properties from the `exp_channel_titles` table.
 
 ```
 $entry->entry_id
@@ -143,7 +143,7 @@ $entry->channel->live_look_template
 
 ### Custom Fields
 
-Entries have their custom fields as properties, keyed by the field short name. Most custom field properties contain the string data from the corresponding `exp_channel_data` `field_id_X` column.
+Entries have their custom fields as properties, keyed by the field short name. Most custom field properties merely the string data from the corresponding `exp_channel_data` `field_id_X` column.
 
 ```
 $entry->your_field_name
@@ -151,9 +151,104 @@ $entry->your_field_name
 
 For the following fieldtypes, an entry's custom field properties will be special objects, rather than string data from the `exp_channel_data` table.
 
-### Matrix
+### Matrix & Grid
 
-Matrix
+Matrix & Grid fields will be Eloquent Collections of `Row` objects. `Row` objects has string properties from the `exp_matrix_data` and `exp_channel_grid_field_X` tables, respectively. They also have their custom fields (columns) as properties, keyed by the field short name. Custom `Row` fields follow the same logic as `Entry` custom fields.
+
+```
+$number_of_rows = $entry->your_matrix_field->count();
+
+foreach ($entry->your_matrix_field as $row) {
+    echo $row->your_text_column;
+    foreach ($row->your_playa_column as $childEntry) {
+        echo $childEntry->title;
+    }
+}
+```
+
+### Playa & Relationship
+
+Playa & Relationship fields will be Eloquent Collections of related `Entry` objects. These `Entry` objects behave just as parent `Entry` objects do.
+
+```
+$number_of_rows = $entry->your_playa_field->count();
+
+foreach ($entry->your_playa_field as $childEntry) {
+    echo $childEntry->title;
+}
+```
+
+### Assets
+
+Assets fields will be Eloquent Collections of `File` objects. Assets `File` objects have the following properties:
+
+```
+$entry->your_assets_field->url
+$entry->your_assets_field->server_path
+$entry->your_assets_field->file_id
+$entry->your_assets_field->folder_id
+$entry->your_assets_field->source_type
+$entry->your_assets_field->source_id
+$entry->your_assets_field->filedir_id
+$entry->your_assets_field->file_name
+$entry->your_assets_field->title
+$entry->your_assets_field->date
+$entry->your_assets_field->alt_text
+$entry->your_assets_field->caption
+$entry->your_assets_field->author
+$entry->your_assets_field->desc
+$entry->your_assets_field->location
+$entry->your_assets_field->keywords
+$entry->your_assets_field->date_modified
+$entry->your_assets_field->kind
+$entry->your_assets_field->width
+$entry->your_assets_field->height
+$entry->your_assets_field->size
+$entry->your_assets_field->search_keywords
+```
+
+```
+foreach ($entry->your_assets_field as $file) {
+    echo '<img src="'.$file->url.'" />';
+}
+```
+
+### File
+
+File fields will be a single `File` object. `File` objects have the following properties:
+
+```
+$entry->your_file_field->url
+$entry->your_file_field->server_path
+$entry->your_file_field->file_id
+$entry->your_file_field->site_id
+$entry->your_file_field->title
+$entry->your_file_field->upload_location_id
+$entry->your_file_field->rel_path
+$entry->your_file_field->mime_type
+$entry->your_file_field->file_name
+$entry->your_file_field->file_size
+$entry->your_file_field->description
+$entry->your_file_field->credit
+$entry->your_file_field->location
+$entry->your_file_field->uploaded_by_member_id
+$entry->your_file_field->upload_date
+$entry->your_file_field->modified_by_member_id
+$entry->your_file_field->modified_date
+$entry->your_file_field->file_hw_original
+```
+
+```
+echo '<img src="'.$entry->your_file_field->url.'" />';
+```
+
+### Date
+
+Date fields will be a single `DateTime` object.
+
+```
+echo $entry->your_date_field->format('Y-m-d H:i:s');
+```
 
 ## Parameters to be implemented in the future
 
@@ -177,9 +272,6 @@ Matrix
 
 ## Todo
 
-- Better array/json serialization
-- Base plugin
 - Pagination? probably have to wait until Illuminate paginate becomes more decoupled
-- PHPdoc
 - API docs
 - unit tests
