@@ -43,6 +43,14 @@ class Entry extends Model
     protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
 
     /**
+     * Set a default channel name
+     *
+     * Useful if extending this class
+     * @var string
+     */
+    protected $channelName;
+
+    /**
      * Join tables
      * @var array
      */
@@ -145,6 +153,28 @@ class Entry extends Model
     protected $builderRelationCache;
 
     /**
+     * {@inheritdoc}
+     */
+    public function __construct(array $attributes = array())
+    {
+        parent::__construct($attributes);
+
+        $nativeClasses = array(
+            'rsanchez\Deep\Model\Entry',
+            'rsanchez\Deep\Model\PlayaEntry',
+            'rsanchez\Deep\Model\RelationshipEntry',
+        );
+
+        $class = get_class($this);
+
+        // set the channel name of this class if it's not one of the native classes
+        if (! in_array($class, $nativeClasses) && is_null($this->channelName)) {
+            $class = basename(str_replace('\\', DIRECTORY_SEPARATOR, $class));
+            $this->channelName = snake_case(str_plural($class));
+        }
+    }
+
+    /**
      * Define the Channel Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -195,6 +225,10 @@ class Entry extends Model
         $query->with('channel', 'channel.fields', 'channel.fields.fieldtype');
 
         $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
+
+        if ($this->channelName) {
+            $this->scopeChannelName($query, $this->channelName);
+        }
 
         return $query;
     }
