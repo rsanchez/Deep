@@ -283,13 +283,11 @@ class Entry extends Model
         $hidden =& $this->hidden;
 
         // remove field_id_X fields from the array
-        $fieldColumns = array_filter(array_keys($this->attributes), function ($key) {
-            return preg_match('#^field_(id|dt|ft)_#', $key) === 1;
-        });
-
-        array_walk($fieldColumns, function ($key) use (&$hidden) {
-            $hidden[] = $key;
-        });
+        foreach (array_keys($this->attributes) as $key) {
+            if (preg_match('#^field_(id|dt|ft)_#', $key)) {
+                $this->hidden[] = $key;
+            }
+        }
 
         $array = parent::toArray();
 
