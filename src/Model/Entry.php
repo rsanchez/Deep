@@ -192,6 +192,15 @@ class Entry extends Model
         return $this->belongsTo('\\rsanchez\\Deep\\Model\\Member', 'author_id', 'member_id');
     }
 
+    /**
+     * Define the Member Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories()
+    {
+        return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Category', 'category_posts', 'entry_id', 'cat_id');
+    }
+
     public function fetchAllFields()
     {
         if (is_null(self::$allFields)) {
@@ -390,49 +399,6 @@ class Entry extends Model
     }
 
     /**
-     * Apply an array of parameters
-     * @param  array $parameters
-     * @return void
-     */
-    public function scopeTagparams(Builder $query, array $parameters)
-    {
-        $search = array();
-
-        foreach ($parameters as $key => $value) {
-            if (strncmp($key, 'search:', 7) === 0) {
-                $key = 'search';
-                $search[substr($key, 7)] = explode('|', $value);
-                continue;
-            }
-
-            if (! array_key_exists($key, static::$parameterMap)) {
-                continue;
-            }
-
-            $method = 'scope'.ucfirst(static::$parameterMap[$key]);
-
-            if (in_array($key, static::$arrayParameters)) {
-                if (array_key_exists('not_'.$key, static::$parameterMap) && strncmp($value, 'not ', 4) === 0) {
-                    $method = 'scope'.ucfirst(static::$parameterMap['not_'.$key]);
-                    $value = explode('|', substr($value, 4));
-                } else {
-                    $value = explode('|', $value);
-                }
-            } elseif (in_array($key, static::$boolParameters)) {
-                $value = $value === 'yes';
-            }
-
-            $this->$method($query, $value);
-        }
-
-        if ($search) {
-            $this->scopeSearch($query, $search);
-        }
-
-        return $query;
-    }
-
-    /**
      * Save the entry (not yet supported)
      *
      * @param  array $options
@@ -444,17 +410,35 @@ class Entry extends Model
     }
 
     /**
-     * Filter by Entry Status
+     * Filter by Category ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $status
+     * @param  string|array                          $category_id
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeStatus(Builder $query, $status)
+    public function scopeCategory(Builder $query, $category_id)
     {
-        $status = is_array($status) ? $status : array($status);
+        $category_id = is_array($category_id) ? $category_id : array($category_id);
 
-        return $query->whereIn('channel_titles.status', $status);
+        return $query->whereHas('categories', function ($q) use ($category_id) {
+            $q->whereIn('categories.cat_id', $category_id);
+        });
+    }
+
+    /**
+     * Filter by Category Name
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $category_name
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategoryName(Builder $query, $category_name)
+    {
+        $category_name = is_array($category_name) ? $category_name : array($category_name);
+
+        return $query->whereHas('categories', function ($q) use ($category_name) {
+            $q->whereIn('categories.cat_name', $category_name);
+        });
     }
 
     /**
@@ -683,6 +667,20 @@ class Entry extends Model
     }
 
     /**
+     * Filter by Entry Status
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeStatus(Builder $query, $status)
+    {
+        $status = is_array($status) ? $status : array($status);
+
+        return $query->whereIn('channel_titles.status', $status);
+    }
+
+    /**
      * Filter out entries after the specified date
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -748,6 +746,49 @@ class Entry extends Model
 
                 });
             }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Apply an array of parameters
+     * @param  array $parameters
+     * @return void
+     */
+    public function scopeTagparams(Builder $query, array $parameters)
+    {
+        $search = array();
+
+        foreach ($parameters as $key => $value) {
+            if (strncmp($key, 'search:', 7) === 0) {
+                $key = 'search';
+                $search[substr($key, 7)] = explode('|', $value);
+                continue;
+            }
+
+            if (! array_key_exists($key, static::$parameterMap)) {
+                continue;
+            }
+
+            $method = 'scope'.ucfirst(static::$parameterMap[$key]);
+
+            if (in_array($key, static::$arrayParameters)) {
+                if (array_key_exists('not_'.$key, static::$parameterMap) && strncmp($value, 'not ', 4) === 0) {
+                    $method = 'scope'.ucfirst(static::$parameterMap['not_'.$key]);
+                    $value = explode('|', substr($value, 4));
+                } else {
+                    $value = explode('|', $value);
+                }
+            } elseif (in_array($key, static::$boolParameters)) {
+                $value = $value === 'yes';
+            }
+
+            $this->$method($query, $value);
+        }
+
+        if ($search) {
+            $this->scopeSearch($query, $search);
         }
 
         return $query;
