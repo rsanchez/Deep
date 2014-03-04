@@ -44,7 +44,25 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
 
 ## Scopes
 
-Scopes are how you can filter your query results. They should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter.
+Scopes are how you can filter your query results. They should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter. Scopes that accept more than one parameter will take an array or a single value (ex. `Entry::status(array('open', 'closed'))` and `Entry::status('closed')` are both valid).
+
+### Channel Name
+
+```
+Entry::channelName('blog')
+```
+
+### Channel ID
+
+```
+Entry::channelId(1)
+```
+
+### Author ID
+
+```
+Entry::authorId(1)
+```
 
 ## Entry objects
 
