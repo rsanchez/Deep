@@ -212,8 +212,13 @@ class Entry extends Model
     {
         parent::boot();
 
-        self::$fieldRepository = new FieldRepository(Field::all());
-        self::$channelRepository = new ChannelRepository(Channel::all(), self::$fieldRepository);
+        if (! self::$fieldRepository instanceof FieldRepository) {
+            self::$fieldRepository = new FieldRepository(Field::all());
+        }
+
+        if (! self::$channelRepository instanceof ChannelRepository) {
+            self::$channelRepository = new ChannelRepository(Channel::all(), self::$fieldRepository);
+        }
     }
 
     /**
