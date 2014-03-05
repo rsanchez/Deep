@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Model\Field;
 
 /**
  * Collection of \rsanchez\Deep\Model\Field
@@ -43,6 +44,16 @@ class FieldCollection extends Collection
     public function getFieldId($field)
     {
         return $this->fieldsByName[$field]->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function push(Field $field)
+    {
+        $this->fieldsByName[$field->field_name] = $field;
+
+        return parent::push($field);
     }
 
     /**
