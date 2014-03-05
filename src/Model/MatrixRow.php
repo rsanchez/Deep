@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\MatrixRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 
@@ -62,7 +62,7 @@ class MatrixRow extends Model
      * @param  int|array                             $entryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEntryId(EloquentBuilder $query, $entryId)
+    public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 

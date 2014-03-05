@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\GridRowCollection;
 use rsanchez\Deep\Collection\GridColCollection;
 
@@ -55,7 +55,7 @@ class GridRow extends Model
      * @param  int|array                             $entryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEntryId(EloquentBuilder $query, $entryId)
+    public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
@@ -69,7 +69,7 @@ class GridRow extends Model
      * @param  int                                   $fieldId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFieldId(EloquentBuilder $query, $fieldId)
+    public function scopeFieldId(Builder $query, $fieldId)
     {
         return $query->from('channel_grid_field_'.$fieldId);
     }

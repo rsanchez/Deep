@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
 
@@ -93,7 +93,7 @@ class File extends Model implements FileInterface
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFromEntryCollection(EloquentBuilder $query, EntryCollection $collection)
+    public function scopeFromEntryCollection(Builder $query, EntryCollection $collection)
     {
         // EE isn't PDO, so no prepared statements
         // I hate doing this...

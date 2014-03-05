@@ -10,10 +10,9 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use \Illuminate\Database\Query\Builder as QueryBuilder;
 use rsanchez\Deep\Model\Channel;
-use rsanchez\Deep\Model\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use DateTime;
 use DateTimeZone;
@@ -146,11 +145,6 @@ class Entry extends Model
 
     protected static $fieldMap;
 
-    /**
-     * A link to the Builder's relation cache
-     * @var array
-     */
-    protected $builderRelationCache;
 
     /**
      * {@inheritdoc}
@@ -243,21 +237,6 @@ class Entry extends Model
     }
 
     /**
-     * Create a new Eloquent query builder for the model.
-     *
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder|static
-     */
-    public function newEloquentBuilder($query)
-    {
-        $builder = new Builder($query);
-
-        $this->builderRelationCache =& $builder->relationCache;
-
-        return $builder;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * Hydrate the collection after creation
@@ -269,7 +248,6 @@ class Entry extends Model
     {
         $collection = new EntryCollection($models);
 
-        $collection->channels = $this->builderRelationCache['channel'];
 
         if ($models) {
             $collection->hydrate();

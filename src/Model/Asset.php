@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 
@@ -86,7 +86,7 @@ class Asset extends Model implements FileInterface
      * @param  string|array                          $entryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEntryId(EloquentBuilder $query, $entryId)
+    public function scopeEntryId(Builder $query, $entryId)
     {
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
@@ -108,7 +108,7 @@ class Asset extends Model implements FileInterface
      * @param  string                                $which table name
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
-    protected function requireTable(EloquentBuilder $query, $which)
+    protected function requireTable(Builder $query, $which)
     {
         static $tables = array(
             'assets_selections' => array('assets_selections.file_id', 'assets_files.file_id'),
