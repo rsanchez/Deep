@@ -10,9 +10,9 @@ A set of Eloquent models for ExpressionEngine Channel Entries. This library has 
 ```
 <?php
 
-use rsanchez\Deep\Model\Entry
+use rsanchez\Deep\Entries
 
-$entries = Entry::channelName('blog')
+$entries = Entries::channel('blog')
                 ->limit(10)
                 ->showFutureEntries()
                 ->get()
@@ -49,7 +49,7 @@ Scopes are how you can filter your query results. They should look familiar, sin
 ### Channel Name
 
 ```
-Entry::channelName('blog')
+Entry::channel('blog')
 ```
 
 ### Channel ID
