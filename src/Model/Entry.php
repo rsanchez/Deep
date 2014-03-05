@@ -145,6 +145,8 @@ class Entry extends Model
 
     protected static $fieldMap;
 
+    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
+
 
     /**
      * {@inheritdoc}
@@ -246,7 +248,9 @@ class Entry extends Model
      */
     public function newCollection(array $models = array())
     {
-        $collection = new EntryCollection($models);
+        $collectionClass = $this->collectionClass;
+
+        $collection = new $collectionClass($models);
 
 
         if ($models) {

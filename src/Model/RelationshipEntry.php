@@ -36,6 +36,8 @@ class RelationshipEntry extends Entry
         'relationships' => array('relationships.child_id', 'channel_titles.entry_id'),
     );
 
+    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
+
     /**
      * Filter by Parent Entry ID
      *
@@ -48,26 +50,5 @@ class RelationshipEntry extends Entry
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'relationships', true)->whereIn('relationships.parent_id', $entryId);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Hydrate the collection after creation
-     *
-     * @param  array                                     $models
-     * @return \rsanchez\Deep\Collection\PlayaCollection
-     */
-    public function newCollection(array $models = array())
-    {
-        $collection = new RelationshipCollection($models);
-
-        $collection->channels = $this->builderRelationCache['channel'];
-
-        if ($models) {
-            $collection->hydrate();
-        }
-
-        return $collection;
     }
 }

@@ -36,6 +36,8 @@ class PlayaEntry extends Entry
         'playa_relationships' => array('playa_relationships.child_entry_id', 'channel_titles.entry_id'),
     );
 
+    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
+
     /**
      * Filter by Parent Entry ID
      *
@@ -48,26 +50,5 @@ class PlayaEntry extends Entry
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'playa_relationships', true)->whereIn('playa_relationships.parent_entry_id', $entryId);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Hydrate the collection after creation
-     *
-     * @param  array                                     $models
-     * @return \rsanchez\Deep\Collection\PlayaCollection
-     */
-    public function newCollection(array $models = array())
-    {
-        $collection = new PlayaCollection($models);
-
-        $collection->channels = $this->builderRelationCache['channel'];
-
-        if ($models) {
-            $collection->hydrate();
-        }
-
-        return $collection;
     }
 }
