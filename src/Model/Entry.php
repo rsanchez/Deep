@@ -144,13 +144,13 @@ class Entry extends AbstractJoinableModel
     protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
 
     /**
-     * Channel Repository
+     * Global Channel Repository
      * @var \rsanchez\Deep\Repository\ChannelRepository
      */
     public static $channelRepository;
 
     /**
-     * Field Repository
+     * Global Field Repository
      * @var \rsanchez\Deep\Repository\FieldRepository
      */
     public static $fieldRepository;
@@ -198,19 +198,39 @@ class Entry extends AbstractJoinableModel
     /**
      * {@inheritdoc}
      *
-     * Load up all the repositories
+     * Load up all the repositories if you haven't already with the Container
      */
     public static function boot()
     {
         parent::boot();
 
         if (! self::$fieldRepository instanceof FieldRepository) {
-            self::$fieldRepository = new FieldRepository(Field::all());
+            self::setFieldRepository(new FieldRepository(Field::all()));
         }
 
         if (! self::$channelRepository instanceof ChannelRepository) {
-            self::$channelRepository = new ChannelRepository(Channel::all(), self::$fieldRepository);
+            self::setChannelRepository(new ChannelRepository(Channel::all(), self::$fieldRepository));
         }
+    }
+
+    /**
+     * Set the global FieldRepository
+     * @param \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @return void
+     */
+    public static function setFieldRepository(FieldRepository $fieldRepository)
+    {
+        self::$fieldRepository = $fieldRepository;
+    }
+
+    /**
+     * Set the global ChannelRepository
+     * @param \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @return void
+     */
+    public static function setChannelRepository(ChannelRepository $channelRepository)
+    {
+        self::$channelRepository = $channelRepository;
     }
 
     /**
