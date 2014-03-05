@@ -11,9 +11,11 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use \Illuminate\Database\Query\Builder as QueryBuilder;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Collection\FieldCollection;
+use rsanchez\Deep\Repository\FieldRepository;
+use rsanchez\Deep\Repository\ChannelRepository;
 use DateTime;
 use DateTimeZone;
 
@@ -70,7 +72,7 @@ class Entry extends Model
         'not_category' => 'notCategory',
         'category_group' => 'categoryGroup',//explode, not
         'not_category_group' => 'notCategoryGroup',
-        'channel' => 'channelName',//explode, not
+        'channel' => 'channel',//explode, not
         'display_by' => 'displayBy',//string
         'dynamic_parameters' => 'dynamicParameters',//explode
         'entry_id' => 'entryId',//explode, not
@@ -143,10 +145,23 @@ class Entry extends Model
         'username',
     );
 
-    protected static $fieldMap;
-
+    /**
+     * The class used when creating a new Collection
+     * @var string
+     */
     protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
 
+    /**
+     * Channel Repository
+     * @var \rsanchez\Deep\Repository\ChannelRepository
+     */
+    public static $channelRepository;
+
+    /**
+     * Field Repository
+     * @var \rsanchez\Deep\Repository\FieldRepository
+     */
+    public static $fieldRepository;
 
     /**
      * {@inheritdoc}
@@ -171,15 +186,6 @@ class Entry extends Model
     }
 
     /**
-     * Define the Channel Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function channel()
-    {
-        return $this->belongsTo('\\rsanchez\\Deep\\Model\\Channel');
-    }
-
-    /**
      * Define the Member Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -197,18 +203,17 @@ class Entry extends Model
         return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Category', 'category_posts', 'entry_id', 'cat_id');
     }
 
-    public function fetchAllFields()
+    /**
+     * {@inheritdoc}
+     *
+     * Load up all the repositories
+     */
+    public static function boot()
     {
-        if (is_null(self::$allFields)) {
+        parent::boot();
 
-            self::$allFields = array();
-
-            $allFields =& self::$allFields;
-
-            Field::select(array('field_id', 'field_name'))->get()->each(function ($field) use ($allFields) {
-                $allFields[$field->field_name] = $field->field_id;
-            });
-        }
+        self::$fieldRepository = new FieldRepository(Field::all());
+        self::$channelRepository = new ChannelRepository(Channel::all(), self::$fieldRepository);
     }
 
     /**
@@ -227,12 +232,10 @@ class Entry extends Model
 
         $query->addSelect('channel_data.*');
 
-        $query->with('channel', 'channel.fields', 'channel.fields.fieldtype');
-
         $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
 
         if ($this->channelName) {
-            $this->scopeChannelName($query, $this->channelName);
+            $this->scopeChannel($query, $this->channelName);
         }
 
         return $query;
@@ -252,8 +255,23 @@ class Entry extends Model
 
         $collection = new $collectionClass($models);
 
+        $channelIds = array_unique(array_pluck($models, 'channel_id'));
 
         if ($models) {
+            $collection->channels = self::$channelRepository->getChannelsById($channelIds);
+
+            $collection->fields = new FieldCollection();
+
+            foreach ($collection->channels as $channel) {
+
+                $fields = self::$fieldRepository->getFieldsByGroup($channel->field_group);
+
+                foreach ($fields as $field) {
+                    $collection->fields->push($field);
+                }
+
+            }
+
             $collection->hydrate();
         }
 
@@ -381,6 +399,21 @@ class Entry extends Model
     }
 
     /**
+     * Get the Channel model associated with this entry
+     *
+     * @param  mixed                             $value
+     * @return \rsanchez\Deep\Model\Channel|null
+     */
+    public function getChannelAttribute($value)
+    {
+        if (self::$channelRepository instanceof ChannelRepository) {
+            return self::$channelRepository->getChannelById($this->channel_id);
+        }
+
+        return $value;
+    }
+
+    /**
      * Save the entry (not yet supported)
      *
      * @param  array $options
@@ -430,11 +463,19 @@ class Entry extends Model
      * @param  string|array                          $channelName
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeChannelName(Builder $query, $channelName)
+    public function scopeChannel(Builder $query, $channelName)
     {
         $channelName = is_array($channelName) ? $channelName : array($channelName);
 
-        return $this->requireTable($query, 'channels')->whereIn('channels.channel_name', $channelName);
+        $channels = self::$channelRepository->getChannelsByName($channelName);
+
+        $channelIds = array();
+
+        $channels->each(function ($channel) use (&$channelIds) {
+            $channelIds[] = $channel->channel_id;
+        });
+
+        return $channelIds ? $this->scopeChannelId($query, $channelIds) : $query;
     }
 
     /**
@@ -713,12 +754,10 @@ class Entry extends Model
     {
         $this->requireTable($query, 'channel_data');
 
-        $this->fetchAllFields();
-
         foreach ($search as $fieldName => $values) {
-            if (isset(self::$allFields[$fieldName])) {
+            if (self::$fieldRepository->hasField($fieldName)) {
 
-                $fieldId = self::$allFields[$fieldName];
+                $fieldId = self::$fieldRepository->getFieldId($fieldName);
 
                 $query->where(function ($query) use ($fieldId, $values) {
 
@@ -816,7 +855,7 @@ class Entry extends Model
      * Join the required table, once
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string                                $which table name
+     * @param  string                                $which  table name
      * @param  bool                                  $select whether to select this table's columns
      * @return \Illuminate\Database\Eloquent\Builder $query
      */

@@ -32,15 +32,6 @@ class Field extends Model
     protected $primaryKey = 'group_id';
 
     /**
-     * Define the Fieldtype Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function fieldtype()
-    {
-        return $this->hasOne('\\rsanchez\\Deep\\Model\\Fieldtype', 'name', 'field_type');
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @param  array                                     $fields

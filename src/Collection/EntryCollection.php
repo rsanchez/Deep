@@ -84,7 +84,7 @@ class EntryCollection extends Collection
         $this->entryIds = $entryIds;
 
         // loop through all the fields used in this collection to gather a list of fieldtypes used
-        $this->channels->fields->each(function ($field) use (&$fieldtypes, &$fieldIdsByFieldtype) {
+        $this->fields->each(function ($field) use (&$fieldtypes, &$fieldIdsByFieldtype) {
                 $fieldtypes[] = $field->field_type;
                 $fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
         });

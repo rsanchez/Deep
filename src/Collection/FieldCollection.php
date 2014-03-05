@@ -49,7 +49,7 @@ class FieldCollection extends Collection
     /**
      * {@inheritdoc}
      */
-    public function push(Field $field)
+    public function push($field)
     {
         $this->fieldsByName[$field->field_name] = $field;
 

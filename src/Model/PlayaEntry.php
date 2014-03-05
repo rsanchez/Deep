@@ -12,7 +12,6 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Entry;
-use rsanchez\Deep\Collection\PlayaCollection;
 
 /**
  * {@inheritdoc}

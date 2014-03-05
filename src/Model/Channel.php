@@ -37,18 +37,9 @@ class Channel extends Model
     protected $hidden = array('fields');
 
     /**
-     * Define the Channel Fields Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function fields()
-    {
-        return $this->hasMany('\\rsanchez\\Deep\\Model\\Field', 'group_id', 'field_group');
-    }
-
-    /**
      * {@inheritdoc}
      *
-     * @param  array                                     $models
+     * @param  array                                       $models
      * @return \rsanchez\Deep\Collection\ChannelCollection
      */
     public function newCollection(array $models = array())
