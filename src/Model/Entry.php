@@ -457,15 +457,15 @@ class Entry extends AbstractJoinableModel
      * Filter by Category ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $category_id
+     * @param  dynamic  string                       $categoryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeCategory(Builder $query, $category_id)
+    public function scopeCategory(Builder $query, $categoryId)
     {
-        $category_id = is_array($category_id) ? $category_id : array($category_id);
+        $categoryIds = array_slice(func_get_args(), 1);
 
-        return $query->whereHas('categories', function ($q) use ($category_id) {
-            $q->whereIn('categories.cat_id', $category_id);
+        return $query->whereHas('categories', function ($q) use ($categoryIds) {
+            $q->whereIn('categories.cat_id', $categoryIds);
         });
     }
 
@@ -473,15 +473,15 @@ class Entry extends AbstractJoinableModel
      * Filter by Category Name
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $category_name
+     * @param  dynamic  string                       $categoryName
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeCategoryName(Builder $query, $category_name)
+    public function scopeCategoryName(Builder $query, $categoryName)
     {
-        $category_name = is_array($category_name) ? $category_name : array($category_name);
+        $categoryNames = array_slice(func_get_args(), 1);
 
-        return $query->whereHas('categories', function ($q) use ($category_name) {
-            $q->whereIn('categories.cat_name', $category_name);
+        return $query->whereHas('categories', function ($q) use ($categoryNames) {
+            $q->whereIn('categories.cat_name', $categoryNames);
         });
     }
 
@@ -489,14 +489,14 @@ class Entry extends AbstractJoinableModel
      * Filter by Channel Name
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $channelName
+     * @param  dynamic  string                       $channelName
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeChannel(Builder $query, $channelName)
     {
-        $channelName = is_array($channelName) ? $channelName : array($channelName);
+        $channelNames = array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelName);
+        $channels = self::$channelRepository->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -504,35 +504,41 @@ class Entry extends AbstractJoinableModel
             $channelIds[] = $channel->channel_id;
         });
 
-        return $channelIds ? $this->scopeChannelId($query, $channelIds) : $query;
+        if ($channelIds) {
+            array_unshift($channelIds, $query);
+
+            call_user_func_array(array($this, 'scopeChannelId'), $channelIds);
+        }
+
+        return $query;
     }
 
     /**
      * Filter by Channel ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  int|array                             $channelId
+     * @param  dynamic  int                          $channelId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeChannelId(Builder $query, $channelId)
     {
-        $channelId = is_array($channelId) ? $channelId : array($channelId);
+        $channelIds = array_slice(func_get_args(), 1);
 
-        return $query->whereIn('channel_titles.channel_id', $channelId);
+        return $query->whereIn('channel_titles.channel_id', $channelIds);
     }
 
     /**
      * Filter by Author ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  int|array                             $authorId
+     * @param  dynamic  int                          $authorId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAuthorId(Builder $query, $authorId)
     {
-        $authorId = is_array($authorId) ? $authorId : array($authorId);
+        $authorIds = array_slice(func_get_args(), 1);
 
-        return $query->whereIn('channel_titles.author_id', $authorId);
+        return $query->whereIn('channel_titles.author_id', $authorIds);
     }
 
     /**
@@ -545,6 +551,8 @@ class Entry extends AbstractJoinableModel
     public function scopeShowExpired(Builder $query, $showExpired = true)
     {
         if (! $showExpired) {
+            $prefix = $query->getQuery()->getConnection()->getTablePrefix();
+
             $query->whereRaw(
                 "(`{$prefix}channel_titles`.`expiration_date` = '' OR  `{$prefix}channel_titles`.`expiration_date` > NOW())"
             );
@@ -573,13 +581,16 @@ class Entry extends AbstractJoinableModel
      * Set a Fixed Order
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  array                                 $fixedOrder
+     * @param  dynamic  int                          $fixedOrder
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFixedOrder(Builder $query, array $fixedOrder)
+    public function scopeFixedOrder(Builder $query, $fixedOrder)
     {
-        return $this->scopeEntryId($query, $fixedOrder)
-                    ->orderBy('FIELD('.implode(', ', $fixedOrder).')', 'asc');
+        $fixedOrder = array_slice(func_get_args(), 1);
+
+        call_user_func_array(array($this, 'scopeEntryId'), func_get_args());
+
+        return $query->orderBy('FIELD('.implode(', ', $fixedOrder).')', 'asc');
     }
 
     /**
@@ -602,28 +613,28 @@ class Entry extends AbstractJoinableModel
      * Filter by Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $entryId
+     * @param  dynamic  string                       $entryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEntryId(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryIds = array_slice(func_get_args(), 1);
 
-        return $query->whereIn('channel_titles.entry_id', $entryId);
+        return $query->whereIn('channel_titles.entry_id', $entryIds);
     }
 
     /**
      * Filter by Not Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $notEntryId
+     * @param  dynamic  string                       $notEntryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeNotEntryId(Builder $query, $notEntryId)
     {
-        $notEntryId = is_array($notEntryId) ? $notEntryId : array($notEntryId);
+        $notEntryIds = array_slice(func_get_args(), 1);
 
-        return $query->whereNotIn('channel_titles.entry_id', $notEntryId);
+        return $query->whereNotIn('channel_titles.entry_id', $notEntryIds);
     }
 
     /**
@@ -654,28 +665,28 @@ class Entry extends AbstractJoinableModel
      * Filter by Member Group ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  int|array                             $groupId
+     * @param  dynamic  int                          $groupId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeGroupId(Builder $query, $groupId)
     {
-        $groupId = is_array($groupId) ? $groupId : array($groupId);
+        $groupIds = array_slice(func_get_args(), 1);
 
-        return $this->requireTable($query, 'members')->whereIn('members.group_id', $groupId);
+        return $this->requireTable($query, 'members')->whereIn('members.group_id', $groupIds);
     }
 
     /**
      * Filter by Not Member Group ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  int|array                             $notGroupId
+     * @param  dynamic  int                          $notGroupId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeNotGroupId(Builder $query, $notGroupId)
     {
-        $notGroupId = is_array($notGroupId) ? $notGroupId : array($notGroupId);
+        $notGroupIds = array_slice(func_get_args(), 1);
 
-        return $this->requireTable($query, 'members')->whereNotIn('members.group_id', $notGroupId);
+        return $this->requireTable($query, 'members')->whereNotIn('members.group_id', $notGroupIds);
     }
 
     /**
@@ -722,14 +733,14 @@ class Entry extends AbstractJoinableModel
      * Filter by Entry Status
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $status
+     * @param  dynamic  string                       $status
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, $status)
     {
-        $status = is_array($status) ? $status : array($status);
+        $statuses = array_slice(func_get_args(), 1);
 
-        return $query->whereIn('channel_titles.status', $status);
+        return $query->whereIn('channel_titles.status', $statuses);
     }
 
     /**
@@ -752,28 +763,28 @@ class Entry extends AbstractJoinableModel
      * Filter by URL Title
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $urlTitle
+     * @param  dynamic  string                       $urlTitle
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUrlTitle(Builder $query, $urlTitle)
     {
-        $urlTitle = is_array($urlTitle) ? $urlTitle : array($urlTitle);
+        $urlTitles = array_slice(func_get_args(), 1);
 
-        return $query->whereIn('channel_titles.url_title', $urlTitle);
+        return $query->whereIn('channel_titles.url_title', $urlTitles);
     }
 
     /**
      * Filter by Member Username
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string|array                          $username
+     * @param  dynamic  string                       $username
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUsername(Builder $query, $username)
     {
-        $username = is_array($username) ? $username : array($username);
+        $usernames = array_slice(func_get_args(), 1);
 
-        return $this->requireTable($query, 'members')->whereIn('members.username', $username);
+        return $this->requireTable($query, 'members')->whereIn('members.username', $usernames);
     }
 
     /**
