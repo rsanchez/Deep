@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
+use rsanchez\Deep\Model\AbstractJoinableModel;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
@@ -22,7 +23,7 @@ use DateTimeZone;
 /**
  * Model for the channel_titles table, joined with channel_data
  */
-class Entry extends Model
+class Entry extends AbstractJoinableModel
 {
     /**
      * {@inheritdoc}
@@ -50,15 +51,6 @@ class Entry extends Model
      * @var string
      */
     protected $channelName;
-
-    /**
-     * Join tables
-     * @var array
-     */
-    protected static $tables = array(
-        'members' => array('members.member_id', 'channel_titles.author_id'),
-        'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
-    );
 
     /**
      * A map of parameter names => model scopes
@@ -219,6 +211,18 @@ class Entry extends Model
         if (! self::$channelRepository instanceof ChannelRepository) {
             self::$channelRepository = new ChannelRepository(Channel::all(), self::$fieldRepository);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function joinTables()
+    {
+        return array(
+            'members' => function ($query) {
+                $query->join('members', 'members.member_id', '=', 'channel_titles.author_id');
+            },
+        );
     }
 
     /**
@@ -854,32 +858,5 @@ class Entry extends Model
     public function scopeDay(Builder $query, $day)
     {
         return $query->where('channel_titles.day', $day);
-    }
-
-    /**
-     * Join the required table, once
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string                                $which  table name
-     * @param  bool                                  $select whether to select this table's columns
-     * @return \Illuminate\Database\Eloquent\Builder $query
-     */
-    protected function requireTable(Builder $query, $which, $select = false)
-    {
-        if (! isset(static::$tables[$which])) {
-            return $query;
-        }
-
-        foreach ($query->getQuery()->joins as $joinClause) {
-            if ($joinClause->table === $which) {
-                return $query;
-            }
-        }
-
-        if ($select) {
-            $query->addSelect($which.'.*');
-        }
-
-        return $query->join($which, static::$tables[$which][0], '=', static::$tables[$which][1]);
     }
 }

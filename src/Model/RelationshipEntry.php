@@ -26,16 +26,22 @@ class RelationshipEntry extends Entry
     protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_id', 'field_id', 'grid_field_id', 'grid_col_id', 'grid_row_id', 'child_id', 'order', 'relationship_id');
 
     /**
-     * Join tables
-     * @var array
+     * {@inheritdoc}
      */
-    protected static $tables = array(
-        'members' => array('members.member_id', 'channel_titles.author_id'),
-        'channels' => array('channels.channel_id', 'channel_titles.channel_id'),
-        'relationships' => array('relationships.child_id', 'channel_titles.entry_id'),
-    );
-
     protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function joinTables()
+    {
+        return array_merge(parent::joinTables(), array(
+            'relationships' => function ($query) {
+                $query->addSelect('relationships.*');
+                $query->join('relationships', 'relationships.child_id', '=', 'channel_titles.entry_id');
+            },
+        ));
+    }
 
     /**
      * Filter by Parent Entry ID

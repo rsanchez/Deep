@@ -11,13 +11,14 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Model\AbstractJoinableModel;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 
 /**
  * Model for the assets_files table, joined with assets_selections
  */
-class Asset extends Model implements FileInterface
+class Asset extends AbstractJoinableModel implements FileInterface
 {
     /**
      * {@inheritdoc}
@@ -102,30 +103,14 @@ class Asset extends Model implements FileInterface
     }
 
     /**
-     * Join the required table, once
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  string                                $which table name
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * {@inheritdoc}
      */
-    protected function requireTable(Builder $query, $which)
+    protected static function joinTables()
     {
-        static $tables = array(
-            'assets_selections' => array('assets_selections.file_id', 'assets_files.file_id'),
+        return array(
+            'assets_selections' => function ($query) {
+                $query->join('assets_selections', 'assets_selections.file_id', '=', 'assets_files.file_id');
+            },
         );
-
-        if (! isset($tables[$which])) {
-            return $query;
-        }
-
-        if (isset($query->getQuery()->joins)) {
-            foreach ($query->getQuery()->joins as $joinClause) {
-                if ($joinClause->table === $which) {
-                    return $query;
-                }
-            }
-        }
-
-        return $query->join($which, $tables[$which][0], '=', $tables[$which][1]);
     }
 }
