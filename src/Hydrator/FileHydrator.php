@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\File;
+use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Repository\UploadPrefRepository;
 
 /**
  * Hydrator for the File fieldtype
@@ -27,11 +29,37 @@ class FileHydrator extends AbstractHydrator
     protected $files;
 
     /**
+     * UploadPref model repository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepository
+     */
+    protected $uploadPrefRepository;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param string                                       $fieldtype
+     * @var \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
+     */
+    public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepository $uploadPrefRepository)
+    {
+        parent::__construct($collection, $fieldtype);
+
+        $this->uploadPrefRepository = $uploadPrefRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function preload(array $entryIds)
     {
-        $this->files = File::with('uploadPref')->fromEntryCollection($this->collection)->get();
+        $this->files = File::fromEntryCollection($this->collection)->get();
+
+        foreach ($this->files as $file) {
+            if ($file->upload_location_id && $uploadPref = $this->uploadPrefRepository->find($file->upload_location_id)) {
+                $file->setUploadPref($uploadPref);
+            }
+        }
     }
 
     /**

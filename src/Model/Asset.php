@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\AbstractJoinableModel;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
+use rsanchez\Deep\Model\UploadPref;
 
 /**
  * Model for the assets_files table, joined with assets_selections

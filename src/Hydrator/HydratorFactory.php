@@ -113,7 +113,7 @@ class HydratorFactory
     }
 
     /**
-     * Create a new Hydrator object
+     * Create a new AssetsHydrator object
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @param  string                                    $fieldtype
      * @return \rsanchez\Deep\Hydrator\AssetsHydrator
@@ -121,6 +121,17 @@ class HydratorFactory
     public function newAssetsHydrator(EntryCollection $collection, $fieldtype)
     {
         return new AssetsHydrator($collection, $fieldtype, $this->uploadPrefRepository);
+    }
+
+    /**
+     * Create a new FileHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\FileHydrator
+     */
+    public function newFileHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new FileHydrator($collection, $fieldtype, $this->uploadPrefRepository);
     }
 
     /**
