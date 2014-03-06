@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 
 /**

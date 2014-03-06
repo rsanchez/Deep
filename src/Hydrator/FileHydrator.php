@@ -37,8 +37,8 @@ class FileHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection    $collection
-     * @param string                                       $fieldtype
+     * @param \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param string                                    $fieldtype
      * @var \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
      */
     public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepository $uploadPrefRepository)
