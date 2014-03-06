@@ -272,8 +272,6 @@ class Entry extends AbstractJoinableModel
 
         $hydrators = self::$hydratorFactory->getHydrators($collection);
 
-        $fieldtypesWithoutHydrator = array_diff($collection->getFieldtypes(), array_keys($hydrators));
-
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
             $hydrator->preload($collection->getEntryIds());
@@ -282,11 +280,6 @@ class Entry extends AbstractJoinableModel
         // loop again to actually hydrate
         foreach ($collection as $entry) {
             foreach ($hydrators as $hydrator) {
-                $hydrator->hydrate($entry);
-            }
-
-            foreach ($fieldtypesWithoutHydrator as $fieldtype) {
-                $hydrator = self::$hydratorFactory->newDefaultHydrator($collection, $fieldtype);
                 $hydrator->hydrate($entry);
             }
         }

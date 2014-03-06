@@ -46,9 +46,17 @@ class Factory
     {
         $hydrators = array();
 
+        // add the built-in ones
         foreach ($this->hydrators as $fieldtype => $class) {
             if ($collection->hasFieldtype($fieldtype)) {
                 $hydrators[$fieldtype] = $this->newHydrator($collection, $fieldtype);
+            }
+        }
+
+        // create default hydrators for fieldtypes not accounted for
+        foreach ($collection->getFieldtypes() as $fieldtype) {
+            if (! array_key_exists($fieldtype, $hydrators)) {
+                $hydrators[$fieldtype] = new DefaultHydrator($collection, $fieldtype);
             }
         }
 
@@ -63,12 +71,9 @@ class Factory
      */
     public function newHydrator(EntryCollection $collection, $fieldtype)
     {
-        if (! array_key_exists($fieldtype, $this->hydrators)) {
-            throw new \Exception('Invalid hydrator: '.$fieldtype);
-        }
-
         $method = 'new'.ucfirst($fieldtype).'Hydrator';
 
+        // some hydrators may have dependencies to be injected
         if (method_exists($this, $method)) {
             return $this->$method($collection, $fieldtype);
         }
@@ -76,16 +81,5 @@ class Factory
         $class = $this->hydrators[$fieldtype];
 
         return new $class($collection, $fieldtype);
-    }
-
-    /**
-     * Create a DefaultHydrator object
-     * @param \rsanchez\Deep\Collection\EntryCollection $collection
-     * @param string                                    $fieldtype
-     * @return \rsanchez\Deep\Hydrator\DefaultHydrator
-     */
-    public function newDefaultHydrator(EntryCollection $collection, $fieldtype)
-    {
-        return new DefaultHydrator($collection, $fieldtype);
     }
 }
