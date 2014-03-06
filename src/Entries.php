@@ -13,8 +13,10 @@ use Illuminate\Container\Container;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\Site;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
+use rsanchez\Deep\Repository\SiteRepository;
 
 /**
  * IoC Container
@@ -36,12 +38,20 @@ class Entries extends Container
             return new Channel();
         });
 
+        $this->bind('Site', function ($app) {
+            return new Site();
+        });
+
         $this->singleton('FieldRepository', function ($app) {
             return new FieldRepository($app->make('Field')->all());
         });
 
         $this->singleton('ChannelRepository', function ($app) {
             return new ChannelRepository($app->make('Channel')->all(), $app->make('FieldRepository'));
+        });
+
+        $this->singleton('SiteRepository', function ($app) {
+            return new SiteRepository($app->make('Site')->all());
         });
 
         $this->singleton('Entry', function ($app) {
