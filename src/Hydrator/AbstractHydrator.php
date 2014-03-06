@@ -32,7 +32,11 @@ abstract class AbstractHydrator implements HydratorInterface
     protected $fieldtype;
 
     /**
-     * {@inheritdoc}
+     * Constructor
+     *
+     * Set the EntryCollection and load any global elements the hydrator might need
+     * @param \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param string          $fieldtype
      */
     public function __construct(EntryCollection $collection, $fieldtype)
     {

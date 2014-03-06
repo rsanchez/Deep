@@ -13,6 +13,7 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepository;
+use rsanchez\Deep\Hydrator\AssetsHydrator;
 
 /**
  * Factory for building new Hydrators
@@ -38,9 +39,24 @@ class HydratorFactory
         'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
     );
 
+    /**
+     * Site model repository
+     * @var \rsanchez\Deep\Repository\SiteRepository
+     */
     protected $siteRepository;
+
+    /**
+     * UploadPref model repository
+     * @var \rsanchez\Deep\Repository\UploadPredRepository
+     */
     protected $uploadPrefRepository;
 
+    /**
+     * Constructor
+     *
+     * @var \rsanchez\Deep\Repository\SiteRepository $siteRepository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
+     */
     public function __construct(SiteRepository $siteRepository, UploadPrefRepository $uploadPrefRepository)
     {
         $this->siteRepository = $siteRepository;
@@ -100,9 +116,20 @@ class HydratorFactory
      * Create a new Hydrator object
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @param  string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\AssetsHydrator
+     */
+    public function newAssetsHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new AssetsHydrator($collection, $fieldtype, $this->uploadPrefRepository);
+    }
+
+    /**
+     * Create a new Hydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
      * @return \rsanchez\Deep\Hydrator\WysiwygHydrator
      */
-    public function newWysiwygHydrator(EntryCollection $collection, $fieldtype, $uploadPrefsRepository, $siteRepository)
+    public function newWysiwygHydrator(EntryCollection $collection, $fieldtype)
     {
     }
 }

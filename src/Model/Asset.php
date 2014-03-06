@@ -45,12 +45,19 @@ class Asset extends AbstractJoinableModel implements FileInterface
     protected $appends = array('url');
 
     /**
-     * Define the Upload Preferences Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * UploadPref model
+     * @var \rsanchez\Deep\Model\UploadPref
      */
-    public function uploadPref()
+    protected $uploadPref;
+
+    /**
+     * Set the UploadPref
+     * @var \rsanchez\Deep\Model\UploadPref $uploadPref
+     * @return void
+     */
+    public function setUploadPref(UploadPref $uploadPref)
     {
-        return $this->hasOne('\\rsanchez\\Deep\\Model\\UploadPref', 'id', 'filedir_id');
+        $this->uploadPref = $uploadPref;
     }
 
     /**

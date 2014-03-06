@@ -11,9 +11,11 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\Asset;
+use rsanchez\Deep\Repository\UploadPrefRepository;
 
 /**
  * Hydrator for the Assets fieldtype
@@ -27,11 +29,37 @@ class AssetsHydrator extends AbstractHydrator
     protected $selections;
 
     /**
+     * UploadPref model repository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepository
+     */
+    protected $uploadPrefRepository;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param string                                       $fieldtype
+     * @var \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
+     */
+    public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepository $uploadPrefRepository)
+    {
+        parent::__construct($collection, $fieldtype);
+
+        $this->uploadPrefRepository = $uploadPrefRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function preload(array $entryIds)
     {
-        $this->selections = Asset::with('uploadPref')->entryId($entryIds)->get();
+        $this->selections = Asset::entryId($entryIds)->get();
+
+        foreach ($this->selections as $asset) {
+            if ($asset->filedir_id && $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {
+                $asset->setUploadPref($uploadPref);
+            }
+        }
     }
 
     /**

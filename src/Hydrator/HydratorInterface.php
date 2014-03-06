@@ -20,15 +20,6 @@ use rsanchez\Deep\Model\Entry;
 interface HydratorInterface
 {
     /**
-     * Constructor
-     *
-     * Set the EntryCollection and load any global elements the hydrator might need
-     * @param EntryCollection $collection
-     * @param string          $fieldtype
-     */
-    public function __construct(EntryCollection $collection, $fieldtype);
-
-    /**
      * Preload any custom field data that resides in another DB table
      * @param  array $entryIds all the entry IDs in the collection (including related entries)
      * @return void
