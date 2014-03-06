@@ -11,11 +11,13 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
+use rsanchez\Deep\Repository\SiteRepository;
+use rsanchez\Deep\Repository\UploadPrefRepository;
 
 /**
  * Factory for building new Hydrators
  */
-class Factory
+class HydratorFactory
 {
     /**
      * Array of fieldtype => hydrator class name
@@ -36,11 +38,20 @@ class Factory
         'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
     );
 
+    protected $siteRepository;
+    protected $uploadPrefRepository;
+
+    public function __construct(SiteRepository $siteRepository, UploadPrefRepository $uploadPrefRepository)
+    {
+        $this->siteRepository = $siteRepository;
+        $this->uploadPrefRepository = $uploadPrefRepository;
+    }
+
     /**
      * Get an array of Hydrators needed by the specified collection
      *    'field_name' => AbstractHydrator
-     * @param \rsanchez\Deep\Collection\EntryCollection $collection
-     * @return array  AbstractHydrator[]
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @return array                                     AbstractHydrator[]
      */
     public function getHydrators(EntryCollection $collection)
     {
@@ -65,21 +76,33 @@ class Factory
 
     /**
      * Create a new Hydrator object
-     * @param \rsanchez\Deep\Collection\EntryCollection $collection
-     * @param string                                    $fieldtype
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
      * @return \rsanchez\Deep\Hydrator\AbstractHydrator
      */
     public function newHydrator(EntryCollection $collection, $fieldtype)
     {
-        $method = 'new'.ucfirst($fieldtype).'Hydrator';
+        $class = $this->hydrators[$fieldtype];
+
+        $baseClass = basename(str_replace('\\', DIRECTORY_SEPARATOR, $class));
+
+        $method = 'new'.$baseClass;
 
         // some hydrators may have dependencies to be injected
         if (method_exists($this, $method)) {
             return $this->$method($collection, $fieldtype);
         }
 
-        $class = $this->hydrators[$fieldtype];
-
         return new $class($collection, $fieldtype);
+    }
+
+    /**
+     * Create a new Hydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\WysiwygHydrator
+     */
+    public function newWysiwygHydrator(EntryCollection $collection, $fieldtype, $uploadPrefsRepository, $siteRepository)
+    {
     }
 }

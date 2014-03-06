@@ -17,7 +17,7 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
-use rsanchez\Deep\Hydrator\Factory as HydratorFactory;
+use rsanchez\Deep\Hydrator\HydratorFactory;
 use DateTime;
 use DateTimeZone;
 
@@ -70,12 +70,6 @@ class Entry extends AbstractJoinableModel
      * @var \rsanchez\Deep\Repository\FieldRepository
      */
     public static $fieldRepository;
-
-    /**
-     * Global Field Repository
-     * @var \rsanchez\Deep\Repository\SiteRepository
-     */
-    public static $siteRepository;
 
     /**
      * Hydrator Factory
@@ -159,16 +153,6 @@ class Entry extends AbstractJoinableModel
     public static function setChannelRepository(ChannelRepository $channelRepository)
     {
         self::$channelRepository = $channelRepository;
-    }
-
-    /**
-     * Set the global SiteRepository
-     * @param  \rsanchez\Deep\Repository\SiteRepository $siteRepository
-     * @return void
-     */
-    public static function setSiteRepository(SiteRepository $siteRepository)
-    {
-        self::$siteRepository = $siteRepository;
     }
 
     /**

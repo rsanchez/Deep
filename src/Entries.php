@@ -14,10 +14,12 @@ use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Site;
+use rsanchez\Deep\Model\UploadPref;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
-use rsanchez\Deep\Hydrator\Factory as HydratorFactory;
+use rsanchez\Deep\Repository\UploadPrefRepository;
+use rsanchez\Deep\Hydrator\HydratorFactory;
 
 /**
  * IoC Container
@@ -43,20 +45,28 @@ class Entries extends Container
             return new Site();
         });
 
+        $this->singleton('UploadPref', function ($app) {
+            return new UploadPref();
+        });
+
         $this->singleton('FieldRepository', function ($app) {
-            return new FieldRepository($app->make('Field')->all());
+            return new FieldRepository($app->make('Field'));
         });
 
         $this->singleton('ChannelRepository', function ($app) {
-            return new ChannelRepository($app->make('Channel')->all(), $app->make('FieldRepository'));
+            return new ChannelRepository($app->make('Channel'), $app->make('FieldRepository'));
         });
 
         $this->singleton('SiteRepository', function ($app) {
-            return new SiteRepository($app->make('Site')->all());
+            return new SiteRepository($app->make('Site'));
+        });
+
+        $this->singleton('UploadPrefRepository', function ($app) {
+            return new UploadPrefRepository($app->make('UploadPref'));
         });
 
         $this->singleton('HydratorFactory', function ($app) {
-            return new HydratorFactory();
+            return new HydratorFactory($app->make('SiteRepository'), $app->make('UploadPrefRepository'));
         });
 
         $this->singleton('Entry', function ($app) {

@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Collection\UploadPrefCollection;
 
 /**
  * Model for the upload_prefs table
@@ -22,4 +23,15 @@ class UploadPref extends Model
      * @var string
      */
     protected $table = 'upload_prefs';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                          $models
+     * @return \rsanchez\Deep\Collection\UploadPrefCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new UploadPrefCollection($models);
+    }
 }

@@ -10,26 +10,22 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\SiteCollection;
+use rsanchez\Deep\Model\Site;
+use rsanchez\Deep\Repository\AbstractDeferredRepository;
 
 /**
  * Repository of all Sites
  */
-class SiteRepository
+class SiteRepository extends AbstractDeferredRepository
 {
     /**
-     * Collection of all Channels
-     * @var \rsanchez\Deep\Collection\SiteCollection
-     */
-    protected $collection;
-
-    /**
-     * Constructor
+     * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\SiteCollection $collection
+     * @param \rsanchez\Deep\Model\Site $model
      */
-    public function __construct(SiteCollection $collection)
+    public function __construct(Site $model)
     {
-        $this->collection = $collection;
+        parent::__construct($model);
     }
 
     /**
@@ -39,6 +35,8 @@ class SiteRepository
      */
     public function getSites()
     {
+        $this->boot();
+
         return $this->collection;
     }
 }

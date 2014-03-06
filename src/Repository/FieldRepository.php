@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\FieldCollection;
+use rsanchez\Deep\Model\Field;
 
 /**
  * Repository of all Fields
@@ -37,11 +38,11 @@ class FieldRepository
     /**
      * Constructor
      *
-     * @param \rsanchez\Deep\Collection\FieldCollection $collection
+     * @param \rsanchez\Deep\Model\Field $model
      */
-    public function __construct(FieldCollection $collection)
+    public function __construct(Field $model)
     {
-        $this->collection = $collection;
+        $this->collection = $model->all();
 
         foreach ($this->collection as $field) {
             $this->fieldsByName[$field->field_name] = $field;

@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\ChannelCollection;
+use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Repository\FieldRepository;
 
 /**
@@ -44,12 +45,12 @@ class ChannelRepository
     /**
      * Constructor
      *
-     * @param \rsanchez\Deep\Collection\ChannelCollection $collection
-     * @param \rsanchez\Deep\Repository\FieldRepository   $fieldRepository
+     * @param \rsanchez\Deep\Model\Channel              $model
+     * @param \rsanchez\Deep\Repository\FieldRepository $fieldRepository
      */
-    public function __construct(ChannelCollection $collection, FieldRepository $fieldRepository)
+    public function __construct(Channel $model, FieldRepository $fieldRepository)
     {
-        $this->collection = $collection;
+        $this->collection = $model->all();
         $this->fieldRepository = $fieldRepository;
 
         foreach ($this->collection as $channel) {
@@ -63,6 +64,7 @@ class ChannelRepository
      * Get Collection of Channels by channel ID
      *
      * @var array $channelIds
+     * @return \rsanchez\Deep\Collection\ChannelCollection
      */
     public function getChannelsById(array $channelIds)
     {
@@ -75,6 +77,7 @@ class ChannelRepository
      * Get Collection of Channels by channel name
      *
      * @var array $channelNames
+     * @return \rsanchez\Deep\Collection\ChannelCollection
      */
     public function getChannelsByName(array $channelNames)
     {
@@ -84,9 +87,20 @@ class ChannelRepository
     }
 
     /**
+     * Alias to getChannelById
+     * @var int $id
+     * @return \rsanchez\Deep\Model\Channel|null
+     */
+    public function find($id)
+    {
+        return $this->getChannelById($id);
+    }
+
+    /**
      * Get single Channel by channel ID
      *
      * @var int $channelId
+     * @return \rsanchez\Deep\Model\Channel|null
      */
     public function getChannelById($channelId)
     {
@@ -97,6 +111,7 @@ class ChannelRepository
      * Get single Channel by channel name
      *
      * @var string $channelName
+     * @return \rsanchez\Deep\Model\Channel|null
      */
     public function getChannelByName($channelName)
     {
