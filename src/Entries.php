@@ -63,6 +63,7 @@ class Entries extends Container
             Entry::setFieldRepository($app->make('FieldRepository'));
             Entry::setChannelRepository($app->make('ChannelRepository'));
             Entry::setHydratorFactory($app->make('HydratorFactory'));
+
             return new Entry();
         });
     }

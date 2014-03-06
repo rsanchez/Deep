@@ -14,7 +14,7 @@ use rsanchez\Deep\Collection\SiteCollection;
 /**
  * Repository of all Sites
  */
-class SitesRepository
+class SiteRepository
 {
     /**
      * Collection of all Channels

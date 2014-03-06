@@ -33,7 +33,7 @@ abstract class AbstractJoinableModel extends Model
      * Join the required table, once
      *
      * @param  \Illuminate\Database\Eloquent\Builder $builder
-     * @param  string                                $table  table name
+     * @param  string                                $table   table name
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     protected function requireTable(Builder $builder, $table)

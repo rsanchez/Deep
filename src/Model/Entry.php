@@ -72,6 +72,12 @@ class Entry extends AbstractJoinableModel
     public static $fieldRepository;
 
     /**
+     * Global Field Repository
+     * @var \rsanchez\Deep\Repository\SiteRepository
+     */
+    public static $siteRepository;
+
+    /**
      * Hydrator Factory
      * @var \rsanchez\Deep\Hydrator\Factory
      */
@@ -137,7 +143,7 @@ class Entry extends AbstractJoinableModel
 
     /**
      * Set the global FieldRepository
-     * @param \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
      * @return void
      */
     public static function setFieldRepository(FieldRepository $fieldRepository)
@@ -147,7 +153,7 @@ class Entry extends AbstractJoinableModel
 
     /**
      * Set the global ChannelRepository
-     * @param \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
      * @return void
      */
     public static function setChannelRepository(ChannelRepository $channelRepository)
@@ -157,7 +163,17 @@ class Entry extends AbstractJoinableModel
 
     /**
      * Set the global SiteRepository
-     * @param \rsanchez\Deep\Repository\HydratorFactory $hydratorFactory
+     * @param  \rsanchez\Deep\Repository\SiteRepository $siteRepository
+     * @return void
+     */
+    public static function setSiteRepository(SiteRepository $siteRepository)
+    {
+        self::$siteRepository = $siteRepository;
+    }
+
+    /**
+     * Set the global SiteRepository
+     * @param  \rsanchez\Deep\Repository\HydratorFactory $hydratorFactory
      * @return void
      */
     public static function setHydratorFactory(HydratorFactory $hydratorFactory)

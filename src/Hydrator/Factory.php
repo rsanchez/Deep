@@ -1,10 +1,20 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
 
+/**
+ * Factory for building new Hydrators
+ */
 class Factory
 {
     /**
@@ -26,6 +36,12 @@ class Factory
         'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
     );
 
+    /**
+     * Get an array of Hydrators needed by the specified collection
+     *    'field_name' => AbstractHydrator
+     * @param \rsanchez\Deep\Collection\EntryCollection $collection
+     * @return array  AbstractHydrator[]
+     */
     public function getHydrators(EntryCollection $collection)
     {
         $hydrators = array();
@@ -35,9 +51,16 @@ class Factory
                 $hydrators[$fieldtype] = $this->newHydrator($collection, $fieldtype);
             }
         }
+
         return $hydrators;
     }
 
+    /**
+     * Create a new Hydrator object
+     * @param \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\AbstractHydrator
+     */
     public function newHydrator(EntryCollection $collection, $fieldtype)
     {
         if (! array_key_exists($fieldtype, $this->hydrators)) {
@@ -55,6 +78,12 @@ class Factory
         return new $class($collection, $fieldtype);
     }
 
+    /**
+     * Create a DefaultHydrator object
+     * @param \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\DefaultHydrator
+     */
     public function newDefaultHydrator(EntryCollection $collection, $fieldtype)
     {
         return new DefaultHydrator($collection, $fieldtype);
