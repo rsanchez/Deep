@@ -28,7 +28,7 @@ class PlayaEntry extends Entry
     /**
      * {@inheritdoc}
      */
-    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
+    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\PlayaCollection';
 
     /**
      * {@inheritdoc}

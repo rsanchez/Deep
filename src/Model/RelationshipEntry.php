@@ -28,7 +28,7 @@ class RelationshipEntry extends Entry
     /**
      * {@inheritdoc}
      */
-    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
+    protected $collectionClass = '\\rsanchez\\Deep\\Collection\\RelationshipCollection';
 
     /**
      * {@inheritdoc}
