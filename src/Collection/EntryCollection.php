@@ -12,32 +12,13 @@ namespace rsanchez\Deep\Collection;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Collection\GridColCollection;
-use rsanchez\Deep\Hydrator\DefaultHydrator;
+use rsanchez\Deep\Model\Field;
 
 /**
  * Collection of \rsanchez\Deep\Model\Entry
  */
 class EntryCollection extends Collection
 {
-    /**
-     * Array of fieldtype => hydrator class name
-     * @var array
-     */
-    protected static $hydrators = array(
-        'matrix'                => '\\rsanchez\\Deep\\Hydrator\\MatrixHydrator',
-        'grid'                  => '\\rsanchez\\Deep\\Hydrator\\GridHydrator',
-        'playa'                 => '\\rsanchez\\Deep\\Hydrator\\PlayaHydrator',
-        'relationship'          => '\\rsanchez\\Deep\\Hydrator\\RelationshipHydrator',
-        'assets'                => '\\rsanchez\\Deep\\Hydrator\\AssetsHydrator',
-        'file'                  => '\\rsanchez\\Deep\\Hydrator\\FileHydrator',
-        'date'                  => '\\rsanchez\\Deep\\Hydrator\\DateHydrator',
-        'multi_select'          => '\\rsanchez\\Deep\\Hydrator\\PipeHydrator',
-        'checkboxes'            => '\\rsanchez\\Deep\\Hydrator\\PipeHydrator',
-        'fieldpack_checkboxes'  => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
-        'fieldpack_multiselect' => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
-        'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
-    );
-
     /**
      * Matrix columns used by this collection
      * @var \rsanchez\Deep\Collection\MatrixColCollection
@@ -76,60 +57,13 @@ class EntryCollection extends Collection
     public $channels;
 
     /**
-     * Loop through all the hydrators to set Entry custom field attributes
-     * @return void
-     */
-    public function hydrate()
-    {
-        $fieldtypes =& $this->fieldtypes;
-        $fieldIdsByFieldtype =& $this->fieldIdsByFieldtype;
-
-        $entryIds = $this->modelKeys();
-
-        $this->entryIds = $entryIds;
-
-        // loop through all the fields used in this collection to gather a list of fieldtypes used
-        $this->fields->each(function ($field) use (&$fieldtypes, &$fieldIdsByFieldtype) {
-                $fieldtypes[] = $field->field_type;
-                $fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
-        });
-
-        $hydrators = array();
-
-        foreach (self::$hydrators as $fieldtype => $class) {
-            if ($this->hasFieldtype($fieldtype)) {
-                $hydrators[$fieldtype] = new $class($this, $fieldtype);
-            }
-        }
-
-        $fieldtypesWithoutHydrator = array_diff($fieldtypes, array_keys($hydrators));
-
-        // loop through the hydrators for preloading
-        foreach ($hydrators as $hydrator) {
-            $hydrator->preload($this->entryIds());
-        }
-
-        // loop again to actually hydrate
-        foreach ($this as $entry) {
-            foreach ($hydrators as $hydrator) {
-                $hydrator->hydrate($entry);
-            }
-
-            foreach ($fieldtypesWithoutHydrator as $fieldtype) {
-                $hydrator = new DefaultHydrator($this, $fieldtype);
-                $hydrator->hydrate($entry);
-            }
-        }
-    }
-
-    /**
      * Get all the entry Ids from this collection.
      * This includes both the entries directly in this collection,
      * and entries found in Playa/Relationship fields
      *
      * @return array
      */
-    public function entryIds()
+    public function getEntryIds()
     {
         return $this->entryIds;
     }
@@ -142,6 +76,20 @@ class EntryCollection extends Collection
     public function addEntryIds(array $entryIds)
     {
         $this->entryIds = array_unique(array_merge($this->entryIds, $entryIds));
+    }
+
+    public function getFieldtypes()
+    {
+        return $this->fieldtypes;
+    }
+
+    public function addField(Field $field)
+    {
+        if (! in_array($field->field_type, $this->fieldtypes)) {
+            $this->fieldtypes[] = $field->field_type;
+        }
+
+        $this->fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
     }
 
     /**

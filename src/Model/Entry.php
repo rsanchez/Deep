@@ -17,6 +17,7 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
+use rsanchez\Deep\Hydrator\Factory as HydratorFactory;
 use DateTime;
 use DateTimeZone;
 
@@ -69,6 +70,12 @@ class Entry extends AbstractJoinableModel
      * @var \rsanchez\Deep\Repository\FieldRepository
      */
     public static $fieldRepository;
+
+    /**
+     * Hydrator Factory
+     * @var \rsanchez\Deep\Hydrator\Factory
+     */
+    public static $hydratorFactory;
 
     /**
      * {@inheritdoc}
@@ -149,6 +156,16 @@ class Entry extends AbstractJoinableModel
     }
 
     /**
+     * Set the global SiteRepository
+     * @param \rsanchez\Deep\Repository\HydratorFactory $hydratorFactory
+     * @return void
+     */
+    public static function setHydratorFactory(HydratorFactory $hydratorFactory)
+    {
+        self::$hydratorFactory = $hydratorFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected static function joinTables()
@@ -216,10 +233,47 @@ class Entry extends AbstractJoinableModel
 
             }
 
-            $collection->hydrate();
+            $this->hydrateCollection($collection);
         }
 
         return $collection;
+    }
+
+    /**
+     * Loop through all the hydrators to set Entry custom field attributes
+     * @return void
+     */
+    public function hydrateCollection(EntryCollection $collection)
+    {
+        $entryIds = $collection->modelKeys();
+
+        $collection->addEntryIds($entryIds);
+
+        // loop through all the fields used in this collection to gather a list of fieldtypes used
+        $collection->fields->each(function ($field) use ($collection) {
+            $collection->addField($field);
+        });
+
+        $hydrators = self::$hydratorFactory->getHydrators($collection);
+
+        $fieldtypesWithoutHydrator = array_diff($collection->getFieldtypes(), array_keys($hydrators));
+
+        // loop through the hydrators for preloading
+        foreach ($hydrators as $hydrator) {
+            $hydrator->preload($collection->getEntryIds());
+        }
+
+        // loop again to actually hydrate
+        foreach ($collection as $entry) {
+            foreach ($hydrators as $hydrator) {
+                $hydrator->hydrate($entry);
+            }
+
+            foreach ($fieldtypesWithoutHydrator as $fieldtype) {
+                $hydrator = self::$hydratorFactory->newDefaultHydrator($collection, $fieldtype);
+                $hydrator->hydrate($entry);
+            }
+        }
     }
 
     /**

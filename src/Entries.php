@@ -17,6 +17,7 @@ use rsanchez\Deep\Model\Site;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
+use rsanchez\Deep\Hydrator\Factory as HydratorFactory;
 
 /**
  * IoC Container
@@ -30,15 +31,15 @@ class Entries extends Container
      */
     public function __construct()
     {
-        $this->bind('Field', function ($app) {
+        $this->singleton('Field', function ($app) {
             return new Field();
         });
 
-        $this->bind('Channel', function ($app) {
+        $this->singleton('Channel', function ($app) {
             return new Channel();
         });
 
-        $this->bind('Site', function ($app) {
+        $this->singleton('Site', function ($app) {
             return new Site();
         });
 
@@ -54,9 +55,14 @@ class Entries extends Container
             return new SiteRepository($app->make('Site')->all());
         });
 
+        $this->singleton('HydratorFactory', function ($app) {
+            return new HydratorFactory();
+        });
+
         $this->singleton('Entry', function ($app) {
             Entry::setFieldRepository($app->make('FieldRepository'));
             Entry::setChannelRepository($app->make('ChannelRepository'));
+            Entry::setHydratorFactory($app->make('HydratorFactory'));
             return new Entry();
         });
     }
