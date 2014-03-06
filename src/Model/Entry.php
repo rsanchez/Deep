@@ -118,24 +118,6 @@ class Entry extends AbstractJoinableModel
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * Load up all the repositories if you haven't already with the Container
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        if (! self::$fieldRepository instanceof FieldRepository) {
-            self::setFieldRepository(new FieldRepository(Field::all()));
-        }
-
-        if (! self::$channelRepository instanceof ChannelRepository) {
-            self::setChannelRepository(new ChannelRepository(Channel::all(), self::$fieldRepository));
-        }
-    }
-
-    /**
      * Set the global FieldRepository
      * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
      * @return void
@@ -219,7 +201,15 @@ class Entry extends AbstractJoinableModel
         $channelIds = array_unique(array_pluck($models, 'channel_id'));
 
         if ($models) {
-            $collection->channels = self::$channelRepository->getChannelsById($channelIds);
+            $channelIds = array();
+
+            foreach ($models as $entry) {
+                $channelIds[] = $entry->channel_id;
+
+                $entry->channel = self::$channelRepository->find($entry->channel_id);
+            }
+
+            $collection->channels = self::$channelRepository->getChannelsById(array_unique($channelIds));
 
             $collection->fields = new FieldCollection();
 
@@ -387,21 +377,6 @@ class Entry extends AbstractJoinableModel
     public function getEditDateAttribute($value)
     {
         return DateTime::createFromFormat('YmdHis', $value);
-    }
-
-    /**
-     * Get the Channel model associated with this entry
-     *
-     * @param  mixed                             $value
-     * @return \rsanchez\Deep\Model\Channel|null
-     */
-    public function getChannelAttribute($value)
-    {
-        if (self::$channelRepository instanceof ChannelRepository) {
-            return self::$channelRepository->getChannelById($this->channel_id);
-        }
-
-        return $value;
     }
 
     /**
