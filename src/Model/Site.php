@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Collection\SiteCollection;
 
 /**
  * Model for the sites table
@@ -25,6 +26,17 @@ class Site extends Model
      * {@inheritdoc}
      */
     protected $primaryKey = 'site_id';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array                                    $models
+     * @return \rsanchez\Deep\Collection\SiteCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new SiteCollection($models);
+    }
 
     /**
      * Get the system preferences for this site
