@@ -24,13 +24,18 @@ class EntryCollection extends Collection
      * @var array
      */
     protected static $hydrators = array(
-        'matrix'       => '\\rsanchez\\Deep\\Hydrator\\MatrixHydrator',
-        'grid'         => '\\rsanchez\\Deep\\Hydrator\\GridHydrator',
-        'playa'        => '\\rsanchez\\Deep\\Hydrator\\PlayaHydrator',
-        'relationship' => '\\rsanchez\\Deep\\Hydrator\\RelationshipHydrator',
-        'assets'       => '\\rsanchez\\Deep\\Hydrator\\AssetsHydrator',
-        'file'         => '\\rsanchez\\Deep\\Hydrator\\FileHydrator',
-        'date'         => '\\rsanchez\\Deep\\Hydrator\\DateHydrator',
+        'matrix'                => '\\rsanchez\\Deep\\Hydrator\\MatrixHydrator',
+        'grid'                  => '\\rsanchez\\Deep\\Hydrator\\GridHydrator',
+        'playa'                 => '\\rsanchez\\Deep\\Hydrator\\PlayaHydrator',
+        'relationship'          => '\\rsanchez\\Deep\\Hydrator\\RelationshipHydrator',
+        'assets'                => '\\rsanchez\\Deep\\Hydrator\\AssetsHydrator',
+        'file'                  => '\\rsanchez\\Deep\\Hydrator\\FileHydrator',
+        'date'                  => '\\rsanchez\\Deep\\Hydrator\\DateHydrator',
+        'multi_select'          => '\\rsanchez\\Deep\\Hydrator\\PipeHydrator',
+        'checkboxes'            => '\\rsanchez\\Deep\\Hydrator\\PipeHydrator',
+        'fieldpack_checkboxes'  => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
+        'fieldpack_multiselect' => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
+        'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
     );
 
     /**
