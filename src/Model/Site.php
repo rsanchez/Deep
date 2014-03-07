@@ -64,4 +64,13 @@ class Site extends Model
     {
         return $value ? @unserialize(@base64_decode($value)) : $value;
     }
+
+    /**
+     * Get the pages for this site
+     * @return array|null
+     */
+    public function getSitePagesAttribute($value)
+    {
+        return $value ? @unserialize(@base64_decode($value)) : $value;
+    }
 }

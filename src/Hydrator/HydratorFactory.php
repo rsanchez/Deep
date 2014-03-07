@@ -13,7 +13,6 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
-use rsanchez\Deep\Hydrator\AssetsHydrator;
 
 /**
  * Factory for building new Hydrators
@@ -37,6 +36,7 @@ class HydratorFactory
         'fieldpack_checkboxes'  => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
         'fieldpack_multiselect' => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
         'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
+        'wygwam'                => '\\rsanchez\\Deep\\Hydrator\\WysiwygHydrator',
     );
 
     /**
@@ -135,12 +135,13 @@ class HydratorFactory
     }
 
     /**
-     * Create a new Hydrator object
+     * Create a new WysiwygHydrator object
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @param  string                                    $fieldtype
      * @return \rsanchez\Deep\Hydrator\WysiwygHydrator
      */
     public function newWysiwygHydrator(EntryCollection $collection, $fieldtype)
     {
+        return new WysiwygHydrator($collection, $fieldtype, $this->siteRepository, $this->uploadPrefRepository);
     }
 }
