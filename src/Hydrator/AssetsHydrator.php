@@ -15,7 +15,7 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\Asset;
-use rsanchez\Deep\Repository\UploadPrefRepository;
+use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
 /**
  * Hydrator for the Assets fieldtype
@@ -30,7 +30,7 @@ class AssetsHydrator extends AbstractHydrator
 
     /**
      * UploadPref model repository
-     * @var \rsanchez\Deep\Repository\UploadPrefRepository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface
      */
     protected $uploadPrefRepository;
 
@@ -39,9 +39,9 @@ class AssetsHydrator extends AbstractHydrator
      *
      * @param \rsanchez\Deep\Collection\EntryCollection $collection
      * @param string                                    $fieldtype
-     * @var \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepository $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
         parent::__construct($collection, $fieldtype);
 

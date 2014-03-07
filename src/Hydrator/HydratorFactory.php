@@ -12,7 +12,7 @@ namespace rsanchez\Deep\Hydrator;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
-use rsanchez\Deep\Repository\UploadPrefRepository;
+use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 use rsanchez\Deep\Hydrator\AssetsHydrator;
 
 /**
@@ -54,10 +54,10 @@ class HydratorFactory
     /**
      * Constructor
      *
-     * @var \rsanchez\Deep\Repository\SiteRepository $siteRepository
-     * @var \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
+     * @var \rsanchez\Deep\Repository\SiteRepository                $siteRepository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(SiteRepository $siteRepository, UploadPrefRepository $uploadPrefRepository)
+    public function __construct(SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
         $this->siteRepository = $siteRepository;
         $this->uploadPrefRepository = $uploadPrefRepository;

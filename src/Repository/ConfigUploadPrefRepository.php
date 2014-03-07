@@ -9,15 +9,13 @@
 
 namespace rsanchez\Deep\Repository;
 
-use rsanchez\Deep\Collection\UploadPrefCollection;
 use rsanchez\Deep\Model\UploadPref;
-use rsanchez\Deep\Repository\AbstractDeferredRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
 /**
  * Repository of all UploadPrefs
  */
-class UploadPrefRepository extends AbstractDeferredRepository implements UploadPrefRepositoryInterface
+class ConfigUploadPrefRepository implements UploadPrefRepositoryInterface
 {
     /**
      * Array of UploadPrefs keyed by id
@@ -30,20 +28,16 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
      *
      * @param \rsanchez\Deep\Model\UploadPref $model
      */
-    public function __construct(UploadPref $model)
+    public function __construct(array $uploadPrefs)
     {
-        parent::__construct($model);
-    }
+        foreach ($uploadPrefs as $id => $config) {
+            $uploadPref = new UploadPref();
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function boot()
-    {
-        parent::boot();
+            $uploadPref->name = $config['name'];
+            $uploadPref->server_path = $config['server_path'];
+            $uploadPref->url = $config['url'];
 
-        foreach ($this->collection as $uploadPref) {
-            $this->uploadPrefsById[$uploadPref->id] = $uploadPref;
+            $this->uploadPrefsById[$id] = $uploadPref;
         }
     }
 
@@ -64,20 +58,6 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
      */
      public function getUploadPrefById($id)
      {
-         $this->boot();
-
          return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
      }
-
-    /**
-     * Get Collection of all UploadPrefs
-     *
-     * @return \rsanchez\Deep\Collection\UploadPrefCollection
-     */
-    public function getUploadPrefs()
-    {
-        $this->boot();
-
-        return $this->collection;
-    }
 }

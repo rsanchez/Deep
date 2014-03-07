@@ -19,6 +19,7 @@ use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepository;
+use rsanchez\Deep\Repository\ConfigUploadPrefRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 
 /**
@@ -30,9 +31,15 @@ class Entries extends Container
      * Constructor
      *
      * Build all the dependencies
+     *
+     * @var array $config  an EE config array
      */
-    public function __construct()
+    public function __construct($config = array())
     {
+        $this->singleton('config', function ($app) use ($config) {
+            return $config;
+        });
+
         $this->singleton('Field', function ($app) {
             return new Field();
         });
@@ -62,6 +69,10 @@ class Entries extends Container
         });
 
         $this->singleton('UploadPrefRepository', function ($app) {
+            if (isset($app['config']['upload_prefs'])) {
+                return new ConfigUploadPrefRepository($app['config']['upload_prefs']);
+            }
+
             return new UploadPrefRepository($app->make('UploadPref'));
         });
 
