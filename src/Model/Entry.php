@@ -198,8 +198,6 @@ class Entry extends AbstractJoinableModel
 
         $collection = new $collectionClass($models);
 
-        $channelIds = array_unique(array_pluck($models, 'channel_id'));
-
         if ($models) {
             $channelIds = array();
 
