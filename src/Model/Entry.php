@@ -405,6 +405,22 @@ class Entry extends AbstractJoinableModel
     }
 
     /**
+     * Filter by not Category ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $categoryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotCategory(Builder $query, $categoryId)
+    {
+        $categoryIds = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('categories', function ($q) use ($categoryIds) {
+            $q->whereNotIn('categories.cat_id', $categoryIds);
+        });
+    }
+
+    /**
      * Filter by Category Name
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -417,6 +433,22 @@ class Entry extends AbstractJoinableModel
 
         return $query->whereHas('categories', function ($q) use ($categoryNames) {
             $q->whereIn('categories.cat_name', $categoryNames);
+        });
+    }
+
+    /**
+     * Filter by not Category Name
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $categoryName
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotCategoryName(Builder $query, $categoryName)
+    {
+        $categoryNames = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('categories', function ($q) use ($categoryNames) {
+            $q->whereNotIn('categories.cat_name', $categoryNames);
         });
     }
 
@@ -474,6 +506,20 @@ class Entry extends AbstractJoinableModel
         $authorIds = array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.author_id', $authorIds);
+    }
+
+    /**
+     * Filter by not Author ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  int                          $authorId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotAuthorId(Builder $query, $authorId)
+    {
+        $authorIds = array_slice(func_get_args(), 1);
+
+        return $query->whereNotIn('channel_titles.author_id', $authorIds);
     }
 
     /**
