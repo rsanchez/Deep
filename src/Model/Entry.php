@@ -188,96 +188,11 @@ class Entry extends Title
     }
 
     /**
-     * Apply an array of parameters
-     * @param  array $parameters
-     * @return void
+     * {@inheritdoc}
      */
     public function scopeTagparams(Builder $query, array $parameters)
     {
-        /**
-         * A map of parameter names => model scopes
-         * @var array
-         */
-        static $parameterMap = array(
-            'author_id' => 'authorId',//explode, not
-            'not_author_id' => 'notAuthorId',
-            'cat_limit' => 'catLimit',//int
-            'category' => 'category',//explode, not
-            'not_category' => 'notCategory',
-            'category_group' => 'categoryGroup',//explode, not
-            'not_category_group' => 'notCategoryGroup',
-            'channel' => 'channel',//explode, not
-            'display_by' => 'displayBy',//string
-            'dynamic_parameters' => 'dynamicParameters',//explode
-            'entry_id' => 'entryId',//explode, not
-            'not_entry_id' => 'notEntryId',
-            'entry_id_from' => 'entryIdFrom',//int
-            'entry_id_fo' => 'entryIdTo',//int
-            'fixed_order' => 'fixedOrder',//explode
-            'group_id' => 'groupId',//explode, not
-            'not_group_id' => 'notGroupId',
-            'limit' => 'limit',//int
-            'month_limit' => 'monthLimit',//int
-            'offset' => 'offset',//int
-            'orderby' => 'orderby',//string
-            //'paginate' => 'paginate',//string
-            //'paginate_base' => 'paginateBase',//string
-            //'paginate_type' => 'paginateType',//string
-            'related_categories_mode' => 'relatedCategoriesMode',//bool
-            'relaxed_categories' => 'relaxedCategories',//bool
-            'show_current_week' => 'showCurrentWeek',//bool
-            'show_expired' => 'showExpired',//bool
-            'show_future_entries' => 'showFutureEntries',//bool
-            //'show_pages' => 'showPages',
-            'sort' => 'sort',
-            'start_day' => 'startDay',//string
-            'start_on' => 'startOn',//string date
-            'status' => 'status',//explode, not
-            'not_status' => 'notStatus',
-            'sticky' => 'sticky',//bool
-            'stop_before' => 'stopBefore',//string date
-            'uncategorized_entries' => 'uncategorizedEntries',//bool
-            'url_title' => 'urlTitle',//explode, not
-            'not_url_title' => 'notUrlTitle',
-            'username' => 'username',//explode, not
-            'username' => 'notUsername',
-            'week_sort' => 'weekSort',//string
-            'year' => 'year',
-            'month' => 'month',
-            'day' => 'day',
-        );
-
-        /**
-         * A list of parameters that are boolean
-         * @var array
-         */
-        static $boolParameters = array(
-            'related_categories_mode',
-            'relaxed_categories',
-            'show_current_week',
-            'show_expired',
-            'show_future_entries',
-            'sticky',
-            'uncategorized_entries',
-        );
-
-        /**
-         * A list of parameters that are arrays
-         * @var array
-         */
-        static $arrayParameters = array(
-            'author_id',
-            'category',
-            'category_group',
-            'channel',
-            'dynamic_parameters',
-            'entry_id',
-            'fixed_order',
-            'group_id',
-            'status',
-            'url_title',
-            'username',
-        );
+        parent::scopeTagparams($query, $parameters);
 
         $search = array();
 
@@ -285,31 +200,7 @@ class Entry extends Title
             if (strncmp($key, 'search:', 7) === 0) {
                 $key = 'search';
                 $search[substr($key, 7)] = explode('|', $value);
-                continue;
             }
-
-            if (! array_key_exists($key, $parameterMap)) {
-                continue;
-            }
-
-            $method = 'scope'.ucfirst($parameterMap[$key]);
-
-            if (in_array($key, $arrayParameters)) {
-                if (array_key_exists('not_'.$key, $parameterMap) && strncmp($value, 'not ', 4) === 0) {
-                    $method = 'scope'.ucfirst($parameterMap['not_'.$key]);
-                    $args = explode('|', substr($value, 4));
-                } else {
-                    $args = explode('|', $value);
-                }
-            } elseif (in_array($key, $boolParameters)) {
-                $args = array($value === 'yes');
-            } else {
-                $args = array($value);
-            }
-
-            array_unshift($args, $query);
-
-            call_user_func_array(array($this, $method), $args);
         }
 
         if ($search) {

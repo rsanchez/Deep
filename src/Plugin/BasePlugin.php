@@ -1,20 +1,39 @@
 <?php
 
+/**
+ * Deep
+ *
+ * @package      rsanchez\Deep
+ * @author       Rob Sanchez <info@robsanchez.com>
+ */
+
 namespace rsanchez\Deep\Plugin;
 
 use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
+use rsanchez\Deep\Collection\EntryCollection;
 use DateTime;
 
-class BasePlugin
+/**
+ * Base class for EE modules/plugins
+ */
+abstract class BasePlugin
 {
+    /**
+     * Constructor
+     * @return void
+     */
     public function __construct()
     {
         self::bootEloquent();
     }
 
+    /**
+     * Bootstrap the EE db connection with Eloquent, once
+     * @return void
+     */
     protected static function bootEloquent()
     {
         if (ee()->session->cache(__CLASS__, __FUNCTION__)) {
@@ -26,6 +45,12 @@ class BasePlugin
         Model::setConnectionResolver(new CodeIgniterConnectionResolver(ee()));
     }
 
+    /**
+     * Parse TMPL->tagdata with the specified collection of entries
+     *
+     * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $entries
+     * @return string
+     */
     protected function parse(AbstractTitleCollection $entries)
     {
         $tagdata = ee()->TMPL->tagdata;
