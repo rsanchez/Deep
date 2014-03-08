@@ -5,7 +5,7 @@ namespace rsanchez\Deep\Plugin;
 use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Entry;
-use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Collection\AbstractTitleCollection;
 use DateTime;
 
 class BasePlugin
@@ -26,9 +26,11 @@ class BasePlugin
         Model::setConnectionResolver(new CodeIgniterConnectionResolver(ee()));
     }
 
-    protected function parse(EntryCollection $entries)
+    protected function parse(AbstractTitleCollection $entries)
     {
         $tagdata = ee()->TMPL->tagdata;
+
+        $customFieldsEnabled = $entries instanceof EntryCollection;
 
         preg_match_all('#{((url_title_path|title_permalink)=([\042\047])(.*?)\\3)}#', $tagdata, $urlTitlePathMatches);
         preg_match_all('#{(entry_id_path=([\042\047])(.*?)\\2)}#', $tagdata, $entryIdPathMatches);
@@ -37,39 +39,41 @@ class BasePlugin
         $singleTags = array();
         $pairTags = array();
 
-        foreach (array_keys(ee()->TMPL->var_single) as $tag) {
-            $spacePosition = strpos($tag, ' ');
+        if ($customFieldsEnabled) {
+            foreach (array_keys(ee()->TMPL->var_single) as $tag) {
+                $spacePosition = strpos($tag, ' ');
 
-            if ($spacePosition === false) {
-                $name = $tag;
-                $params = array();
-            } else {
-                $name = substr($tag, 0, $spacePosition);
-                $params = ee()->functions->assign_parameters(substr($tag, $spacePosition));
+                if ($spacePosition === false) {
+                    $name = $tag;
+                    $params = array();
+                } else {
+                    $name = substr($tag, 0, $spacePosition);
+                    $params = ee()->functions->assign_parameters(substr($tag, $spacePosition));
+                }
+
+                $singleTags[] = (object) array(
+                    'name' => $name,
+                    'key' => $tag,
+                    'params' => $params,
+                    'tagdata' => '',
+                );
             }
 
-            $singleTags[] = (object) array(
-                'name' => $name,
-                'key' => $tag,
-                'params' => $params,
-                'tagdata' => '',
-            );
-        }
+            foreach (ee()->TMPL->var_pair as $tag => $params) {
+                $spacePosition = strpos($tag, ' ');
 
-        foreach (ee()->TMPL->var_pair as $tag => $params) {
-            $spacePosition = strpos($tag, ' ');
+                $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
 
-            $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
+                preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
 
-            preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
-
-            foreach ($matches[1] as $i => $key) {
-                $pairTags[] = (object) array(
-                    'name' => $name,
-                    'key' => $key,
-                    'params' => $params,
-                    'tagdata' => $matches[2][$i],
-                );
+                foreach ($matches[1] as $i => $key) {
+                    $pairTags[] = (object) array(
+                        'name' => $name,
+                        'key' => $key,
+                        'params' => $params,
+                        'tagdata' => $matches[2][$i],
+                    );
+                }
             }
         }
 
@@ -78,15 +82,17 @@ class BasePlugin
         foreach ($entries as $entry) {
             $row = array();
 
-            foreach ($pairTags as $tag) {
-                if ($entry->channel->fields->hasField($tag->name)) {
-                    $row[$tag->key] = $entry->{$tag->name}->isEmpty() ? '' : ee()->TMPL->parse_variables($tag->tagdata, $entry->{$tag->name}->toArray());
+            if ($customFieldsEnabled) {
+                foreach ($pairTags as $tag) {
+                    if ($entry->channel->fields->hasField($tag->name)) {
+                        $row[$tag->key] = $entry->{$tag->name}->isEmpty() ? '' : ee()->TMPL->parse_variables($tag->tagdata, $entry->{$tag->name}->toArray());
+                    }
                 }
-            }
 
-            foreach ($singleTags as $tag) {
-                if ($entry->channel->fields->hasField($tag->name)) {
-                    $row[$tag->key] = (string) $entry->{$tag->name};
+                foreach ($singleTags as $tag) {
+                    if ($entry->channel->fields->hasField($tag->name)) {
+                        $row[$tag->key] = (string) $entry->{$tag->name};
+                    }
                 }
             }
 

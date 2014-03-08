@@ -12,12 +12,13 @@ namespace rsanchez\Deep\Collection;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Collection\GridColCollection;
+use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Model\Field;
 
 /**
  * Collection of \rsanchez\Deep\Model\Entry
  */
-class EntryCollection extends Collection
+class EntryCollection extends TitleCollection
 {
     /**
      * Matrix columns used by this collection
@@ -51,40 +52,29 @@ class EntryCollection extends Collection
     protected $fieldIdsByFieldtype = array();
 
     /**
-     * Channels used by this collection
-     * @var \rsanchez\Deep\Collection\ChannelCollection
+     * Fields used by this collection
+     * @var \rsanchez\Deep\Collection\FieldCollection
      */
-    public $channels;
+    public $fields;
 
     /**
-     * Get all the entry Ids from this collection.
-     * This includes both the entries directly in this collection,
-     * and entries found in Playa/Relationship fields
-     *
+     * Get a list of names of fieldtypes used by this  collection
      * @return array
      */
-    public function getEntryIds()
-    {
-        return $this->entryIds;
-    }
-
-    /**
-     * Add additional entry ids to this collection
-     *
-     * @param array $entryIds
-     */
-    public function addEntryIds(array $entryIds)
-    {
-        $this->entryIds = array_unique(array_merge($this->entryIds, $entryIds));
-    }
-
     public function getFieldtypes()
     {
         return $this->fieldtypes;
     }
 
+    /**
+     * Register a field used by this collection
+     * @param  \rsanchez\Deep\Model\Field $field
+     * @return void
+     */
     public function addField(Field $field)
     {
+        $this->fields->push($field);
+
         if (! in_array($field->field_type, $this->fieldtypes)) {
             $this->fieldtypes[] = $field->field_type;
         }
@@ -139,18 +129,6 @@ class EntryCollection extends Collection
     public function getMatrixCols()
     {
         return $this->matrixCols;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toJson($options = 0)
-    {
-        if (func_num_args() === 0) {
-            $options = JSON_NUMERIC_CHECK;
-        }
-
-        return parent::toJson($options);
     }
 
     /**

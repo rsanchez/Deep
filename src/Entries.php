@@ -13,6 +13,7 @@ use Illuminate\Container\Container;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Model\Site;
 use rsanchez\Deep\Model\UploadPref;
 use rsanchez\Deep\Repository\FieldRepository;
@@ -78,6 +79,12 @@ class Entries extends Container
 
         $this->singleton('HydratorFactory', function ($app) {
             return new HydratorFactory($app->make('SiteRepository'), $app->make('UploadPrefRepository'));
+        });
+
+        $this->singleton('Title', function ($app) {
+            Title::setChannelRepository($app->make('ChannelRepository'));
+
+            return new Title();
         });
 
         $this->singleton('Entry', function ($app) {
