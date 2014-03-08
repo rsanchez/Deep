@@ -334,6 +334,34 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by not Channel Name
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $channelName
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotChannel(Builder $query, $channelName)
+    {
+        $channelNames = array_slice(func_get_args(), 1);
+
+        $channels = self::$channelRepository->getChannelsByName($channelNames);
+
+        $channelIds = array();
+
+        $channels->each(function ($channel) use (&$channelIds) {
+            $channelIds[] = $channel->channel_id;
+        });
+
+        if ($channelIds) {
+            array_unshift($channelIds, $query);
+
+            call_user_func_array(array($this, 'scopeNotChannelId'), $channelIds);
+        }
+
+        return $query;
+    }
+
+    /**
      * Filter by Channel ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -345,6 +373,20 @@ class Title extends AbstractJoinableModel
         $channelIds = array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.channel_id', $channelIds);
+    }
+
+    /**
+     * Filter by not Channel ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  int                          $channelId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotChannelId(Builder $query, $channelId)
+    {
+        $channelIds = array_slice(func_get_args(), 1);
+
+        return $query->whereNotIn('channel_titles.channel_id', $channelIds);
     }
 
     /**
@@ -658,6 +700,191 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Call the specified scope, exploding a pipe-delimited string into an array
+     * Calls the not version of the scope if the string begins with not
+     * eg  'not 4|5|6'
+     *
+     * @param string $string ex '4|5|6' 'not 4|5|6'
+     * @param string $scope the name of the scope, ex. AuthorId
+     */
+    protected function scopeArrayFromString($string, $scope)
+    {
+        if ($not = strncmp($string, 'not ', 4) === 0) {
+            $string = substr($string, 4);
+        }
+
+        $args = explode('|', $string);
+
+        $method = 'scope'.$scope;
+
+        if ($not && method_exists($this, 'scopeNot'.$scope)) {
+            $method = 'scopeNot'.$scope;
+        }
+
+        array_unshift($args, $query);
+
+        return call_user_func_array(array($this, $method), $args);
+    }
+
+    /**
+     * Filter by Author ID string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAuthorIdString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'AuthorId');
+    }
+
+    /**
+     * Filter by Category string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategoryString(Builder $query, $string)
+    {
+        // @TODO support the full range of options from
+        // http://ellislab.com/expressionengine/user-guide/add-ons/channel/channel_entries.html#category
+        return $this->scopeArrayFromString($query, $string, 'Category');
+    }
+
+    /**
+     * Filter by Category Group string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategoryGroupString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'CategoryGroup');
+    }
+
+    /**
+     * Filter by Channel string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeChannelString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'Channel');
+    }
+
+    /**
+     * Filter by Entry ID string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEntryIdString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'EntryId');
+    }
+
+    /**
+     * Filter by Fixed Order string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFixedOrderString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'FixedOrder');
+    }
+
+    /**
+     * Filter by Member Group ID string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeGroupIdString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'GroupId');
+    }
+
+    /**
+     * Filter by Show Expired string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShowExpiredString(Builder $query, $string)
+    {
+        return $this->scopeShowExpired($query, $string === 'yes');
+    }
+
+    /**
+     * Filter by Show Future Entries string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShowFutureEntriesString(Builder $query, $string)
+    {
+        return $this->scopeShowFutureEntries($query, $string === 'yes');
+    }
+
+    /**
+     * Filter by Status string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeStatusString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'Status');
+    }
+
+    /**
+     * Filter by Sticky string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeStickyString(Builder $query, $string)
+    {
+        return $this->scopeSticky($query, $string === 'yes');
+    }
+
+    /**
+     * Filter by URL Title string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUrlTitleString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'UrlTitle');
+    }
+
+    /**
+     * Filter by Username string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUsernameString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'Username');
+    }
+
+    /**
      * Apply an array of parameters
      * @param  array $parameters
      * @return void
@@ -669,85 +896,47 @@ class Title extends AbstractJoinableModel
          * @var array
          */
         static $parameterMap = array(
-            'author_id' => 'authorId',//explode, not
-            'not_author_id' => 'notAuthorId',
-            'cat_limit' => 'catLimit',//int
-            'category' => 'category',//explode, not
-            'not_category' => 'notCategory',
-            'category_group' => 'categoryGroup',//explode, not
-            'not_category_group' => 'notCategoryGroup',
-            'channel' => 'channel',//explode, not
-            'display_by' => 'displayBy',//string
-            'dynamic_parameters' => 'dynamicParameters',//explode
-            'entry_id' => 'entryId',//explode, not
-            'not_entry_id' => 'notEntryId',
-            'entry_id_from' => 'entryIdFrom',//int
-            'entry_id_fo' => 'entryIdTo',//int
-            'fixed_order' => 'fixedOrder',//explode
-            'group_id' => 'groupId',//explode, not
-            'not_group_id' => 'notGroupId',
-            'limit' => 'limit',//int
-            'month_limit' => 'monthLimit',//int
-            'offset' => 'offset',//int
-            'orderby' => 'orderby',//string
+            'author_id' => 'authorIdString',
+            'cat_limit' => 'catLimit',
+            'category' => 'categoryString',
+            'category_group' => 'categoryGroupString',
+            'channel' => 'channel',
+            //'dynamic_parameters' => 'dynamicParameters',
+            'entry_id' => 'entryIdString',
+            'entry_id_from' => 'entryIdFrom',
+            'entry_id_fo' => 'entryIdTo',
+            'fixed_order' => 'fixedOrderString',
+            'group_id' => 'groupIdString',
+            'limit' => 'limit',
+            'offset' => 'offset',
+            'orderby' => 'orderby',
             //'paginate' => 'paginate',//string
             //'paginate_base' => 'paginateBase',//string
             //'paginate_type' => 'paginateType',//string
-            'related_categories_mode' => 'relatedCategoriesMode',//bool
-            'relaxed_categories' => 'relaxedCategories',//bool
-            'show_current_week' => 'showCurrentWeek',//bool
-            'show_expired' => 'showExpired',//bool
-            'show_future_entries' => 'showFutureEntries',//bool
+            'show_expired' => 'showExpiredString',
+            'show_future_entries' => 'showFutureEntriesString',
             //'show_pages' => 'showPages',
             'sort' => 'sort',
-            'start_day' => 'startDay',//string
-            'start_on' => 'startOn',//string date
-            'status' => 'status',//explode, not
-            'not_status' => 'notStatus',
-            'sticky' => 'sticky',//bool
-            'stop_before' => 'stopBefore',//string date
-            'uncategorized_entries' => 'uncategorizedEntries',//bool
-            'url_title' => 'urlTitle',//explode, not
-            'not_url_title' => 'notUrlTitle',
-            'username' => 'username',//explode, not
-            'username' => 'notUsername',
-            'week_sort' => 'weekSort',//string
+            'start_day' => 'startDay',
+            'start_on' => 'startOn',
+            'status' => 'statusString',
+            'sticky' => 'stickyString',
+            'stop_before' => 'stopBefore',
+            //'uncategorized_entries' => 'uncategorizedEntries',//bool
+            'url_title' => 'urlTitleString',
+            'username' => 'usernameString',
             'year' => 'year',
             'month' => 'month',
             'day' => 'day',
         );
 
-        /**
-         * A list of parameters that are boolean
-         * @var array
-         */
-        static $boolParameters = array(
-            'related_categories_mode',
-            'relaxed_categories',
-            'show_current_week',
-            'show_expired',
-            'show_future_entries',
-            'sticky',
-            'uncategorized_entries',
-        );
-
-        /**
-         * A list of parameters that are arrays
-         * @var array
-         */
-        static $arrayParameters = array(
-            'author_id',
-            'category',
-            'category_group',
-            'channel',
-            'dynamic_parameters',
-            'entry_id',
-            'fixed_order',
-            'group_id',
-            'status',
-            'url_title',
-            'username',
-        );
+        if (isset($parameters['dynamic_parameters'])) {
+            foreach (explode('|', $parameters['dynamic_parameters']) as $key) {
+                if (isset($_REQUEST[$key])) {
+                    $parameters[$key] = is_array($_REQUEST[$key]) ? implode('|', $_REQUEST[$key]) : $_REQUEST[$key];
+                }
+            }
+        }
 
         foreach ($parameters as $key => $value) {
             if (! array_key_exists($key, $parameterMap)) {
@@ -756,22 +945,7 @@ class Title extends AbstractJoinableModel
 
             $method = 'scope'.ucfirst($parameterMap[$key]);
 
-            if (in_array($key, $arrayParameters)) {
-                if (array_key_exists('not_'.$key, $parameterMap) && strncmp($value, 'not ', 4) === 0) {
-                    $method = 'scope'.ucfirst($parameterMap['not_'.$key]);
-                    $args = explode('|', substr($value, 4));
-                } else {
-                    $args = explode('|', $value);
-                }
-            } elseif (in_array($key, $boolParameters)) {
-                $args = array($value === 'yes');
-            } else {
-                $args = array($value);
-            }
-
-            array_unshift($args, $query);
-
-            call_user_func_array(array($this, $method), $args);
+            $this->$method($query, $value);
         }
 
         return $query;
