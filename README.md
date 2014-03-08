@@ -1,11 +1,11 @@
 # Deep
 
-A set of Eloquent models for ExpressionEngine Channel Entries. This library has a few goals in mind:
+A set of [Eloquent](http://laravel.com/docs/eloquent) models for ExpressionEngine Channel Entries. This library has a few goals in mind:
 
-- replicate as much of the `{exp:channel:entries}` functionality as possible using Eloquent query scopes
+- replicate as much of the `{exp:channel:entries}` functionality as possible using Eloquent [query scopes](http://laravel.com/docs/eloquent#query-scopes)
 - chainable with standard Eloquent model methods (ex. `->where('foo', 'bar')`)
 - minimize the number of queries needed using eager loading
-- provide an base plugin from which EE plugins/modules can extend, which has parity with `{exp:channel:entries}`
+- provide an base plugin from which EE plugins/modules can extend, which has near parity with `{exp:channel:entries}`
 
 ```
 <?php
@@ -20,11 +20,11 @@ $entries = Entries::channel('blog')
 
 <?php foreach ($entries as $entry) : ?>
 <article>
-    <h1><?php echo $entry->title ?></h1>
+    <h1><?php echo $entry->title; ?></h1>
 
-    <p class="date"><?php echo $entry->entry_date->format('F j, Y') ?></p>
+    <p class="date"><?php echo $entry->entry_date->format('F j, Y'); ?></p>
 
-    <?php echo $entry->description ?>
+    <?php echo $entry->description; ?>
 </article>
 <?php endforeach ?>
 ```
@@ -42,26 +42,152 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
 
     require_once FCPATH.'vendor/autoload.php'
 
-## Scopes
+## Query Scopes
 
-Scopes are how you can filter your query results. They should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter. Scopes that accept more than one parameter will take an array or a single value (ex. `Entry::status(array('open', 'closed'))` and `Entry::status('closed')` are both valid).
+Query scopes are how you can filter your query results. They should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter.
 
 ### Channel Name
 
 ```
-Entry::channel('blog')
+Entries::channel('blog', 'news')->get();
+```
+
+### Not Channel Name
+
+```
+Entries::notChannel('blog', 'news')->get();
 ```
 
 ### Channel ID
 
 ```
-Entry::channelId(1)
+Entries::channelId(1, 2)->get();
+```
+
+### Not Channel ID
+
+```
+Entries::notChannelId(1, 2)->get();
 ```
 
 ### Author ID
 
 ```
-Entry::authorId(1)
+Entry::authorId(1, 2)->get();
+```
+
+### Not Author ID
+
+```
+Entry::notAuthorId(1, 2)->get();
+```
+
+### Category ID
+
+```
+Entry::category(1, 2)->get();
+```
+
+### Not Category ID
+
+```
+Entry::notCategory(1, 2)->get();
+```
+
+### Category Name
+
+```
+Entry::categoryName('mammals', 'reptiles')->get();
+```
+
+### NotCategory Name
+
+```
+Entry::notCategoryName('mammals', 'reptiles')->get();
+```
+
+### Category Group
+
+```
+Entry::categoryGroup(1, 2)->get();
+```
+
+### Not Category Group
+
+```
+Entry::notCategoryGroup(1, 2)->get();
+```
+
+### Day
+
+```
+Entry::day(31)->get();
+```
+
+### Entry ID
+
+```
+Entry::entryId(1, 2)->get();
+```
+
+### Not Entry ID
+
+```
+Entry::notEntryId(1, 2)->get();
+```
+
+### Entry ID From
+
+```
+Entry::entryIdFrom(1)->get();
+```
+
+### Entry ID To
+
+```
+Entry::entryIdTo(100)->get();
+```
+
+### Fixed Order
+
+```
+Entry::fixedOrder(4, 8, 15, 16, 23, 42)->get();
+```
+
+### Member Group ID
+
+```
+Entry::groupId(1, 2)->get();
+```
+
+### Not Member Group ID
+
+```
+Entry::notGroupId(1, 2)->get();
+```
+
+### Limit
+
+```
+Entry::limit(1)->get();
+```
+
+### Month
+
+```
+Entry::month(12)->get();
+```
+
+### Offset
+
+```
+Entry::offset(1)->get();
+```
+
+### Year
+
+```
+Entry::year(2014)->get();
 ```
 
 ## Entry objects
@@ -171,7 +297,7 @@ For the following fieldtypes, an entry's custom field properties will be special
 
 ### Matrix & Grid
 
-Matrix & Grid fields will be Eloquent Collections of `Row` objects. `Row` objects has string properties from the `exp_matrix_data` and `exp_channel_grid_field_X` tables, respectively. They also have their custom fields (columns) as properties, keyed by the field short name. Custom `Row` fields follow the same logic as `Entry` custom fields.
+Matrix & Grid fields will be Eloquent Collections of `Row` objects. Each `Row` object has string properties keyed to the column short name from the `exp_matrix_data` and `exp_channel_grid_field_X` tables, respectively. Custom `Row` fields follow the same logic as `Entry` custom fields.
 
 ```
 $number_of_rows = $entry->your_matrix_field->count();
@@ -198,7 +324,7 @@ foreach ($entry->your_playa_field as $childEntry) {
 
 ### Assets
 
-Assets fields will be Eloquent Collections of `File` objects. Assets `File` objects have the following properties:
+Assets fields will be Eloquent Collections of `Asset` objects. `Asset` objects have the following properties:
 
 ```
 $entry->your_assets_field->url
@@ -274,22 +400,33 @@ echo $entry->your_date_field->format('Y-m-d H:i:s');
 - category_group
 - search:field_name
 - show_pages
+- uncategorized_entries
 
 ## Parameters not implemented
 
 - backspace
 - cache
-- refresh
+- display_by
+- disable
 - dynamic
 - dynamic_start
-- require_entry
+- month_limit
 - paginate
 - paginate_base
 - paginate_type
+- refresh
+- related_categories_mode
+- relaxed_categories
+- require_entry
+- show_current_week
 - track_views
+- week_sort
 
 ## Todo
 
+- Category scope
+- Carbon instead of DateTime
+- orderby/sort
 - Pagination? probably have to wait until Illuminate paginate becomes more decoupled
 - API docs
 - unit tests
