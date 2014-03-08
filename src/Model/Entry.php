@@ -46,14 +46,6 @@ class Entry extends AbstractJoinableModel
     protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
 
     /**
-     * Set a default channel name
-     *
-     * Useful if extending this class
-     * @var string
-     */
-    protected $channelName;
-
-    /**
      * The class used when creating a new Collection
      * @var string
      */
@@ -76,28 +68,6 @@ class Entry extends AbstractJoinableModel
      * @var \rsanchez\Deep\Hydrator\Factory
      */
     public static $hydratorFactory;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $attributes = array())
-    {
-        parent::__construct($attributes);
-
-        $nativeClasses = array(
-            'rsanchez\Deep\Model\Entry',
-            'rsanchez\Deep\Model\PlayaEntry',
-            'rsanchez\Deep\Model\RelationshipEntry',
-        );
-
-        $class = get_class($this);
-
-        // set the channel name of this class if it's not one of the native classes
-        if (! in_array($class, $nativeClasses) && is_null($this->channelName)) {
-            $class = basename(str_replace('\\', DIRECTORY_SEPARATOR, $class));
-            $this->channelName = snake_case(str_plural($class));
-        }
-    }
 
     /**
      * Define the Member Eloquent relationship
@@ -176,10 +146,6 @@ class Entry extends AbstractJoinableModel
         $query->addSelect('channel_data.*');
 
         $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
-
-        if ($this->channelName) {
-            $this->scopeChannel($query, $this->channelName);
-        }
 
         return $query;
     }
