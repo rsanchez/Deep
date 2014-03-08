@@ -921,4 +921,218 @@ class Entry extends AbstractJoinableModel
     {
         return $query->where('channel_titles.day', $day);
     }
+
+    /**
+     * Translates a custom field name to field_id_x and performs a where query
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $method the where method to use
+     * @param  array                                 $args the where query arguments
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+	protected function scopeWhereFieldHandler(Builder $query, $method, array $args)
+    {
+		$fieldName = array_shift($args);
+
+    	if (self::$fieldRepository->hasField($fieldName)) {
+            $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
+
+			array_unshift($column, $args);
+
+			call_user_func_array(array($query, $method), $args);
+		}
+
+		return $query;
+	}
+
+    /**
+     * Where custom field equals
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  mixed   $value
+     * @param  string  $boolean
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereField(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'where', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field equals
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  mixed   $value
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereField(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhere', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Where custom field is between
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  array   $values
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldBetween(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'whereBetween', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field is between
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  array   $values
+     * @param  bool  $not
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldBetween(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhereBetween', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Where custom field is not between
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  array   $values
+     * @param  string  $boolean
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldNotBetween(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'whereNotBetween', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field is not between
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  array   $values
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldNotBetween(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhereNotBetween', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Where custom field is in
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  mixed   $values
+     * @param  string  $boolean
+     * @param  bool    $not
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldIn(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'whereIn', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field is in
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  mixed   $values
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldIn(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhereIn', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Where custom field is not in
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  mixed   $values
+     * @param  string  $boolean
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldNotIn(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'whereNotIn', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field is not in
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  mixed   $values
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldNotIn(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhereNotIn', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Where custom field is null
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  string  $boolean
+     * @param  bool    $not
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldNull(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'whereNull', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field is null
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldNull(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhereNull', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Where custom field is not null
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @param  string  $boolean
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldNotNull(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'whereNotNull', array_slice(func_get_args(), 1);
+    }
+
+    /**
+     * Or where custom field is not null
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string  $column
+     * @retrun \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldNotNull(Builder $query)
+    {
+    	return $this->scopeWhereFieldHandler($query, 'orWhereNotNull', array_slice(func_get_args(), 1);
+    }
 }
