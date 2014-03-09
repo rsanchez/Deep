@@ -236,6 +236,25 @@ class Entry extends Title
     }
 
     /**
+     * Order by custom field
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  string                                $direction
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrderByField(Builder $query, $fieldName, $direction = 'asc')
+    {
+        if (self::$fieldRepository->hasField($fieldName)) {
+            $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
+
+            $query->orderBy($column, $direction);
+        }
+
+        return $query;
+    }
+
+    /**
      * Where custom field equals
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query

@@ -298,101 +298,101 @@ Entries::year(2014)->get();
 This scope accepts an array of parameters And applies all the [supported](#parameters-not-implemented) `{exp:channel:entries}` parameters to the query.
 
 ```
-Entries::tagparams(ee()->TMPL->tagparams);
+Entries::tagparams(ee()->TMPL->tagparams)->get();
 ```
 
-### Search
+### Custom Field Scopes
+
+This set of scopes allows you to use the traditional some Eloquent methods with custom field names instead of `field_id_X`.
+
+#### Order By Field
 
 ```
-Entries::search('your_field_name', 'value1', 'value2')->get()
+Entries::orderByField('your_custom_field', 'asc')->get();
 ```
-
-### Where Field Scopes
-
-This set of scopes allows you to use the traditional Eloquent `where` methods with custom field names instead of `field_id_X`.
 
 #### Where Field
 
 ```
-Entries::whereField('your_custom_field', 'foo');
+Entries::whereField('your_custom_field', 'foo')->get();
 ```
 
 #### Or Where Field
 
 ```
-Entries::orWhereField('your_custom_field', 'foo');
+Entries::orWhereField('your_custom_field', 'foo')->get();
 ```
 
 #### Where Field In
 
 ```
-Entries::whereFieldIn('your_custom_field', array('foo', 'bar'));
+Entries::whereFieldIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Or Where Field In
 
 ```
-Entries::orWhereFieldIn('your_custom_field', array('foo', 'bar'));
+Entries::orWhereFieldIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Where Field Not In
 
 ```
-Entries::whereFieldNotIn('your_custom_field', array('foo', 'bar'));
+Entries::whereFieldNotIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Or Where Field Not In
 
 ```
-Entries::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'));
+Entries::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Where Field Between
 
 ```
-Entries::whereFieldBetween('your_custom_field', array(1, 10));
+Entries::whereFieldBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Or Where Field Between
 
 ```
-Entries::orWhereFieldBetween('your_custom_field', array(1, 10));
+Entries::orWhereFieldBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Where Field Not Between
 
 ```
-Entries::whereFieldNotBetween('your_custom_field', array(1, 10));
+Entries::whereFieldNotBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Or Where Field Not Between
 
 ```
-Entries::orWhereFieldNotBetween('your_custom_field', array(1, 10));
+Entries::orWhereFieldNotBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Where Field Null
 
 ```
-Entries::whereFieldNull('your_custom_field');
+Entries::whereFieldNull('your_custom_field')->get();
 ```
 
 #### Or Where Field Null
 
 ```
-Entries::orWhereFieldNull('your_custom_field');
+Entries::orWhereFieldNull('your_custom_field')->get();
 ```
 
 #### Where Field Not Null
 
 ```
-Entries::whereFieldNotNull('your_custom_field');
+Entries::whereFieldNotNull('your_custom_field')->get();
 ```
 
 #### Or Where Field Not Null
 
 ```
-Entries::orWhereFieldNotNull('your_custom_field');
+Entries::orWhereFieldNotNull('your_custom_field')->get();
 ```
 
 ### Advanced Category Querying
@@ -728,7 +728,7 @@ class My_plugin extends BasePlugin
 
 You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
 
-NOTE: The `Title` model does NOT implement the Search and Where Field scopes.
+NOTE: The `Title` model does NOT implement the [Search](#search) and [Custom Field](#custom-field-scopes) scopes.
 
 ```
 <?php
@@ -749,6 +749,7 @@ $entries = Titles::channel('blog')
 - dynamic
 - dynamic_start
 - month_limit
+- orderby
 - paginate
 - paginate_base
 - paginate_type
@@ -757,14 +758,7 @@ $entries = Titles::channel('blog')
 - relaxed_categories
 - require_entry
 - show_current_week
+- sort
 - track_views
 - week_sort
 - uncategorized_entries
-
-## Todo
-
-- Category scope
-- orderby/sort
-- Pagination? probably have to wait until Illuminate paginate becomes more decoupled
-- API docs
-- unit tests
