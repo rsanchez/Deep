@@ -129,12 +129,9 @@ class WysiwygHydrator extends AbstractHydrator
         preg_match_all('#{page_(\d+)}#', $value, $pageMatches);
 
         foreach ($pageMatches[1] as $i => $entryId) {
-            $replace = $pageMatches[0][$i];
-            $this->siteRepository->getSites()->each(function ($site) use (&$value, $replace, $entryId) {
-                if (isset($site->site_pages[$site->site_id]['uris'][$entryId])) {
-                    $value = str_replace($replace, $site->site_pages[$site->site_id]['uris'][$entryId], $value);
-                }
-            });
+            if ($pageUri = $this->siteRepository->getPageUri($entryId)) {
+                $value = str_replace($pageMatches[0][$i], $pageUri, $value);
+            }
         }
 
         preg_match_all('#{filedir_(\d+)}#', $value, $filedirMatches);

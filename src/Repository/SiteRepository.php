@@ -39,4 +39,21 @@ class SiteRepository extends AbstractDeferredRepository
 
         return $this->collection;
     }
+
+    /**
+     * Get the Page URI for the specified entry ID
+     *
+     * @param int $entryId
+     * @return string|null
+     */
+    public function getPageUri($entryId)
+    {
+        foreach ($this->getSites() as $site) {
+            if (isset($site->site_pages[$site->site_id]['uris'][$entryId])) {
+                return $site->site_pages[$site->site_id]['uris'][$entryId];
+            }
+        }
+
+        return null;
+    }
 }
