@@ -164,24 +164,27 @@ class Entry extends Title
 
     /**
      * Filter by Custom Field Search
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  string                                $value
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSearch(Builder $query, array $search)
+    public function scopeSearch(Builder $query, $fieldName, $value)
     {
-        $this->requireTable($query, 'channel_data');
+        $values = array_slice(func_get_args(), 2);
 
-        foreach ($search as $fieldName => $values) {
-            if (self::$fieldRepository->hasField($fieldName)) {
+        if (self::$fieldRepository->hasField($fieldName)) {
 
-                $fieldId = self::$fieldRepository->getFieldId($fieldName);
+            $fieldId = self::$fieldRepository->getFieldId($fieldName);
 
-                $query->where(function ($query) use ($fieldId, $values) {
+            $query->where(function ($query) use ($fieldId, $values) {
 
-                    foreach ($values as $value) {
-                        $query->orWhere('channel_data.field_id_'.$fieldId, 'LIKE', '%{$value}%');
-                    }
+                foreach ($values as $value) {
+                    $query->orWhere('channel_data.field_id_'.$fieldId, 'LIKE', '%{$value}%');
+                }
 
-                });
-            }
+            });
         }
 
         return $query;
