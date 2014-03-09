@@ -26,7 +26,7 @@ use rsanchez\Deep\Hydrator\HydratorFactory;
 /**
  * IoC Container
  */
-class Entries extends Container
+class Deep extends Container
 {
     /**
      * Constructor
@@ -97,17 +97,17 @@ class Entries extends Container
     }
 
     /**
-     * Shortcut to the dependency-injected Entry model
-     * @return mixed
+     * The static proxies Entries and Titles use this
+     * @return static
      */
-    public static function __callStatic($name, $args)
+    public static function getInstance()
     {
         static $app;
 
         if (is_null($app)) {
-            $app = new static();
+            $app = new self();
         }
 
-        return call_user_func_array(array($app->make('Entry'), $name), $args);
+        return $app;
     }
 }
