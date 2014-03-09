@@ -17,7 +17,7 @@ use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
-use DateTime;
+use Carbon\Carbon;
 use DateTimeZone;
 
 /**
@@ -127,7 +127,7 @@ class Entry extends Title
         $attributes = $this->attributes;
 
         foreach ($attributes as $key => $value) {
-            if ($value instanceof DateTime) {
+            if ($value instanceof Carbon) {
                 $date = clone $value;
                 $date->setTimezone(new DateTimeZone('UTC'));
                 $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';

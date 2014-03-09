@@ -16,6 +16,7 @@ use rsanchez\Deep\Model\AbstractJoinableModel;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
+use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 
@@ -165,7 +166,7 @@ class Title extends AbstractJoinableModel
         $attributes = parent::attributesToArray();
 
         foreach (array('entry_date', 'edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date') as $key) {
-            if ($attributes[$key] instanceof DateTime) {
+            if ($attributes[$key] instanceof Carbon) {
                 $date = clone $attributes[$key];
                 $date->setTimezone(new DateTimeZone('UTC'));
                 $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
@@ -176,58 +177,58 @@ class Title extends AbstractJoinableModel
     }
 
     /**
-     * Get the entry_date column as a DateTime object
+     * Get the entry_date column as a Carbon object
      *
      * @param  int       $value unix time
-     * @return \DateTime
+     * @return \Carbon\Carbon
      */
     public function getEntryDateAttribute($value)
     {
-        return DateTime::createFromFormat('U', $value);
+        return Carbon::createFromFormat('U', $value);
     }
 
     /**
-     * Get the expiration_date column as a DateTime object, or null if there is no expiration date
+     * Get the expiration_date column as a Carbon object, or null if there is no expiration date
      *
      * @param  int            $value unix time
-     * @return \DateTime|null
+     * @return \Carbon\Carbon|null
      */
     public function getExpirationDateAttribute($value)
     {
-        return $value ? DateTime::createFromFormat('U', $value) : null;
+        return $value ? Carbon::createFromFormat('U', $value) : null;
     }
 
     /**
-     * Get the comment_expiration_date column as a DateTime object, or null if there is no expiration date
+     * Get the comment_expiration_date column as a Carbon object, or null if there is no expiration date
      *
      * @param  int            $value unix time
-     * @return \DateTime|null
+     * @return \Carbon\Carbon|null
      */
     public function getCommentExpirationDateAttribute($value)
     {
-        return $value ? DateTime::createFromFormat('U', $value) : null;
+        return $value ? Carbon::createFromFormat('U', $value) : null;
     }
 
     /**
-     * Get the recent_comment_date column as a DateTime object, or null if there is no expiration date
+     * Get the recent_comment_date column as a Carbon object, or null if there is no expiration date
      *
      * @param  int            $value unix time
-     * @return \DateTime|null
+     * @return \Carbon\Carbon|null
      */
     public function getRecentCommentDateAttribute($value)
     {
-        return $value ? DateTime::createFromFormat('U', $value) : null;
+        return $value ? Carbon::createFromFormat('U', $value) : null;
     }
 
     /**
-     * Get the edit_date column as a DateTime object
+     * Get the edit_date column as a Carbon object
      *
      * @param  int       $value unix time
-     * @return \DateTime
+     * @return \Carbon\Carbon
      */
     public function getEditDateAttribute($value)
     {
-        return DateTime::createFromFormat('YmdHis', $value);
+        return Carbon::createFromFormat('YmdHis', $value);
     }
 
     /**

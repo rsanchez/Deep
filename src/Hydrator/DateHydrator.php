@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
-use DateTime;
+use Carbon\Carbon;
 
 /**
  * Hydrator for the Date fieldtype
@@ -33,7 +33,7 @@ class DateHydrator extends AbstractHydrator
 
             $date = $entry->getAttribute('field_id_'.$field->field_id);
 
-            $entry->setAttribute($field->field_name, $date ? DateTime::createFromFormat('U', $date) : null);
+            $entry->setAttribute($field->field_name, $date ? Carbon::createFromFormat('U', $date) : null);
 
         });
 
@@ -49,7 +49,7 @@ class DateHydrator extends AbstractHydrator
                 $cols->each(function ($col) use ($row) {
                     $date = $row->getAttribute('col_id_'.$col->col_id);
 
-                    $row->setAttribute($col->col_name, $date ? DateTime::createFromFormat('U', $date) : null);
+                    $row->setAttribute($col->col_name, $date ? Carbon::createFromFormat('U', $date) : null);
                 });
 
             });
@@ -68,7 +68,7 @@ class DateHydrator extends AbstractHydrator
                 $cols->each(function ($col) use ($row) {
                     $date = $row->getAttribute('col_id_'.$col->col_id);
 
-                    $row->setAttribute($col->col_name, $date ? DateTime::createFromFormat('U', $date) : null);
+                    $row->setAttribute($col->col_name, $date ? Carbon::createFromFormat('U', $date) : null);
                 });
 
             });

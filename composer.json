@@ -12,6 +12,8 @@
         "psr-4": { "rsanchez\\Deep\\": "src/" }
     },
     "require": {
-        "expressodev/laravel-codeigniter-db": "dev-master"
+        "expressodev/laravel-codeigniter-db": "dev-master",
+        "illuminate/container": "~4.1.0",
+        "nesbot/carbon": "1.*"
     }
 }
