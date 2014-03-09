@@ -6,11 +6,12 @@ A set of [Eloquent](http://laravel.com/docs/eloquent) models for ExpressionEngin
 - chainable with standard Eloquent model methods (ex. `->where('foo', 'bar')`)
 - minimize the number of queries needed using eager loading
 - provide an base plugin from which EE plugins/modules can extend, which has near parity with `{exp:channel:entries}`
+- automatically fetch custom fields using field names and entities instead of just raw text from `exp_channel_data`
 
 ```
 <?php
 
-use rsanchez\Deep\Entries
+use rsanchez\Deep\App\Entries;
 
 $entries = Entries::channel('blog')
                 ->limit(10)
@@ -219,7 +220,7 @@ $entry->comment_total
 
 ### Dates
 
-Entries have the following date properties. Each of these will be a `DateTime` object. `expiration_date`, `comment_expiration_date` and `recent_comment_date` can be `null`.
+Entries have the following date properties. Each of these will be a (`Carbon` object)[https://github.com/briannesbitt/Carbon]. `expiration_date`, `comment_expiration_date` and `recent_comment_date` can be `null`.
 
 ```
 $entry->entry_date
@@ -327,33 +328,29 @@ foreach ($entry->your_playa_field as $childEntry) {
 Assets fields will be Eloquent Collections of `Asset` objects. `Asset` objects have the following properties:
 
 ```
-$entry->your_assets_field->url
-$entry->your_assets_field->server_path
-$entry->your_assets_field->file_id
-$entry->your_assets_field->folder_id
-$entry->your_assets_field->source_type
-$entry->your_assets_field->source_id
-$entry->your_assets_field->filedir_id
-$entry->your_assets_field->file_name
-$entry->your_assets_field->title
-$entry->your_assets_field->date
-$entry->your_assets_field->alt_text
-$entry->your_assets_field->caption
-$entry->your_assets_field->author
-$entry->your_assets_field->desc
-$entry->your_assets_field->location
-$entry->your_assets_field->keywords
-$entry->your_assets_field->date_modified
-$entry->your_assets_field->kind
-$entry->your_assets_field->width
-$entry->your_assets_field->height
-$entry->your_assets_field->size
-$entry->your_assets_field->search_keywords
-```
-
-```
 foreach ($entry->your_assets_field as $file) {
-    echo '<img src="'.$file->url.'" />';
+    $file->url
+    $file->server_path
+    $file->file_id
+    $file->folder_id
+    $file->source_type
+    $file->source_id
+    $file->filedir_id
+    $file->file_name
+    $file->title
+    $file->date
+    $file->alt_text
+    $file->caption
+    $file->author
+    $file->desc
+    $file->location
+    $file->keywords
+    $file->date_modified
+    $file->kind
+    $file->width
+    $file->height
+    $file->size
+    $file->search_keywords
 }
 ```
 
@@ -388,19 +385,49 @@ echo '<img src="'.$entry->your_file_field->url.'" />';
 
 ### Date
 
-Date fields will be a single `DateTime` object.
+Date fields will be a single [`Carbon` object](https://github.com/briannesbitt/Carbon).
 
 ```
 echo $entry->your_date_field->format('Y-m-d H:i:s');
 ```
 
-## Parameters to be implemented in the future
+## Extending the `BasePlugin` class
 
-- category
-- category_group
-- search:field_name
-- show_pages
-- uncategorized_entries
+The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for ExpressionEngine modules and plugins. The `parse` method parses a template using an `EntryCollection`.
+
+```
+<?php
+
+use rsanchez\Deep\Entries;
+use rsanchez\Deep\Plugin\BasePlugin;
+
+class My_plugin extends BasePlugin
+{
+    public function __construct()
+    {
+        $entries = Entries::tagparams(ee()->TMPL->tagparams)
+                            // do any additional custom querying here
+                            ->get();
+
+        $this->return_data = $this->parse($entries);
+    }
+}
+
+```
+
+## The `Titles` Class
+
+You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
+
+```
+<?php
+
+use rsanchez\Deep\App\Titles;
+
+$entries = Titles::channel('blog')
+                ->limit(1)
+                ->get();
+```
 
 ## Parameters not implemented
 
@@ -421,11 +448,11 @@ echo $entry->your_date_field->format('Y-m-d H:i:s');
 - show_current_week
 - track_views
 - week_sort
+- uncategorized_entries
 
 ## Todo
 
 - Category scope
-- Carbon instead of DateTime
 - orderby/sort
 - Pagination? probably have to wait until Illuminate paginate becomes more decoupled
 - API docs
