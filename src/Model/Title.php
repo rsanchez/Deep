@@ -482,6 +482,20 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by site ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $siteId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSiteId(Builder $query, $siteId)
+    {
+        $siteIds = array_slice(func_get_args(), 1);
+
+        return $query->whereIn('channel_titles.site_id', $siteIds);
+    }
+
+    /**
      * Set a Fixed Order
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
