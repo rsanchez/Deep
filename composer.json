@@ -1,7 +1,6 @@
 {
     "name": "rsanchez/deep",
     "description": "A set of Eloquent models for ExpressionEngine Channel Entries.",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "Rob Sanchez",
