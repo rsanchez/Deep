@@ -640,14 +640,32 @@ class Title extends AbstractJoinableModel
      */
     public function scopeShowPages(Builder $query, $showPages = true)
     {
-        $args = self::$siteRepository->getPageEntryIds();
+        if (! $showPages) {
+            $args = self::$siteRepository->getPageEntryIds();
 
-        array_unshift($args, $query);
+            array_unshift($args, $query);
 
-        if ($showPages === 'only') {
-            call_user_func_array(array($this, 'scopeEntryId'), $args);
-        } elseif (! $showPages || $showPages === 'no') {
             call_user_func_array(array($this, 'scopeNotEntryId'), $args);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Filter by Pages Only
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool|string                           $showPagesOnly
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShowPagesOnly(Builder $query, $showPagesOnly = true)
+    {
+        if ($showPagesOnly) {
+            $args = self::$siteRepository->getPageEntryIds();
+
+            array_unshift($args, $query);
+
+            call_user_func_array(array($this, 'scopeEntryId'), $args);
         }
 
         return $query;
@@ -901,6 +919,22 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by Show Pages string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShowPagesString(Builder $query, $string)
+    {
+        if ($string === 'only') {
+            return $this->scopeShowPagesOnly($query);
+        }
+
+        return $this->scopeShowPages($query, $string === 'yes');
+    }
+
+    /**
      * Filter by Status string parameter
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -978,7 +1012,7 @@ class Title extends AbstractJoinableModel
             //'paginate_type' => 'paginateType',//string
             'show_expired' => 'showExpiredString',
             'show_future_entries' => 'showFutureEntriesString',
-            'show_pages' => 'showPages',
+            'show_pages' => 'showPagesString',
             'sort' => 'sort',
             'start_day' => 'startDay',
             'start_on' => 'startOn',
