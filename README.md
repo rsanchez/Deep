@@ -185,10 +185,214 @@ Entry::month(12)->get();
 Entry::offset(1)->get();
 ```
 
+### Show Expired
+
+```
+Entry::showExpired(false)->get();
+```
+
+### Show Future Entries
+
+```
+Entry::showFutureEntries(true)->get();
+```
+
+### Show Pages
+
+```
+Entry::showPages(false)->get();
+```
+
+### Show Pages Only
+
+```
+Entry::showPagesOnly(true)->get();
+```
+
+### Site ID
+
+```
+Entry::siteId(1, 2)->get();
+```
+
+### Start On
+
+Unix time:
+
+```
+Entry::startOn(1394393247)->get();
+```
+
+Or use a `DateTime` object:
+
+```
+$date = new DateTime();
+Entry::startOn($date)->get();
+```
+
+### Stop Before
+
+Unix time:
+
+```
+Entry::stopBefore(1394393247)->get();
+```
+
+Or use a `DateTime` object:
+
+```
+$date = new DateTime();
+Entry::stopBefore($date)->get();
+```
+
+### Sticky
+
+```
+Entry::sticky(true)->get();
+```
+
+### Status
+
+```
+Entry::status('open', 'closed')->get();
+```
+
+### Not Status
+
+```
+Entry::notStatus('open', 'closed')->get();
+```
+
+### URL Title
+
+```
+Entry::urlTitle('cats', 'dogs')->get();
+```
+
+### Not URL Title
+
+```
+Entry::notUrlTitle('cats', 'dogs')->get();
+```
+
+### Username
+
+```
+Entry::username('john_doe', 'jane_doe')->get();
+```
+
+### Not Username
+
+```
+Entry::notUsername('john_doe', 'jane_doe')->get();
+```
+
 ### Year
 
 ```
 Entry::year(2014)->get();
+```
+
+### Tagparams
+
+This scope accepts an array of parameters And applies all the [supported](#parameters-not-implemented) `{exp:channel:entries}` parameters to the query.
+
+```
+Entry::tagparams(ee()->TMPL->tagparams);
+```
+
+### Search
+
+```
+Entry::search('your_field_name', 'value1', 'value2')->get()
+```
+
+### Where Field Scopes
+
+This set of scopes allows you to use the traditional Eloquent `where` methods with custom field names instead of `field_id_X`.
+
+#### Where Field
+
+```
+Entry::whereField('your_custom_field', 'foo');
+```
+
+#### Or Where Field
+
+```
+Entry::orWhereField('your_custom_field', 'foo');
+```
+
+#### Where Field In
+
+```
+Entry::whereFieldIn('your_custom_field', array('foo', 'bar'));
+```
+
+#### Or Where Field In
+
+```
+Entry::orWhereFieldIn('your_custom_field', array('foo', 'bar'));
+```
+
+#### Where Field Not In
+
+```
+Entry::whereFieldNotIn('your_custom_field', array('foo', 'bar'));
+```
+
+#### Or Where Field Not In
+
+```
+Entry::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'));
+```
+
+#### Where Field Between
+
+```
+Entry::whereFieldBetween('your_custom_field', array(1, 10));
+```
+
+#### Or Where Field Between
+
+```
+Entry::orWhereFieldBetween('your_custom_field', array(1, 10));
+```
+
+#### Where Field Not Between
+
+```
+Entry::whereFieldNotBetween('your_custom_field', array(1, 10));
+```
+
+#### Or Where Field Not Between
+
+```
+Entry::orWhereFieldNotBetween('your_custom_field', array(1, 10));
+```
+
+#### Where Field Null
+
+```
+Entry::whereFieldNull('your_custom_field');
+```
+
+#### Or Where Field Null
+
+```
+Entry::orWhereFieldNull('your_custom_field');
+```
+
+#### Where Field Not Null
+
+```
+Entry::whereFieldNotNull('your_custom_field');
+```
+
+#### Or Where Field Not Null
+
+```
+Entry::orWhereFieldNotNull('your_custom_field');
 ```
 
 ## Entry objects
@@ -216,11 +420,12 @@ $entry->year
 $entry->month
 $entry->day
 $entry->comment_total
+$entry->page_uri
 ```
 
 ### Dates
 
-Entries have the following date properties. Each of these will be a (`Carbon` object)[https://github.com/briannesbitt/Carbon]. `expiration_date`, `comment_expiration_date` and `recent_comment_date` can be `null`.
+Entries have the following date properties. Each of these will be a [`Carbon` object](https://github.com/briannesbitt/Carbon). `expiration_date`, `comment_expiration_date` and `recent_comment_date` can be `null`.
 
 ```
 $entry->entry_date
@@ -284,6 +489,99 @@ $entry->channel->max_revisions
 $entry->channel->default_entry_title
 $entry->channel->url_title_prefix
 $entry->channel->live_look_template
+```
+
+### Categories
+
+Each `Entry` object has a `categories` property which is a collection of `Category` objects. Currently, there is no support for custom category fields.
+
+```
+foreach ($entry->categories as $category) {
+    echo '<li><a href="/blog/category/'.$category->cat_url_title.'">'.$category->cat_name.'</a></li>';
+}
+```
+
+### Author
+
+Each `Entry` object has a `member` property which is a `Member` object. Currently, there is no support for custom member fields.
+
+```
+$entry->member->member_id
+$entry->member->group_id
+$entry->member->username
+$entry->member->screen_name
+$entry->member->password
+$entry->member->salt
+$entry->member->unique_id
+$entry->member->crypt_key
+$entry->member->authcode
+$entry->member->email
+$entry->member->url
+$entry->member->location
+$entry->member->occupation
+$entry->member->interests
+$entry->member->bday_d
+$entry->member->bday_m
+$entry->member->bday_y
+$entry->member->aol_im
+$entry->member->yahoo_im
+$entry->member->msn_im
+$entry->member->icq
+$entry->member->bio
+$entry->member->signature
+$entry->member->avatar_filename
+$entry->member->avatar_width
+$entry->member->avatar_height
+$entry->member->photo_filename
+$entry->member->photo_width
+$entry->member->photo_height
+$entry->member->sig_img_filename
+$entry->member->sig_img_width
+$entry->member->sig_img_height
+$entry->member->ignore_list
+$entry->member->private_messages
+$entry->member->accept_messages
+$entry->member->last_view_bulletins
+$entry->member->last_bulletin_date
+$entry->member->ip_address
+$entry->member->join_date
+$entry->member->last_visit
+$entry->member->last_activity
+$entry->member->total_entries
+$entry->member->total_comments
+$entry->member->total_forum_topics
+$entry->member->total_forum_posts
+$entry->member->last_entry_date
+$entry->member->last_comment_date
+$entry->member->last_forum_post_date
+$entry->member->last_email_date
+$entry->member->in_authorlist
+$entry->member->accept_admin_email
+$entry->member->accept_user_email
+$entry->member->notify_by_default
+$entry->member->notify_of_pm
+$entry->member->display_avatars
+$entry->member->display_signatures
+$entry->member->parse_smileys
+$entry->member->smart_notifications
+$entry->member->language
+$entry->member->timezone
+$entry->member->time_format
+$entry->member->include_seconds
+$entry->member->date_format
+$entry->member->cp_theme
+$entry->member->profile_theme
+$entry->member->forum_theme
+$entry->member->tracker
+$entry->member->template_size
+$entry->member->notepad
+$entry->member->notepad_size
+$entry->member->quick_links
+$entry->member->quick_tabs
+$entry->member->show_sidebar
+$entry->member->pmember_id
+$entry->member->rte_enabled
+$entry->member->rte_toolset_id
 ```
 
 ### Custom Fields
@@ -418,6 +716,8 @@ class My_plugin extends BasePlugin
 ## The `Titles` Class
 
 You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
+
+NOTE: The `Title` model does NOT implement the Search and Where Field scopes.
 
 ```
 <?php
