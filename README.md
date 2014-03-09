@@ -706,7 +706,7 @@ The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for E
 ```
 <?php
 
-use rsanchez\Deep\Entries;
+use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Plugin\BasePlugin;
 
 class My_plugin extends BasePlugin
