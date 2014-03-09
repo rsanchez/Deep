@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\AbstractJoinableModel;
 use rsanchez\Deep\Repository\ChannelRepository;
+use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use Carbon\Carbon;
@@ -57,6 +58,12 @@ class Title extends AbstractJoinableModel
     protected static $channelRepository;
 
     /**
+     * Global Site Repository
+     * @var \rsanchez\Deep\Repository\SiteRepository
+     */
+    protected static $siteRepository;
+
+    /**
      * Define the Member Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -82,6 +89,16 @@ class Title extends AbstractJoinableModel
     public static function setChannelRepository(ChannelRepository $channelRepository)
     {
         self::$channelRepository = $channelRepository;
+    }
+
+    /**
+     * Set the global SiteRepository
+     * @param  \rsanchez\Deep\Repository\SiteRepository $siteRepository
+     * @return void
+     */
+    public static function setSiteRepository(SiteRepository $siteRepository)
+    {
+        self::$siteRepository = $siteRepository;
     }
 
     /**
@@ -229,6 +246,16 @@ class Title extends AbstractJoinableModel
     public function getEditDateAttribute($value)
     {
         return Carbon::createFromFormat('YmdHis', $value);
+    }
+
+    /**
+     * Get the page_uri of the entry
+     *
+     * @return string|null
+     */
+    public function getPageUriAttribute()
+    {
+        return self::$siteRepository->getPageUri($this->entry_id);
     }
 
     /**
@@ -591,6 +618,28 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by Page
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool|string                           $showPages
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShowPages(Builder $query, $showPages = true)
+    {
+        $args = self::$siteRepository->getPageEntryIds();
+
+        array_unshift($args, $query);
+
+        if ($showPages === 'only') {
+            call_user_func_array(array($this, 'scopeEntryId'), $args);
+        } elseif (! $showPages || $showPages === 'no') {
+            call_user_func_array(array($this, 'scopeNotEntryId'), $args);
+        }
+
+        return $query;
+    }
+
+    /**
      * Filter out entries before the specified date
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -902,7 +951,6 @@ class Title extends AbstractJoinableModel
             'category' => 'categoryString',
             'category_group' => 'categoryGroupString',
             'channel' => 'channel',
-            //'dynamic_parameters' => 'dynamicParameters',
             'entry_id' => 'entryIdString',
             'entry_id_from' => 'entryIdFrom',
             'entry_id_fo' => 'entryIdTo',
@@ -916,7 +964,7 @@ class Title extends AbstractJoinableModel
             //'paginate_type' => 'paginateType',//string
             'show_expired' => 'showExpiredString',
             'show_future_entries' => 'showFutureEntriesString',
-            //'show_pages' => 'showPages',
+            'show_pages' => 'showPages',
             'sort' => 'sort',
             'start_day' => 'startDay',
             'start_on' => 'startOn',

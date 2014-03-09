@@ -83,6 +83,7 @@ class Deep extends Container
 
         $this->singleton('Title', function ($app) {
             Title::setChannelRepository($app->make('ChannelRepository'));
+            Title::setSiteRepository($app->make('SiteRepository'));
 
             return new Title();
         });
@@ -91,6 +92,7 @@ class Deep extends Container
             Entry::setFieldRepository($app->make('FieldRepository'));
             Entry::setChannelRepository($app->make('ChannelRepository'));
             Entry::setHydratorFactory($app->make('HydratorFactory'));
+            Entry::setSiteRepository($app->make('SiteRepository'));
 
             return new Entry();
         });
