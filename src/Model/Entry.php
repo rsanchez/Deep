@@ -197,17 +197,16 @@ class Entry extends Title
     {
         parent::scopeTagparams($query, $parameters);
 
-        $search = array();
-
         foreach ($parameters as $key => $value) {
             if (strncmp($key, 'search:', 7) === 0) {
-                $key = 'search';
-                $search[substr($key, 7)] = explode('|', $value);
-            }
-        }
+                $args = explode('|', $value);
 
-        if ($search) {
-            $this->scopeSearch($query, $search);
+                array_unshift($args, substr($key, 7));
+
+                array_unshift($query);
+
+                call_user_func_array(array($this, 'scopeSearch'), $args);
+            }
         }
 
         return $query;
