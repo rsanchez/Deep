@@ -74,145 +74,145 @@ Entries::notChannelId(1, 2)->get();
 ### Author ID
 
 ```
-Entry::authorId(1, 2)->get();
+Entries::authorId(1, 2)->get();
 ```
 
 ### Not Author ID
 
 ```
-Entry::notAuthorId(1, 2)->get();
+Entries::notAuthorId(1, 2)->get();
 ```
 
 ### Category ID
 
 ```
-Entry::category(1, 2)->get();
+Entries::category(1, 2)->get();
 ```
 
 ### Not Category ID
 
 ```
-Entry::notCategory(1, 2)->get();
+Entries::notCategory(1, 2)->get();
 ```
 
 ### Category Name
 
 ```
-Entry::categoryName('mammals', 'reptiles')->get();
+Entries::categoryName('mammals', 'reptiles')->get();
 ```
 
-### NotCategory Name
+### Not Category Name
 
 ```
-Entry::notCategoryName('mammals', 'reptiles')->get();
+Entries::notCategoryName('mammals', 'reptiles')->get();
 ```
 
 ### Category Group
 
 ```
-Entry::categoryGroup(1, 2)->get();
+Entries::categoryGroup(1, 2)->get();
 ```
 
 ### Not Category Group
 
 ```
-Entry::notCategoryGroup(1, 2)->get();
+Entries::notCategoryGroup(1, 2)->get();
 ```
 
 ### Day
 
 ```
-Entry::day(31)->get();
+Entries::day(31)->get();
 ```
 
 ### Entry ID
 
 ```
-Entry::entryId(1, 2)->get();
+Entries::entryId(1, 2)->get();
 ```
 
 ### Not Entry ID
 
 ```
-Entry::notEntryId(1, 2)->get();
+Entries::notEntryId(1, 2)->get();
 ```
 
 ### Entry ID From
 
 ```
-Entry::entryIdFrom(1)->get();
+Entries::entryIdFrom(1)->get();
 ```
 
 ### Entry ID To
 
 ```
-Entry::entryIdTo(100)->get();
+Entries::entryIdTo(100)->get();
 ```
 
 ### Fixed Order
 
 ```
-Entry::fixedOrder(4, 8, 15, 16, 23, 42)->get();
+Entries::fixedOrder(4, 8, 15, 16, 23, 42)->get();
 ```
 
 ### Member Group ID
 
 ```
-Entry::groupId(1, 2)->get();
+Entries::groupId(1, 2)->get();
 ```
 
 ### Not Member Group ID
 
 ```
-Entry::notGroupId(1, 2)->get();
+Entries::notGroupId(1, 2)->get();
 ```
 
 ### Limit
 
 ```
-Entry::limit(1)->get();
+Entries::limit(1)->get();
 ```
 
 ### Month
 
 ```
-Entry::month(12)->get();
+Entries::month(12)->get();
 ```
 
 ### Offset
 
 ```
-Entry::offset(1)->get();
+Entries::offset(1)->get();
 ```
 
 ### Show Expired
 
 ```
-Entry::showExpired(false)->get();
+Entries::showExpired(false)->get();
 ```
 
 ### Show Future Entries
 
 ```
-Entry::showFutureEntries(true)->get();
+Entries::showFutureEntries(true)->get();
 ```
 
 ### Show Pages
 
 ```
-Entry::showPages(false)->get();
+Entries::showPages(false)->get();
 ```
 
 ### Show Pages Only
 
 ```
-Entry::showPagesOnly(true)->get();
+Entries::showPagesOnly(true)->get();
 ```
 
 ### Site ID
 
 ```
-Entry::siteId(1, 2)->get();
+Entries::siteId(1, 2)->get();
 ```
 
 ### Start On
@@ -220,14 +220,14 @@ Entry::siteId(1, 2)->get();
 Unix time:
 
 ```
-Entry::startOn(1394393247)->get();
+Entries::startOn(1394393247)->get();
 ```
 
 Or use a `DateTime` object:
 
 ```
 $date = new DateTime();
-Entry::startOn($date)->get();
+Entries::startOn($date)->get();
 ```
 
 ### Stop Before
@@ -235,62 +235,62 @@ Entry::startOn($date)->get();
 Unix time:
 
 ```
-Entry::stopBefore(1394393247)->get();
+Entries::stopBefore(1394393247)->get();
 ```
 
 Or use a `DateTime` object:
 
 ```
 $date = new DateTime();
-Entry::stopBefore($date)->get();
+Entries::stopBefore($date)->get();
 ```
 
 ### Sticky
 
 ```
-Entry::sticky(true)->get();
+Entries::sticky(true)->get();
 ```
 
 ### Status
 
 ```
-Entry::status('open', 'closed')->get();
+Entries::status('open', 'closed')->get();
 ```
 
 ### Not Status
 
 ```
-Entry::notStatus('open', 'closed')->get();
+Entries::notStatus('open', 'closed')->get();
 ```
 
 ### URL Title
 
 ```
-Entry::urlTitle('cats', 'dogs')->get();
+Entries::urlTitle('cats', 'dogs')->get();
 ```
 
 ### Not URL Title
 
 ```
-Entry::notUrlTitle('cats', 'dogs')->get();
+Entries::notUrlTitle('cats', 'dogs')->get();
 ```
 
 ### Username
 
 ```
-Entry::username('john_doe', 'jane_doe')->get();
+Entries::username('john_doe', 'jane_doe')->get();
 ```
 
 ### Not Username
 
 ```
-Entry::notUsername('john_doe', 'jane_doe')->get();
+Entries::notUsername('john_doe', 'jane_doe')->get();
 ```
 
 ### Year
 
 ```
-Entry::year(2014)->get();
+Entries::year(2014)->get();
 ```
 
 ### Tagparams
@@ -298,13 +298,13 @@ Entry::year(2014)->get();
 This scope accepts an array of parameters And applies all the [supported](#parameters-not-implemented) `{exp:channel:entries}` parameters to the query.
 
 ```
-Entry::tagparams(ee()->TMPL->tagparams);
+Entries::tagparams(ee()->TMPL->tagparams);
 ```
 
 ### Search
 
 ```
-Entry::search('your_field_name', 'value1', 'value2')->get()
+Entries::search('your_field_name', 'value1', 'value2')->get()
 ```
 
 ### Where Field Scopes
@@ -314,85 +314,96 @@ This set of scopes allows you to use the traditional Eloquent `where` methods wi
 #### Where Field
 
 ```
-Entry::whereField('your_custom_field', 'foo');
+Entries::whereField('your_custom_field', 'foo');
 ```
 
 #### Or Where Field
 
 ```
-Entry::orWhereField('your_custom_field', 'foo');
+Entries::orWhereField('your_custom_field', 'foo');
 ```
 
 #### Where Field In
 
 ```
-Entry::whereFieldIn('your_custom_field', array('foo', 'bar'));
+Entries::whereFieldIn('your_custom_field', array('foo', 'bar'));
 ```
 
 #### Or Where Field In
 
 ```
-Entry::orWhereFieldIn('your_custom_field', array('foo', 'bar'));
+Entries::orWhereFieldIn('your_custom_field', array('foo', 'bar'));
 ```
 
 #### Where Field Not In
 
 ```
-Entry::whereFieldNotIn('your_custom_field', array('foo', 'bar'));
+Entries::whereFieldNotIn('your_custom_field', array('foo', 'bar'));
 ```
 
 #### Or Where Field Not In
 
 ```
-Entry::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'));
+Entries::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'));
 ```
 
 #### Where Field Between
 
 ```
-Entry::whereFieldBetween('your_custom_field', array(1, 10));
+Entries::whereFieldBetween('your_custom_field', array(1, 10));
 ```
 
 #### Or Where Field Between
 
 ```
-Entry::orWhereFieldBetween('your_custom_field', array(1, 10));
+Entries::orWhereFieldBetween('your_custom_field', array(1, 10));
 ```
 
 #### Where Field Not Between
 
 ```
-Entry::whereFieldNotBetween('your_custom_field', array(1, 10));
+Entries::whereFieldNotBetween('your_custom_field', array(1, 10));
 ```
 
 #### Or Where Field Not Between
 
 ```
-Entry::orWhereFieldNotBetween('your_custom_field', array(1, 10));
+Entries::orWhereFieldNotBetween('your_custom_field', array(1, 10));
 ```
 
 #### Where Field Null
 
 ```
-Entry::whereFieldNull('your_custom_field');
+Entries::whereFieldNull('your_custom_field');
 ```
 
 #### Or Where Field Null
 
 ```
-Entry::orWhereFieldNull('your_custom_field');
+Entries::orWhereFieldNull('your_custom_field');
 ```
 
 #### Where Field Not Null
 
 ```
-Entry::whereFieldNotNull('your_custom_field');
+Entries::whereFieldNotNull('your_custom_field');
 ```
 
 #### Or Where Field Not Null
 
 ```
-Entry::orWhereFieldNotNull('your_custom_field');
+Entries::orWhereFieldNotNull('your_custom_field');
+```
+
+### Advanced Category Querying
+
+This library makes use of Eloquent's [relationship capabilities](http://laravel.com/docs/eloquent#querying-relations). If you need to do more advanced category querying than the default category scopes, you can use the `whereHas` and `orWhereHas` methods.
+
+```
+Entries::whereHas('categories', function ($query) {
+    // category starts with A
+    $query->where('cat_name', 'LIKE', 'A%');
+})->get();
 ```
 
 ## Entry objects
