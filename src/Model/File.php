@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
 use rsanchez\Deep\Model\UploadPref;
+use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Model for the files table
@@ -73,6 +76,28 @@ class File extends Model implements FileInterface
     }
 
     /**
+     * Get the upload_date column as a Carbon object
+     *
+     * @param  int       $value unix time
+     * @return \Carbon\Carbon
+     */
+    public function getUploadDateAttribute($value)
+    {
+        return Carbon::createFromFormat('U', $value);
+    }
+
+    /**
+     * Get the modified_date column as a Carbon object
+     *
+     * @param  int       $value unix time
+     * @return \Carbon\Carbon
+     */
+    public function getModifiedDateAttribute($value)
+    {
+        return Carbon::createFromFormat('U', $value);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString()
@@ -126,5 +151,23 @@ class File extends Model implements FileInterface
         });
 
         return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        foreach (array('upload_date', 'modified_date') as $key) {
+            if ($attributes[$key] instanceof Carbon) {
+                $date = clone $attributes[$key];
+                $date->setTimezone(new DateTimeZone('UTC'));
+                $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
+            }
+        }
+
+        return $attributes;
     }
 }

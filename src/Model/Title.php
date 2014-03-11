@@ -174,9 +174,7 @@ class Title extends AbstractJoinableModel
     }
 
     /**
-     * Convert the model's attributes to an array.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function attributesToArray()
     {

@@ -15,6 +15,9 @@ use rsanchez\Deep\Model\AbstractJoinableModel;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Model\UploadPref;
+use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Model for the assets_files table, joined with assets_selections
@@ -89,6 +92,28 @@ class Asset extends AbstractJoinableModel implements FileInterface
     }
 
     /**
+     * Get the date column as a Carbon object
+     *
+     * @param  int       $value unix time
+     * @return \Carbon\Carbon
+     */
+    public function getDateAttribute($value)
+    {
+        return Carbon::createFromFormat('U', $value);
+    }
+
+    /**
+     * Get the date_modified column as a Carbon object
+     *
+     * @param  int       $value unix time
+     * @return \Carbon\Carbon
+     */
+    public function getDateModifiedAttribute($value)
+    {
+        return Carbon::createFromFormat('U', $value);
+    }
+
+    /**
      * Filter by Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -100,6 +125,24 @@ class Asset extends AbstractJoinableModel implements FileInterface
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'assets_selections')->whereIn('assets_selections.entry_id', $entryId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        foreach (array('date', 'date_modified') as $key) {
+            if ($attributes[$key] instanceof Carbon) {
+                $date = clone $attributes[$key];
+                $date->setTimezone(new DateTimeZone('UTC'));
+                $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
+            }
+        }
+
+        return $attributes;
     }
 
     /**
