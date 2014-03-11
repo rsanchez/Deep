@@ -10,6 +10,8 @@
 namespace rsanchez\Deep;
 
 use Illuminate\Container\Container;
+use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
+use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
@@ -22,6 +24,7 @@ use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepository;
 use rsanchez\Deep\Repository\ConfigUploadPrefRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
+use CI_Controller;
 
 /**
  * IoC Container
@@ -96,6 +99,20 @@ class Deep extends Container
 
             return new Entry();
         });
+    }
+
+    /**
+     * Bootstrap the EE db connection with Eloquent, once
+     * @param  \CI_Controller $ee
+     * @return void
+     */
+    public static function bootEloquent(CI_Controller $ee)
+    {
+        if (Model::getConnectionResolver() instanceof CodeIgniterConnectionResolver) {
+            return;
+        }
+
+        Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
     }
 
     /**

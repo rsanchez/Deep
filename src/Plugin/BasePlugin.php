@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Plugin;
 
 use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\EntryCollection;
@@ -27,22 +28,7 @@ abstract class BasePlugin
      */
     public function __construct()
     {
-        self::bootEloquent();
-    }
-
-    /**
-     * Bootstrap the EE db connection with Eloquent, once
-     * @return void
-     */
-    protected static function bootEloquent()
-    {
-        if (ee()->session->cache(__CLASS__, __FUNCTION__)) {
-            return;
-        }
-
-        ee()->session->set_cache(__CLASS__, __FUNCTION__, true);
-
-        Model::setConnectionResolver(new CodeIgniterConnectionResolver(ee()));
+        Deep::bootEloquent(ee());
     }
 
     /**
