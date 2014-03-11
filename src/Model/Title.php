@@ -194,7 +194,7 @@ class Title extends AbstractJoinableModel
     /**
      * Get the entry_date column as a Carbon object
      *
-     * @param  int       $value unix time
+     * @param  int            $value unix time
      * @return \Carbon\Carbon
      */
     public function getEntryDateAttribute($value)
@@ -205,7 +205,7 @@ class Title extends AbstractJoinableModel
     /**
      * Get the expiration_date column as a Carbon object, or null if there is no expiration date
      *
-     * @param  int            $value unix time
+     * @param  int                 $value unix time
      * @return \Carbon\Carbon|null
      */
     public function getExpirationDateAttribute($value)
@@ -216,7 +216,7 @@ class Title extends AbstractJoinableModel
     /**
      * Get the comment_expiration_date column as a Carbon object, or null if there is no expiration date
      *
-     * @param  int            $value unix time
+     * @param  int                 $value unix time
      * @return \Carbon\Carbon|null
      */
     public function getCommentExpirationDateAttribute($value)
@@ -227,7 +227,7 @@ class Title extends AbstractJoinableModel
     /**
      * Get the recent_comment_date column as a Carbon object, or null if there is no expiration date
      *
-     * @param  int            $value unix time
+     * @param  int                 $value unix time
      * @return \Carbon\Carbon|null
      */
     public function getRecentCommentDateAttribute($value)
@@ -238,7 +238,7 @@ class Title extends AbstractJoinableModel
     /**
      * Get the edit_date column as a Carbon object
      *
-     * @param  int       $value unix time
+     * @param  int            $value unix time
      * @return \Carbon\Carbon
      */
     public function getEditDateAttribute($value)
@@ -785,7 +785,7 @@ class Title extends AbstractJoinableModel
      * eg  'not 4|5|6'
      *
      * @param string $string ex '4|5|6' 'not 4|5|6'
-     * @param string $scope the name of the scope, ex. AuthorId
+     * @param string $scope  the name of the scope, ex. AuthorId
      */
     protected function scopeArrayFromString($string, $scope)
     {

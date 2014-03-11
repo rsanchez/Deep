@@ -43,7 +43,7 @@ class SiteRepository extends AbstractDeferredRepository
     /**
      * Get the Page URI for the specified entry ID
      *
-     * @param int $entryId
+     * @param  int         $entryId
      * @return string|null
      */
     public function getPageUri($entryId)

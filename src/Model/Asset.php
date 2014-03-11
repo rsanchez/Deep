@@ -16,7 +16,6 @@ use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Model\UploadPref;
 use Carbon\Carbon;
-use DateTime;
 use DateTimeZone;
 
 /**
@@ -94,7 +93,7 @@ class Asset extends AbstractJoinableModel implements FileInterface
     /**
      * Get the date column as a Carbon object
      *
-     * @param  int       $value unix time
+     * @param  int            $value unix time
      * @return \Carbon\Carbon
      */
     public function getDateAttribute($value)
@@ -105,7 +104,7 @@ class Asset extends AbstractJoinableModel implements FileInterface
     /**
      * Get the date_modified column as a Carbon object
      *
-     * @param  int       $value unix time
+     * @param  int            $value unix time
      * @return \Carbon\Carbon
      */
     public function getDateModifiedAttribute($value)

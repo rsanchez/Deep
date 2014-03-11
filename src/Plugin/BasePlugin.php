@@ -9,8 +9,6 @@
 
 namespace rsanchez\Deep\Plugin;
 
-use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
-use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Collection\AbstractTitleCollection;

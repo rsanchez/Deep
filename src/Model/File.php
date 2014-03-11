@@ -15,7 +15,6 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
 use rsanchez\Deep\Model\UploadPref;
 use Carbon\Carbon;
-use DateTime;
 use DateTimeZone;
 
 /**
@@ -78,7 +77,7 @@ class File extends Model implements FileInterface
     /**
      * Get the upload_date column as a Carbon object
      *
-     * @param  int       $value unix time
+     * @param  int            $value unix time
      * @return \Carbon\Carbon
      */
     public function getUploadDateAttribute($value)
@@ -89,7 +88,7 @@ class File extends Model implements FileInterface
     /**
      * Get the modified_date column as a Carbon object
      *
-     * @param  int       $value unix time
+     * @param  int            $value unix time
      * @return \Carbon\Carbon
      */
     public function getModifiedDateAttribute($value)
