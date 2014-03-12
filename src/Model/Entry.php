@@ -181,7 +181,7 @@ class Entry extends Title
             $query->where(function ($query) use ($fieldId, $values) {
 
                 foreach ($values as $value) {
-                    $query->orWhere('channel_data.field_id_'.$fieldId, 'LIKE', '%{$value}%');
+                    $query->orWhere('channel_data.field_id_'.$fieldId, 'LIKE', "%{$value}%");
                 }
 
             });
