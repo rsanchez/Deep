@@ -125,6 +125,12 @@ Entries::notCategoryGroup(1, 2)->get();
 Entries::day(31)->get();
 ```
 
+### Dynamic Parameters
+
+```
+Entries::dynamicParameters(array('limit', 'search:your_field_name'), $_REQUEST)->get();
+```
+
 ### Entry ID
 
 ```

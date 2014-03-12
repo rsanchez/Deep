@@ -981,11 +981,33 @@ class Title extends AbstractJoinableModel
     }
 
     /**
-     * Apply an array of parameters
-     * @param  array $parameters
-     * @return void
+     * Dynamically apply scopes
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  array                                 $allowedParameters list of keys to pull from $request
+     * @param  array                                 $request           array of request variables, for instance $_REQUEST
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeTagparams(Builder $query, array $parameters)
+    public function scopeDynamicParameters(Builder $query, array $allowedParameters, array $request)
+    {
+        foreach ($allowedParameters as $key) {
+            if (isset($request[$key])) {
+                $this->scopeTagparam($query, $key, $request[$key]);
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Apply a single parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $key   snake_cased parameter name
+     * @param  string                                $value scope parameters in string form, eg. 1|2|3
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeTagparam(Builder $query, $key, $value)
     {
         /**
          * A map of parameter names => model scopes
@@ -1025,22 +1047,36 @@ class Title extends AbstractJoinableModel
             'day' => 'day',
         );
 
+        if (! array_key_exists($key, $parameterMap)) {
+            return $query;
+        }
+
+        $method = 'scope'.ucfirst($parameterMap[$key]);
+
+        return $this->$method($query, $value);
+    }
+
+    /**
+     * Apply an array of parameters
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  array                                 $parameters
+     * @param  array                                 $request    array of request variables, for instance $_REQUEST
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeTagparams(Builder $query, array $parameters, array $request = array())
+    {
+        // because you're so special
         if (isset($parameters['dynamic_parameters'])) {
-            foreach (explode('|', $parameters['dynamic_parameters']) as $key) {
-                if (isset($_REQUEST[$key])) {
-                    $parameters[$key] = is_array($_REQUEST[$key]) ? implode('|', $_REQUEST[$key]) : $_REQUEST[$key];
-                }
-            }
+            $this->scopeDynamicParameters(
+                $query,
+                explode('|', $parameters['dynamic_parameters']),
+                $request
+            );
         }
 
         foreach ($parameters as $key => $value) {
-            if (! array_key_exists($key, $parameterMap)) {
-                continue;
-            }
-
-            $method = 'scope'.ucfirst($parameterMap[$key]);
-
-            $this->$method($query, $value);
+            $this->scopeTagparam($query, $key, $value);
         }
 
         return $query;

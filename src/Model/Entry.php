@@ -193,23 +193,19 @@ class Entry extends Title
     /**
      * {@inheritdoc}
      */
-    public function scopeTagparams(Builder $query, array $parameters)
+    public function scopeTagparam(Builder $query, $key, $value)
     {
-        parent::scopeTagparams($query, $parameters);
+        if (strncmp($key, 'search:', 7) === 0) {
+            $args = explode('|', $value);
 
-        foreach ($parameters as $key => $value) {
-            if (strncmp($key, 'search:', 7) === 0) {
-                $args = explode('|', $value);
+            array_unshift($args, substr($key, 7));
 
-                array_unshift($args, substr($key, 7));
+            array_unshift($args, $query);
 
-                array_unshift($query);
-
-                call_user_func_array(array($this, 'scopeSearch'), $args);
-            }
+            return call_user_func_array(array($this, 'scopeSearch'), $args);
         }
 
-        return $query;
+        return parent::scopeTagparam($query, $key, $value);
     }
 
     /**
