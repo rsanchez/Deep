@@ -10,10 +10,12 @@
 namespace rsanchez\Deep\Plugin;
 
 use rsanchez\Deep\Deep;
+use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\EntryCollection;
 use DateTime;
+use Closure;
 
 /**
  * Base class for EE modules/plugins
@@ -21,12 +23,41 @@ use DateTime;
 abstract class BasePlugin
 {
     /**
+     * Hold an instance of the Deep IoC
+     * @var \rsanchez\Deep\Deep
+     */
+    protected static $app;
+
+    /**
      * Constructor
      * @return void
      */
     public function __construct()
     {
-        Deep::bootEloquent(ee());
+        if (is_null(self::$app)) {
+            self::$app = new Deep(ee()->config->config);
+
+            self::$app->bootEloquent(ee());
+        }
+    }
+
+    /**
+     * Parse a plugin tag pair equivalent to channel:entries
+     *
+     * @param  Closure|null $callback receieves a query builder object as the first parameter
+     * @return string
+     */
+    protected function parse(Closure $callback = null)
+    {
+        $query = self::$app->make('Entry')->tagparams(ee()->TMPL->tagparams);
+
+        if (is_callable($callback)) {
+            $callback($query);
+        }
+
+        $entries = $query->get();
+
+        return $this->parseEntryCollection($entries);
     }
 
     /**
@@ -35,7 +66,7 @@ abstract class BasePlugin
      * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $entries
      * @return string
      */
-    protected function parse(AbstractTitleCollection $entries)
+    protected function parseEntryCollection(AbstractTitleCollection $entries)
     {
         $tagdata = ee()->TMPL->tagdata;
 

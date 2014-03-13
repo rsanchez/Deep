@@ -16,7 +16,7 @@ use rsanchez\Deep\App\Entries;
 $entries = Entries::channel('blog')
                 ->limit(10)
                 ->showFutureEntries()
-                ->get()
+                ->get();
 ?>
 
 <?php foreach ($entries as $entry) : ?>
@@ -713,21 +713,28 @@ The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for E
 ```
 <?php
 
-use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Plugin\BasePlugin;
 
 class My_plugin extends BasePlugin
 {
-    public function __construct()
+    public function starts_with_a()
     {
-        $entries = Entries::tagparams(ee()->TMPL->tagparams)
-                            // do any additional custom querying here
-                            ->get();
-
-        $this->return_data = $this->parse($entries);
+        $this->return_data = $this->parse(function ($query) {
+            // do additional custom querying here
+            $query->where('title', 'LIKE', 'A%');
+        });
     }
 }
 
+```
+
+Now you can parse your plugin like a channel:entries tag:
+
+```
+{exp:my_plugin:starts_with_a channel="blog"}
+  {title}
+  {url_title_path="blog/view"}
+{/exp:my_plugin:starts_with_a}
 ```
 
 ## The `Titles` Class
