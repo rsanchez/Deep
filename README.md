@@ -717,11 +717,18 @@ use rsanchez\Deep\Plugin\BasePlugin;
 
 class My_plugin extends BasePlugin
 {
-    public function starts_with_a()
+    public function entries()
     {
-        $this->return_data = $this->parse(function ($query) {
+        return $this->parse();
+    }
+
+    public function entries_that_start_with()
+    {
+        $letter = ee()->TMPL->fetch_param('letter');
+
+        return $this->parse(function ($query) use ($letter) {
             // do additional custom querying here
-            $query->where('title', 'LIKE', 'A%');
+            $query->where('title', 'LIKE', $letter.'%');
         });
     }
 }
@@ -731,10 +738,15 @@ class My_plugin extends BasePlugin
 Now you can parse your plugin like a channel:entries tag:
 
 ```
-{exp:my_plugin:starts_with_a channel="blog"}
+{exp:my_plugin:entries channel="blog"}
   {title}
   {url_title_path="blog/view"}
-{/exp:my_plugin:starts_with_a}
+{/exp:my_plugin:entries}
+
+{exp:my_plugin:entries_that_start_with channel="blog" letter="A"}
+  {title}
+  {url_title_path="blog/view"}
+{/exp:my_plugin:entries_that_start_with}
 ```
 
 ## The `Titles` Class
