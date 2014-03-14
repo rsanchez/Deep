@@ -49,7 +49,35 @@ abstract class BasePlugin
      */
     protected function parse(Closure $callback = null)
     {
+        $disabled = array();
+
+        if ($disable = ee()->TMPL->fetch_param('disable')) {
+            $disabled = explode('|', $disable);
+        }
+
+        ee()->load->library('pagination');
+
+        $pagination = ee()->pagination->create();
+
+        $limit = ee()->TMPL->fetch_param('limit');
+
+        if ($limit && ! in_array('pagination', $disabled)) {
+            ee()->TMPL->tagdata = $pagination->prepare(ee()->TMPL->tagdata);
+
+            unset(ee()->TMPL->tagparams['offset']);
+        }
+
         $query = self::$app->make('Entry')->tagparams(ee()->TMPL->tagparams);
+
+        if ($pagination->paginate) {
+            $paginationCount = $query->getPaginationCount();
+
+            if (preg_match('#P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
+                $query->skip($match[1]);
+            }
+
+            $pagination->build($paginationCount, $limit);
+        }
 
         if (is_callable($callback)) {
             $callback($query);
@@ -57,7 +85,13 @@ abstract class BasePlugin
 
         $entries = $query->get();
 
-        return $this->parseEntryCollection($entries);
+        $output = $this->parseEntryCollection($entries);
+
+        if ($pagination->paginate) {
+            $output = $pagination->render($output);
+        }
+
+        return $output;
     }
 
     /**

@@ -749,6 +749,27 @@ Now you can parse your plugin like a channel:entries tag:
 {/exp:my_plugin:entries_that_start_with}
 ```
 
+The following channel:entries parameters are not implemented by the `BasePlugin` class:
+
+- backspace
+- cache
+- display_by
+- disable
+- dynamic
+- dynamic_start
+- month_limit
+- orderby
+- paginate_type
+- refresh
+- related_categories_mode
+- relaxed_categories
+- require_entry
+- show_current_week
+- sort
+- track_views
+- week_sort
+- uncategorized_entries
+
 ## The `Titles` Class
 
 You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
@@ -764,26 +785,3 @@ $entries = Titles::channel('blog')
                 ->limit(1)
                 ->get();
 ```
-
-## Parameters not implemented
-
-- backspace
-- cache
-- display_by
-- disable
-- dynamic
-- dynamic_start
-- month_limit
-- orderby
-- paginate
-- paginate_base
-- paginate_type
-- refresh
-- related_categories_mode
-- relaxed_categories
-- require_entry
-- show_current_week
-- sort
-- track_views
-- week_sort
-- uncategorized_entries
