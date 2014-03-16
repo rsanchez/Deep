@@ -751,7 +751,6 @@ Now you can parse your plugin like a channel:entries tag:
 
 The following channel:entries parameters are not implemented by the `BasePlugin` class:
 
-- backspace
 - cache
 - display_by
 - disable

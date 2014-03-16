@@ -91,6 +91,10 @@ abstract class BasePlugin
             $output = $pagination->render($output);
         }
 
+        if ($backspace = ee()->TMPL->fetch_param('backspace')) {
+            $output = substr($output, 0, -$backspace);
+        }
+
         return $output;
     }
 
