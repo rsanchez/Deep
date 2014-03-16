@@ -14,6 +14,7 @@ use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\EntryCollection;
+use Illuminate\Support\Collection;
 use DateTime;
 use Closure;
 
@@ -165,7 +166,40 @@ abstract class BasePlugin
             if ($customFieldsEnabled) {
                 foreach ($pairTags as $tag) {
                     if ($entry->channel->fields->hasField($tag->name)) {
-                        $row[$tag->key] = $entry->{$tag->name}->isEmpty() ? '' : ee()->TMPL->parse_variables($tag->tagdata, $entry->{$tag->name}->toArray());
+
+                        $row[$tag->key] = '';
+
+                        $value = $entry->{$tag->name};
+
+                        if ($value instanceof Collection) {
+                            if (isset($tag->params['row_id'])) {
+                                $rowId = $tag->params['row_id'];
+
+                                $value = $value->filter(function ($row) use ($rowId) {
+                                    return $row->row_id == $rowId;
+                                });
+                            }
+
+                            if (isset($tag->params['limit']) || isset($tag->params['offset'])) {
+                                $offset = isset($tag->params['offset']) ? $tag->params['offset'] : 0;
+                                $limit = isset($tag->params['limit']) ? $tag->params['limit'] : null;
+                                $value = $value->slice($offset, $limit);
+                            }
+
+                            $value = $value->toArray();
+                        } elseif (is_object($value) && method_exists($value, 'toArray')) {
+                            $value = $value->toArray();
+                        } elseif ($value) {
+                            $value = (string) $value;
+                        }
+
+                        if ($value) {
+                            $row[$tag->key] = ee()->TMPL->parse_variables($tag->tagdata, $value);
+
+                            if (isset($tag->params['backspace'])) {
+                                $row[$tag->key] = substr($row[$tag->key], 0, -$tag->params['backspace']);
+                            }
+                        }
                     }
                 }
 

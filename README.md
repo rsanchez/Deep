@@ -804,6 +804,15 @@ The `BasePlugin` class does not. If you wish to impose any or all of those defau
         return $this->parse();
     }
 
+The `BasePlugin` class allows the following parameters on Matrix, Grid, Playa and Relationships tag pairs:
+
+- limit
+- offset
+- backspace
+- row_id\*
+
+\*Matrix and Grid only
+
 ## The `Titles` Class
 
 You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
