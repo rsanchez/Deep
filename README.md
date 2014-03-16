@@ -785,6 +785,25 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - week_sort
 - uncategorized_entries
 
+The original channel:entries has the following default parameters:
+
+    orderby="entry_date"
+    show_future_entries="no"
+    show_expired="no"
+    sort="asc"
+    status="not closed"
+    dynamic="yes"
+    limit="100"
+
+The `BasePlugin` class does not. If you wish to impose any or all of those default parameters, you'll need to add them yourself:
+
+    public function entries()
+    {
+        ee()->TMPL->tagparams['status'] = 'not closed';
+
+        return $this->parse();
+    }
+
 ## The `Titles` Class
 
 You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
