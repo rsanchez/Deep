@@ -61,10 +61,12 @@ abstract class BasePlugin
 
         $limit = ee()->TMPL->fetch_param('limit');
 
-        if ($limit && ! in_array('pagination', $disabled)) {
-            ee()->TMPL->tagdata = $pagination->prepare(ee()->TMPL->tagdata);
+        ee()->TMPL->tagdata = $pagination->prepare(ee()->TMPL->tagdata);
 
+        if ($limit && ! in_array('pagination', $disabled)) {
             unset(ee()->TMPL->tagparams['offset']);
+        } else {
+            $pagination->paginate = false;
         }
 
         $query = self::$app->make('Entry')->tagparams(ee()->TMPL->tagparams);
