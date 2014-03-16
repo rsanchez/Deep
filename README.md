@@ -751,7 +751,6 @@ Now you can parse your plugin like a channel:entries tag:
 
 The following channel:entries parameters are not implemented by the `BasePlugin` class:
 
-- cache
 - display_by
 - disable
 - dynamic
@@ -759,7 +758,6 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - month_limit
 - orderby
 - paginate_type
-- refresh
 - related_categories_mode
 - relaxed_categories
 - require_entry
