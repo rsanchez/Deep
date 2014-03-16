@@ -55,7 +55,7 @@ class GridHydrator extends AbstractHydrator
         $fieldIds = $this->collection->getFieldIdsByFieldtype($this->fieldtype);
 
         foreach ($fieldIds as $fieldId) {
-            $this->rows[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->get();
+            $this->rows[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
         }
     }
 
@@ -76,7 +76,7 @@ class GridHydrator extends AbstractHydrator
             });
 
             $fieldRows = $rows->filter(function ($row) use ($entry) {
-                return $entry->getKey() === $row->getKey();
+                return $entry->getKey() === $row->entry_id;
             })->each(function ($row) use ($fieldCols) {
                 $row->setCols($fieldCols);
 

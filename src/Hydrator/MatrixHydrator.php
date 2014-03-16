@@ -52,7 +52,7 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $this->rows = MatrixRow::entryId($entryIds)->get();
+        $this->rows = MatrixRow::entryId($entryIds)->orderBy('row_order', 'asc')->get();
     }
 
     /**
@@ -70,7 +70,7 @@ class MatrixHydrator extends AbstractHydrator
             });
 
             $fieldRows = $rows->filter(function ($row) use ($entry, $field) {
-                return $entry->getKey() === $row->getKey() && $field->field_id === $row->field_id;
+                return $entry->getKey() === $row->entry_id && $field->field_id === $row->field_id;
             })->each(function ($row) use ($fieldCols) {
                 $row->setCols($fieldCols);
 
