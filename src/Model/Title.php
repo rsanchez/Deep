@@ -1026,14 +1026,9 @@ class Title extends AbstractJoinableModel
             'group_id' => 'groupIdString',
             'limit' => 'limit',
             'offset' => 'offset',
-            'orderby' => 'orderby',
-            //'paginate' => 'paginate',//string
-            //'paginate_base' => 'paginateBase',//string
-            //'paginate_type' => 'paginateType',//string
             'show_expired' => 'showExpiredString',
             'show_future_entries' => 'showFutureEntriesString',
             'show_pages' => 'showPagesString',
-            'sort' => 'sort',
             'start_day' => 'startDay',
             'start_on' => 'startOn',
             'status' => 'statusString',
@@ -1067,6 +1062,15 @@ class Title extends AbstractJoinableModel
     public function scopeTagparams(Builder $query, array $parameters, array $request = array())
     {
         // because you're so special
+        if (! empty($parameters['orderby'])) {
+            $directions = isset($parameters['sort']) ? explode('|', $parameters['sort']) : null;
+
+            foreach (explode('|', $parameters['orderby']) as $i => $column) {
+                $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
+                $query->orderBy($column, $direction);
+            }
+        }
+
         if (isset($parameters['dynamic_parameters'])) {
             $this->scopeDynamicParameters(
                 $query,

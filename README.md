@@ -307,6 +307,26 @@ This scope accepts an array of parameters And applies all the [supported](#param
 Entries::tagparams(ee()->TMPL->tagparams)->get();
 ```
 
+The following channel:entries parameters are not implemented by the `tagparams` scope:
+
+- cache
+- display_by
+- disable
+- dynamic
+- dynamic_start
+- month_limit
+- paginate
+- paginate_base
+- paginate_type
+- refresh
+- related_categories_mode
+- relaxed_categories
+- require_entry
+- show_current_week
+- track_views
+- week_sort
+- uncategorized_entries
+
 ### Custom Field Scopes
 
 This set of scopes allows you to use the traditional some Eloquent methods with custom field names instead of `field_id_X`.
@@ -756,13 +776,11 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - dynamic
 - dynamic_start
 - month_limit
-- orderby
 - paginate_type
 - related_categories_mode
 - relaxed_categories
 - require_entry
 - show_current_week
-- sort
 - track_views
 - week_sort
 - uncategorized_entries

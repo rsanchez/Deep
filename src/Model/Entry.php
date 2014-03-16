@@ -193,6 +193,32 @@ class Entry extends Title
     /**
      * {@inheritdoc}
      */
+    public function scopeTagparams(Builder $query, array $parameters, array $request = array())
+    {
+        if (! empty($parameters['orderby'])) {
+            $directions = isset($parameters['sort']) ? explode('|', $parameters['sort']) : null;
+
+            foreach (explode('|', $parameters['orderby']) as $i => $column) {
+                $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
+
+                if (self::$fieldRepository->hasField($column)) {
+                    $column = 'field_id_'.self::$fieldRepository->getFieldId($column);
+
+                    $query->orderBy($column, $direction);
+                } else {
+                    $query->orderBy($column, $direction);
+                }
+            }
+
+            unset($parameters['orderby']);
+        }
+
+        return parent::scopeTagparams($query, $parameters, $request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function scopeTagparam(Builder $query, $key, $value)
     {
         if (strncmp($key, 'search:', 7) === 0) {
