@@ -784,10 +784,11 @@ class Title extends AbstractJoinableModel
      * Calls the not version of the scope if the string begins with not
      * eg  'not 4|5|6'
      *
-     * @param string $string ex '4|5|6' 'not 4|5|6'
-     * @param string $scope  the name of the scope, ex. AuthorId
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $string ex '4|5|6' 'not 4|5|6'
+     * @param string                                $scope  the name of the scope, ex. AuthorId
      */
-    protected function scopeArrayFromString($string, $scope)
+    protected function scopeArrayFromString(Builder $query, $string, $scope)
     {
         if ($not = strncmp($string, 'not ', 4) === 0) {
             $string = substr($string, 4);
