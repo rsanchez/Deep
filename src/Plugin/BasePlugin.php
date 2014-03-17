@@ -88,34 +88,11 @@ abstract class BasePlugin
 
         $entries = $query->get();
 
-        $output = $this->parseEntryCollection($entries);
-
-        if ($pagination->paginate) {
-            $output = $pagination->render($output);
-        }
-
-        if ($backspace = ee()->TMPL->fetch_param('backspace')) {
-            $output = substr($output, 0, -$backspace);
-        }
-
-        return $output;
-    }
-
-    /**
-     * Parse TMPL->tagdata with the specified collection of entries
-     *
-     * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $entries
-     * @return string
-     */
-    protected function parseEntryCollection(AbstractTitleCollection $entries)
-    {
-        $tagdata = ee()->TMPL->tagdata;
-
         $customFieldsEnabled = $entries instanceof EntryCollection;
 
-        preg_match_all('#{((url_title_path|title_permalink)=([\042\047])(.*?)\\3)}#', $tagdata, $urlTitlePathMatches);
-        preg_match_all('#{(entry_id_path=([\042\047])(.*?)\\2)}#', $tagdata, $entryIdPathMatches);
-        preg_match_all('#{((.*?) format=([\042\047])(.*?)\\3)}#', $tagdata, $dateMatches);
+        preg_match_all('#{((url_title_path|title_permalink)=([\042\047])(.*?)\\3)}#', ee()->TMPL->tagdata, $urlTitlePathMatches);
+        preg_match_all('#{(entry_id_path=([\042\047])(.*?)\\2)}#', ee()->TMPL->tagdata, $entryIdPathMatches);
+        preg_match_all('#{((.*?) format=([\042\047])(.*?)\\3)}#', ee()->TMPL->tagdata, $dateMatches);
 
         $singleTags = array();
         $pairTags = array();
@@ -145,7 +122,7 @@ abstract class BasePlugin
 
                 $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
 
-                preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
+                preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', ee()->TMPL->tagdata, $matches);
 
                 foreach ($matches[1] as $i => $key) {
                     $pairTags[] = (object) array(
@@ -240,6 +217,16 @@ abstract class BasePlugin
             return ee()->TMPL->no_results();
         }
 
-        return ee()->TMPL->parse_variables($tagdata, $variables);
+        $output = ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+
+        if ($pagination->paginate) {
+            $output = $pagination->render($output);
+        }
+
+        if ($backspace = ee()->TMPL->fetch_param('backspace')) {
+            $output = substr($output, 0, -$backspace);
+        }
+
+        return $output;
     }
 }
