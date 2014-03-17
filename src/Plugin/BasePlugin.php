@@ -73,6 +73,12 @@ abstract class BasePlugin
 
         $query = ee()->deep->make($identifier)->tagparams(ee()->TMPL->tagparams);
 
+        $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
+
+        if (strpos(ee()->TMPL->tagdata, 'comment_subscriber_total') !== false) {
+            $query->addSelect($query->getQuery()->getConnection()->raw("(SELECT COUNT(*) FROM {$tablePrefix}comment_subscriptions WHERE {$tablePrefix}comment_subscriptions.entry_id = {$tablePrefix}channel_titles.entry_id) AS comment_subscriber_total"));
+        }
+
         $paginationOffset = 0;
 
         $paginationCount = $limit;
@@ -220,6 +226,10 @@ abstract class BasePlugin
                         $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
                         $row[$tag->key] = ee()->functions->create_url($path.$entry->url_title);
                         break;
+                    case 'profile_path':
+                        $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
+                        $row[$tag->key] = ee()->functions->create_url($path.$entry->author_id);
+                        break;
                 }
             }
 
@@ -241,6 +251,12 @@ abstract class BasePlugin
                 $row['photo_url'] = $entry->member->photo_filename ? ee()->config->item('photo_url').$entry->member->photo_filename : '';
                 $row['photo_image_height'] = $entry->member->photo_height;
                 $row['photo_image_width'] = $entry->member->photo_width;
+                $row['signature_image_url'] = $entry->member->sig_img_filename ? ee()->config->item('sig_img_url').$entry->member->sig_img_filename : '';
+                $row['signature_image_height'] = $entry->member->sig_img_height;
+                $row['signature_image_width'] = $entry->member->sig_img_width;
+                $row['url_or_email'] = $entry->member->url ?: $entry->member->email;
+                $row['url_or_email_as_author'] = '<a href="'.($entry->member->url ?: 'mailto:'.$entry->member->email).'">'.$row['author'].'</a>';
+                $row['url_or_email_as_link'] = '<a href="'.($entry->member->url ?: 'mailto:'.$entry->member->email).'">'.$row['url_or_email'].'</a>';
             }
 
             $variables[] = $row;
