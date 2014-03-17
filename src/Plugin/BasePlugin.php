@@ -70,7 +70,11 @@ abstract class BasePlugin
             $pagination->paginate = false;
         }
 
-        $query = self::$app->make('Entry')->tagparams(ee()->TMPL->tagparams);
+        $customFieldsEnabled = ! in_array('custom_fields', $disabled);
+
+        $identifier = $customFieldsEnabled ? 'Entry' : 'Title';
+
+        $query = self::$app->make($identifier)->tagparams(ee()->TMPL->tagparams);
 
         if ($pagination->paginate) {
             $paginationCount = $query->getPaginationCount();
@@ -87,8 +91,6 @@ abstract class BasePlugin
         }
 
         $entries = $query->get();
-
-        $customFieldsEnabled = $entries instanceof EntryCollection;
 
         preg_match_all('#{((url_title_path|title_permalink)=([\042\047])(.*?)\\3)}#', ee()->TMPL->tagdata, $urlTitlePathMatches);
         preg_match_all('#{(entry_id_path=([\042\047])(.*?)\\2)}#', ee()->TMPL->tagdata, $entryIdPathMatches);
