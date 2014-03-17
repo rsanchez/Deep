@@ -95,6 +95,22 @@ Entries::category(1, 2)->get();
 Entries::notCategory(1, 2)->get();
 ```
 
+### All Categories
+
+Only show entries that have all of the specified categories.
+
+```
+Entries::allCategories(1, 2)->get();
+```
+
+### Not All Categories
+
+Exclude entries that have all of the specified categories.
+
+```
+Entries::notAllCategories(1, 2)->get();
+```
+
 ### Category Name
 
 ```
