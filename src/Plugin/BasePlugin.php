@@ -58,23 +58,32 @@ abstract class BasePlugin
 
         ee()->TMPL->tagdata = $pagination->prepare(ee()->TMPL->tagdata);
 
-        if ($limit && ! in_array('pagination', $disabled)) {
+        $customFieldsEnabled = ! in_array('custom_fields', $disabled);
+        $membersEnabled = ! in_array('members', $disabled);
+        $paginationEnabled = ! in_array('pagination', $disabled);
+        $categoriesEnabled = ! in_array('categories', $disabled);
+
+        if ($limit && $paginationEnabled) {
             unset(ee()->TMPL->tagparams['offset']);
         } else {
             $pagination->paginate = false;
         }
 
-        $customFieldsEnabled = ! in_array('custom_fields', $disabled);
-
         $identifier = $customFieldsEnabled ? 'Entry' : 'Title';
 
         $query = ee()->deep->make($identifier)->tagparams(ee()->TMPL->tagparams);
+
+        $paginationOffset = 0;
+
+        $paginationCount = $limit;
 
         if ($pagination->paginate) {
             $paginationCount = $query->getPaginationCount();
 
             if (preg_match('#P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
                 $query->skip($match[1]);
+
+                $paginationOffset = $match[1];
             }
 
             $pagination->build($paginationCount, $limit);
@@ -86,33 +95,32 @@ abstract class BasePlugin
 
         $entries = $query->get();
 
-        preg_match_all('#{((url_title_path|title_permalink)=([\042\047])(.*?)\\3)}#', ee()->TMPL->tagdata, $urlTitlePathMatches);
-        preg_match_all('#{(entry_id_path=([\042\047])(.*?)\\2)}#', ee()->TMPL->tagdata, $entryIdPathMatches);
-        preg_match_all('#{((.*?) format=([\042\047])(.*?)\\3)}#', ee()->TMPL->tagdata, $dateMatches);
-
         $singleTags = array();
         $pairTags = array();
 
-        if ($customFieldsEnabled) {
-            foreach (array_keys(ee()->TMPL->var_single) as $tag) {
-                $spacePosition = strpos($tag, ' ');
+        foreach (array_keys(ee()->TMPL->var_single) as $tag) {
+            $spacePosition = strpos($tag, ' ');
 
-                if ($spacePosition === false) {
-                    $name = $tag;
-                    $params = array();
-                } else {
-                    $name = substr($tag, 0, $spacePosition);
-                    $params = ee()->functions->assign_parameters(substr($tag, $spacePosition));
-                }
-
-                $singleTags[] = (object) array(
-                    'name' => $name,
-                    'key' => $tag,
-                    'params' => $params,
-                    'tagdata' => '',
-                );
+            if ($spacePosition !== false) {
+                $name = substr($tag, 0, $spacePosition);
+                $params = ee()->functions->assign_parameters(substr($tag, $spacePosition));
+            } elseif (preg_match('#^([a-z_]+)=([\042\047]?)?(.*?)\\2$#', $tag, $match)) {
+                $name = $match[1];
+                $params = $match[2] ? array($match[3]) : array('');
+            } else {
+                $name = $tag;
+                $params = array();
             }
 
+            $singleTags[] = (object) array(
+                'name' => $name,
+                'key' => $tag,
+                'params' => $params,
+                'tagdata' => '',
+            );
+        }
+
+        if ($customFieldsEnabled) {
             foreach (ee()->TMPL->var_pair as $tag => $params) {
                 $spacePosition = strpos($tag, ' ');
 
@@ -133,8 +141,19 @@ abstract class BasePlugin
 
         $variables = array();
 
-        foreach ($entries as $entry) {
-            $row = array();
+        foreach ($entries as $i => $entry) {
+            $row = array(
+                'absolute_count' => $paginationOffset + $i + 1,
+                'absolute_results' => $paginationCount,
+                'channel' => $entry->channel->channel_name,
+                'channel_short_name' => $entry->channel->channel_name,
+                'comment_auto_path' => $entry->channel->comment_url,
+                'comment_entry_id_auto_path' => $entry->channel->comment_url.'/'.$entry->entry_id,
+                'comment_url_title_auto_path' => $entry->channel->comment_url.'/'.$entry->url_title,
+                'entry_site_id' => $entry->site_id,
+                'page_uri' => $entry->page_uri,
+                'page_url' => ee()->functions->create_url($entry->page_uri),
+            );
 
             if ($customFieldsEnabled) {
                 foreach ($pairTags as $tag) {
@@ -183,31 +202,45 @@ abstract class BasePlugin
                 }
             }
 
-            foreach ($urlTitlePathMatches[1] as $i => $key) {
-                $row[$key] = ee()->functions->create_url($urlTitlePathMatches[4][$i]);
+            foreach ($singleTags as $tag) {
+                if (isset($tag->params['format'])) {
+                    $format = preg_replace('#%([a-zA-Z])#', '\\1', $tag->params['format']);
+
+                    $row[$tag->key] = ($entry->{$tag->name} instanceof DateTime) ? $entry->{$tag->name}->format($format) : '';
+                }
+
+                switch ($tag->name) {
+                    case 'entry_id_path':
+                    case 'permalink':
+                        $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
+                        $row[$tag->key] = ee()->functions->create_url($path.$entry->entry_id);
+                        break;
+                    case 'title_permalink':
+                    case 'url_title_path':
+                        $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
+                        $row[$tag->key] = ee()->functions->create_url($path.$entry->url_title);
+                        break;
+                }
             }
 
-            foreach ($entryIdPathMatches[1] as $i => $key) {
-                $row[$key] = ee()->functions->create_url($entryIdPathMatches[3][$i]);
-            }
-
-            foreach ($dateMatches[1] as $i => $key) {
-                $name = $dateMatches[2][$i];
-                $format = preg_replace('#%([a-zA-Z])#', '\\1', $dateMatches[4][$i]);
-
-                $row[$key] = ($entry->$name instanceof DateTime) ? $entry->$name->format($format) : '';
-            }
-
-            if (! in_array('categories', $disabled)) {
+            if ($categoriesEnabled) {
                 $row['categories'] = $entry->categories->toArray();
             }
 
             $row = array_merge($row, $entry->getOriginal(), $entry->channel->toArray());
 
-            if (isset($entry->member)) {
+            if ($membersEnabled) {
                 foreach ($entry->member->toArray() as $key => $value) {
                     $row[$key] = $value;
                 }
+
+                $row['author'] = $entry->member->screen_name ?: $entry->member->username;
+                $row['avatar_url'] = $entry->member->avatar_filename ? ee()->config->item('avatar_url').$entry->member->avatar_filename : '';
+                $row['avatar_image_height'] = $entry->member->avatar_height;
+                $row['avatar_image_width'] = $entry->member->avatar_width;
+                $row['photo_url'] = $entry->member->photo_filename ? ee()->config->item('photo_url').$entry->member->photo_filename : '';
+                $row['photo_image_height'] = $entry->member->photo_height;
+                $row['photo_image_width'] = $entry->member->photo_width;
             }
 
             $variables[] = $row;
