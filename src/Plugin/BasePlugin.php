@@ -202,6 +202,10 @@ abstract class BasePlugin
                 $row[$key] = ($entry->$name instanceof DateTime) ? $entry->$name->format($format) : '';
             }
 
+            if (! in_array('categories', $disabled)) {
+                $row['categories'] = $entry->categories->toArray();
+            }
+
             $row = array_merge($row, $entry->getOriginal(), $entry->channel->toArray());
 
             if (isset($entry->member)) {
