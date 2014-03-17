@@ -284,6 +284,50 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter out entries without all Category IDs
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $categoryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAllCategories(Builder $query, $categoryId1, $categoryId2)
+    {
+        $categoryIds = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('categories', function ($q) use ($categoryIds) {
+
+            $q->where(function($qq) use ($categoryIds) {
+                foreach ($categoryIds as $categoryId) {
+                    $qq->orWhere('categories.cat_id', $categoryId);
+                }
+            });
+
+        }, '>=', count($categoryIds));
+    }
+
+    /**
+     * Filter out entries without all Category IDs
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $categoryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotAllCategories(Builder $query, $categoryId1, $categoryId2)
+    {
+        $categoryIds = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('categories', function ($q) use ($categoryIds) {
+
+            $q->where(function($qq) use ($categoryIds) {
+                foreach ($categoryIds as $categoryId) {
+                    $qq->orWhere('categories.cat_id', $categoryId);
+                }
+            });
+
+        }, '<', count($categoryIds));
+    }
+
+    /**
      * Filter by not Category ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -828,9 +872,23 @@ class Title extends AbstractJoinableModel
      */
     public function scopeCategoryString(Builder $query, $string)
     {
-        // @TODO support the full range of options from
-        // http://ellislab.com/expressionengine/user-guide/add-ons/channel/channel_entries.html#category
-        return $this->scopeArrayFromString($query, $string, 'Category');
+        if ($not = strncmp($string, 'not ', 4) === 0) {
+            $string = substr($string, 4);
+        }
+
+        $type = strpos($string, '&') !== false ? '&' : '|';
+
+        $args = explode($type, $string);
+
+        if ($type === '&') {
+            $method = $not ? 'scopeNotAllCategories' : 'scopeAllCategories';
+        } else {
+            $method = $not ? 'scopeNotCategory' : 'scopeCategory';
+        }
+
+        array_unshift($args, $query);
+
+        return call_user_func_array(array($this, $method), $args);
     }
 
     /**
