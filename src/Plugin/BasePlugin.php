@@ -157,6 +157,8 @@ abstract class BasePlugin
                 'comment_entry_id_auto_path' => $entry->channel->comment_url.'/'.$entry->entry_id,
                 'comment_url_title_auto_path' => $entry->channel->comment_url.'/'.$entry->url_title,
                 'entry_site_id' => $entry->site_id,
+                'forum_topic' => (int) (bool) $entry->forum_topic_id,
+                'not_forum_topic' => (int) ! $entry->forum_topic_id,
                 'page_uri' => $entry->page_uri,
                 'page_url' => ee()->functions->create_url($entry->page_uri),
             );
@@ -239,6 +241,9 @@ abstract class BasePlugin
 
             $row = array_merge($row, $entry->getOriginal(), $entry->channel->toArray());
 
+            $row['allow_comments'] = (int) ($entry->allow_comments === 'y');
+            $row['sticky'] = (int) ($entry->sticky === 'y');
+
             if ($membersEnabled) {
                 foreach ($entry->member->toArray() as $key => $value) {
                     $row[$key] = $value;
@@ -248,12 +253,15 @@ abstract class BasePlugin
                 $row['avatar_url'] = $entry->member->avatar_filename ? ee()->config->item('avatar_url').$entry->member->avatar_filename : '';
                 $row['avatar_image_height'] = $entry->member->avatar_height;
                 $row['avatar_image_width'] = $entry->member->avatar_width;
+                $row['avatar'] = (int) (bool) $entry->member->avatar_filename;
                 $row['photo_url'] = $entry->member->photo_filename ? ee()->config->item('photo_url').$entry->member->photo_filename : '';
                 $row['photo_image_height'] = $entry->member->photo_height;
                 $row['photo_image_width'] = $entry->member->photo_width;
+                $row['photo'] = (int) (bool) $entry->member->photo_filename;
                 $row['signature_image_url'] = $entry->member->sig_img_filename ? ee()->config->item('sig_img_url').$entry->member->sig_img_filename : '';
                 $row['signature_image_height'] = $entry->member->sig_img_height;
                 $row['signature_image_width'] = $entry->member->sig_img_width;
+                $row['signature_image'] = (int) (bool) $entry->member->sig_img_filename;
                 $row['url_or_email'] = $entry->member->url ?: $entry->member->email;
                 $row['url_or_email_as_author'] = '<a href="'.($entry->member->url ?: 'mailto:'.$entry->member->email).'">'.$row['author'].'</a>';
                 $row['url_or_email_as_link'] = '<a href="'.($entry->member->url ?: 'mailto:'.$entry->member->email).'">'.$row['url_or_email'].'</a>';

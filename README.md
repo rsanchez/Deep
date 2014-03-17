@@ -785,11 +785,13 @@ Now you can parse your plugin like a channel:entries tag:
 {/exp:my_plugin:entries_that_start_with}
 ```
 
-The following channel:entries single tags are not implemented by the `BasePlugin` class:
+The following channel:entries single tags / conditionals are not implemented by the `BasePlugin` class:
 
+- category_request
 - gmt_entry_date
 - gmt_edit_date
 - member_search_path
+- not_category_request
 - relative_url
 - relative_date
 - trimmed_url
