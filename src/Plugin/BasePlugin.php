@@ -24,21 +24,15 @@ use Closure;
 abstract class BasePlugin
 {
     /**
-     * Hold an instance of the Deep IoC
-     * @var \rsanchez\Deep\Deep
-     */
-    protected static $app;
-
-    /**
      * Constructor
      * @return void
      */
     public function __construct()
     {
-        if (is_null(self::$app)) {
-            self::$app = new Deep(ee()->config->config);
+        if (! isset(ee()->deep)) {
+            ee()->deep = new Deep(ee()->config->config);
 
-            self::$app->bootEloquent(ee());
+            ee()->deep->bootEloquent(ee());
         }
     }
 
@@ -74,7 +68,7 @@ abstract class BasePlugin
 
         $identifier = $customFieldsEnabled ? 'Entry' : 'Title';
 
-        $query = self::$app->make($identifier)->tagparams(ee()->TMPL->tagparams);
+        $query = ee()->deep->make($identifier)->tagparams(ee()->TMPL->tagparams);
 
         if ($pagination->paginate) {
             $paginationCount = $query->getPaginationCount();
