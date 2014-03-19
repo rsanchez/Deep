@@ -1,6 +1,6 @@
 # Deep
 
-A set of [Eloquent](http://laravel.com/docs/eloquent) models for ExpressionEngine Channel Entries. This library has a few goals in mind:
+A read-only set of [Eloquent](http://laravel.com/docs/eloquent) models for ExpressionEngine Channel Entries. This library has a few goals in mind:
 
 - replicate as much of the `{exp:channel:entries}` functionality as possible using Eloquent [query scopes](http://laravel.com/docs/eloquent#query-scopes)
 - chainable with standard Eloquent model methods (ex. `->where('foo', 'bar')`)
