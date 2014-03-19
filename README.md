@@ -43,6 +43,10 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
 
     require_once FCPATH.'vendor/autoload.php'
 
+Unless you are [extending the `BasePlugin` class](#extending-the-baseplugin-class), you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
+
+    \rsanchez\Deep\Deep::bootEloquent(ee());
+
 ## Query Scopes
 
 Query scopes are how you can filter your query results. They should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter.
