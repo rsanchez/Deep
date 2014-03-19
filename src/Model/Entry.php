@@ -249,7 +249,7 @@ class Entry extends Title
         if (self::$fieldRepository->hasField($fieldName)) {
             $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
 
-            array_unshift($column, $args);
+            array_unshift($args, $column);
 
             call_user_func_array(array($query, $method), $args);
         }
