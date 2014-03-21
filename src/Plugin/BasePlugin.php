@@ -73,6 +73,14 @@ abstract class BasePlugin
 
         $query = ee()->deep->make($identifier)->tagparams(ee()->TMPL->tagparams);
 
+        if ($categoriesEnabled) {
+            $query->with('categories');
+        }
+
+        if ($membersEnabled) {
+            $query->with('member');
+        }
+
         $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
 
         if (strpos(ee()->TMPL->tagdata, 'comment_subscriber_total') !== false) {
