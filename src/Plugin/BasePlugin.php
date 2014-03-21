@@ -29,11 +29,11 @@ abstract class BasePlugin
      */
     public function __construct()
     {
-        if (! isset(ee()->deep)) {
-            ee()->deep = new Deep(ee()->config->config);
+        Deep::extendInstance('config', function () {
+            return ee()->config->config;
+        });
 
-            ee()->deep->bootEloquent(ee());
-        }
+        Deep::bootEloquent(ee());
     }
 
     /**
@@ -69,9 +69,9 @@ abstract class BasePlugin
             $pagination->paginate = false;
         }
 
-        $identifier = $customFieldsEnabled ? 'Entry' : 'Title';
+        $builderClass = $customFieldsEnabled ? 'Entries' : 'Titles';
 
-        $query = ee()->deep->make($identifier)->tagparams(ee()->TMPL->tagparams);
+        $query = call_user_func(array('\\rsanchez\\Deep\\App\\'.$builderClass, 'tagparams'), ee()->TMPL->tagparams);
 
         if ($categoriesEnabled) {
             $query->with('categories');

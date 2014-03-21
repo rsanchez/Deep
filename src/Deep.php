@@ -25,6 +25,7 @@ use rsanchez\Deep\Repository\UploadPrefRepository;
 use rsanchez\Deep\Repository\ConfigUploadPrefRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use CI_Controller;
+use Closure;
 
 /**
  * IoC Container
@@ -113,6 +114,17 @@ class Deep extends Container
         }
 
         Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
+    }
+
+    /**
+     * Extend an abstract type in the global instance
+     * @param  string  $abstract
+     * @param  Closure $closure
+     * @return void
+     */
+    public static function extendInstance($abstract, Closure $closure)
+    {
+        self::getInstance()->extend($abstract, $closure);
     }
 
     /**
