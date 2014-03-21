@@ -1077,7 +1077,7 @@ class Title extends AbstractJoinableModel
             'cat_limit' => 'catLimit',
             'category' => 'categoryString',
             'category_group' => 'categoryGroupString',
-            'channel' => 'channel',
+            'channel' => 'channelString',
             'entry_id' => 'entryIdString',
             'entry_id_from' => 'entryIdFrom',
             'entry_id_fo' => 'entryIdTo',
