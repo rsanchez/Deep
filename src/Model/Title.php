@@ -64,16 +64,16 @@ class Title extends AbstractJoinableModel
     protected static $siteRepository;
 
     /**
-     * Define the Member Eloquent relationship
+     * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function member()
+    public function author()
     {
         return $this->belongsTo('\\rsanchez\\Deep\\Model\\Member', 'author_id', 'member_id');
     }
 
     /**
-     * Define the Member Eloquent relationship
+     * Define the Categories Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categories()

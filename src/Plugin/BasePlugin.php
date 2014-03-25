@@ -76,7 +76,7 @@ abstract class BasePlugin
         }
 
         if ($membersEnabled) {
-            $query->with('member');
+            $query->with('author');
         }
 
         $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
@@ -251,26 +251,26 @@ abstract class BasePlugin
             $row['sticky'] = (int) ($entry->sticky === 'y');
 
             if ($membersEnabled) {
-                foreach ($entry->member->toArray() as $key => $value) {
+                foreach ($entry->author->toArray() as $key => $value) {
                     $row[$key] = $value;
                 }
 
-                $row['author'] = $entry->member->screen_name ?: $entry->member->username;
-                $row['avatar_url'] = $entry->member->avatar_filename ? ee()->config->item('avatar_url').$entry->member->avatar_filename : '';
-                $row['avatar_image_height'] = $entry->member->avatar_height;
-                $row['avatar_image_width'] = $entry->member->avatar_width;
-                $row['avatar'] = (int) (bool) $entry->member->avatar_filename;
-                $row['photo_url'] = $entry->member->photo_filename ? ee()->config->item('photo_url').$entry->member->photo_filename : '';
-                $row['photo_image_height'] = $entry->member->photo_height;
-                $row['photo_image_width'] = $entry->member->photo_width;
-                $row['photo'] = (int) (bool) $entry->member->photo_filename;
-                $row['signature_image_url'] = $entry->member->sig_img_filename ? ee()->config->item('sig_img_url').$entry->member->sig_img_filename : '';
-                $row['signature_image_height'] = $entry->member->sig_img_height;
-                $row['signature_image_width'] = $entry->member->sig_img_width;
-                $row['signature_image'] = (int) (bool) $entry->member->sig_img_filename;
-                $row['url_or_email'] = $entry->member->url ?: $entry->member->email;
-                $row['url_or_email_as_author'] = '<a href="'.($entry->member->url ?: 'mailto:'.$entry->member->email).'">'.$row['author'].'</a>';
-                $row['url_or_email_as_link'] = '<a href="'.($entry->member->url ?: 'mailto:'.$entry->member->email).'">'.$row['url_or_email'].'</a>';
+                $row['author'] = $entry->author->screen_name ?: $entry->author->username;
+                $row['avatar_url'] = $entry->author->avatar_filename ? ee()->config->item('avatar_url').$entry->author->avatar_filename : '';
+                $row['avatar_image_height'] = $entry->author->avatar_height;
+                $row['avatar_image_width'] = $entry->author->avatar_width;
+                $row['avatar'] = (int) (bool) $entry->author->avatar_filename;
+                $row['photo_url'] = $entry->author->photo_filename ? ee()->config->item('photo_url').$entry->author->photo_filename : '';
+                $row['photo_image_height'] = $entry->author->photo_height;
+                $row['photo_image_width'] = $entry->author->photo_width;
+                $row['photo'] = (int) (bool) $entry->author->photo_filename;
+                $row['signature_image_url'] = $entry->author->sig_img_filename ? ee()->config->item('sig_img_url').$entry->author->sig_img_filename : '';
+                $row['signature_image_height'] = $entry->author->sig_img_height;
+                $row['signature_image_width'] = $entry->author->sig_img_width;
+                $row['signature_image'] = (int) (bool) $entry->author->sig_img_filename;
+                $row['url_or_email'] = $entry->author->url ?: $entry->author->email;
+                $row['url_or_email_as_author'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['author'].'</a>';
+                $row['url_or_email_as_link'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['url_or_email'].'</a>';
             }
 
             $variables[] = $row;
