@@ -12,8 +12,6 @@ namespace rsanchez\Deep\Plugin;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Model\Entry;
-use rsanchez\Deep\Collection\AbstractTitleCollection;
-use rsanchez\Deep\Collection\EntryCollection;
 use Illuminate\Support\Collection;
 use DateTime;
 use Closure;
