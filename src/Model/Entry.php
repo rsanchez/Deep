@@ -174,20 +174,94 @@ class Entry extends Title
     {
         $values = array_slice(func_get_args(), 2);
 
-        if (self::$fieldRepository->hasField($fieldName)) {
+        $model = $this;
 
-            $fieldId = self::$fieldRepository->getFieldId($fieldName);
-
-            $query->where(function ($query) use ($fieldId, $values) {
-
-                foreach ($values as $value) {
-                    $query->orWhere('channel_data.field_id_'.$fieldId, 'LIKE', "%{$value}%");
-                }
-
-            });
-        }
+        $query->where(function ($subquery) use ($model, $fieldName, $values) {
+            foreach ($values as $value) {
+                call_user_func(array($model, 'scopeOrWhereFieldContains'), $subquery, $fieldName, $value);
+            }
+        });
 
         return $query;
+    }
+
+    /**
+     * Filter by custom field search: string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearchString(Builder $query, $fieldName, $string)
+    {
+        if (! $string) {
+            return $query;
+        }
+
+        if (! self::$fieldRepository->hasField($fieldName)) {
+            return $query;
+        }
+
+        if (preg_match('#^(>|>=|<|<=)(.+)$#', $string, $match)) {
+            $comparison = true;
+            $operator = $match[1];
+            $string = $match[1];
+        } else {
+            $comparison = false;
+        }
+
+        // numeric comparisons are a single value, not a pipe delimited list
+        if ($comparison) {
+            return $this->scopeWhereField($query, $fieldName, $operator, $string);
+        }
+
+        if (strncmp($string, '=', 1) === 0) {
+            $contains = false;
+            $string = substr($string, 1);
+        } else {
+            $contains = true;
+        }
+
+        if (strncmp($string, 'not ', 4) === 0) {
+            $not = true;
+            $string = substr($string, 4);
+        } else {
+            $not = false;
+        }
+
+        $and = strpos($string, '&&') !== false;
+
+        $separator = $and && $contains ? '&&' : '|';
+
+        $values = explode($separator, str_replace('IS_EMPTY', '', $string));
+
+        if (! $contains) {
+            $method = $not ? 'scopeWhereFieldNotIn' : 'scopeWhereFieldIn';
+
+            return call_user_func_array(array($this, $method), array($query, $fieldName, $values));
+        }
+
+        if ($and) {
+            $method = $not ? 'scopeWhereFieldDoesNotContain' : 'scopeWhereFieldContains';
+        } else {
+            $method = $not ? 'scopeOrWhereFieldDoesNotContain' : 'scopeOrWhereFieldContains';
+        }
+
+        $model = $this;
+
+        return $query->where(function ($subquery) use ($model, $fieldName, $method, $values) {
+            foreach ($values as $value) {
+                $suffix = '';
+
+                if (preg_match('#^(.+)\\\W$#', $value, $match)) {
+                    $value = $match[1];
+                    $suffix = 'WholeWord';
+                }
+
+                call_user_func(array($model, $method.$suffix), $subquery, $fieldName, $value);
+            }
+        });
     }
 
     /**
@@ -202,7 +276,7 @@ class Entry extends Title
                 $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
 
                 if (self::$fieldRepository->hasField($column)) {
-                    $column = 'field_id_'.self::$fieldRepository->getFieldId($column);
+                    $column = 'channel_data.field_id_'.self::$fieldRepository->getFieldId($column);
 
                     $query->orderBy($column, $direction);
                 } else {
@@ -222,13 +296,7 @@ class Entry extends Title
     public function scopeTagparam(Builder $query, $key, $value)
     {
         if (strncmp($key, 'search:', 7) === 0) {
-            $args = explode('|', $value);
-
-            array_unshift($args, substr($key, 7));
-
-            array_unshift($args, $query);
-
-            return call_user_func_array(array($this, 'scopeSearch'), $args);
+            return $this->scopeSearchString($query, substr($key, 7), $value);
         }
 
         return parent::scopeTagparam($query, $key, $value);
@@ -247,7 +315,7 @@ class Entry extends Title
         $fieldName = array_shift($args);
 
         if (self::$fieldRepository->hasField($fieldName)) {
-            $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
+            $column = 'channel_data.field_id_'.self::$fieldRepository->getFieldId($fieldName);
 
             array_unshift($args, $column);
 
@@ -268,7 +336,7 @@ class Entry extends Title
     public function scopeOrderByField(Builder $query, $fieldName, $direction = 'asc')
     {
         if (self::$fieldRepository->hasField($fieldName)) {
-            $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
+            $column = 'channel_data.field_id_'.self::$fieldRepository->getFieldId($fieldName);
 
             $query->orderBy($column, $direction);
         }
@@ -465,5 +533,246 @@ class Entry extends Title
     public function scopeOrWhereFieldNotNull(Builder $query)
     {
         return $this->scopeWhereFieldHandler($query, 'orWhereNotNull', array_slice(func_get_args(), 1));
+    }
+
+    /**
+     * Translates a custom field name to field_id_x and performs a where like/regexp query
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @param  string                                $boolean
+     * @param  bool                                  $not
+     * @param  bool                                  $wholeWord
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function scopeWhereFieldContainsHandler(
+        Builder $query,
+        $fieldName,
+        $value,
+        $boolean = 'and',
+        $not = false,
+        $wholeWord = false
+    ) {
+        if ($value) {
+            $operator = $not ? 'not ' : '';
+
+            if ($wholeWord) {
+                $operator .= 'regexp';
+
+                $value = '([[:<:]]|^)'.preg_quote($value).'([[:>:]]|$)';
+
+                if (self::$fieldRepository->hasField($fieldName)) {
+                    $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
+
+                    $method = $boolean === 'and' ? 'whereRaw' : 'orWhereRaw';
+
+                    $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
+
+                    $query->$method("`{$tablePrefix}channel_data`.`{$column}` {$operator} '{$value}'");
+                }
+            } else {
+                $operator .= 'like';
+
+                $value = '%'.$value.'%';
+
+                $this->scopeWhereFieldHandler($query, 'where', array($fieldName, $operator, $value, $boolean));
+            }
+        } else {
+            $operator = $not ? '!=' : '=';
+
+            $this->scopeWhereField($query, $fieldName, $operator, $value, $boolean);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Like scopeWhereFieldContainsHandler, but with many values
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  array                                 $values
+     * @param  string                                $boolean
+     * @param  bool                                  $not
+     * @param  bool                                  $wholeWord
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function scopeWhereFieldContainsManyHandler(
+        Builder $query,
+        $fieldName,
+        array $values,
+        $boolean = 'and',
+        $not = false,
+        $wholeWord = false
+    ) {
+        if (count($values) === 1) {
+            return $this->scopeWhereFieldContainsHandler(
+                $query,
+                $fieldName,
+                current($values),
+                $boolean,
+                $not,
+                $wholeWord
+            );
+        }
+
+        $model = $this;
+
+        return $query->where(function ($subquery) use ($model, $fieldName, $values, $boolean, $not, $wholeWord) {
+            call_user_func(
+                array($model, 'scopeWhereFieldContainsHandler'),
+                $subquery,
+                $fieldName,
+                $value,
+                $boolean,
+                $not,
+                $wholeWord
+            );
+        });
+    }
+
+    /**
+     * Where field contains
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldContains(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler($query, $fieldName, array_slice(func_get_args(), 2));
+    }
+
+    /**
+     * Where field does not contain
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldDoesNotContain(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler(
+            $query,
+            $fieldName,
+            array_slice(func_get_args(), 2),
+            'and',
+            true
+        );
+    }
+
+    /**
+     * Or where field contains
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldContains(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler($query, $fieldName, array_slice(func_get_args(), 2), 'or');
+    }
+
+    /**
+     * Or where field does not contain
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldDoesNotContain(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler(
+            $query,
+            $fieldName,
+            array_slice(func_get_args(), 2),
+            'or',
+            true
+        );
+    }
+
+    /**
+     * Where field contains whole word
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldContainsWholeWord(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler(
+            $query,
+            $fieldName,
+            array_slice(func_get_args(), 2),
+            'and',
+            false,
+            true
+        );
+    }
+
+    /**
+     * Where field does not contain whole word
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereFieldDoesNotContainWholeWord(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler(
+            $query,
+            $fieldName,
+            array_slice(func_get_args(), 2),
+            'and',
+            true,
+            true
+        );
+    }
+
+    /**
+     * Or where field contains whole word
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldContainsWholeWord(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler(
+            $query,
+            $fieldName,
+            array_slice(func_get_args(), 2),
+            'or',
+            false,
+            true
+        );
+    }
+
+    /**
+     * Or where field does not contain whole word
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fieldName
+     * @param  mixed                                 $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrWhereFieldDoesNotContainWholeWord(Builder $query, $fieldName, $value)
+    {
+        return $this->scopeWhereFieldContainsManyHandler(
+            $query,
+            $fieldName,
+            array_slice(func_get_args(), 2),
+            'or',
+            true,
+            true
+        );
     }
 }

@@ -441,6 +441,62 @@ Entries::whereFieldNotNull('your_custom_field')->get();
 Entries::orWhereFieldNotNull('your_custom_field')->get();
 ```
 
+#### Where Field Contains
+
+This is like `search:your_custom_field="foo|bar"`.
+
+```
+Entries::whereFieldContains('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Or Where Field Contains
+
+```
+Entries::orWhereFieldContains('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Where Field Does Not Contain
+
+This is like `search:your_custom_field="not foo|bar"`.
+
+```
+Entries::whereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Or Where Field Does Not Contain
+
+```
+Entries::orWhereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Where Field Contains Whole Word
+
+This is like `search:your_custom_field="foo\W|bar\W"`.
+
+```
+Entries::whereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Or Where Field Contains Whole Word
+
+```
+Entries::orWhereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Where Field Does Not Contain Whole Word
+
+This is like `search:your_custom_field="not foo\W|bar\W"`.
+
+```
+Entries::whereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')->get();
+```
+
+#### Or Where Field Does Not Contain Whole Word
+
+```
+Entries::orWhereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')->get();
+```
+
 ### Advanced Category Querying
 
 This library makes use of Eloquent's [relationship capabilities](http://laravel.com/docs/eloquent#querying-relations). If you need to do more advanced category querying than the default category scopes, you can use the `whereHas` and `orWhereHas` methods.
