@@ -802,6 +802,16 @@ Date fields will be a single [`Carbon` object](https://github.com/briannesbitt/C
 echo $entry->your_date_field->format('Y-m-d H:i:s');
 ```
 
+### Multiselect, Checkboxes, Fieldpack Multiselect, Fieldpack Checkboxes & Fieldpack List
+
+These fields will be arrays of values:
+
+```
+foreach ($entry->your_multiselect_field as $value) {
+    echo $value;
+}
+```
+
 ## Extending the `BasePlugin` class
 
 The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for ExpressionEngine modules and plugins. The `parseEntries` method parses a template using an `EntryCollection`.
