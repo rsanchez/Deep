@@ -17,6 +17,7 @@ use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Model\Site;
+use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Model\UploadPref;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
@@ -55,6 +56,10 @@ class Deep extends Container
 
         $this->singleton('Site', function ($app) {
             return new Site();
+        });
+
+        $this->singleton('Category', function ($app) {
+            return new Category();
         });
 
         $this->singleton('UploadPref', function ($app) {
