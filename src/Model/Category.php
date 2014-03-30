@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Model for the categories table
@@ -29,4 +30,32 @@ class Category extends Model
      * @var string
      */
     protected $primaryKey = 'cat_id';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newQuery($excludeDeleted = true)
+    {
+        $query = parent::newQuery($excludeDeleted);
+
+        $query->select($this->table.'.*');
+
+        return $query;
+    }
+
+    /**
+     * Order by Category Nesting
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNested(Builder $query)
+    {
+        $connection = $query->getQuery()->getConnection();
+
+        $tablePrefix = $connection->getTablePrefix();
+
+        return $query->leftJoin("{$this->table} AS subcategories", $connection->raw('`subcategories`.`cat_id`'), '=', 'categories.parent_id')
+            ->orderBy($connection->raw("coalesce(`subcategories`.`cat_url_title`, `{$tablePrefix}categories`.`cat_url_title`), `{$tablePrefix}categories`.`cat_order`"));
+    }
 }
