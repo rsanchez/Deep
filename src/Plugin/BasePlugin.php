@@ -40,7 +40,7 @@ abstract class BasePlugin
      * @param  Closure|null $callback receieves a query builder object as the first parameter
      * @return string
      */
-    protected function parse(Closure $callback = null)
+    protected function parseEntries(Closure $callback = null)
     {
         $disabled = array();
 

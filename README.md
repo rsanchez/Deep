@@ -804,7 +804,7 @@ echo $entry->your_date_field->format('Y-m-d H:i:s');
 
 ## Extending the `BasePlugin` class
 
-The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for ExpressionEngine modules and plugins. The `parse` method parses a template using an `EntryCollection`.
+The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for ExpressionEngine modules and plugins. The `parseEntries` method parses a template using an `EntryCollection`.
 
 ```
 <?php
@@ -815,14 +815,14 @@ class My_plugin extends BasePlugin
 {
     public function entries()
     {
-        return $this->parse();
+        return $this->parseEntries();
     }
 
     public function entries_that_start_with()
     {
         $letter = ee()->TMPL->fetch_param('letter');
 
-        return $this->parse(function ($query) use ($letter) {
+        return $this->parseEntries(function ($query) use ($letter) {
             // do additional custom querying here
             $query->where('title', 'LIKE', $letter.'%');
         });
@@ -889,7 +889,7 @@ The `BasePlugin` class does not. If you wish to impose any or all of those defau
     {
         ee()->TMPL->tagparams['status'] = 'not closed';
 
-        return $this->parse();
+        return $this->parseEntries();
     }
 
 The `BasePlugin` class allows the following parameters on Matrix, Grid, Playa and Relationships tag pairs:
