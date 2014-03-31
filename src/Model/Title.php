@@ -257,6 +257,26 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Get the channel_name of the entry's channel
+     *
+     * @return string
+     */
+    public function getChannelNameAttribute()
+    {
+        return $this->channel->channel_name;
+    }
+
+    /**
+     * Get the channel_name of the entry's channel
+     *
+     * @return string
+     */
+    public function getChannelShortNameAttribute()
+    {
+        return $this->channel->channel_name;
+    }
+
+    /**
      * Save the entry (not yet supported)
      *
      * @param  array $options
