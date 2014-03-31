@@ -58,4 +58,14 @@ class Channel extends Model
             return $field->field_type === $type;
         });
     }
+
+    /**
+     * Return the channel_name when cast to string
+     *
+     * @var string
+     */
+    public function __toString()
+    {
+        return $this->channel_name;
+    }
 }

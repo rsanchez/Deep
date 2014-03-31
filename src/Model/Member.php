@@ -29,4 +29,14 @@ class Member extends Model
      * @var string
      */
     protected $primaryKey = 'member_id';
+
+    /**
+     * Return the screen_name when cast to string
+     *
+     * @var string
+     */
+    public function __toString()
+    {
+        return $this->screen_name;
+    }
 }
