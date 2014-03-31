@@ -230,9 +230,9 @@ class Entry extends Title
             $not = false;
         }
 
-        $and = strpos($string, '&&') !== false;
+        $and = $contains && strpos($string, '&&') !== false;
 
-        $separator = $and && $contains ? '&&' : '|';
+        $separator = $and ? '&&' : '|';
 
         $values = explode($separator, str_replace('IS_EMPTY', '', $string));
 
