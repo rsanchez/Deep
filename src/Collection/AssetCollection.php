@@ -9,12 +9,12 @@
 
 namespace rsanchez\Deep\Collection;
 
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\AbstractFilterableCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\Asset
  */
-class AssetCollection extends Collection
+class AssetCollection extends AbstractFilterableCollection
 {
     /**
      * Get the URL of the first item in the collection

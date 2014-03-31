@@ -9,11 +9,11 @@
 
 namespace rsanchez\Deep\Collection;
 
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\AbstractFilterableCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\MatrixRow
  */
-class MatrixRowCollection extends Collection
+class MatrixRowCollection extends AbstractFilterableCollection
 {
 }

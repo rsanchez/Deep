@@ -9,12 +9,12 @@
 
 namespace rsanchez\Deep\Collection;
 
-use Illuminate\Database\Eloquent\Collection;
+use rsanchez\Deep\Collection\AbstractFilterableCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\Title
  */
-abstract class AbstractTitleCollection extends Collection
+abstract class AbstractTitleCollection extends AbstractFilterableCollection
 {
     /**
      * All of the entry IDs in this collection (including related entries)

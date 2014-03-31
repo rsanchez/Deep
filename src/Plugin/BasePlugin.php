@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Plugin;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Collection\AbstractFilterableCollection;
 use Illuminate\Support\Collection;
 use DateTime;
 use Closure;
@@ -177,22 +178,8 @@ abstract class BasePlugin
 
                         $value = $entry->{$tag->name};
 
-                        if ($value instanceof Collection) {
-                            if (isset($tag->params['row_id'])) {
-                                $rowId = $tag->params['row_id'];
-
-                                $value = $value->filter(function ($row) use ($rowId) {
-                                    return $row->row_id == $rowId;
-                                });
-                            }
-
-                            if (isset($tag->params['limit']) || isset($tag->params['offset'])) {
-                                $offset = isset($tag->params['offset']) ? $tag->params['offset'] : 0;
-                                $limit = isset($tag->params['limit']) ? $tag->params['limit'] : null;
-                                $value = $value->slice($offset, $limit);
-                            }
-
-                            $value = $value->toArray();
+                        if ($value instanceof AbstractFilterableCollection) {
+                            $value = $value($tag->params)->toArray();
                         } elseif (is_object($value) && method_exists($value, 'toArray')) {
                             $value = $value->toArray();
                         } elseif ($value) {
@@ -200,10 +187,14 @@ abstract class BasePlugin
                         }
 
                         if ($value) {
-                            $row[$tag->key] = ee()->TMPL->parse_variables($tag->tagdata, $value);
+                            if (is_array($value)) {
+                                $row[$tag->key] = ee()->TMPL->parse_variables($tag->tagdata, $value);
 
-                            if (isset($tag->params['backspace'])) {
-                                $row[$tag->key] = substr($row[$tag->key], 0, -$tag->params['backspace']);
+                                if (isset($tag->params['backspace'])) {
+                                    $row[$tag->key] = substr($row[$tag->key], 0, -$tag->params['backspace']);
+                                }
+                            } else {
+                                $row[$tag->key] = $value;
                             }
                         }
                     }

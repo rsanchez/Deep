@@ -906,10 +906,16 @@ The `BasePlugin` class allows the following parameters on Matrix, Grid, Playa an
 
 - limit
 - offset
+- orderby
+- sort
+- search:your_field
+- fixed_order
 - backspace
-- row_id\*
+- entry_id\*
+- row_id\*\*
 
-\*Matrix and Grid only
+\*Playa and Relationships only
+\*\*Matrix and Grid only
 
 ## The `Titles` Class
 
