@@ -30,10 +30,10 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Filter by model attribute contains
      *
-     * @param  string $attribute name of the attribute on which to filter
-     * @param  array  $values
-     * @param  bool   $and
-     * @param  bool   $not
+     * @param  string                                                 $attribute name of the attribute on which to filter
+     * @param  array                                                  $values
+     * @param  bool                                                   $and
+     * @param  bool                                                   $not
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function filterByAttributeContains($attribute, array $values, $and = false, $not = false)
@@ -70,8 +70,8 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Filter by model attribute in array string
      *
-     * @param  string $attribute name of the attribute on which to filter
-     * @param  string $filter pipe-delimited list of values, optionaly prefixed by not
+     * @param  string                                                 $attribute name of the attribute on which to filter
+     * @param  string                                                 $filter    pipe-delimited list of values, optionaly prefixed by not
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function filterByAttributeInString($attribute, $filter)
@@ -88,9 +88,9 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Filter by model attribute in array
      *
-     * @param  string $attribute name of the attribute on which to filter
-     * @param  array  $values
-     * @param  bool   $not
+     * @param  string                                                 $attribute name of the attribute on which to filter
+     * @param  array                                                  $values
+     * @param  bool                                                   $not
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function filterByAttributeIn($attribute, array $values, $not = false)
@@ -103,9 +103,9 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Filter by model attribute numerical comparison
      *
-     * @param  string $attribute name of the attribute on which to filter
-     * @param  mixed  $value
-     * @param  string $operator >, >=, <, <=
+     * @param  string                                                 $attribute name of the attribute on which to filter
+     * @param  mixed                                                  $value
+     * @param  string                                                 $operator  >, >=, <, <=
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function filterByAttributeComparison($attribute, $value, $operator)
@@ -139,8 +139,8 @@ abstract class AbstractFilterableCollection extends Collection
      * - 'foo\W|bar'
      * - '>=3'
      *
-     * @param  string $attribute name of the attribute on which to filter
-     * @param  string $filter   a string describing the filter
+     * @param  string                                                 $attribute name of the attribute on which to filter
+     * @param  string                                                 $filter    a string describing the filter
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function filterByAttribute($attribute, $filter)
@@ -186,7 +186,7 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Filter by model ID
      *
-     * @param  int $id,... one or more IDs
+     * @param  int                                                    $id,... one or more IDs
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function filterById($id)
@@ -203,8 +203,8 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Limit the collection
      *
-     * @param  int $limit
-     * @param  int $offset
+     * @param  int                                                    $limit
+     * @param  int                                                    $offset
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function limit($limit, $offset = 0)
@@ -217,8 +217,8 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Offset the collection
      *
-     * @param  int $limit
-     * @param  int $offset
+     * @param  int                                                    $limit
+     * @param  int                                                    $offset
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function offset($offset, $limit = null)
@@ -231,8 +231,8 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Sort by one or more model attributes
      *
-     * @param  array|int    $id one or more IDs
-     * @param  array|string $sort sort direction
+     * @param  array|int                                              $id   one or more IDs
+     * @param  array|string                                           $sort sort direction
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function sortByAttribute($attribute, $sort = 'asc')
@@ -269,7 +269,7 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Sort by model ID in the specified order
      *
-     * @param  int $id,... one or more IDs
+     * @param  int                                                    $id,... one or more IDs
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function sortByFixedOrder($id)
@@ -297,7 +297,7 @@ abstract class AbstractFilterableCollection extends Collection
      * - sort
      * - any model attribute (ex. row_id)
      *
-     * @param  array $params
+     * @param  array                                                  $params
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function tagparams(array $params)
@@ -308,7 +308,7 @@ abstract class AbstractFilterableCollection extends Collection
 
         $collection = $this->createClone();
 
-        $ignore = array('fixed_order', 'orderby', 'sort', 'offset', 'limit');
+        $ignore = array('fixed_order', 'orderby', 'sort', 'offset', 'limit', 'var_prefix');
 
         $filters = array_diff_key($params, array_flip($ignore));
 
@@ -362,7 +362,7 @@ abstract class AbstractFilterableCollection extends Collection
     /**
      * Alias to tagparams
      *
-     * @param  array $params
+     * @param  array                                                  $params
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
     public function __invoke(array $params)

@@ -12,6 +12,8 @@ namespace rsanchez\Deep\Plugin;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Collection\AbstractTitleCollection;
+use rsanchez\Deep\Collection\RelationshipCollection;
 use rsanchez\Deep\Collection\AbstractFilterableCollection;
 use Illuminate\Support\Collection;
 use DateTime;
@@ -33,6 +35,8 @@ abstract class BasePlugin
         });
 
         Deep::bootEloquent(ee());
+
+        ee()->load->library(array('pagination', 'typography'));
     }
 
     /**
@@ -43,21 +47,7 @@ abstract class BasePlugin
      */
     protected function parseEntries(Closure $callback = null)
     {
-        if ($prefix = ee()->TMPL->fetch_param('var_prefix')) {
-            $prefix = rtrim($prefix, ':').':';
-            $prefixLength = strlen($prefix);
-        } else {
-            $prefix = '';
-            $prefixLength = 0;
-        }
-
-        $disabled = array();
-
-        if ($disable = ee()->TMPL->fetch_param('disable')) {
-            $disabled = explode('|', $disable);
-        }
-
-        ee()->load->library(array('pagination', 'typography'));
+        $disabled = empty(ee()->TMPL->tagparams['disable']) ? array() : explode('|', ee()->TMPL->tagparams['disable']);
 
         $pagination = ee()->pagination->create();
 
@@ -88,38 +78,92 @@ abstract class BasePlugin
             $query->with('author');
         }
 
-        $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
+        $connection = $query->getQuery()->getConnection();
+        $tablePrefix = $connection->getTablePrefix();
 
         if (strpos(ee()->TMPL->tagdata, 'comment_subscriber_total') !== false) {
-            $query->addSelect($query->getQuery()->getConnection()->raw("(SELECT COUNT(*) FROM {$tablePrefix}comment_subscriptions WHERE {$tablePrefix}comment_subscriptions.entry_id = {$tablePrefix}channel_titles.entry_id) AS comment_subscriber_total"));
-        }
+            $subquery = "(SELECT COUNT(*)
+                FROM {$tablePrefix}comment_subscriptions
+                WHERE {$tablePrefix}comment_subscriptions.entry_id = {$tablePrefix}channel_titles.entry_id)
+                AS comment_subscriber_total";
 
-        $paginationOffset = 0;
-
-        $paginationCount = $limit;
-
-        if ($pagination->paginate) {
-            $paginationCount = $query->getPaginationCount();
-
-            if (preg_match('#P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
-                $query->skip($match[1]);
-
-                $paginationOffset = $match[1];
-            }
-
-            $pagination->build($paginationCount, $limit);
+            $query->addSelect($connection->raw($subquery));
         }
 
         if (is_callable($callback)) {
             $callback($query);
         }
 
-        $entries = $query->get();
+        ee()->TMPL->tagparams['absolute_results'] = $limit;
+
+        if ($pagination->paginate) {
+            ee()->TMPL->tagparams['absolute_results'] = $query->getPaginationCount();
+
+            if (preg_match('#P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
+                $query->skip($match[1]);
+
+                ee()->TMPL->tagparams['offset'] = $match[1];
+            }
+
+            $pagination->build($paginationCount, $limit);
+        }
+
+        $output = $this->parseEntryCollection(
+            $query->get(),
+            ee()->TMPL->tagdata,
+            ee()->TMPL->tagparams,
+            ee()->TMPL->var_pair,
+            ee()->TMPL->var_single
+        );
+
+        if ($pagination->paginate) {
+            $output = $pagination->render($output);
+        }
+
+        return $output;
+    }
+
+    /**
+     * Parse a plugin tag pair equivalent to channel:entries
+     *
+     * @param  AbstractTitleCollection $entries a collection of entries
+     * @param  string                  $tagdata the raw template to parse
+     * @param  array                   $params channel:entries parameters
+     * @param  array                   $varPair array of pair tags from ee()->functions->assign_variables
+     * @param  array                   $varSingle array single tags from ee()->functions->assign_variables
+     * @return string
+     */
+    protected function parseEntryCollection(
+        AbstractTitleCollection $entries,
+        $tagdata,
+        array $params = array(),
+        array $varPair = array(),
+        array $varSingle = array()
+    ) {
+        $disabled = empty($params['disable']) ? array() : explode('|', $disable);
+
+        $offset = isset($params['offset']) ? $params['offset'] : 0;
+
+        $absoluteResults = isset($params['absolute_results']) ? $params['absolute_results'] : $entries->count();
+
+        $customFieldsEnabled = ! in_array('custom_fields', $disabled);
+        $membersEnabled = ! in_array('members', $disabled);
+        $categoriesEnabled = ! in_array('categories', $disabled);
+
+        ee()->load->library('typography');
+
+        if (! empty($params['var_prefix'])) {
+            $prefix = rtrim($params['var_prefix'], ':').':';
+            $prefixLength = strlen($prefix);
+        } else {
+            $prefix = '';
+            $prefixLength = 0;
+        }
 
         $singleTags = array();
         $pairTags = array();
 
-        foreach (array_keys(ee()->TMPL->var_single) as $tag) {
+        foreach (array_keys($varSingle) as $tag) {
             $spacePosition = strpos($tag, ' ');
 
             if ($spacePosition !== false) {
@@ -148,7 +192,7 @@ abstract class BasePlugin
         $parsePairTags = $customFieldsEnabled || $categoriesEnabled;
 
         if ($parsePairTags) {
-            foreach (ee()->TMPL->var_pair as $tag => $params) {
+            foreach ($varPair as $tag => $params) {
                 $spacePosition = strpos($tag, ' ');
 
                 $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
@@ -157,7 +201,7 @@ abstract class BasePlugin
                     continue;
                 }
 
-                preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', ee()->TMPL->tagdata, $matches);
+                preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
 
                 foreach ($matches[1] as $i => $key) {
                     $pairTags[] = (object) array(
@@ -174,8 +218,8 @@ abstract class BasePlugin
 
         foreach ($entries as $i => $entry) {
             $row = array(
-                $prefix.'absolute_count' => $paginationOffset + $i + 1,
-                $prefix.'absolute_results' => $paginationCount,
+                $prefix.'absolute_count' => $offset + $i + 1,
+                $prefix.'absolute_results' => $absoluteResults,
                 $prefix.'channel' => $entry->channel->channel_name,
                 $prefix.'channel_short_name' => $entry->channel->channel_name,
                 $prefix.'comment_auto_path' => $entry->channel->comment_url,
@@ -201,8 +245,12 @@ abstract class BasePlugin
                                 ? '/'.ee()->config->item('reserved_category_word').'/'.$categoryModel->cat_url_title
                                 : '/C'.$categoryModel->cat_id;
 
+                            $regex = '#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#';
+
+                            $active = (bool) preg_match($regex, ee()->uri->uri_string());
+
                             $category = array(
-                                'active' => (bool) preg_match('#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#', ee()->uri->uri_string()),
+                                'active' => $active,
                                 'category_description' => $categoryModel->cat_description,
                                 'category_group' => $categoryModel->grou_id,
                                 'category_id' => $categoryModel->cat_id,
@@ -213,7 +261,8 @@ abstract class BasePlugin
                             );
 
                             foreach ($pathTags[2] as $i => $path) {
-                                $category[substr($pathTags[0][$i], 1, -1)] = ee()->functions->create_url($path.$categoryUri);
+                                $key = substr($pathTags[0][$i], 1, -1);
+                                $category[$key] = ee()->functions->create_url($path.$categoryUri);
                             }
 
                             array_push($categories, $category);
@@ -228,7 +277,22 @@ abstract class BasePlugin
 
                         $value = $entry->{$tag->name};
 
-                        if ($value instanceof AbstractFilterableCollection) {
+                        if ($value instanceof AbstractTitleCollection) {
+                            // native relationships are prefixed by default
+                            if ($value instanceof RelationshipCollection) {
+                                $tag->params['var_prefix'] = $tag->name;
+                            }
+
+                            $tag->vars = ee()->functions->assign_variables($tag->tagdata);
+
+                            $value = $this->parseEntryCollection(
+                                $value($tag->params),
+                                $tag->tagdata,
+                                $tag->params,
+                                $tag->vars['var_pair'],
+                                $tag->vars['var_single']
+                            );
+                        } elseif ($value instanceof AbstractFilterableCollection) {
                             $value = $value($tag->params)->toArray();
                         } elseif (is_object($value) && method_exists($value, 'toArray')) {
                             $value = $value->toArray();
@@ -312,25 +376,26 @@ abstract class BasePlugin
                 $row[$prefix.'signature_image_width'] = $entry->author->sig_img_width;
                 $row[$prefix.'signature_image'] = (int) (bool) $entry->author->sig_img_filename;
                 $row[$prefix.'url_or_email'] = $entry->author->url ?: $entry->author->email;
-                $row[$prefix.'url_or_email_as_author'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['author'].'</a>';
-                $row[$prefix.'url_or_email_as_link'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['url_or_email'].'</a>';
+                $row[$prefix.'url_or_email_as_author'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row[$prefix.'author'].'</a>';
+                $row[$prefix.'url_or_email_as_link'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row[$prefix.'url_or_email'].'</a>';
             }
 
             $variables[] = $row;
+        }
+
+        if (preg_match('#{if '.preg_quote($prefix).'no_results}(.*?){/if}#s', $tagdata, $match)) {
+            $tagdata = str_replace($match[0], '', $tagdata);
+            ee()->TMPL->no_results = $match[1];
         }
 
         if (! $variables) {
             return ee()->TMPL->no_results();
         }
 
-        $output = ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+        $output = ee()->TMPL->parse_variables($tagdata, $variables);
 
-        if ($pagination->paginate) {
-            $output = $pagination->render($output);
-        }
-
-        if ($backspace = ee()->TMPL->fetch_param('backspace')) {
-            $output = substr($output, 0, -$backspace);
+        if (! empty($params['backspace'])) {
+            $output = substr($output, 0, -$params['backspace']);
         }
 
         return $output;

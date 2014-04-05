@@ -35,7 +35,7 @@ class Category extends Model
     /**
      * {@inheritdoc}
      *
-     * @param  array $models
+     * @param  array                                        $models
      * @return \rsanchez\Deep\Collection\CategoryCollection
      */
     public function newCollection(array $models = array())

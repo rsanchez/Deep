@@ -19,7 +19,7 @@ class CategoryCollection extends AbstractFilterableCollection
     /**
      * Filter by cat_id attribute
      *
-     * @param  string $filter pipe-delimited list of cat_ids, optionaly prefixed by not
+     * @param  string                                       $filter pipe-delimited list of cat_ids, optionaly prefixed by not
      * @return \rsanchez\Deep\Collection\CategoryCollection
      */
     public function filterByShow($filter)
@@ -30,7 +30,7 @@ class CategoryCollection extends AbstractFilterableCollection
     /**
      * Filter by group_id attribute
      *
-     * @param  string $filter pipe-delimited list of group_ids, optionaly prefixed by not
+     * @param  string                                       $filter pipe-delimited list of group_ids, optionaly prefixed by not
      * @return \rsanchez\Deep\Collection\CategoryCollection
      */
     public function filterByShowGroup($filter)
