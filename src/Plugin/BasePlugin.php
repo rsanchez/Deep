@@ -43,6 +43,14 @@ abstract class BasePlugin
      */
     protected function parseEntries(Closure $callback = null)
     {
+        if ($prefix = ee()->TMPL->fetch_param('var_prefix')) {
+            $prefix = rtrim($prefix, ':').':';
+            $prefixLength = strlen($prefix);
+        } else {
+            $prefix = '';
+            $prefixLength = 0;
+        }
+
         $disabled = array();
 
         if ($disable = ee()->TMPL->fetch_param('disable')) {
@@ -125,8 +133,12 @@ abstract class BasePlugin
                 $params = array();
             }
 
+            if ($prefix && strncmp($name, $prefix, $prefixLength) !== 0) {
+                continue;
+            }
+
             $singleTags[] = (object) array(
-                'name' => $name,
+                'name' => $prefix ? substr($name, $prefixLength) : $name,
                 'key' => $tag,
                 'params' => $params,
                 'tagdata' => '',
@@ -141,11 +153,15 @@ abstract class BasePlugin
 
                 $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
 
+                if ($prefix && strncmp($name, $prefix, $prefixLength) !== 0) {
+                    continue;
+                }
+
                 preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', ee()->TMPL->tagdata, $matches);
 
                 foreach ($matches[1] as $i => $key) {
                     $pairTags[] = (object) array(
-                        'name' => $name,
+                        'name' => $prefix ? substr($name, $prefixLength) : $name,
                         'key' => $key,
                         'params' => $params ?: array(),
                         'tagdata' => $matches[2][$i],
@@ -158,18 +174,18 @@ abstract class BasePlugin
 
         foreach ($entries as $i => $entry) {
             $row = array(
-                'absolute_count' => $paginationOffset + $i + 1,
-                'absolute_results' => $paginationCount,
-                'channel' => $entry->channel->channel_name,
-                'channel_short_name' => $entry->channel->channel_name,
-                'comment_auto_path' => $entry->channel->comment_url,
-                'comment_entry_id_auto_path' => $entry->channel->comment_url.'/'.$entry->entry_id,
-                'comment_url_title_auto_path' => $entry->channel->comment_url.'/'.$entry->url_title,
-                'entry_site_id' => $entry->site_id,
-                'forum_topic' => (int) (bool) $entry->forum_topic_id,
-                'not_forum_topic' => (int) ! $entry->forum_topic_id,
-                'page_uri' => $entry->page_uri,
-                'page_url' => ee()->functions->create_url($entry->page_uri),
+                $prefix.'absolute_count' => $paginationOffset + $i + 1,
+                $prefix.'absolute_results' => $paginationCount,
+                $prefix.'channel' => $entry->channel->channel_name,
+                $prefix.'channel_short_name' => $entry->channel->channel_name,
+                $prefix.'comment_auto_path' => $entry->channel->comment_url,
+                $prefix.'comment_entry_id_auto_path' => $entry->channel->comment_url.'/'.$entry->entry_id,
+                $prefix.'comment_url_title_auto_path' => $entry->channel->comment_url.'/'.$entry->url_title,
+                $prefix.'entry_site_id' => $entry->site_id,
+                $prefix.'forum_topic' => (int) (bool) $entry->forum_topic_id,
+                $prefix.'not_forum_topic' => (int) ! $entry->forum_topic_id,
+                $prefix.'page_uri' => $entry->page_uri,
+                $prefix.'page_url' => ee()->functions->create_url($entry->page_uri),
             );
 
             if ($parsePairTags) {
@@ -266,32 +282,38 @@ abstract class BasePlugin
                 }
             }
 
-            $row = array_merge($row, $entry->getOriginal(), $entry->channel->toArray());
+            foreach ($entry->getOriginal() as $key => $value) {
+                $row[$prefix.$key] = $value;
+            }
 
-            $row['allow_comments'] = (int) ($entry->allow_comments === 'y');
-            $row['sticky'] = (int) ($entry->sticky === 'y');
+            foreach ($entry->channel->toArray() as $key => $value) {
+                $row[$prefix.$key] = $value;
+            }
+
+            $row[$prefix.'allow_comments'] = (int) ($entry->allow_comments === 'y');
+            $row[$prefix.'sticky'] = (int) ($entry->sticky === 'y');
 
             if ($membersEnabled) {
                 foreach ($entry->author->toArray() as $key => $value) {
-                    $row[$key] = $value;
+                    $row[$prefix.$key] = $value;
                 }
 
-                $row['author'] = $entry->author->screen_name ?: $entry->author->username;
-                $row['avatar_url'] = $entry->author->avatar_filename ? ee()->config->item('avatar_url').$entry->author->avatar_filename : '';
-                $row['avatar_image_height'] = $entry->author->avatar_height;
-                $row['avatar_image_width'] = $entry->author->avatar_width;
-                $row['avatar'] = (int) (bool) $entry->author->avatar_filename;
-                $row['photo_url'] = $entry->author->photo_filename ? ee()->config->item('photo_url').$entry->author->photo_filename : '';
-                $row['photo_image_height'] = $entry->author->photo_height;
-                $row['photo_image_width'] = $entry->author->photo_width;
-                $row['photo'] = (int) (bool) $entry->author->photo_filename;
-                $row['signature_image_url'] = $entry->author->sig_img_filename ? ee()->config->item('sig_img_url').$entry->author->sig_img_filename : '';
-                $row['signature_image_height'] = $entry->author->sig_img_height;
-                $row['signature_image_width'] = $entry->author->sig_img_width;
-                $row['signature_image'] = (int) (bool) $entry->author->sig_img_filename;
-                $row['url_or_email'] = $entry->author->url ?: $entry->author->email;
-                $row['url_or_email_as_author'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['author'].'</a>';
-                $row['url_or_email_as_link'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['url_or_email'].'</a>';
+                $row[$prefix.'author'] = $entry->author->screen_name ?: $entry->author->username;
+                $row[$prefix.'avatar_url'] = $entry->author->avatar_filename ? ee()->config->item('avatar_url').$entry->author->avatar_filename : '';
+                $row[$prefix.'avatar_image_height'] = $entry->author->avatar_height;
+                $row[$prefix.'avatar_image_width'] = $entry->author->avatar_width;
+                $row[$prefix.'avatar'] = (int) (bool) $entry->author->avatar_filename;
+                $row[$prefix.'photo_url'] = $entry->author->photo_filename ? ee()->config->item('photo_url').$entry->author->photo_filename : '';
+                $row[$prefix.'photo_image_height'] = $entry->author->photo_height;
+                $row[$prefix.'photo_image_width'] = $entry->author->photo_width;
+                $row[$prefix.'photo'] = (int) (bool) $entry->author->photo_filename;
+                $row[$prefix.'signature_image_url'] = $entry->author->sig_img_filename ? ee()->config->item('sig_img_url').$entry->author->sig_img_filename : '';
+                $row[$prefix.'signature_image_height'] = $entry->author->sig_img_height;
+                $row[$prefix.'signature_image_width'] = $entry->author->sig_img_width;
+                $row[$prefix.'signature_image'] = (int) (bool) $entry->author->sig_img_filename;
+                $row[$prefix.'url_or_email'] = $entry->author->url ?: $entry->author->email;
+                $row[$prefix.'url_or_email_as_author'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['author'].'</a>';
+                $row[$prefix.'url_or_email_as_link'] = '<a href="'.($entry->author->url ?: 'mailto:'.$entry->author->email).'">'.$row['url_or_email'].'</a>';
             }
 
             $variables[] = $row;
