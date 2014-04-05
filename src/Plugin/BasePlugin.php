@@ -49,7 +49,7 @@ abstract class BasePlugin
             $disabled = explode('|', $disable);
         }
 
-        ee()->load->library('pagination');
+        ee()->load->library(array('pagination', 'typography'));
 
         $pagination = ee()->pagination->create();
 
@@ -133,7 +133,9 @@ abstract class BasePlugin
             );
         }
 
-        if ($customFieldsEnabled) {
+        $parsePairTags = $customFieldsEnabled || $categoriesEnabled;
+
+        if ($parsePairTags) {
             foreach (ee()->TMPL->var_pair as $tag => $params) {
                 $spacePosition = strpos($tag, ' ');
 
@@ -145,7 +147,7 @@ abstract class BasePlugin
                     $pairTags[] = (object) array(
                         'name' => $name,
                         'key' => $key,
-                        'params' => $params,
+                        'params' => $params ?: array(),
                         'tagdata' => $matches[2][$i],
                     );
                 }
@@ -170,9 +172,41 @@ abstract class BasePlugin
                 'page_url' => ee()->functions->create_url($entry->page_uri),
             );
 
-            if ($customFieldsEnabled) {
+            if ($parsePairTags) {
                 foreach ($pairTags as $tag) {
-                    if ($entry->channel->fields->hasField($tag->name)) {
+                    if ($categoriesEnabled && $tag->name === 'categories') {
+
+                        $categories = array();
+
+                        preg_match_all('#{path=([\042\047]?)(.*?)\\1}#', $tag->tagdata, $pathTags);
+
+                        foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
+                            $categoryUri = ee()->config->item('use_category_name') === 'y'
+                                ? '/'.ee()->config->item('reserved_category_word').'/'.$categoryModel->cat_url_title
+                                : '/C'.$categoryModel->cat_id;
+
+                            $category = array(
+                                'active' => (bool) preg_match('#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#', ee()->uri->uri_string()),
+                                'category_description' => $categoryModel->cat_description,
+                                'category_group' => $categoryModel->grou_id,
+                                'category_id' => $categoryModel->cat_id,
+                                'parent_id' => $categoryModel->parent_id,
+                                'category_image' => $categoryModel->cat_image,
+                                'category_name' => $categoryModel->cat_name,
+                                'category_url_title' => $categoryModel->cat_url_title,
+                            );
+
+                            foreach ($pathTags[2] as $i => $path) {
+                                $category[substr($pathTags[0][$i], 1, -1)] = ee()->functions->create_url($path.$categoryUri);
+                            }
+
+                            array_push($categories, $category);
+                        }
+
+                        // @TODO parse the file path at the model attribute level using upload pref repository
+                        $row[$tag->key] = $categories ? ee()->typography->parse_file_paths(ee()->TMPL->parse_variables($tag->tagdata, $categories)) : '';
+
+                    } elseif ($customFieldsEnabled && $entry->channel->fields->hasField($tag->name)) {
 
                         $row[$tag->key] = '';
 
@@ -230,10 +264,6 @@ abstract class BasePlugin
                         $row[$tag->key] = ee()->functions->create_url($path.$entry->author_id);
                         break;
                 }
-            }
-
-            if ($categoriesEnabled) {
-                $row['categories'] = $entry->categories->toArray();
             }
 
             $row = array_merge($row, $entry->getOriginal(), $entry->channel->toArray());

@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Collection\CategoryCollection;
 
 /**
  * Model for the categories table
@@ -30,6 +31,17 @@ class Category extends Model
      * @var string
      */
     protected $primaryKey = 'cat_id';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  array $models
+     * @return \rsanchez\Deep\Collection\CategoryCollection
+     */
+    public function newCollection(array $models = array())
+    {
+        return new CategoryCollection($models);
+    }
 
     /**
      * {@inheritdoc}

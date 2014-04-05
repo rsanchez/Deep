@@ -28,6 +28,105 @@ abstract class AbstractFilterableCollection extends Collection
     }
 
     /**
+     * Filter by model attribute contains
+     *
+     * @param  string $attribute name of the attribute on which to filter
+     * @param  array  $values
+     * @param  bool   $and
+     * @param  bool   $not
+     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     */
+    public function filterByAttributeContains($attribute, array $values, $and = false, $not = false)
+    {
+        $this->items = array_filter($this->items, function ($model) use ($attribute, $and, $not, $values) {
+            $isMatch = false;
+
+            foreach ($values as $value) {
+                if ($value) {
+                    if (preg_match('#^(.+)\\\W$#', $value, $match)) {
+                        $regex = '#\b'.preg_quote($match[1]).'\b#';
+                    } else {
+                        $regex = '#'.preg_quote($value).'#';
+                    }
+
+                    $isValueMatch = (bool) preg_match($regex, $model->$attribute);
+                } else {
+                    $isValueMatch = empty($model->$attribute);
+                }
+
+                $isMatch = $not ? ! $isValueMatch : $isValueMatch;
+
+                if ($and && ! $isValueMatch) {
+                    break;
+                } elseif (! $and && $isValueMatch) {
+                    break;
+                }
+            }
+
+            return $isMatch;
+        });
+    }
+
+    /**
+     * Filter by model attribute in array string
+     *
+     * @param  string $attribute name of the attribute on which to filter
+     * @param  string $filter pipe-delimited list of values, optionaly prefixed by not
+     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     */
+    public function filterByAttributeInString($attribute, $filter)
+    {
+        $not = strncmp('not ', $filter, 4) === 0;
+
+        if ($not) {
+            $filter = substr($filter, 4);
+        }
+
+        return $this->filterByAttributeIn($attribute, explode('|', $filter), $not);
+    }
+
+    /**
+     * Filter by model attribute in array
+     *
+     * @param  string $attribute name of the attribute on which to filter
+     * @param  array  $values
+     * @param  bool   $not
+     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     */
+    public function filterByAttributeIn($attribute, array $values, $not = false)
+    {
+        $this->items = array_filter($this->items, function ($model) use ($attribute, $not, $values) {
+            return $not ? ! in_array($model->$attribute, $values) : in_array($model->$attribute, $values);
+        });
+    }
+
+    /**
+     * Filter by model attribute numerical comparison
+     *
+     * @param  string $attribute name of the attribute on which to filter
+     * @param  mixed  $value
+     * @param  string $operator >, >=, <, <=
+     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     */
+    public function filterByAttributeComparison($attribute, $value, $operator)
+    {
+        $this->items = array_filter($this->items, function ($model) use ($value, $attribute, $operator) {
+            switch ($operator) {
+                case '>':
+                    return $model->$attribute > $value;
+                case '>=':
+                    return $model->$attribute >= $value;
+                case '<':
+                    return $model->$attribute < $value;
+                case '<=':
+                    return $model->$attribute <= $value;
+            }
+        });
+
+        return $this;
+    }
+
+    /**
      * Filter by model attribute
      *
      * The filter should be one of the following formats:
@@ -50,22 +149,9 @@ abstract class AbstractFilterableCollection extends Collection
         if (preg_match('#^(>|>=|<|<=)(.+)$#', $filter, $match)) {
             $operator = $match[1];
 
-            $filter = $match[2];
+            $value = $match[2];
 
-            $this->items = array_filter($this->items, function ($model) use ($filter, $attribute, $operator) {
-                switch ($operator) {
-                    case '>':
-                        return $model->$attribute > $filter;
-                    case '>=':
-                        return $model->$attribute >= $filter;
-                    case '<':
-                        return $model->$attribute < $filter;
-                    case '<=':
-                        return $model->$attribute <= $filter;
-                }
-            });
-
-            return $this;
+            return $this->filterByAttributeComparison($attribute, $value, $operator);
         }
 
         if (strncmp($filter, '=', 1) === 0) {
@@ -86,45 +172,15 @@ abstract class AbstractFilterableCollection extends Collection
 
         $separator = $and ? '&&' : '|';
 
+        $filter = str_replace('IS_EMPTY', '', $filter);
+
         $values = explode($separator, $filter);
 
         if ($contains) {
-
-            $this->items = array_filter($this->items, function ($model) use ($attribute, $and, $not, $values) {
-                $isMatch = false;
-
-                foreach ($values as $value) {
-                    if ($value === 'IS_EMPTY') {
-                        $isValueMatch = empty($model->$attribute);
-                    } else {
-                        if (preg_match('#^(.+)\\\W$#', $value, $match)) {
-                            $regex = '#\b'.preg_quote($match[1]).'\b#';
-                        } else {
-                            $regex = '#'.preg_quote($value).'#';
-                        }
-
-                        $isValueMatch = (bool) preg_match($regex, $model->$attribute);
-                    }
-
-                    $isMatch = $isValueMatch || $not;
-
-                    if ($and && ! $isValueMatch) {
-                        break;
-                    } elseif (! $and && $isValueMatch) {
-                        break;
-                    }
-                }
-
-                return $isMatch;
-            });
-
-        } else {
-            $this->items = array_filter($this->items, function ($model) use ($attribute, $not, $values) {
-                return in_array($model->$attribute, $values) || $not;
-            });
+            return $this->filterByAttributeContains($attribute, $values, $and, $not);
         }
 
-        return $this;
+        return $this->filterByAttributeIn($attribute, $values, $not);
     }
 
     /**
@@ -244,7 +300,7 @@ abstract class AbstractFilterableCollection extends Collection
      * @param  array $params
      * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
      */
-    public function __invoke(array $params)
+    public function tagparams(array $params)
     {
         if (! $this->items) {
             return $this;
@@ -262,6 +318,13 @@ abstract class AbstractFilterableCollection extends Collection
 
         foreach ($filters as $attribute => $filter) {
             if (! $filter) {
+                continue;
+            }
+
+            $method = 'filterBy'.ucfirst(camel_case($attribute));
+
+            if (method_exists($collection, $method)) {
+                $collection->$method($filter);
                 continue;
             }
 
@@ -294,5 +357,16 @@ abstract class AbstractFilterableCollection extends Collection
         }
 
         return $collection;
+    }
+
+    /**
+     * Alias to tagparams
+     *
+     * @param  array $params
+     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     */
+    public function __invoke(array $params)
+    {
+        return $this->tagparams($params);
     }
 }
