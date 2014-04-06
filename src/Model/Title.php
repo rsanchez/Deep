@@ -17,6 +17,7 @@ use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
+use rsanchez\Deep\Relations\BelongsToManySiblings;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -79,6 +80,24 @@ class Title extends AbstractJoinableModel
     public function categories()
     {
         return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Category', 'category_posts', 'entry_id', 'cat_id');
+    }
+
+    /**
+     * Define the Categories Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function parents()
+    {
+        return $this->belongsToMany('\\'.get_class($this), 'relationships', 'child_id', 'parent_id');
+    }
+
+    /**
+     * Define the Categories Eloquent relationship
+     * @return \rsanchez\Deep\Relations\BelongsToManySiblings
+     */
+    public function siblings()
+    {
+        return new BelongsToManySiblings($this->newQuery(), $this, 'relationships', 'child_id', 'child_id', __FUNCTION__, 'parent_id', 'order');
     }
 
     /**

@@ -126,10 +126,10 @@ abstract class BasePlugin
     /**
      * Parse a plugin tag pair equivalent to channel:entries
      *
-     * @param  AbstractTitleCollection $entries a collection of entries
-     * @param  string                  $tagdata the raw template to parse
-     * @param  array                   $params channel:entries parameters
-     * @param  array                   $varPair array of pair tags from ee()->functions->assign_variables
+     * @param  AbstractTitleCollection $entries   a collection of entries
+     * @param  string                  $tagdata   the raw template to parse
+     * @param  array                   $params    channel:entries parameters
+     * @param  array                   $varPair   array of pair tags from ee()->functions->assign_variables
      * @param  array                   $varSingle array single tags from ee()->functions->assign_variables
      * @return string
      */
