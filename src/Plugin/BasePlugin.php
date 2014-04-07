@@ -36,6 +36,8 @@ abstract class BasePlugin
 
         Deep::bootEloquent(ee());
 
+        $this->app = Deep::getInstance();
+
         ee()->load->library(array('pagination', 'typography'));
     }
 
@@ -56,9 +58,10 @@ abstract class BasePlugin
         ee()->TMPL->tagdata = $pagination->prepare(ee()->TMPL->tagdata);
 
         $customFieldsEnabled = ! in_array('custom_fields', $disabled);
-        $membersEnabled = ! in_array('members', $disabled);
+        $memberDataEnabled = ! in_array('members', $disabled);
         $paginationEnabled = ! in_array('pagination', $disabled);
         $categoriesEnabled = ! in_array('categories', $disabled);
+        $categoryFieldsEnabled = $categoriesEnabled && ! in_array('category_fields', $disabled);
 
         if ($limit && $paginationEnabled) {
             unset(ee()->TMPL->tagparams['offset']);
@@ -71,11 +74,11 @@ abstract class BasePlugin
         $query = call_user_func(array('\\rsanchez\\Deep\\App\\'.$builderClass, 'tagparams'), ee()->TMPL->tagparams);
 
         if ($categoriesEnabled) {
-            $query->with('categories');
+            $query->withCategories($categoryFieldsEnabled);
         }
 
-        if ($membersEnabled) {
-            $query->with('author');
+        if ($memberDataEnabled) {
+            $query->withAuthor(true);
         }
 
         $connection = $query->getQuery()->getConnection();
@@ -147,8 +150,9 @@ abstract class BasePlugin
         $absoluteResults = isset($params['absolute_results']) ? $params['absolute_results'] : $entries->count();
 
         $customFieldsEnabled = ! in_array('custom_fields', $disabled);
-        $membersEnabled = ! in_array('members', $disabled);
+        $memberDataEnabled = ! in_array('member_data', $disabled);
         $categoriesEnabled = ! in_array('categories', $disabled);
+        $categoryFieldsEnabled = $categoriesEnabled && ! in_array('category_fields', $disabled);
 
         ee()->load->library('typography');
 
@@ -241,24 +245,30 @@ abstract class BasePlugin
                         preg_match_all('#{path=([\042\047]?)(.*?)\\1}#', $tag->tagdata, $pathTags);
 
                         foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
+                            $category = $categoryModel->toArray();
+
+                            unset(
+                                $category['cat_id'],
+                                $category['cat_name'],
+                                $category['cat_description'],
+                                $category['cat_image'],
+                                $category['cat_url_title'],
+                                $category['group_id']
+                            );
+
                             $categoryUri = ee()->config->item('use_category_name') === 'y'
                                 ? '/'.ee()->config->item('reserved_category_word').'/'.$categoryModel->cat_url_title
                                 : '/C'.$categoryModel->cat_id;
 
                             $regex = '#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#';
 
-                            $active = (bool) preg_match($regex, ee()->uri->uri_string());
-
-                            $category = array(
-                                'active' => $active,
-                                'category_description' => $categoryModel->cat_description,
-                                'category_group' => $categoryModel->grou_id,
-                                'category_id' => $categoryModel->cat_id,
-                                'parent_id' => $categoryModel->parent_id,
-                                'category_image' => $categoryModel->cat_image,
-                                'category_name' => $categoryModel->cat_name,
-                                'category_url_title' => $categoryModel->cat_url_title,
-                            );
+                            $category['active'] = (bool) preg_match($regex, ee()->uri->uri_string());
+                            $category['category_description'] = $categoryModel->cat_description;
+                            $category['category_group'] = $categoryModel->group_id;
+                            $category['category_id'] = $categoryModel->cat_id;
+                            $category['category_image'] = $categoryModel->cat_image;
+                            $category['category_name'] = $categoryModel->cat_name;
+                            $category['category_url_title'] = $categoryModel->cat_url_title;
 
                             foreach ($pathTags[2] as $i => $path) {
                                 $key = substr($pathTags[0][$i], 1, -1);
@@ -357,7 +367,7 @@ abstract class BasePlugin
             $row[$prefix.'allow_comments'] = (int) ($entry->allow_comments === 'y');
             $row[$prefix.'sticky'] = (int) ($entry->sticky === 'y');
 
-            if ($membersEnabled) {
+            if ($memberDataEnabled) {
                 foreach ($entry->author->toArray() as $key => $value) {
                     $row[$prefix.$key] = $value;
                 }

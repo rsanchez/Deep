@@ -1093,6 +1093,46 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Eager load categories
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool                                  $fields whether to load custom fields
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithCategories(Builder $query, $fields = false)
+    {
+        $with = 'categories';
+
+        if ($fields) {
+            $with = array($with => function ($query) {
+                return $query->withFields();
+            });
+        }
+
+        return $query->with($with);
+    }
+
+    /**
+     * Eager load author
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  bool                                  $fields whether to load custom fields
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithAuthor(Builder $query, $fields = false)
+    {
+        $with = 'author';
+
+        if ($fields) {
+            $with = array($with => function ($query) {
+                return $query->withFields();
+            });
+        }
+
+        return $query->with($with);
+    }
+
+    /**
      * Dynamically apply scopes
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query

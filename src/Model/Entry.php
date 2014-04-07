@@ -142,8 +142,6 @@ class Entry extends Title
      */
     public function toArray()
     {
-        $hidden =& $this->hidden;
-
         // remove field_id_X fields from the array
         foreach (array_keys($this->attributes) as $key) {
             if (preg_match('#^field_(id|dt|ft)_#', $key)) {

@@ -18,12 +18,17 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Model\Site;
 use rsanchez\Deep\Model\Category;
+use rsanchez\Deep\Model\Member;
+use rsanchez\Deep\Model\CategoryField;
+use rsanchez\Deep\Model\MemberField;
 use rsanchez\Deep\Model\UploadPref;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepository;
 use rsanchez\Deep\Repository\ConfigUploadPrefRepository;
+use rsanchez\Deep\Repository\CategoryFieldRepository;
+use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use CI_Controller;
 use Closure;
@@ -58,16 +63,28 @@ class Deep extends Container
             return new Site();
         });
 
-        $this->singleton('Category', function ($app) {
-            return new Category();
-        });
-
         $this->singleton('UploadPref', function ($app) {
             return new UploadPref();
         });
 
         $this->singleton('FieldRepository', function ($app) {
             return new FieldRepository($app->make('Field'));
+        });
+
+        $this->singleton('CategoryField', function ($app) {
+            return new CategoryField();
+        });
+
+        $this->singleton('MemberField', function ($app) {
+            return new MemberField();
+        });
+
+        $this->singleton('CategoryFieldRepository', function ($app) {
+            return new CategoryFieldRepository($app->make('CategoryField'));
+        });
+
+        $this->singleton('MemberFieldRepository', function ($app) {
+            return new MemberFieldRepository($app->make('MemberField'));
         });
 
         $this->singleton('ChannelRepository', function ($app) {
@@ -90,7 +107,21 @@ class Deep extends Container
             return new HydratorFactory($app->make('SiteRepository'), $app->make('UploadPrefRepository'));
         });
 
+        $this->singleton('Category', function ($app) {
+            Category::setCategoryFieldRepository($app->make('CategoryFieldRepository'));
+
+            return new Category();
+        });
+
+        $this->singleton('Member', function ($app) {
+            Member::setMemberFieldRepository($app->make('MemberFieldRepository'));
+
+            return new Category();
+        });
+
         $this->singleton('Title', function ($app) {
+            Category::setCategoryFieldRepository($app->make('CategoryFieldRepository'));
+            Member::setMemberFieldRepository($app->make('MemberFieldRepository'));
             Title::setChannelRepository($app->make('ChannelRepository'));
             Title::setSiteRepository($app->make('SiteRepository'));
 
@@ -98,6 +129,8 @@ class Deep extends Container
         });
 
         $this->singleton('Entry', function ($app) {
+            Category::setCategoryFieldRepository($app->make('CategoryFieldRepository'));
+            Member::setMemberFieldRepository($app->make('MemberFieldRepository'));
             Entry::setFieldRepository($app->make('FieldRepository'));
             Entry::setChannelRepository($app->make('ChannelRepository'));
             Entry::setHydratorFactory($app->make('HydratorFactory'));

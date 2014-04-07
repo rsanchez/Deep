@@ -9,13 +9,13 @@
 
 namespace rsanchez\Deep\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\AbstractField;
 use rsanchez\Deep\Collection\FieldCollection;
 
 /**
  * Model for the channel_fields table
  */
-class Field extends Model
+class Field extends AbstractField
 {
     /**
      * {@inheritdoc}

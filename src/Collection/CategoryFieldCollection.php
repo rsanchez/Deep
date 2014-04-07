@@ -12,8 +12,8 @@ namespace rsanchez\Deep\Collection;
 use rsanchez\Deep\Collection\AbstractFieldCollection;
 
 /**
- * Collection of \rsanchez\Deep\Model\Field
+ * Collection of \rsanchez\Deep\Model\CategoryField
  */
-class FieldCollection extends AbstractFieldCollection
+class CategoryFieldCollection extends AbstractFieldCollection
 {
 }
