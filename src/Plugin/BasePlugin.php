@@ -193,28 +193,24 @@ abstract class BasePlugin
             );
         }
 
-        $parsePairTags = $customFieldsEnabled || $categoriesEnabled;
+        foreach ($varPair as $tag => $params) {
+            $spacePosition = strpos($tag, ' ');
 
-        if ($parsePairTags) {
-            foreach ($varPair as $tag => $params) {
-                $spacePosition = strpos($tag, ' ');
+            $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
 
-                $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
+            if ($prefix && strncmp($name, $prefix, $prefixLength) !== 0) {
+                continue;
+            }
 
-                if ($prefix && strncmp($name, $prefix, $prefixLength) !== 0) {
-                    continue;
-                }
+            preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
 
-                preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
-
-                foreach ($matches[1] as $i => $key) {
-                    $pairTags[] = (object) array(
-                        'name' => $prefix ? substr($name, $prefixLength) : $name,
-                        'key' => $key,
-                        'params' => $params ?: array(),
-                        'tagdata' => $matches[2][$i],
-                    );
-                }
+            foreach ($matches[1] as $i => $key) {
+                $pairTags[] = (object) array(
+                    'name' => $prefix ? substr($name, $prefixLength) : $name,
+                    'key' => $key,
+                    'params' => $params ?: array(),
+                    'tagdata' => $matches[2][$i],
+                );
             }
         }
 
@@ -236,106 +232,102 @@ abstract class BasePlugin
                 $prefix.'page_url' => ee()->functions->create_url($entry->page_uri),
             );
 
-            if ($parsePairTags) {
-                foreach ($pairTags as $tag) {
-                    if ($categoriesEnabled && $tag->name === 'categories') {
+            foreach ($pairTags as $tag) {
+                if ($categoriesEnabled && $tag->name === 'categories') {
 
-                        $categories = array();
+                    $categories = array();
 
-                        preg_match_all('#{path=([\042\047]?)(.*?)\\1}#', $tag->tagdata, $pathTags);
+                    preg_match_all('#{path=([\042\047]?)(.*?)\\1}#', $tag->tagdata, $pathTags);
 
-                        foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
-                            $category = $categoryModel->toArray();
+                    foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
+                        $category = $categoryModel->toArray();
 
-                            unset(
-                                $category['cat_id'],
-                                $category['cat_name'],
-                                $category['cat_description'],
-                                $category['cat_image'],
-                                $category['cat_url_title'],
-                                $category['group_id']
-                            );
+                        unset(
+                            $category['cat_id'],
+                            $category['cat_name'],
+                            $category['cat_description'],
+                            $category['cat_image'],
+                            $category['cat_url_title'],
+                            $category['group_id']
+                        );
 
-                            $categoryUri = ee()->config->item('use_category_name') === 'y'
-                                ? '/'.ee()->config->item('reserved_category_word').'/'.$categoryModel->cat_url_title
-                                : '/C'.$categoryModel->cat_id;
+                        $categoryUri = ee()->config->item('use_category_name') === 'y'
+                            ? '/'.ee()->config->item('reserved_category_word').'/'.$categoryModel->cat_url_title
+                            : '/C'.$categoryModel->cat_id;
 
-                            $regex = '#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#';
+                        $regex = '#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#';
 
-                            $category['active'] = (bool) preg_match($regex, ee()->uri->uri_string());
-                            $category['category_description'] = $categoryModel->cat_description;
-                            $category['category_group'] = $categoryModel->group_id;
-                            $category['category_id'] = $categoryModel->cat_id;
-                            $category['category_image'] = $categoryModel->cat_image;
-                            $category['category_name'] = $categoryModel->cat_name;
-                            $category['category_url_title'] = $categoryModel->cat_url_title;
+                        $category['active'] = (bool) preg_match($regex, ee()->uri->uri_string());
+                        $category['category_description'] = $categoryModel->cat_description;
+                        $category['category_group'] = $categoryModel->group_id;
+                        $category['category_id'] = $categoryModel->cat_id;
+                        $category['category_image'] = $categoryModel->cat_image;
+                        $category['category_name'] = $categoryModel->cat_name;
+                        $category['category_url_title'] = $categoryModel->cat_url_title;
 
-                            foreach ($pathTags[2] as $i => $path) {
-                                $key = substr($pathTags[0][$i], 1, -1);
-                                $category[$key] = ee()->functions->create_url($path.$categoryUri);
-                            }
-
-                            array_push($categories, $category);
+                        foreach ($pathTags[2] as $i => $path) {
+                            $key = substr($pathTags[0][$i], 1, -1);
+                            $category[$key] = ee()->functions->create_url($path.$categoryUri);
                         }
 
-                        // @TODO parse the file path at the model attribute level using upload pref repository
-                        $row[$tag->key] = $categories ? ee()->typography->parse_file_paths(ee()->TMPL->parse_variables($tag->tagdata, $categories)) : '';
-
-                    } elseif ($customFieldsEnabled && $entry->channel->fields->hasField($tag->name)) {
-
-                        $row[$tag->key] = '';
-
-                        $value = $entry->{$tag->name};
-
-                        if ($value instanceof AbstractTitleCollection) {
-                            // native relationships are prefixed by default
-                            if ($value instanceof RelationshipCollection) {
-                                $tag->params['var_prefix'] = $tag->name;
-                            }
-
-                            $tag->vars = ee()->functions->assign_variables($tag->tagdata);
-
-                            $value = $this->parseEntryCollection(
-                                $value($tag->params),
-                                $tag->tagdata,
-                                $tag->params,
-                                $tag->vars['var_pair'],
-                                $tag->vars['var_single']
-                            );
-                        } elseif ($value instanceof AbstractFilterableCollection) {
-                            $value = $value($tag->params)->toArray();
-                        } elseif (is_object($value) && method_exists($value, 'toArray')) {
-                            $value = $value->toArray();
-                        } elseif ($value) {
-                            $value = (string) $value;
-                        }
-
-                        if ($value) {
-                            if (is_array($value)) {
-                                $row[$tag->key] = ee()->TMPL->parse_variables($tag->tagdata, $value);
-
-                                if (isset($tag->params['backspace'])) {
-                                    $row[$tag->key] = substr($row[$tag->key], 0, -$tag->params['backspace']);
-                                }
-                            } else {
-                                $row[$tag->key] = $value;
-                            }
-                        }
+                        array_push($categories, $category);
                     }
-                }
 
-                foreach ($singleTags as $tag) {
-                    if ($entry->channel->fields->hasField($tag->name)) {
-                        $row[$tag->key] = (string) $entry->{$tag->name};
+                    // @TODO parse the file path at the model attribute level using upload pref repository
+                    $row[$tag->key] = $categories ? ee()->typography->parse_file_paths(ee()->TMPL->parse_variables($tag->tagdata, $categories)) : '';
+
+                } elseif ($customFieldsEnabled && $entry->channel->fields->hasField($tag->name)) {
+
+                    $row[$tag->key] = '';
+
+                    $value = $entry->{$tag->name};
+
+                    if ($value instanceof AbstractTitleCollection) {
+                        // native relationships are prefixed by default
+                        if ($value instanceof RelationshipCollection) {
+                            $tag->params['var_prefix'] = $tag->name;
+                        }
+
+                        $tag->vars = ee()->functions->assign_variables($tag->tagdata);
+
+                        $value = $this->parseEntryCollection(
+                            $value($tag->params),
+                            $tag->tagdata,
+                            $tag->params,
+                            $tag->vars['var_pair'],
+                            $tag->vars['var_single']
+                        );
+                    } elseif ($value instanceof AbstractFilterableCollection) {
+                        $value = $value($tag->params)->toArray();
+                    } elseif (is_object($value) && method_exists($value, 'toArray')) {
+                        $value = $value->toArray();
+                    } elseif ($value) {
+                        $value = (string) $value;
+                    }
+
+                    if ($value) {
+                        if (is_array($value)) {
+                            $row[$tag->key] = ee()->TMPL->parse_variables($tag->tagdata, $value);
+
+                            if (isset($tag->params['backspace'])) {
+                                $row[$tag->key] = substr($row[$tag->key], 0, -$tag->params['backspace']);
+                            }
+                        } else {
+                            $row[$tag->key] = $value;
+                        }
                     }
                 }
             }
 
             foreach ($singleTags as $tag) {
-                if (isset($tag->params['format'])) {
+                if ($customFieldsEnabled && $entry->channel->fields->hasField($tag->name)) {
+                    $row[$tag->key] = (string) $entry->{$tag->name};
+                }
+
+                if (isset($tag->params['format']) && $entry->{$tag->name} instanceof DateTime) {
                     $format = preg_replace('#%([a-zA-Z])#', '\\1', $tag->params['format']);
 
-                    $row[$tag->key] = ($entry->{$tag->name} instanceof DateTime) ? $entry->{$tag->name}->format($format) : '';
+                    $row[$tag->key] = $entry->{$tag->name}->format($format);
                 }
 
                 switch ($tag->name) {
