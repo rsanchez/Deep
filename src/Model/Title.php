@@ -17,7 +17,7 @@ use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
-use rsanchez\Deep\Relations\BelongsToManySiblings;
+use rsanchez\Deep\Hydrator\HydratorFactory;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -65,6 +65,18 @@ class Title extends AbstractJoinableModel
     protected static $siteRepository;
 
     /**
+     * Hydrator Factory
+     * @var \rsanchez\Deep\Hydrator\Factory
+     */
+    public static $hydratorFactory;
+
+    /**
+     * List of extra hydrators to load (e.g. parents or siblings)
+     * @var array
+     */
+    protected $extraHydrators = array();
+
+    /**
      * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -80,24 +92,6 @@ class Title extends AbstractJoinableModel
     public function categories()
     {
         return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Category', 'category_posts', 'entry_id', 'cat_id');
-    }
-
-    /**
-     * Define the Categories Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function parents()
-    {
-        return $this->belongsToMany('\\'.get_class($this), 'relationships', 'child_id', 'parent_id');
-    }
-
-    /**
-     * Define the Categories Eloquent relationship
-     * @return \rsanchez\Deep\Relations\BelongsToManySiblings
-     */
-    public function siblings()
-    {
-        return new BelongsToManySiblings($this->newQuery(), $this, 'relationships', 'child_id', 'child_id', __FUNCTION__, 'parent_id', 'order');
     }
 
     /**
@@ -132,6 +126,16 @@ class Title extends AbstractJoinableModel
     public static function setSiteRepository(SiteRepository $siteRepository)
     {
         self::$siteRepository = $siteRepository;
+    }
+
+    /**
+     * Set the global HydratorFactory
+     * @param  \rsanchez\Deep\Repository\HydratorFactory $hydratorFactory
+     * @return void
+     */
+    public static function setHydratorFactory(HydratorFactory $hydratorFactory)
+    {
+        self::$hydratorFactory = $hydratorFactory;
     }
 
     /**
@@ -178,6 +182,20 @@ class Title extends AbstractJoinableModel
         $collection = new $collectionClass($models);
 
         if ($models) {
+            $entryIds = array();
+            $channelIds = array();
+
+            foreach ($collection as $entry) {
+                $entryIds[] = $entry->entry_id;
+                $channelIds[] = $entry->channel_id;
+
+                $entry->channel = self::$channelRepository->find($entry->channel_id);
+            }
+
+            $collection->addEntryIds($entryIds);
+
+            $collection->channels = self::$channelRepository->getChannelsById(array_unique($channelIds));
+
             $this->hydrateCollection($collection);
         }
 
@@ -191,19 +209,19 @@ class Title extends AbstractJoinableModel
      */
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
-        $entryIds = array();
-        $channelIds = array();
+        if ($hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators)) {
+            // loop through the hydrators for preloading
+            foreach ($hydrators as $hydrator) {
+                $hydrator->preload($collection->getEntryIds());
+            }
 
-        foreach ($collection as $entry) {
-            $entryIds[] = $entry->entry_id;
-            $channelIds[] = $entry->channel_id;
-
-            $entry->channel = self::$channelRepository->find($entry->channel_id);
+            // loop again to actually hydrate
+            foreach ($collection as $entry) {
+                foreach ($hydrators as $hydrator) {
+                    $hydrator->hydrate($entry);
+                }
+            }
         }
-
-        $collection->addEntryIds($entryIds);
-
-        $collection->channels = self::$channelRepository->getChannelsById(array_unique($channelIds));
     }
 
     /**
@@ -1147,6 +1165,32 @@ class Title extends AbstractJoinableModel
                 $this->scopeTagparam($query, $key, $request[$key]);
             }
         }
+
+        return $query;
+    }
+
+    /**
+     * Hydrate the parents property
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithParents(Builder $query)
+    {
+        $this->extraHydrators[] = 'parents';
+
+        return $query;
+    }
+
+    /**
+     * Hydrate the siblings property
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithSiblings(Builder $query)
+    {
+        $this->extraHydrators[] = 'siblings';
 
         return $query;
     }

@@ -93,6 +93,16 @@ abstract class BasePlugin
             $query->addSelect($connection->raw($subquery));
         }
 
+        $prefix = ee()->TMPL->fetch_param('var_prefix') ? ee()->TMPL->fetch_param('var_prefix').':' : '';
+
+        if (strpos(ee()->TMPL->tagdata, '{'.$prefix.'parents') !== false) {
+            $query->withParents();
+        }
+
+        if (strpos(ee()->TMPL->tagdata, '{'.$prefix.'siblings') !== false) {
+            $query->withSiblings();
+        }
+
         if (is_callable($callback)) {
             $callback($query);
         }
@@ -233,7 +243,38 @@ abstract class BasePlugin
             );
 
             foreach ($pairTags as $tag) {
-                if ($categoriesEnabled && $tag->name === 'categories') {
+                if ($tag->name === 'parents' || $tag->name === 'siblings') {
+                    $value = $entry->{$tag->name};
+
+                    $tag->params['var_prefix'] = $prefix.$tag->name;
+                    $tag->vars = ee()->functions->assign_variables($tag->tagdata);
+
+                    if (! empty($tag->params['field'])) {
+                        $fieldRepository = $this->app->make('FieldRepository');
+
+                        $fieldIds = array();
+
+                        foreach (explode('|', $tag->params['field']) as $fieldName) {
+                            if ($fieldRepository->hasField($fieldName)) {
+                                $fieldIds[] = $fieldRepository->getFieldId($fieldName);
+                            }
+                        }
+
+                        if ($fieldIds) {
+                            $tag->params['field_id'] = implode('|', $fieldIds);
+                        }
+
+                        unset($tag->params['field']);
+                    }
+
+                    $row[$tag->key] = $this->parseEntryCollection(
+                        $value($tag->params),
+                        $tag->tagdata,
+                        $tag->params,
+                        $tag->vars['var_pair'],
+                        $tag->vars['var_single']
+                    );
+                } elseif ($categoriesEnabled && $tag->name === 'categories') {
 
                     $categories = array();
 

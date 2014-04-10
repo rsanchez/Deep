@@ -94,6 +94,14 @@ class EntryCollection extends TitleCollection
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function hasCustomFields()
+    {
+        return true;
+    }
+
+    /**
      * Get the field IDs for the specified fieldtype
      *
      * @param  string $fieldtype

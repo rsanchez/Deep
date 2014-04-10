@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
@@ -37,6 +38,8 @@ class HydratorFactory
         'fieldpack_multiselect' => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
         'fieldpack_list'        => '\\rsanchez\\Deep\\Hydrator\\ExplodeHydrator',
         'wygwam'                => '\\rsanchez\\Deep\\Hydrator\\WysiwygHydrator',
+        'parents'               => '\\rsanchez\\Deep\\Hydrator\\ParentsHydrator',
+        'siblings'              => '\\rsanchez\\Deep\\Hydrator\\SiblingsHydrator',
     );
 
     /**
@@ -66,24 +69,32 @@ class HydratorFactory
     /**
      * Get an array of Hydrators needed by the specified collection
      *    'field_name' => AbstractHydrator
-     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
-     * @return array                                     AbstractHydrator[]
+     * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $collection
+     * @return array                                             AbstractHydrator[]
      */
-    public function getHydrators(EntryCollection $collection)
+    public function getHydrators(AbstractTitleCollection $collection, array $extraHydrators = array())
     {
         $hydrators = array();
 
-        // add the built-in ones
-        foreach ($this->hydrators as $fieldtype => $class) {
-            if ($collection->hasFieldtype($fieldtype)) {
-                $hydrators[$fieldtype] = $this->newHydrator($collection, $fieldtype);
+        if ($collection->hasCustomFields()) {
+            // add the built-in ones
+            foreach ($this->hydrators as $type => $class) {
+                if ($collection->hasFieldtype($type)) {
+                    $hydrators[$type] = $this->newHydrator($collection, $type);
+                }
+            }
+
+            // create default hydrators for fieldtypes not accounted for
+            foreach ($collection->getFieldtypes() as $type) {
+                if (! isset($hydrators[$type])) {
+                    $hydrators[$type] = new DefaultHydrator($collection, $type);
+                }
             }
         }
 
-        // create default hydrators for fieldtypes not accounted for
-        foreach ($collection->getFieldtypes() as $fieldtype) {
-            if (! array_key_exists($fieldtype, $hydrators)) {
-                $hydrators[$fieldtype] = new DefaultHydrator($collection, $fieldtype);
+        foreach ($extraHydrators as $type) {
+            if (isset($this->hydrators[$type])) {
+                $hydrators[$type] = $this->newHydrator($collection, $type);
             }
         }
 

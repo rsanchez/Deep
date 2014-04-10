@@ -33,22 +33,6 @@ class PlayaEntry extends Entry
     /**
      * {@inheritdoc}
      */
-    public function parents()
-    {
-        return $this->belongsToMany('\\'.get_class($this), 'playa_relationships', 'child_entry_id', 'parent_entry_id');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function siblings()
-    {
-        return new BelongsToManySiblings($this->newQuery(), $this, 'playa_relationships', 'child_entry_id', 'child_entry_id', __FUNCTION__, 'parent_entry_id', 'rel_order');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected static function joinTables()
     {
         return array_merge(parent::joinTables(), array(

@@ -43,11 +43,22 @@ abstract class AbstractTitleCollection extends AbstractFilterableCollection
     /**
      * Add additional entry ids to this collection
      *
-     * @param array $entryIds
+     * @param  array $entryIds
+     * @return void
      */
     public function addEntryIds(array $entryIds)
     {
         $this->entryIds = array_unique(array_merge($this->entryIds, $entryIds));
+    }
+
+    /**
+     * Whether or not this collection supports custom fields
+     *
+     * @return bool
+     */
+    public function hasCustomFields()
+    {
+        return false;
     }
 
     /**

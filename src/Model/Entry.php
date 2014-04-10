@@ -15,7 +15,6 @@ use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
-use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -38,12 +37,6 @@ class Entry extends Title
     public static $fieldRepository;
 
     /**
-     * Hydrator Factory
-     * @var \rsanchez\Deep\Hydrator\Factory
-     */
-    public static $hydratorFactory;
-
-    /**
      * Set the global FieldRepository
      * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
      * @return void
@@ -51,16 +44,6 @@ class Entry extends Title
     public static function setFieldRepository(FieldRepository $fieldRepository)
     {
         self::$fieldRepository = $fieldRepository;
-    }
-
-    /**
-     * Set the global HydratorFactory
-     * @param  \rsanchez\Deep\Repository\HydratorFactory $hydratorFactory
-     * @return void
-     */
-    public static function setHydratorFactory(HydratorFactory $hydratorFactory)
-    {
-        self::$hydratorFactory = $hydratorFactory;
     }
 
     /**
@@ -88,8 +71,6 @@ class Entry extends Title
      */
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
-        parent::hydrateCollection($collection);
-
         $collection->fields = new FieldCollection();
 
         foreach ($collection->channels as $channel) {
@@ -99,22 +80,9 @@ class Entry extends Title
             foreach ($fields as $field) {
                 $collection->addField($field);
             }
-
         }
 
-        $hydrators = self::$hydratorFactory->getHydrators($collection);
-
-        // loop through the hydrators for preloading
-        foreach ($hydrators as $hydrator) {
-            $hydrator->preload($collection->getEntryIds());
-        }
-
-        // loop again to actually hydrate
-        foreach ($collection as $entry) {
-            foreach ($hydrators as $hydrator) {
-                $hydrator->hydrate($entry);
-            }
-        }
+        parent::hydrateCollection($collection);
     }
 
     /**
