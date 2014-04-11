@@ -185,7 +185,7 @@ abstract class BasePlugin
                 $params = ee()->functions->assign_parameters(substr($tag, $spacePosition));
             } elseif (preg_match('#^([a-z_]+)=([\042\047]?)?(.*?)\\2$#', $tag, $match)) {
                 $name = $match[1];
-                $params = $match[2] ? array($match[3]) : array('');
+                $params = $match[3] ? array($match[3]) : array('');
             } else {
                 $name = $tag;
                 $params = array();
