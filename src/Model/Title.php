@@ -975,6 +975,18 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by Category Name string parameter
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $string
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategoryNameString(Builder $query, $string)
+    {
+        return $this->scopeArrayFromString($query, $string, 'CategoryName');
+    }
+
+    /**
      * Filter by Channel string parameter
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -1213,6 +1225,7 @@ class Title extends AbstractJoinableModel
             'author_id' => 'authorIdString',
             'cat_limit' => 'catLimit',
             'category' => 'categoryString',
+            'category_name' => 'categoryNameString',
             'category_group' => 'categoryGroupString',
             'channel' => 'channelString',
             'entry_id' => 'entryIdString',
