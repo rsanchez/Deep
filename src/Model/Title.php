@@ -1281,15 +1281,4 @@ class Title extends AbstractJoinableModel
 
         return $query;
     }
-
-    /**
-     * Get the count of the total records for pagination.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @return int
-     */
-    public function scopeGetPaginationCount(Builder $query)
-    {
-        return $query->getQuery()->getPaginationCount();
-    }
 }

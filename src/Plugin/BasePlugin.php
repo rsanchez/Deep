@@ -71,6 +71,10 @@ abstract class BasePlugin
 
         $builderClass = $customFieldsEnabled ? 'Entries' : 'Titles';
 
+        if ($hasPaginationOffset = preg_match('#^((.*?)/)?P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
+            $paginationOffset = $match[3];
+        }
+
         $query = call_user_func(array('\\rsanchez\\Deep\\App\\'.$builderClass, 'tagparams'), ee()->TMPL->tagparams);
 
         if ($categoriesEnabled) {
@@ -110,15 +114,15 @@ abstract class BasePlugin
         ee()->TMPL->tagparams['absolute_results'] = $limit;
 
         if ($pagination->paginate) {
-            ee()->TMPL->tagparams['absolute_results'] = $query->getPaginationCount();
+            ee()->TMPL->tagparams['absolute_results'] = $query->getQuery()->getPaginationCount();
 
-            if (preg_match('#P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
-                $query->skip($match[1]);
+            if ($hasPaginationOffset) {
+                $query->skip($paginationOffset);
 
-                ee()->TMPL->tagparams['offset'] = $match[1];
+                ee()->TMPL->tagparams['offset'] = $paginationOffset;
             }
 
-            $pagination->build($paginationCount, $limit);
+            $pagination->build(ee()->TMPL->tagparams['absolute_results'], $limit);
         }
 
         $output = $this->parseEntryCollection(
