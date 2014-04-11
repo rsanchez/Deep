@@ -857,11 +857,9 @@ Now you can parse your plugin like a channel:entries tag:
 
 The following channel:entries single tags / conditionals are not implemented by the `BasePlugin` class:
 
-- category_request
 - gmt_entry_date
 - gmt_edit_date
 - member_search_path
-- not_category_request
 - relative_url
 - relative_date
 - trimmed_url
@@ -870,8 +868,6 @@ The following channel:entries single tags / conditionals are not implemented by 
 The following channel:entries parameters are not implemented by the `BasePlugin` class:
 
 - display_by
-- disable
-- dynamic
 - dynamic_start
 - month_limit
 - paginate_type

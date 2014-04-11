@@ -96,8 +96,46 @@ abstract class BasePlugin
 
         $builderClass = $customFieldsEnabled ? 'Entries' : 'Titles';
 
-        if ($hasPaginationOffset = preg_match('#^((.*?)/)?P(\d+)/?$#', ee()->uri->uri_string(), $match)) {
+        $uri = ee()->uri->page_query_string ?: ee()->uri->query_string;
+
+        if ($hasPaginationOffset = preg_match('#^((.*?)/)?P(\d+)/?$#', $uri, $match)) {
             $paginationOffset = $match[3];
+            $uri = $match[2];
+        }
+
+        ee()->TMPL->tagparams['category_request'] = false;
+
+        if ($uri && ee()->TMPL->fetch_param('dynamic', 'yes') === 'yes') {
+            $segments = explode('/', $uri);
+            $lastSegment = array_pop($segments);
+            $penultimateSegment = array_pop($segments);
+
+            if (preg_match('#(^|/)(\d{4})/(\d{2})(/(\d{2}))?/?$#', $uri, $match)) {
+                ee()->TMPL->tagparams['year'] = $match[2];
+                ee()->TMPL->tagparams['month'] = $match[3];
+
+                if (isset($match[5])) {
+                    ee()->TMPL->tagparams['day'] = $match[5];
+                }
+            } elseif (is_numeric($lastSegment)) {
+                ee()->TMPL->tagparams['entry_id'] = $lastSegment;
+            } elseif (
+                ee()->config->item('use_category_name') === 'y' &&
+                $penultimateSegment === ee()->config->item('reserved_category_word')
+            ) {
+                ee()->TMPL->tagparams['category_name'] = $lastSegment;
+
+                ee()->TMPL->tagparams['category_request'] = true;
+            } elseif (
+                ee()->config->item('use_category_name') !== 'y' &&
+                preg_match('#(^|/)C(\d+)#', $uri, $match)
+            ) {
+                ee()->TMPL->tagparams['category'] = $match[2];
+
+                ee()->TMPL->tagparams['category_request'] = true;
+            } else {
+                ee()->TMPL->tagparams['url_title'] = $lastSegment;
+            }
         }
 
         $query = call_user_func(array('\\rsanchez\\Deep\\App\\'.$builderClass, 'tagparams'), ee()->TMPL->tagparams);
@@ -259,6 +297,8 @@ abstract class BasePlugin
             $row = array(
                 $prefix.'absolute_count' => $offset + $i + 1,
                 $prefix.'absolute_results' => $absoluteResults,
+                $prefix.'category_request' => isset($params['category_request']) ? $params['category_request'] : false,
+                $prefix.'not_category_request' => isset($params['category_request']) ? ! $params['category_request'] : true,
                 $prefix.'channel' => $entry->channel->channel_name,
                 $prefix.'channel_short_name' => $entry->channel->channel_name,
                 $prefix.'comment_auto_path' => $entry->channel->comment_url,
