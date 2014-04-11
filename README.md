@@ -883,23 +883,24 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - week_sort
 - uncategorized_entries
 
-The original channel:entries has the following default parameters:
+The `BasePlugin` class has the following default parameters:
 
     orderby="entry_date"
     show_future_entries="no"
     show_expired="no"
-    sort="asc"
-    status="not closed"
+    sort="desc"
+    status="open"
     dynamic="yes"
     limit="100"
 
-The `BasePlugin` class does not. If you wish to impose any or all of those default parameters, you'll need to add them yourself:
+You can change this by overloading the `getEntriesDefaultParameters` method in your plugin/module class:
 
-    public function entries()
+    protected function getEntriesDefaultParameters()
     {
-        ee()->TMPL->tagparams['status'] = 'not closed';
-
-        return $this->parseEntries();
+        return array(
+            'dynamic' => 'no',
+            'status' => 'open|Featured',
+        );
     }
 
 The `BasePlugin` class allows the following parameters on Matrix, Grid, Playa and Relationships tag pairs:

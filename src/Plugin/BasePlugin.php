@@ -42,6 +42,25 @@ abstract class BasePlugin
     }
 
     /**
+     * Get the default tag parameters when using parseEntries
+     *
+     * @return array
+     */
+    protected function getEntriesDefaultParameters()
+    {
+        return array(
+            'dynamic' => 'yes',
+            'limit' => '100',
+            'orderby' => 'entry_date',
+            'paginate' => 'bottom',
+            'show_future_entries' => 'no',
+            'show_expired' => 'no',
+            'sort' => 'desc',
+            'status' => 'open',
+        );
+    }
+
+    /**
      * Parse a plugin tag pair equivalent to channel:entries
      *
      * @param  Closure|null $callback receieves a query builder object as the first parameter
@@ -49,6 +68,12 @@ abstract class BasePlugin
      */
     protected function parseEntries(Closure $callback = null)
     {
+        foreach ($this->getEntriesDefaultParameters() as $key => $value) {
+            if (! isset(ee()->TMPL->tagparams[$key])) {
+                ee()->TMPL->tagparams[$key] = $value;
+            }
+        }
+
         $disabled = empty(ee()->TMPL->tagparams['disable']) ? array() : explode('|', ee()->TMPL->tagparams['disable']);
 
         $pagination = ee()->pagination->create();
