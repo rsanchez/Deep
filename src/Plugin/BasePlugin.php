@@ -94,8 +94,6 @@ abstract class BasePlugin
             $pagination->paginate = false;
         }
 
-        $builderClass = $customFieldsEnabled ? 'Entries' : 'Titles';
-
         $uri = ee()->uri->page_query_string ?: ee()->uri->query_string;
 
         if ($hasPaginationOffset = preg_match('#^((.*?)/)?P(\d+)/?$#', $uri, $match)) {
@@ -138,7 +136,7 @@ abstract class BasePlugin
             }
         }
 
-        $query = call_user_func(array('\\rsanchez\\Deep\\App\\'.$builderClass, 'tagparams'), ee()->TMPL->tagparams);
+        $query = $this->app->make($customFieldsEnabled ? 'Entry' : 'Title')->tagparams(ee()->TMPL->tagparams);
 
         if ($categoriesEnabled) {
             $query->withCategories($categoryFieldsEnabled);
