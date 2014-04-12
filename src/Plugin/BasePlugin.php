@@ -150,10 +150,11 @@ abstract class BasePlugin
         $tablePrefix = $connection->getTablePrefix();
 
         if (strpos(ee()->TMPL->tagdata, 'comment_subscriber_total') !== false) {
-            $subquery = "(SELECT COUNT(*)
-                FROM {$tablePrefix}comment_subscriptions
-                WHERE {$tablePrefix}comment_subscriptions.entry_id = {$tablePrefix}channel_titles.entry_id)
-                AS comment_subscriber_total";
+            $subquery = "(select count(*) "
+                ."from `{$tablePrefix}comment_subscriptions` "
+                ."where `{$tablePrefix}comment_subscriptions`.`entry_id` "
+                ."= `{$tablePrefix}`channel_titles`.`entry_id`) "
+                ."as `comment_subscriber_total`";
 
             $query->addSelect($connection->raw($subquery));
         }
