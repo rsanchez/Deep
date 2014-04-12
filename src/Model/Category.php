@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\AbstractJoinableModel;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
@@ -17,7 +17,7 @@ use rsanchez\Deep\Repository\CategoryFieldRepository;
 /**
  * Model for the categories table
  */
-class Category extends Model
+class Category extends AbstractJoinableModel 
 {
     /**
      * {@inheritdoc}
@@ -57,9 +57,21 @@ class Category extends Model
      */
     public function scopeWithFields(Builder $query)
     {
-        return $query->join('category_field_data', 'category_field_data.cat_id', '=', 'categories.cat_id')
+        return $this->requireTable($query, 'category_field_data')
             ->addSelect('categories.*')
             ->addSelect('category_field_data.*');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function joinTables()
+    {
+        return array(
+            'category_field_data' => function ($query) {
+                $query->join('category_field_data', 'category_field_data.cat_id', '=', 'categories.cat_id');
+            },
+        );
     }
 
     /**

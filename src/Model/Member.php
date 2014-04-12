@@ -9,14 +9,14 @@
 
 namespace rsanchez\Deep\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\AbstractJoinableModel;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Repository\MemberFieldRepository;
 
 /**
  * Model for the members table
  */
-class Member extends Model
+class Member extends AbstractJoinableModel
 {
     /**
      * {@inheritdoc}
@@ -56,9 +56,21 @@ class Member extends Model
      */
     public function scopeWithFields(Builder $query)
     {
-        return $query->join('member_data', 'member_data.member_id', '=', 'member_data.member_id')
+        return $this->requireTable($query, 'member_data')
             ->addSelect('members.*')
             ->addSelect('member_data.*');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function joinTables()
+    {
+        return array(
+            'member_data' => function ($query) {
+                $query->join('member_data', 'member_data.member_id', '=', 'member_data.member_id');
+            },
+        );
     }
 
     /**
