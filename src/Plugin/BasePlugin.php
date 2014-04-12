@@ -30,13 +30,13 @@ abstract class BasePlugin
      */
     public function __construct()
     {
-        Deep::extendInstance('config', function () {
+        $this->app = Deep::getInstance();
+
+        $this->app->extend('config', function () {
             return ee()->config->config;
         });
 
-        Deep::bootEloquent(ee());
-
-        $this->app = Deep::getInstance();
+        $this->app->bootEloquent(ee());
 
         ee()->load->library(array('pagination', 'typography'));
     }
@@ -147,7 +147,7 @@ abstract class BasePlugin
         }
 
         if ($memberDataEnabled) {
-            $query->withAuthor(true);
+            $query->withAuthorFields();
         }
 
         $connection = $query->getQuery()->getConnection();
