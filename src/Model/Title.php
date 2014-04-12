@@ -1143,6 +1143,17 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Eager load categories with custom fields
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithCategoryFields(Builder $query)
+    {
+        return $this->scopeWithCategories($query, true);
+    }
+
+    /**
      * Eager load author
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -1160,6 +1171,17 @@ class Title extends AbstractJoinableModel
         }
 
         return $query->with($with);
+    }
+
+    /**
+     * Eager load author with custom fields
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithAuthorFields(Builder $query)
+    {
+        return $this->scopeWithAuthor($query, true);
     }
 
     /**
