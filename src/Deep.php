@@ -108,35 +108,42 @@ class Deep extends Container
         });
 
         $this->singleton('Category', function ($app) {
-            Category::setCategoryFieldRepository($app->make('CategoryFieldRepository'));
+            $category = new Category();
 
-            return new Category();
+            $category->setCategoryFieldRepository($app->make('CategoryFieldRepository'));
+
+            return $category;
         });
 
         $this->singleton('Member', function ($app) {
-            Member::setMemberFieldRepository($app->make('MemberFieldRepository'));
+            $member = new Member();
 
-            return new Category();
+            $member->setMemberFieldRepository($app->make('MemberFieldRepository'));
+
+            return $member;
         });
 
         $this->singleton('Title', function ($app) {
-            Category::setCategoryFieldRepository($app->make('CategoryFieldRepository'));
-            Member::setMemberFieldRepository($app->make('MemberFieldRepository'));
-            Title::setChannelRepository($app->make('ChannelRepository'));
-            Title::setSiteRepository($app->make('SiteRepository'));
+            $app->make('Category');
+            $app->make('Member');
 
-            return new Title();
+            $title = new Title();
+
+            $title->setChannelRepository($app->make('ChannelRepository'));
+            $title->setSiteRepository($app->make('SiteRepository'));
+            $title->setHydratorFactory($app->make('HydratorFactory'));
+
+            return $title;
         });
 
         $this->singleton('Entry', function ($app) {
-            Category::setCategoryFieldRepository($app->make('CategoryFieldRepository'));
-            Member::setMemberFieldRepository($app->make('MemberFieldRepository'));
-            Entry::setFieldRepository($app->make('FieldRepository'));
-            Entry::setChannelRepository($app->make('ChannelRepository'));
-            Entry::setHydratorFactory($app->make('HydratorFactory'));
-            Entry::setSiteRepository($app->make('SiteRepository'));
+            $app->make('Title');
 
-            return new Entry();
+            $entry = new Entry();
+
+            $entry->setFieldRepository($app->make('FieldRepository'));
+
+            return $entry;
         });
     }
 
