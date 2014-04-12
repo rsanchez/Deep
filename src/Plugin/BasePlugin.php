@@ -101,6 +101,10 @@ abstract class BasePlugin
             $uri = $match[2];
         }
 
+        if (! $uri && ee()->TMPL->fetch_param('require_entry') === 'yes') {
+            return ee()->TMPL->no_results();
+        }
+
         ee()->TMPL->tagparams['category_request'] = false;
 
         if ($uri && ee()->TMPL->fetch_param('dynamic', 'yes') === 'yes') {

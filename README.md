@@ -873,7 +873,6 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - paginate_type
 - related_categories_mode
 - relaxed_categories
-- require_entry
 - show_current_week
 - track_views
 - week_sort
