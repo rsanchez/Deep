@@ -871,7 +871,6 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - dynamic_start
 - month_limit
 - paginate_type
-- related_categories_mode
 - relaxed_categories
 - show_current_week
 - track_views

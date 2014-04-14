@@ -147,6 +147,9 @@ class Title extends AbstractJoinableModel
             'members' => function ($query) {
                 $query->join('members', 'members.member_id', '=', 'channel_titles.author_id');
             },
+            'category_posts' => function ($query) {
+                $query->join('category_posts', 'category_posts.entry_id', '=', 'channel_titles.entry_id');
+            },
         );
     }
 
@@ -352,6 +355,45 @@ class Title extends AbstractJoinableModel
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
             $q->whereIn('categories.cat_id', $categoryIds);
         });
+    }
+
+    /**
+     * Get entries that are share one or more categories with the specified entry ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int                                   $entryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRelatedCategories(Builder $query, $entryId)
+    {
+        $connection = $query->getQuery()->getConnection();
+        $tablePrefix = $connection->getTablePrefix();
+
+        return $this->requireTable($query, 'category_posts')
+            ->join($connection->raw("`{$tablePrefix}category_posts` AS `{$tablePrefix}category_posts_2`"), 'category_posts_2.cat_id', '=', 'category_posts.cat_id')
+            ->where('category_posts_2.entry_id', $entryId)
+            ->where('channel_titles.entry_id', '!=', $entryId)
+            ->groupBy('channel_titles.entry_id');
+    }
+
+    /**
+     * Get entries that are share one or more categories with the specified entry url title
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $urlTitle
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRelatedCategoriesUrlTitle(Builder $query, $urlTitle)
+    {
+        $connection = $query->getQuery()->getConnection();
+        $tablePrefix = $connection->getTablePrefix();
+
+        return $this->requireTable($query, 'category_posts')
+            ->join($connection->raw("`{$tablePrefix}category_posts` AS `{$tablePrefix}category_posts_2`"), 'category_posts_2.cat_id', '=', 'category_posts.cat_id')
+            ->join($connection->raw("`{$tablePrefix}channel_titles` AS `{$tablePrefix}channel_titles_2`"), 'channel_titles_2.entry_id', '=', 'category_posts_2.entry_id')
+            ->where('channel_titles_2.url_title', $urlTitle)
+            ->where('channel_titles.entry_id', '!=', $urlTitle)
+            ->groupBy('channel_titles.entry_id');
     }
 
     /**

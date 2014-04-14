@@ -107,7 +107,15 @@ abstract class BasePlugin
 
         ee()->TMPL->tagparams['category_request'] = false;
 
-        if ($uri && ee()->TMPL->fetch_param('dynamic', 'yes') === 'yes') {
+        $singleEntry = false;
+
+        $relatedCategoriesMode = ee()->TMPL->fetch_param('related_categories_mode') === 'yes';
+
+        $dynamic = ee()->TMPL->fetch_param('dynamic', 'yes') === 'yes';
+
+        $query = $this->app->make($customFieldsEnabled ? 'Entry' : 'Title')->newQuery();
+
+        if ($uri && ($dynamic || $relatedCategoriesMode)) {
             $segments = explode('/', $uri);
             $lastSegment = array_pop($segments);
             $penultimateSegment = array_pop($segments);
@@ -120,7 +128,13 @@ abstract class BasePlugin
                     ee()->TMPL->tagparams['day'] = $match[5];
                 }
             } elseif (is_numeric($lastSegment)) {
-                ee()->TMPL->tagparams['entry_id'] = $lastSegment;
+                if ($relatedCategoriesMode) {
+                    $singleEntry = true;
+                    $query->relatedCategories($lastSegment);
+                    ee()->TMPL->tagparams['dynamic'] = 'no';
+                } else {
+                    ee()->TMPL->tagparams['entry_id'] = $lastSegment;
+                }
             } elseif (
                 ee()->config->item('use_category_name') === 'y' &&
                 $penultimateSegment === ee()->config->item('reserved_category_word')
@@ -136,11 +150,21 @@ abstract class BasePlugin
 
                 ee()->TMPL->tagparams['category_request'] = true;
             } else {
-                ee()->TMPL->tagparams['url_title'] = $lastSegment;
+                if ($relatedCategoriesMode) {
+                    $singleEntry = true;
+                    $query->relatedCategoriesUrlTitle($lastSegment);
+                    ee()->TMPL->tagparams['dynamic'] = 'no';
+                } else {
+                    ee()->TMPL->tagparams['url_title'] = $lastSegment;
+                }
             }
         }
 
-        $query = $this->app->make($customFieldsEnabled ? 'Entry' : 'Title')->tagparams(ee()->TMPL->tagparams);
+        if ($relatedCategoriesMode && ! $singleEntry) {
+            return ee()->TMPL->no_results();
+        }
+
+        $query->tagparams(ee()->TMPL->tagparams);
 
         if ($categoriesEnabled) {
             $query->withCategories($categoryFieldsEnabled);
