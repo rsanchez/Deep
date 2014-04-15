@@ -111,6 +111,7 @@ class Deep extends Container
             $category = new Category();
 
             $category->setCategoryFieldRepository($app->make('CategoryFieldRepository'));
+            $category->setChannelRepository($app->make('ChannelRepository'));
 
             return $category;
         });

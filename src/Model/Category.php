@@ -13,6 +13,7 @@ use rsanchez\Deep\Model\AbstractJoinableModel;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
+use rsanchez\Deep\Repository\ChannelRepository;
 
 /**
  * Model for the categories table
@@ -40,6 +41,12 @@ class Category extends AbstractJoinableModel
     protected static $categoryFieldRepository;
 
     /**
+     * Global Channel Repository
+     * @var \rsanchez\Deep\Repository\ChannelRepository
+     */
+    protected static $channelRepository;
+
+    /**
      * Set the global CategoryFieldRepository
      * @param  \rsanchez\Deep\Repository\CategoryFieldRepository $categoryFieldRepository
      * @return void
@@ -47,6 +54,16 @@ class Category extends AbstractJoinableModel
     public static function setCategoryFieldRepository(CategoryFieldRepository $categoryFieldRepository)
     {
         self::$categoryFieldRepository = $categoryFieldRepository;
+    }
+
+    /**
+     * Set the global ChannelRepository
+     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @return void
+     */
+    public static function setChannelRepository(ChannelRepository $channelRepository)
+    {
+        self::$channelRepository = $channelRepository;
     }
 
     /**
