@@ -60,6 +60,16 @@ class Channel extends Model
     }
 
     /**
+     * Get the cat_group attribute as an array
+     * @param  string $data pipe-delimited list
+     * @return array of category group IDs
+     */
+    public function getCatGroupAttribute($data)
+    {
+        return $data ? explode('|', $data) : array();
+    }
+
+    /**
      * Return the channel_name when cast to string
      *
      * @var string
