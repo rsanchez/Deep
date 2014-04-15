@@ -1200,18 +1200,12 @@ class Title extends AbstractJoinableModel
      * Eager load categories
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  bool                                  $fields whether to load custom fields
+     * @param  Closure|null                          $callback eager load constraint
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithCategories(Builder $query, $fields = false)
+    public function scopeWithCategories(Builder $query, Closure $callback = null)
     {
-        $with = 'categories';
-
-        if ($fields) {
-            $with = array($with => function ($query) {
-                return $query->withFields();
-            });
-        }
+        $with = $callback ? array('categories' => $callback) : 'categories';
 
         return $query->with($with);
     }
@@ -1220,29 +1214,30 @@ class Title extends AbstractJoinableModel
      * Eager load categories with custom fields
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Closure|null                          $callback eager load constraint
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithCategoryFields(Builder $query)
+    public function scopeWithCategoryFields(Builder $query, Closure $callback = null)
     {
-        return $this->scopeWithCategories($query, true);
+        return $this->scopeWithCategories($query, function ($query) use ($callback) {
+            if ($callback) {
+                $callback($query);
+            }
+
+            return $query->withFields();
+        });
     }
 
     /**
      * Eager load author
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  bool                                  $fields whether to load custom fields
+     * @param  Closure|null                          $callback eager load constraint
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithAuthor(Builder $query, $fields = false)
+    public function scopeWithAuthor(Builder $query, Closure $callback = null)
     {
-        $with = 'author';
-
-        if ($fields) {
-            $with = array($with => function ($query) {
-                return $query->withFields();
-            });
-        }
+        $with = $callback ? array('author' => $callback) : 'author';
 
         return $query->with($with);
     }
@@ -1251,11 +1246,18 @@ class Title extends AbstractJoinableModel
      * Eager load author with custom fields
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Closure|null                          $callback eager load constraint
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithAuthorFields(Builder $query)
+    public function scopeWithAuthorFields(Builder $query, Closure $callback = null)
     {
-        return $this->scopeWithAuthor($query, true);
+        return $this->scopeWithAuthor($query, function ($query) use ($callback) {
+            if ($callback) {
+                $callback($query);
+            }
+
+            return $query->withFields();
+        });
     }
 
     /**
