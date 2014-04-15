@@ -489,6 +489,38 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by Category Group
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $groupId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategoryGroup(Builder $query, $groupId)
+    {
+        $groupIds = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('categories', function ($q) use ($groupIds) {
+            $q->whereIn('categories.group_id', $groupIds);
+        });
+    }
+
+    /**
+     * Filter by Not Category Group
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $groupId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotCategoryGroup(Builder $query, $groupId)
+    {
+        $groupIds = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('categories', function ($q) use ($groupIds) {
+            $q->whereNotIn('categories.group_id', $groupIds);
+        });
+    }
+
+    /**
      * Filter by Channel Name
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
