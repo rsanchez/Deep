@@ -14,14 +14,8 @@ use rsanchez\Deep\Model\AbstractField;
 /**
  * Repository of all Fields
  */
-abstract class AbstractFieldRepository
+abstract class AbstractFieldRepository extends AbstractDeferredRepository
 {
-    /**
-     * Collection of all Fields
-     * @var \rsanchez\Deep\Collection\AbstractFieldCollection
-     */
-    protected $collection;
-
     /**
      * Array of Field keyed by field_name
      * @var array
@@ -41,11 +35,21 @@ abstract class AbstractFieldRepository
      */
     public function __construct(AbstractField $model)
     {
-        $this->collection = $model->all();
+        parent::__construct($model);
+    }
 
-        foreach ($this->collection as $field) {
-            $this->fieldsByName[$field->field_name] = $field;
-            $this->fieldsById[$field->field_id] = $field;
+    /**
+     * {@inheritdoc}
+     */
+    protected function boot()
+    {
+        if (is_null($this->collection)) {
+            parent::boot();
+
+            foreach ($this->collection as $field) {
+                $this->fieldsByName[$field->field_name] = $field;
+                $this->fieldsById[$field->field_id] = $field;
+            }
         }
     }
 
@@ -56,6 +60,8 @@ abstract class AbstractFieldRepository
      */
     public function getFields()
     {
+        $this->boot();
+
         return $this->collection;
     }
 
@@ -67,6 +73,8 @@ abstract class AbstractFieldRepository
      */
     public function getFieldId($field)
     {
+        $this->boot();
+
         return $this->fieldsByName[$field]->field_id;
     }
 
@@ -78,6 +86,8 @@ abstract class AbstractFieldRepository
      */
     public function getFieldName($id)
     {
+        $this->boot();
+
         return $this->fieldsById[$id]->field_name;
     }
 
@@ -89,6 +99,8 @@ abstract class AbstractFieldRepository
      */
     public function hasField($field)
     {
+        $this->boot();
+
         return isset($this->fieldsByName[$field]);
     }
 
@@ -100,6 +112,8 @@ abstract class AbstractFieldRepository
      */
     public function hasFieldId($id)
     {
+        $this->boot();
+
         return isset($this->fieldsById[$id]);
     }
 }

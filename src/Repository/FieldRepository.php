@@ -30,13 +30,20 @@ class FieldRepository extends AbstractFieldRepository
     public function __construct(Field $model)
     {
         parent::__construct($model);
+    }
 
-        foreach ($this->collection as $field) {
-            if (! array_key_exists($field->group_id, $this->fieldsByGroup)) {
-                $this->fieldsByGroup[$field->group_id] = new FieldCollection();
+    protected function boot()
+    {
+        if (is_null($this->collection)) {
+            parent::boot();
+
+            foreach ($this->collection as $field) {
+                if (! array_key_exists($field->group_id, $this->fieldsByGroup)) {
+                    $this->fieldsByGroup[$field->group_id] = new FieldCollection();
+                }
+
+                $this->fieldsByGroup[$field->group_id]->push($field);
             }
-
-            $this->fieldsByGroup[$field->group_id]->push($field);
         }
     }
 
@@ -48,6 +55,8 @@ class FieldRepository extends AbstractFieldRepository
      */
     public function getFieldsByGroup($groupId)
     {
+        $this->boot();
+
         return $groupId && isset($this->fieldsByGroup[$groupId]) ? $this->fieldsByGroup[$groupId] : new FieldCollection();
     }
 }

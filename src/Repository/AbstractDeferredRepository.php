@@ -24,7 +24,7 @@ abstract class AbstractDeferredRepository
     protected $model;
 
     /**
-     * Collection of all Channels
+     * Collection of all records
      * @var \Illuminate\Database\Eloquent\Collection
      */
     protected $collection;
