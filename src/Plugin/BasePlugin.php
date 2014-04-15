@@ -167,7 +167,15 @@ abstract class BasePlugin
         $query->tagparams(ee()->TMPL->tagparams);
 
         if ($categoriesEnabled) {
-            $query->withCategories($categoryFieldsEnabled);
+            $query->withCategories(function ($query) use ($categoryFieldsEnabled) {
+                if ($categoryFieldsEnabled) {
+                    $query->withFields();
+                }
+
+                return $query->orderBy('categories.group_id')
+                    ->orderBy('categories.parent_id')
+                    ->orderBy('categories.cat_order');
+            });
         }
 
         if ($memberDataEnabled) {
