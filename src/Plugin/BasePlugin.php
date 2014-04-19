@@ -12,9 +12,11 @@ namespace rsanchez\Deep\Plugin;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\App\Entries;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
 use rsanchez\Deep\Collection\AbstractFilterableCollection;
+use rsanchez\Deep\Collection\CategoryCollection;
 use Illuminate\Support\Collection;
 use DateTime;
 use Closure;
@@ -57,6 +59,24 @@ abstract class BasePlugin
             'show_expired' => 'no',
             'sort' => 'desc',
             'status' => 'open',
+        );
+    }
+
+    /**
+     * Get the default tag parameters when using parseEntries
+     *
+     * @return array
+     */
+    protected function getCategoriesDefaultParameters()
+    {
+        return array(
+            'show_empty' => 'yes',
+            'show_future_entries' => 'no',
+            'show_expired' => 'no',
+            'restrict_channel' => 'yes',
+            'style' => 'nested',
+            'id' => 'nav_categories',
+            'orderby' => 'categories.group_id|categories.parent_id|categories.cat_order',
         );
     }
 
@@ -344,6 +364,11 @@ abstract class BasePlugin
                 $prefix.'not_forum_topic' => (int) ! $entry->forum_topic_id,
                 $prefix.'page_uri' => $entry->page_uri,
                 $prefix.'page_url' => ee()->functions->create_url($entry->page_uri),
+                $prefix.'entry_id_path' => array($entry->entry_id, array('path_variable' => true)),
+                $prefix.'permalink' => array($entry->entry_id, array('path_variable' => true)),
+                $prefix.'title_permalink' => array($entry->url_title, array('path_variable' => true)),
+                $prefix.'url_title_path' => array($entry->url_title, array('path_variable' => true)),
+                $prefix.'profile_path' => array($entry->author_id, array('path_variable' => true)),
             );
 
             foreach ($pairTags as $tag) {
@@ -382,8 +407,6 @@ abstract class BasePlugin
 
                     $categories = array();
 
-                    preg_match_all('#{path=([\042\047]?)(.*?)\\1}#', $tag->tagdata, $pathTags);
-
                     foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
                         $category = $categoryModel->toArray();
 
@@ -409,11 +432,7 @@ abstract class BasePlugin
                         $category['category_image'] = $categoryModel->cat_image;
                         $category['category_name'] = $categoryModel->cat_name;
                         $category['category_url_title'] = $categoryModel->cat_url_title;
-
-                        foreach ($pathTags[2] as $i => $path) {
-                            $key = substr($pathTags[0][$i], 1, -1);
-                            $category[$key] = ee()->functions->create_url($path.$categoryUri);
-                        }
+                        $category['path'] = array($categoryUri, array('path_variable' => true));
 
                         array_push($categories, $category);
                     }
@@ -469,27 +488,10 @@ abstract class BasePlugin
                     $row[$tag->key] = (string) $entry->{$tag->name};
                 }
 
-                if (isset($tag->params['format']) && $entry->{$tag->name} instanceof DateTime) {
-                    $format = preg_replace('#%([a-zA-Z])#', '\\1', $tag->params['format']);
+                if ($entry->{$tag->name} instanceof DateTime) {
+                    $format = isset($tag->params['format']) ? preg_replace('#%([a-zA-Z])#', '\\1', $tag->params['format']) : 'U';
 
                     $row[$tag->key] = $entry->{$tag->name}->format($format);
-                }
-
-                switch ($tag->name) {
-                    case 'entry_id_path':
-                    case 'permalink':
-                        $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
-                        $row[$tag->key] = ee()->functions->create_url($path.$entry->entry_id);
-                        break;
-                    case 'title_permalink':
-                    case 'url_title_path':
-                        $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
-                        $row[$tag->key] = ee()->functions->create_url($path.$entry->url_title);
-                        break;
-                    case 'profile_path':
-                        $path = isset($tag->params[0]) ? $tag->params[0].'/' : '';
-                        $row[$tag->key] = ee()->functions->create_url($path.$entry->author_id);
-                        break;
                 }
             }
 
@@ -544,6 +546,155 @@ abstract class BasePlugin
         if (! empty($params['backspace'])) {
             $output = substr($output, 0, -$params['backspace']);
         }
+
+        return $output;
+    }
+
+    /**
+     * Parse a plugin tag pair equivalent to channel:categories
+     *
+     * @param  Closure|null $callback receieves a query builder object as the first parameter
+     * @return string
+     */
+    protected function parseCategories(Closure $callback = null)
+    {
+        foreach ($this->getCategoriesDefaultParameters() as $key => $value) {
+            if (! isset(ee()->TMPL->tagparams[$key])) {
+                ee()->TMPL->tagparams[$key] = $value;
+            }
+        }
+
+        $query = $this->app->make('Category')->nested()->tagparams(ee()->TMPL->tagparams);
+
+        $customFieldsEnabled = ee()->TMPL->fetch_param('disable') !== 'category_fields';
+
+        if ($customFieldsEnabled) {
+            $query->withFields();
+        }
+
+        if (is_callable($callback)) {
+            $callback($query);
+        }
+
+        $categories = $query->get();
+
+        $prefix = ee()->TMPL->fetch_param('var_prefix') ? ee()->TMPL->fetch_param('var_prefix').':' : '';
+
+        if (preg_match('#{if '.preg_quote($prefix).'no_results}(.*?){/if}#s', ee()->TMPL->tagdata, $match)) {
+            ee()->TMPL->tagdata = str_replace($match[0], '', ee()->TMPL->tagdata);
+            ee()->TMPL->no_results = $match[1];
+        }
+
+        if ($categories->isEmpty()) {
+            return ee()->TMPL->no_results();
+        }
+
+        if (ee()->TMPL->fetch_param('style') === 'nested') {
+            $output = '<ul id="'.ee()->TMPL->fetch_param('id', 'nav_categories').'" class="'.ee()->TMPL->fetch_param('class', 'nav_categories').'">';
+
+            foreach ($categories as $category) {
+                $output .= $this->categoryToList($category, ee()->TMPL->tagdata, $customFieldsEnabled, $prefix);
+            }
+
+            $output .= '</ul>';
+        } else {
+            $variables = array();
+
+            $this->categoryCollectionToVariables($categories, $variables, $customFieldsEnabled, $prefix);
+
+            $output = ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+
+            if ($backspace = ee()->TMPL->fetch_param('backspace')) {
+                $output = substr($output, 0, -$backspace);
+            }
+        }
+
+        return $output;
+
+    }
+
+    /**
+     * Convert a Category collection into a multi-dimensional array suitable for ee()->TMPL->parse_variables
+     *
+     * @param  CategoryCollection $categories
+     * @param  array              $variables
+     * @param  boolean            $customFieldsEnabled
+     * @param  string             $prefix
+     * @return void
+     */
+    protected function categoryCollectionToVariables(CategoryCollection $categories, array &$variables, $customFieldsEnabled = false, $prefix = '')
+    {
+        foreach ($categories as $category) {
+            $variables[] = $this->categoryToVariables($category, $customFieldsEnabled, $prefix);
+
+            if ($category->hasChildren()) {
+                $this->categoryCollectionToVariables($category->children, $variables, $customFieldsEnabled, $prefix);
+            }
+        }
+    }
+
+    /**
+     * Convert a Category model into an array suitable for ee()->TMPL->parse_variables_row
+     *
+     * @param  Category $category
+     * @param  boolean  $customFieldsEnabled
+     * @param  string   $prefix
+     * @return array
+     */
+    protected function categoryToVariables(Category $category, $customFieldsEnabled = false, $prefix = '')
+    {
+        $categoryUri = ee()->config->item('use_category_name') === 'y'
+            ? '/'.ee()->config->item('reserved_category_word').'/'.$category->cat_url_title
+            : '/C'.$category->cat_id;
+
+        $regex = '#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#';
+
+        $row = array(
+            $prefix.'active' => (bool) preg_match($regex, ee()->uri->uri_string()),
+            $prefix.'category_description' => $category->cat_description,
+            $prefix.'category_id' => $category->cat_id,
+            $prefix.'parent_id' => $category->parent_id,
+            $prefix.'category_image' => $category->cat_image,
+            $prefix.'category_name' => $category->cat_name,
+            $prefix.'category_url_title' => $category->cat_url_title,
+            $prefix.'path' => array($categoryUri, array('path_variable' => true)),
+        );
+
+        if ($customFieldsEnabled) {
+            foreach ($category->getFields() as $field) {
+                $row[$prefix.$field->field_name] = $category->{$field->field_name};
+            }
+        }
+
+        return $row;
+    }
+
+    /**
+     * Convert a Category model into a list element
+     *
+     * @param  Category $category
+     * @param  [type]   $tagdata
+     * @param  boolean  $customFieldsEnabled
+     * @param  string   $prefix
+     * @return string
+     */
+    protected function categoryToList(Category $category, $tagdata, $customFieldsEnabled = false, $prefix = '')
+    {
+        $output = '<li>';
+
+        $output .= ee()->TMPL->parse_variables_row($tagdata, $this->categoryToVariables($category, $customFieldsEnabled, $prefix));
+
+        if ($category->hasChildren()) {
+            $output .= ' <ul>';
+
+            foreach ($category->children as $child) {
+                $output .= $this->categoryToList($child, $tagdata, $customFieldsEnabled, $prefix);
+            }
+
+            $output .= '</ul>';
+        }
+
+        $output .= '</li>';
 
         return $output;
     }
