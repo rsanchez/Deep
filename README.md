@@ -38,7 +38,7 @@ Add this to your `composer.json`:
 
     "minimum-stability": "dev",
     "require": {
-        "rsanchez/deep": "dev-master"
+        "rsanchez/deep": "1.0.*"
     }
 
 Make sure you load composer's autoloader at the top of your `config.php` (your actual vendor path may vary):
