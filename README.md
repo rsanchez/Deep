@@ -816,6 +816,8 @@ foreach ($entry->your_multiselect_field as $value) {
 
 The abstract `rsanchez\Deep\Plugin\BasePlugin` class is provided as a base for ExpressionEngine modules and plugins. The `parseEntries` method parses a template using an `EntryCollection`.
 
+### Entries
+
 ```
 <?php
 
@@ -877,7 +879,7 @@ The following channel:entries parameters are not implemented by the `BasePlugin`
 - week_sort
 - uncategorized_entries
 
-The `BasePlugin` class has the following default parameters:
+The `parseEntries` method has the following default parameters:
 
     orderby="entry_date"
     show_future_entries="no"
@@ -911,6 +913,72 @@ The `BasePlugin` class allows the following parameters on Matrix, Grid, Playa an
 
 \*Playa and Relationships only
 \*\*Matrix and Grid only
+
+### Categories
+
+The `BasePlugin` class can also parse the equivalent of a channel:categories tag.
+
+```
+<?php
+
+use rsanchez\Deep\Plugin\BasePlugin;
+
+class My_plugin extends BasePlugin
+{
+    public function categories()
+    {
+        return $this->parseCategories();
+    }
+
+    public function offices()
+    {
+        $country = ee()->TMPL->fetch_param('country', 'us');
+
+        ee()->TMPL->tagparams['style'] = 'linear';
+
+        return $this->parseCategories(function ($query) use ($country) {
+            return $query->channel('offices')->where('categories.cat_name', $country);
+        });
+    }
+}
+
+```
+
+Now you can parse your plugin like a channel:categories tag:
+
+```
+{exp:my_plugin:categories channel="blog" style="nested"}
+  <a href="{path='blog'}"{if active} class="active"{/if}>{category_name}</a>
+{/exp:my_plugin:categories}
+
+{exp:my_plugin:offices country="{segment_2}"}
+{if no_results}{redirect="404"}{/if}
+<h1><a href="{site_url}offices/{category_url_title}">{category_name}</a></h1>
+{category_description}
+{/exp:my_plugin:offices}
+```
+
+The `parseCategories` method has the following default parameters:
+
+    show_empty="yes"
+    show_future_entries="no"
+    show_expired="no"
+    restrict_channel="yes"
+    style="nested"
+    id="nav_categories"
+    class="nav_categories"
+    orderby="categories.group_id|categories.parent_id|categories.cat_order"
+
+You can change this by overloading the `getCategoriesDefaultParameters` method in your plugin/module class:
+
+    protected function getCategoriesDefaultParameters()
+    {
+        $params = parent::getCategoriesDefaultParameters();
+
+        $params['style'] = 'linear';
+
+        return $params;
+    }
 
 ## The `Titles` Class
 
