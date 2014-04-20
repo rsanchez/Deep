@@ -8,6 +8,8 @@ A read-only set of [Eloquent](http://laravel.com/docs/eloquent) models for Expre
 - provide an base plugin from which EE plugins/modules can extend, which has near parity with `{exp:channel:entries}`
 - automatically fetch custom fields using field names and entities instead of just raw text from `exp_channel_data`
 
+For more detailed information, see the [auto-generated API docs](http://rsanchez.github.io/Deep/api).
+
 ```
 <?php
 
