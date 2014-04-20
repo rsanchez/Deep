@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: http://rsanchez.github.io/Deep/api/sitemap.xml
