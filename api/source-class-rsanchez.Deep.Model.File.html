@@ -244,50 +244,49 @@
 </span></span><span id="127" class="l"><a class="l" href="#127">127: </a><span class="php-comment">     */</span>
 </span><span id="128" class="l"><a class="l" href="#128">128: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeFromEntryCollection" href="#_scopeFromEntryCollection">scopeFromEntryCollection</a>(Builder <span class="php-var">$query</span>, EntryCollection <span class="php-var">$collection</span>)
 </span><span id="129" class="l"><a class="l" href="#129">129: </a>    {
-</span><span id="130" class="l"><a class="l" href="#130">130: </a>        <span class="php-comment">// EE isn't PDO, so no prepared statements</span>
-</span><span id="131" class="l"><a class="l" href="#131">131: </a>        <span class="php-comment">// I hate doing this...</span>
-</span><span id="132" class="l"><a class="l" href="#132">132: </a>        <span class="php-var">$escape</span> = <span class="php-keyword1">array</span>(<span class="php-var">$query</span>-&gt;getQuery()-&gt;getConnection()-&gt;ci-&gt;db, <span class="php-quote">'escape'</span>);
+</span><span id="130" class="l"><a class="l" href="#130">130: </a>        <span class="php-var">$collection</span>-&gt;<span class="php-keyword2">each</span>(<span class="php-keyword1">function</span> (<span class="php-var">$entry</span>) <span class="php-keyword1">use</span> (<span class="php-var">$query</span>) {
+</span><span id="131" class="l"><a class="l" href="#131">131: </a>
+</span><span id="132" class="l"><a class="l" href="#132">132: </a>            <span class="php-var">$entry</span>-&gt;channel-&gt;fieldsByType(<span class="php-quote">'file'</span>)-&gt;<span class="php-keyword2">each</span>(<span class="php-keyword1">function</span> (<span class="php-var">$field</span>) <span class="php-keyword1">use</span> (<span class="php-var">$entry</span>, <span class="php-var">$query</span>) {
 </span><span id="133" class="l"><a class="l" href="#133">133: </a>
-</span><span id="134" class="l"><a class="l" href="#134">134: </a>        <span class="php-var">$collection</span>-&gt;<span class="php-keyword2">each</span>(<span class="php-keyword1">function</span> (<span class="php-var">$entry</span>) <span class="php-keyword1">use</span> (<span class="php-var">$query</span>, <span class="php-var">$escape</span>) {
+</span><span id="134" class="l"><a class="l" href="#134">134: </a>                <span class="php-var">$value</span> = <span class="php-var">$entry</span>-&gt;getAttribute(<span class="php-quote">'field_id_'</span>.<span class="php-var">$field</span>-&gt;field_id);
 </span><span id="135" class="l"><a class="l" href="#135">135: </a>
-</span><span id="136" class="l"><a class="l" href="#136">136: </a>            <span class="php-var">$entry</span>-&gt;channel-&gt;fieldsByType(<span class="php-quote">'file'</span>)-&gt;<span class="php-keyword2">each</span>(<span class="php-keyword1">function</span> (<span class="php-var">$field</span>) <span class="php-keyword1">use</span> (<span class="php-var">$entry</span>, <span class="php-var">$query</span>, <span class="php-var">$escape</span>) {
-</span><span id="137" class="l"><a class="l" href="#137">137: </a>
-</span><span id="138" class="l"><a class="l" href="#138">138: </a>                <span class="php-var">$value</span> = <span class="php-var">$entry</span>-&gt;getAttribute(<span class="php-quote">'field_id_'</span>.<span class="php-var">$field</span>-&gt;field_id);
+</span><span id="136" class="l"><a class="l" href="#136">136: </a>                <span class="php-keyword1">if</span> (! <span class="php-keyword2">preg_match</span>(<span class="php-quote">'#^{filedir_(\d+)}(.*)$#'</span>, <span class="php-var">$value</span>, <span class="php-var">$match</span>)) {
+</span><span id="137" class="l"><a class="l" href="#137">137: </a>                    <span class="php-keyword1">return</span>;
+</span><span id="138" class="l"><a class="l" href="#138">138: </a>                }
 </span><span id="139" class="l"><a class="l" href="#139">139: </a>
-</span><span id="140" class="l"><a class="l" href="#140">140: </a>                <span class="php-keyword1">if</span> (! <span class="php-keyword2">preg_match</span>(<span class="php-quote">'#^{filedir_(\d+)}(.*)$#'</span>, <span class="php-var">$value</span>, <span class="php-var">$match</span>)) {
-</span><span id="141" class="l"><a class="l" href="#141">141: </a>                    <span class="php-keyword1">return</span>;
-</span><span id="142" class="l"><a class="l" href="#142">142: </a>                }
-</span><span id="143" class="l"><a class="l" href="#143">143: </a>
-</span><span id="144" class="l"><a class="l" href="#144">144: </a>                <span class="php-var">$filedir</span> = <span class="php-keyword2">call_user_func</span>(<span class="php-var">$escape</span>, <span class="php-var">$match</span>[<span class="php-num">1</span>]);
-</span><span id="145" class="l"><a class="l" href="#145">145: </a>                <span class="php-var">$filename</span> = <span class="php-keyword2">call_user_func</span>(<span class="php-var">$escape</span>, <span class="php-var">$match</span>[<span class="php-num">2</span>]);
-</span><span id="146" class="l"><a class="l" href="#146">146: </a>
-</span><span id="147" class="l"><a class="l" href="#147">147: </a>                <span class="php-var">$query</span>-&gt;orWhereRaw(<span class="php-quote">&quot;(`file_name` = </span><span class="php-var">{$filename}</span><span class="php-quote"> AND `upload_location_id` = </span><span class="php-var">{$filedir}</span><span class="php-quote">)&quot;</span>);
-</span><span id="148" class="l"><a class="l" href="#148">148: </a>            });
-</span><span id="149" class="l"><a class="l" href="#149">149: </a>
-</span><span id="150" class="l"><a class="l" href="#150">150: </a>        });
-</span><span id="151" class="l"><a class="l" href="#151">151: </a>
-</span><span id="152" class="l"><a class="l" href="#152">152: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>;
-</span><span id="153" class="l"><a class="l" href="#153">153: </a>    }
-</span><span id="154" class="l"><a class="l" href="#154">154: </a>
-</span><span id="155" class="l"><a class="l" href="#155">155: </a>    <span class="php-comment">/**
-</span></span><span id="156" class="l"><a class="l" href="#156">156: </a><span class="php-comment">     * {@inheritdoc}
-</span></span><span id="157" class="l"><a class="l" href="#157">157: </a><span class="php-comment">     */</span>
-</span><span id="158" class="l"><a class="l" href="#158">158: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_attributesToArray" href="#_attributesToArray">attributesToArray</a>()
-</span><span id="159" class="l"><a class="l" href="#159">159: </a>    {
-</span><span id="160" class="l"><a class="l" href="#160">160: </a>        <span class="php-var">$attributes</span> = parent::attributesToArray();
-</span><span id="161" class="l"><a class="l" href="#161">161: </a>
-</span><span id="162" class="l"><a class="l" href="#162">162: </a>        <span class="php-keyword1">foreach</span> (<span class="php-keyword1">array</span>(<span class="php-quote">'upload_date'</span>, <span class="php-quote">'modified_date'</span>) <span class="php-keyword1">as</span> <span class="php-var">$key</span>) {
-</span><span id="163" class="l"><a class="l" href="#163">163: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$attributes</span>[<span class="php-var">$key</span>] <span class="php-keyword1">instanceof</span> Carbon) {
-</span><span id="164" class="l"><a class="l" href="#164">164: </a>                <span class="php-var">$date</span> = <span class="php-keyword1">clone</span> <span class="php-var">$attributes</span>[<span class="php-var">$key</span>];
-</span><span id="165" class="l"><a class="l" href="#165">165: </a>                <span class="php-var">$date</span>-&gt;setTimezone(<span class="php-keyword1">new</span> DateTimeZone(<span class="php-quote">'UTC'</span>));
-</span><span id="166" class="l"><a class="l" href="#166">166: </a>                <span class="php-var">$attributes</span>[<span class="php-var">$key</span>] = <span class="php-var">$date</span>-&gt;format(<span class="php-quote">'Y-m-d\TH:i:s'</span>).<span class="php-quote">'Z'</span>;
-</span><span id="167" class="l"><a class="l" href="#167">167: </a>            }
-</span><span id="168" class="l"><a class="l" href="#168">168: </a>        }
-</span><span id="169" class="l"><a class="l" href="#169">169: </a>
-</span><span id="170" class="l"><a class="l" href="#170">170: </a>        <span class="php-keyword1">return</span> <span class="php-var">$attributes</span>;
-</span><span id="171" class="l"><a class="l" href="#171">171: </a>    }
-</span><span id="172" class="l"><a class="l" href="#172">172: </a>}
-</span><span id="173" class="l"><a class="l" href="#173">173: </a></span></code></pre>
+</span><span id="140" class="l"><a class="l" href="#140">140: </a>                <span class="php-var">$filedir</span> = <span class="php-var">$match</span>[<span class="php-num">1</span>];
+</span><span id="141" class="l"><a class="l" href="#141">141: </a>                <span class="php-var">$filename</span> = <span class="php-var">$match</span>[<span class="php-num">2</span>];
+</span><span id="142" class="l"><a class="l" href="#142">142: </a>
+</span><span id="143" class="l"><a class="l" href="#143">143: </a>                <span class="php-var">$query</span>-&gt;orWhere(<span class="php-keyword1">function</span> (<span class="php-var">$query</span>) <span class="php-keyword1">use</span> (<span class="php-var">$filedir</span>, <span class="php-var">$filename</span>) {
+</span><span id="144" class="l"><a class="l" href="#144">144: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;where(<span class="php-quote">'file_name'</span>, <span class="php-var">$filename</span>)
+</span><span id="145" class="l"><a class="l" href="#145">145: </a>                        -&gt;where(<span class="php-quote">'upload_location_id'</span>, <span class="php-var">$filedir</span>);
+</span><span id="146" class="l"><a class="l" href="#146">146: </a>                });
+</span><span id="147" class="l"><a class="l" href="#147">147: </a>            });
+</span><span id="148" class="l"><a class="l" href="#148">148: </a>
+</span><span id="149" class="l"><a class="l" href="#149">149: </a>        });
+</span><span id="150" class="l"><a class="l" href="#150">150: </a>
+</span><span id="151" class="l"><a class="l" href="#151">151: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>;
+</span><span id="152" class="l"><a class="l" href="#152">152: </a>    }
+</span><span id="153" class="l"><a class="l" href="#153">153: </a>
+</span><span id="154" class="l"><a class="l" href="#154">154: </a>    <span class="php-comment">/**
+</span></span><span id="155" class="l"><a class="l" href="#155">155: </a><span class="php-comment">     * {@inheritdoc}
+</span></span><span id="156" class="l"><a class="l" href="#156">156: </a><span class="php-comment">     */</span>
+</span><span id="157" class="l"><a class="l" href="#157">157: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_attributesToArray" href="#_attributesToArray">attributesToArray</a>()
+</span><span id="158" class="l"><a class="l" href="#158">158: </a>    {
+</span><span id="159" class="l"><a class="l" href="#159">159: </a>        <span class="php-var">$attributes</span> = parent::attributesToArray();
+</span><span id="160" class="l"><a class="l" href="#160">160: </a>
+</span><span id="161" class="l"><a class="l" href="#161">161: </a>        <span class="php-keyword1">foreach</span> (<span class="php-keyword1">array</span>(<span class="php-quote">'upload_date'</span>, <span class="php-quote">'modified_date'</span>) <span class="php-keyword1">as</span> <span class="php-var">$key</span>) {
+</span><span id="162" class="l"><a class="l" href="#162">162: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$attributes</span>[<span class="php-var">$key</span>] <span class="php-keyword1">instanceof</span> Carbon) {
+</span><span id="163" class="l"><a class="l" href="#163">163: </a>                <span class="php-var">$date</span> = <span class="php-keyword1">clone</span> <span class="php-var">$attributes</span>[<span class="php-var">$key</span>];
+</span><span id="164" class="l"><a class="l" href="#164">164: </a>                <span class="php-var">$date</span>-&gt;setTimezone(<span class="php-keyword1">new</span> DateTimeZone(<span class="php-quote">'UTC'</span>));
+</span><span id="165" class="l"><a class="l" href="#165">165: </a>                <span class="php-var">$attributes</span>[<span class="php-var">$key</span>] = <span class="php-var">$date</span>-&gt;format(<span class="php-quote">'Y-m-d\TH:i:s'</span>).<span class="php-quote">'Z'</span>;
+</span><span id="166" class="l"><a class="l" href="#166">166: </a>            }
+</span><span id="167" class="l"><a class="l" href="#167">167: </a>        }
+</span><span id="168" class="l"><a class="l" href="#168">168: </a>
+</span><span id="169" class="l"><a class="l" href="#169">169: </a>        <span class="php-keyword1">return</span> <span class="php-var">$attributes</span>;
+</span><span id="170" class="l"><a class="l" href="#170">170: </a>    }
+</span><span id="171" class="l"><a class="l" href="#171">171: </a>}
+</span><span id="172" class="l"><a class="l" href="#172">172: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
