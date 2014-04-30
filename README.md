@@ -23,7 +23,7 @@ $entries = Entries::channel('blog')
 
 <?php foreach ($entries as $entry) : ?>
 <article>
-    <h1><?php echo $entry->title; ?></h1>
+    <h1><?php echo e($entry->title); ?></h1>
 
     <p class="date"><?php echo $entry->entry_date->format('F j, Y'); ?></p>
 
@@ -51,57 +51,59 @@ Unless you are [extending the `BasePlugin` class](#extending-the-baseplugin-clas
 
 ## Query Scopes
 
-Query scopes are how you can filter your query results. They should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter.
+### Filtering Scopes
 
-### Channel Name
+Filtering scopes should look familiar, since most of them relate to a native `{exp:channel:entries}` parameter.
+
+#### Channel Name
 
 ```
 Entries::channel('blog', 'news')->get();
 ```
 
-### Not Channel Name
+#### Not Channel Name
 
 ```
 Entries::notChannel('blog', 'news')->get();
 ```
 
-### Channel ID
+#### Channel ID
 
 ```
 Entries::channelId(1, 2)->get();
 ```
 
-### Not Channel ID
+#### Not Channel ID
 
 ```
 Entries::notChannelId(1, 2)->get();
 ```
 
-### Author ID
+#### Author ID
 
 ```
 Entries::authorId(1, 2)->get();
 ```
 
-### Not Author ID
+#### Not Author ID
 
 ```
 Entries::notAuthorId(1, 2)->get();
 ```
 
-### Category ID
+#### Category ID
 
 ```
 Entries::category(1, 2)->get();
 ```
 
-### Not Category ID
+#### Not Category ID
 
 ```
 Entries::notCategory(1, 2)->get();
 ```
 
-### All Categories
+#### All Categories
 
 Only show entries that have all of the specified categories.
 
@@ -109,7 +111,7 @@ Only show entries that have all of the specified categories.
 Entries::allCategories(1, 2)->get();
 ```
 
-### Not All Categories
+#### Not All Categories
 
 Exclude entries that have all of the specified categories.
 
@@ -117,133 +119,133 @@ Exclude entries that have all of the specified categories.
 Entries::notAllCategories(1, 2)->get();
 ```
 
-### Category Name
+#### Category Name
 
 ```
 Entries::categoryName('mammals', 'reptiles')->get();
 ```
 
-### Not Category Name
+#### Not Category Name
 
 ```
 Entries::notCategoryName('mammals', 'reptiles')->get();
 ```
 
-### Category Group
+#### Category Group
 
 ```
 Entries::categoryGroup(1, 2)->get();
 ```
 
-### Not Category Group
+#### Not Category Group
 
 ```
 Entries::notCategoryGroup(1, 2)->get();
 ```
 
-### Day
+#### Day
 
 ```
 Entries::day(31)->get();
 ```
 
-### Dynamic Parameters
+#### Dynamic Parameters
 
 ```
 Entries::dynamicParameters(array('limit', 'search:your_field_name'), $_REQUEST)->get();
 ```
 
-### Entry ID
+#### Entry ID
 
 ```
 Entries::entryId(1, 2)->get();
 ```
 
-### Not Entry ID
+#### Not Entry ID
 
 ```
 Entries::notEntryId(1, 2)->get();
 ```
 
-### Entry ID From
+#### Entry ID From
 
 ```
 Entries::entryIdFrom(1)->get();
 ```
 
-### Entry ID To
+#### Entry ID To
 
 ```
 Entries::entryIdTo(100)->get();
 ```
 
-### Fixed Order
+#### Fixed Order
 
 ```
 Entries::fixedOrder(4, 8, 15, 16, 23, 42)->get();
 ```
 
-### Member Group ID
+#### Member Group ID
 
 ```
 Entries::groupId(1, 2)->get();
 ```
 
-### Not Member Group ID
+#### Not Member Group ID
 
 ```
 Entries::notGroupId(1, 2)->get();
 ```
 
-### Limit
+#### Limit
 
 ```
 Entries::limit(1)->get();
 ```
 
-### Month
+#### Month
 
 ```
 Entries::month(12)->get();
 ```
 
-### Offset
+#### Offset
 
 ```
 Entries::offset(1)->get();
 ```
 
-### Show Expired
+#### Show Expired
 
 ```
 Entries::showExpired(false)->get();
 ```
 
-### Show Future Entries
+#### Show Future Entries
 
 ```
 Entries::showFutureEntries(true)->get();
 ```
 
-### Show Pages
+#### Show Pages
 
 ```
 Entries::showPages(false)->get();
 ```
 
-### Show Pages Only
+#### Show Pages Only
 
 ```
 Entries::showPagesOnly(true)->get();
 ```
 
-### Site ID
+#### Site ID
 
 ```
 Entries::siteId(1, 2)->get();
 ```
 
-### Start On
+#### Start On
 
 Unix time:
 
@@ -258,7 +260,7 @@ $date = new DateTime();
 Entries::startOn($date)->get();
 ```
 
-### Stop Before
+#### Stop Before
 
 Unix time:
 
@@ -273,55 +275,55 @@ $date = new DateTime();
 Entries::stopBefore($date)->get();
 ```
 
-### Sticky
+#### Sticky
 
 ```
 Entries::sticky(true)->get();
 ```
 
-### Status
+#### Status
 
 ```
 Entries::status('open', 'closed')->get();
 ```
 
-### Not Status
+#### Not Status
 
 ```
 Entries::notStatus('open', 'closed')->get();
 ```
 
-### URL Title
+#### URL Title
 
 ```
 Entries::urlTitle('cats', 'dogs')->get();
 ```
 
-### Not URL Title
+#### Not URL Title
 
 ```
 Entries::notUrlTitle('cats', 'dogs')->get();
 ```
 
-### Username
+#### Username
 
 ```
 Entries::username('john_doe', 'jane_doe')->get();
 ```
 
-### Not Username
+#### Not Username
 
 ```
 Entries::notUsername('john_doe', 'jane_doe')->get();
 ```
 
-### Year
+#### Year
 
 ```
 Entries::year(2014)->get();
 ```
 
-### Tagparams
+#### Tagparams
 
 This scope accepts an array of parameters And applies all the [supported](#parameters-not-implemented) `{exp:channel:entries}` parameters to the query.
 
@@ -348,6 +350,58 @@ The following channel:entries parameters are not implemented by the `tagparams` 
 - track_views
 - week_sort
 - uncategorized_entries
+
+### Eager Loading Scopes
+
+These scopes force eager loading of certain relationships. Eager loading of custom field data is done automatically with the `Entry` model (and the `Entries` proxy). Use the `Title` model (or the `Titles` proxy) to *not* eager load custom field data.
+
+#### With Categories
+
+Eager load the `categories` attribute.
+
+```
+Entries::withCategories()->get();
+```
+
+#### With Category Fields
+
+Eager load the `categories` attribute with custom category fields.
+
+```
+Entries::withCategoryFields()->get();
+```
+
+#### With Author
+
+Eager load the `author` attribute.
+
+```
+Entries::withAuthor()->get();
+```
+
+#### With Author Fields
+
+Eager load the `author` attribute with custom member fields.
+
+```
+Entries::withAuthorFields()->get();
+```
+
+#### With Parents
+
+Eager load the `parents` attribute (native EE relationship fields only).
+
+```
+Entries::withParents()->get();
+```
+
+#### With Siblings
+
+Eager load the `siblings` attribute (native EE relationship fields only).
+
+```
+Entries::withSiblings()->get();
+```
 
 ### Custom Field Scopes
 
@@ -608,7 +662,7 @@ $entry->channel->live_look_template
 
 ### Categories
 
-Each `Entry` object has a `categories` property which is a collection of `Category` objects. Currently, there is no support for custom category fields.
+Each `Entry` object has a `categories` property which is a collection of `Category` objects. Use the `withCategories` or `withCategoryFields` scope to eager load this relationship.
 
 ```
 foreach ($entry->categories as $category) {
@@ -616,9 +670,21 @@ foreach ($entry->categories as $category) {
 }
 ```
 
+```
+$category->cat_id
+$category->site_id
+$category->group_id
+$category->parent_id
+$category->cat_name
+$category->cat_description
+$category->cat_image
+$category->cat_order
+$category->your_custom_field
+```
+
 ### Author
 
-Each `Entry` object has a `author` property which is a `Member` object. Currently, there is no support for custom member fields.
+Each `Entry` object has a `author` property which is a `Member` object. Use the `withAuthor` or `withAuthorFields` scope to eager load this relationship.
 
 ```
 $entry->author->member_id
@@ -697,6 +763,7 @@ $entry->author->show_sidebar
 $entry->author->pmember_id
 $entry->author->rte_enabled
 $entry->author->rte_toolset_id
+$entry->author->your_custom_field
 ```
 
 ### Custom Fields
