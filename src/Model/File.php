@@ -127,13 +127,9 @@ class File extends Model implements FileInterface
      */
     public function scopeFromEntryCollection(Builder $query, EntryCollection $collection)
     {
-        // EE isn't PDO, so no prepared statements
-        // I hate doing this...
-        $escape = array($query->getQuery()->getConnection()->ci->db, 'escape');
+        $collection->each(function ($entry) use ($query) {
 
-        $collection->each(function ($entry) use ($query, $escape) {
-
-            $entry->channel->fieldsByType('file')->each(function ($field) use ($entry, $query, $escape) {
+            $entry->channel->fieldsByType('file')->each(function ($field) use ($entry, $query) {
 
                 $value = $entry->getAttribute('field_id_'.$field->field_id);
 
@@ -141,10 +137,13 @@ class File extends Model implements FileInterface
                     return;
                 }
 
-                $filedir = call_user_func($escape, $match[1]);
-                $filename = call_user_func($escape, $match[2]);
+                $filedir = $match[1];
+                $filename = $match[2];
 
-                $query->orWhereRaw("(`file_name` = {$filename} AND `upload_location_id` = {$filedir})");
+                $query->orWhere(function ($query) use ($filedir, $filename) {
+                    return $query->where('file_name', $filename)
+                        ->where('upload_location_id', $filedir);
+                });
             });
 
         });
