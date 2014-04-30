@@ -19,6 +19,7 @@ use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use Carbon\Carbon;
+use Closure;
 use DateTime;
 use DateTimeZone;
 
