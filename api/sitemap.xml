@@ -13,6 +13,12 @@
 	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.App.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.App.Laravel.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.App.Laravel.Facade.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.Collection.html</loc>
 </url>
 <url>
@@ -37,6 +43,18 @@
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Entries.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Laravel.Facade.Categories.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Laravel.Facade.Entries.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Laravel.Facade.Titles.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Laravel.ServiceProvider.html</loc>
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Titles.html</loc>
