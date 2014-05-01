@@ -41,6 +41,10 @@ Add this to your `composer.json`:
         "rsanchez/deep": "1.0.*"
     }
 
+## Setup
+
+### ExpressionEngine
+
 Make sure you load composer's autoloader at the top of your `config.php` (your actual vendor path may vary):
 
     require_once FCPATH.'vendor/autoload.php'
@@ -48,6 +52,27 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
 Unless you are [extending the `BasePlugin` class](#extending-the-baseplugin-class), you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
 
     \rsanchez\Deep\Deep::bootEloquent(ee());
+
+### Laravel
+
+Deep comes with a service provider for Laravel. Add this to the list of providers in `app/config/app.php`:
+
+    'rsanchez\Deep\App\Laravel\ServiceProvider',
+
+This registers the `Entries`, `Titles` and `Categories` facades, so you can use them in your app easily:
+
+    Route::get('/blog', function()
+    {
+        $entries = Entries::channel('blog')->get();
+        return View::make('blog.index')->withEntries($entries);
+    });
+
+    Route::get('/blog/json', function()
+    {
+        $entries = Entries::channel('blog')->get();
+        return Response::json($entries);
+    });
+
 
 ## Query Scopes
 
