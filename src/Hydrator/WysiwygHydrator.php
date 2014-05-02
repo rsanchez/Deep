@@ -124,7 +124,7 @@ class WysiwygHydrator extends AbstractHydrator
      * @param  string $value WYSIWYG content
      * @return string
      */
-    protected function parse($value)
+    public function parse($value)
     {
         preg_match_all('#{page_(\d+)}#', $value, $pageMatches);
 
