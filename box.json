@@ -1,0 +1,5 @@
+{
+    "directories": ["src", "vendor"],
+    "output": "build/deep.phar",
+    "stub": "build/phar-stub.php"
+}

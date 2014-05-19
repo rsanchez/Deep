@@ -73,6 +73,17 @@ This registers the `Entries`, `Titles` and `Categories` facades, so you can use 
         return Response::json($entries);
     });
 
+## Using the Phar archive for easier distribution
+
+You can build a Phar archive as an alternative installation method. The best way to package Deep with your custom distributed add-on is to use the Phar archive, since EE doesn't natively support compser installation out of the box.
+
+To build the Phar archive, you must have [box](http://box-project.org/) installed. Then you can clone this repo, run `composer install` to fetch all the dependencies, and run `box build` to create the Phar archive. The archive can be found in `build/deep.phar` after it's built.
+
+Now you can package that single Phar archive with your add-on (say, in a `phar` folder in your add-on root) and load it like so:
+
+```
+Phar::loadPhar(PATH_THIRD.'my_addon/phar/deep.phar');
+```
 
 ## Query Scopes
 
