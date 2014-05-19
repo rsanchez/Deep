@@ -36,10 +36,13 @@ $entries = Entries::channel('blog')
 
 Add this to your `composer.json`:
 
-    "minimum-stability": "dev",
     "require": {
         "rsanchez/deep": "1.0.*"
     }
+
+Or run:
+
+    composer require rsanchez/deep 1.0.*
 
 ## Setup
 
