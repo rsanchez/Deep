@@ -27,6 +27,16 @@ use Closure;
 abstract class BasePlugin
 {
     /**
+     * @var \rsanchez\Deep\Deep
+     */
+    protected $app;
+
+    /**
+     * @var \Pagination_object
+     */
+    protected $paginator;
+
+    /**
      * Constructor
      * @return void
      */
@@ -81,12 +91,12 @@ abstract class BasePlugin
     }
 
     /**
-     * Parse a plugin tag pair equivalent to channel:entries
+     * Get an EntryCollection based on the state of ee()->TMPL
      *
      * @param  Closure|null $callback receieves a query builder object as the first parameter
-     * @return string
+     * @return \rsanchez\Deep\Collection\EntryCollection
      */
-    protected function parseEntries(Closure $callback = null)
+    protected function getEntries(Closure $callback = null)
     {
         foreach ($this->getEntriesDefaultParameters() as $key => $value) {
             if (! isset(ee()->TMPL->tagparams[$key])) {
@@ -96,11 +106,11 @@ abstract class BasePlugin
 
         $disabled = empty(ee()->TMPL->tagparams['disable']) ? array() : explode('|', ee()->TMPL->tagparams['disable']);
 
-        $pagination = ee()->pagination->create();
+        $this->paginator = ee()->pagination->create();
 
         $limit = ee()->TMPL->fetch_param('limit');
 
-        ee()->TMPL->tagdata = $pagination->prepare(ee()->TMPL->tagdata);
+        ee()->TMPL->tagdata = $this->paginator->prepare(ee()->TMPL->tagdata);
 
         $customFieldsEnabled = ! in_array('custom_fields', $disabled);
         $memberDataEnabled = ! in_array('members', $disabled);
@@ -111,13 +121,12 @@ abstract class BasePlugin
         if ($limit && $paginationEnabled) {
             unset(ee()->TMPL->tagparams['offset']);
         } else {
-            $pagination->paginate = false;
+            $this->paginator->paginate = false;
         }
 
         $uri = ee()->uri->page_query_string ?: ee()->uri->query_string;
 
-        if ($hasPaginationOffset = preg_match('#^((.*?)/)?P(\d+)/?$#', $uri, $match)) {
-            $paginationOffset = $match[3];
+        if (preg_match('#^((.*?)/)?P\d+/?$#', $uri, $match)) {
             $uri = $match[2];
         }
 
@@ -231,28 +240,41 @@ abstract class BasePlugin
 
         ee()->TMPL->tagparams['absolute_results'] = $limit;
 
-        if ($pagination->paginate) {
+        if ($this->paginator->paginate) {
             ee()->TMPL->tagparams['absolute_results'] = $query->getQuery()->getPaginationCount();
 
-            if ($hasPaginationOffset) {
-                $query->skip($paginationOffset);
+            $this->paginator->build(ee()->TMPL->tagparams['absolute_results'], $limit);
 
-                ee()->TMPL->tagparams['offset'] = $paginationOffset;
+            if ($this->paginator->offset) {
+                $query->skip($this->paginator->offset);
+
+                ee()->TMPL->tagparams['offset'] = $this->paginator->offset;
             }
-
-            $pagination->build(ee()->TMPL->tagparams['absolute_results'], $limit);
         }
 
+        return $query->get();
+    }
+
+    /**
+     * Parse a plugin tag pair equivalent to channel:entries
+     *
+     * @param  Closure|null $callback receieves a query builder object as the first parameter
+     * @return string
+     */
+    public function parseEntries(Closure $callback = null)
+    {
+        $entries = $this->getEntries($callback);
+
         $output = $this->parseEntryCollection(
-            $query->get(),
+            $entries,
             ee()->TMPL->tagdata,
             ee()->TMPL->tagparams,
             ee()->TMPL->var_pair,
             ee()->TMPL->var_single
         );
 
-        if ($pagination->paginate) {
-            $output = $pagination->render($output);
+        if ($this->paginator->paginate) {
+            $output = $this->paginator->render($output);
         }
 
         return $output;
