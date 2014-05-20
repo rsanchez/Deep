@@ -220,7 +220,7 @@
 </span><span id="98" class="l"><a class="l" href="#98"> 98: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$value</span> <span class="php-keyword1">instanceof</span> Carbon) {
 </span><span id="99" class="l"><a class="l" href="#99"> 99: </a>                <span class="php-var">$date</span> = <span class="php-keyword1">clone</span> <span class="php-var">$value</span>;
 </span><span id="100" class="l"><a class="l" href="#100">100: </a>                <span class="php-var">$date</span>-&gt;setTimezone(<span class="php-keyword1">new</span> DateTimeZone(<span class="php-quote">'UTC'</span>));
-</span><span id="101" class="l"><a class="l" href="#101">101: </a>                <span class="php-var">$attributes</span>[<span class="php-var">$key</span>] = <span class="php-var">$date</span>-&gt;format(<span class="php-quote">'Y-m-d\TH:i:s'</span>).<span class="php-quote">'Z'</span>;
+</span><span id="101" class="l"><a class="l" href="#101">101: </a>                <span class="php-var">$attributes</span>[<span class="php-var">$key</span>] = <span class="php-var">$date</span>-&gt;format(self::<span class="php-var">$dateFormat</span>);
 </span><span id="102" class="l"><a class="l" href="#102">102: </a>            }
 </span><span id="103" class="l"><a class="l" href="#103">103: </a>        }
 </span><span id="104" class="l"><a class="l" href="#104">104: </a>
