@@ -98,7 +98,7 @@ class Entry extends Title
             if ($value instanceof Carbon) {
                 $date = clone $value;
                 $date->setTimezone(new DateTimeZone('UTC'));
-                $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
+                $attributes[$key] = $date->format(self::$dateFormat);
             }
         }
 

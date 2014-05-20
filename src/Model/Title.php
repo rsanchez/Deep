@@ -78,6 +78,12 @@ class Title extends AbstractJoinableModel
     protected $extraHydrators = array();
 
     /**
+     * The date format used when converting to array / json
+     * @var string
+     */
+    protected static $dateFormat = 'Y-m-d\TH:i:s\Z';
+
+    /**
      * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -152,6 +158,15 @@ class Title extends AbstractJoinableModel
                 $query->join('category_posts', 'category_posts.entry_id', '=', 'channel_titles.entry_id');
             },
         );
+    }
+
+    /**
+     * Set the default date format
+     * @param string $dateFormat
+     */
+    public static function setDateFormat($dateFormat)
+    {
+        self::$dateFormat = $dateFormat;
     }
 
     /**
@@ -239,7 +254,7 @@ class Title extends AbstractJoinableModel
             if ($attributes[$key] instanceof Carbon) {
                 $date = clone $attributes[$key];
                 $date->setTimezone(new DateTimeZone('UTC'));
-                $attributes[$key] = $date->format('Y-m-d\TH:i:s').'Z';
+                $attributes[$key] = $date->format(self::$dateFormat);
             }
         }
 
