@@ -468,8 +468,8 @@ class Title extends AbstractJoinableModel
         $categoryIds = is_array($categoryId) ? $categoryId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
-            $q->whereNotIn('categories.cat_id', $categoryIds);
-        });
+            $q->whereIn('categories.cat_id', $categoryIds);
+        }, '=', 0);
     }
 
     /**
