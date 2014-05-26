@@ -488,7 +488,7 @@
 </span></span><span id="366" class="l"><a class="l" href="#366"> 366: </a><span class="php-comment">     */</span>
 </span><span id="367" class="l"><a class="l" href="#367"> 367: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeCategory" href="#_scopeCategory">scopeCategory</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryId</span>)
 </span><span id="368" class="l"><a class="l" href="#368"> 368: </a>    {
-</span><span id="369" class="l"><a class="l" href="#369"> 369: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="369" class="l"><a class="l" href="#369"> 369: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryId</span>) ? <span class="php-var">$categoryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="370" class="l"><a class="l" href="#370"> 370: </a>
 </span><span id="371" class="l"><a class="l" href="#371"> 371: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryIds</span>) {
 </span><span id="372" class="l"><a class="l" href="#372"> 372: </a>            <span class="php-var">$q</span>-&gt;whereIn(<span class="php-quote">'categories.cat_id'</span>, <span class="php-var">$categoryIds</span>);
@@ -530,7 +530,7 @@
 </span><span id="408" class="l"><a class="l" href="#408"> 408: </a>            -&gt;<span class="php-keyword2">join</span>(<span class="php-var">$connection</span>-&gt;raw(<span class="php-quote">&quot;`</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">category_posts` AS `</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">category_posts_2`&quot;</span>), <span class="php-quote">'category_posts_2.cat_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'category_posts.cat_id'</span>)
 </span><span id="409" class="l"><a class="l" href="#409"> 409: </a>            -&gt;<span class="php-keyword2">join</span>(<span class="php-var">$connection</span>-&gt;raw(<span class="php-quote">&quot;`</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">channel_titles` AS `</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">channel_titles_2`&quot;</span>), <span class="php-quote">'channel_titles_2.entry_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'category_posts_2.entry_id'</span>)
 </span><span id="410" class="l"><a class="l" href="#410"> 410: </a>            -&gt;where(<span class="php-quote">'channel_titles_2.url_title'</span>, <span class="php-var">$urlTitle</span>)
-</span><span id="411" class="l"><a class="l" href="#411"> 411: </a>            -&gt;where(<span class="php-quote">'channel_titles.entry_id'</span>, <span class="php-quote">'!='</span>, <span class="php-var">$urlTitle</span>)
+</span><span id="411" class="l"><a class="l" href="#411"> 411: </a>            -&gt;where(<span class="php-quote">'channel_titles.url_title'</span>, <span class="php-quote">'!='</span>, <span class="php-var">$urlTitle</span>)
 </span><span id="412" class="l"><a class="l" href="#412"> 412: </a>            -&gt;groupBy(<span class="php-quote">'channel_titles.entry_id'</span>);
 </span><span id="413" class="l"><a class="l" href="#413"> 413: </a>    }
 </span><span id="414" class="l"><a class="l" href="#414"> 414: </a>
@@ -541,9 +541,9 @@
 </span></span><span id="419" class="l"><a class="l" href="#419"> 419: </a><span class="php-comment">     * @param  dynamic  string                       $categoryId
 </span></span><span id="420" class="l"><a class="l" href="#420"> 420: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
 </span></span><span id="421" class="l"><a class="l" href="#421"> 421: </a><span class="php-comment">     */</span>
-</span><span id="422" class="l"><a class="l" href="#422"> 422: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeAllCategories" href="#_scopeAllCategories">scopeAllCategories</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryId1</span>, <span class="php-var">$categoryId2</span>)
+</span><span id="422" class="l"><a class="l" href="#422"> 422: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeAllCategories" href="#_scopeAllCategories">scopeAllCategories</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryId</span>)
 </span><span id="423" class="l"><a class="l" href="#423"> 423: </a>    {
-</span><span id="424" class="l"><a class="l" href="#424"> 424: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="424" class="l"><a class="l" href="#424"> 424: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryId</span>) ? <span class="php-var">$categoryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="425" class="l"><a class="l" href="#425"> 425: </a>
 </span><span id="426" class="l"><a class="l" href="#426"> 426: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryIds</span>) {
 </span><span id="427" class="l"><a class="l" href="#427"> 427: </a>
@@ -563,9 +563,9 @@
 </span></span><span id="441" class="l"><a class="l" href="#441"> 441: </a><span class="php-comment">     * @param  dynamic  string                       $categoryId
 </span></span><span id="442" class="l"><a class="l" href="#442"> 442: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
 </span></span><span id="443" class="l"><a class="l" href="#443"> 443: </a><span class="php-comment">     */</span>
-</span><span id="444" class="l"><a class="l" href="#444"> 444: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotAllCategories" href="#_scopeNotAllCategories">scopeNotAllCategories</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryId1</span>, <span class="php-var">$categoryId2</span>)
+</span><span id="444" class="l"><a class="l" href="#444"> 444: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotAllCategories" href="#_scopeNotAllCategories">scopeNotAllCategories</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryId</span>)
 </span><span id="445" class="l"><a class="l" href="#445"> 445: </a>    {
-</span><span id="446" class="l"><a class="l" href="#446"> 446: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="446" class="l"><a class="l" href="#446"> 446: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryId</span>) ? <span class="php-var">$categoryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="447" class="l"><a class="l" href="#447"> 447: </a>
 </span><span id="448" class="l"><a class="l" href="#448"> 448: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryIds</span>) {
 </span><span id="449" class="l"><a class="l" href="#449"> 449: </a>
@@ -587,7 +587,7 @@
 </span></span><span id="465" class="l"><a class="l" href="#465"> 465: </a><span class="php-comment">     */</span>
 </span><span id="466" class="l"><a class="l" href="#466"> 466: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotCategory" href="#_scopeNotCategory">scopeNotCategory</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryId</span>)
 </span><span id="467" class="l"><a class="l" href="#467"> 467: </a>    {
-</span><span id="468" class="l"><a class="l" href="#468"> 468: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="468" class="l"><a class="l" href="#468"> 468: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryId</span>) ? <span class="php-var">$categoryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="469" class="l"><a class="l" href="#469"> 469: </a>
 </span><span id="470" class="l"><a class="l" href="#470"> 470: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryIds</span>) {
 </span><span id="471" class="l"><a class="l" href="#471"> 471: </a>            <span class="php-var">$q</span>-&gt;whereNotIn(<span class="php-quote">'categories.cat_id'</span>, <span class="php-var">$categoryIds</span>);
@@ -603,7 +603,7 @@
 </span></span><span id="481" class="l"><a class="l" href="#481"> 481: </a><span class="php-comment">     */</span>
 </span><span id="482" class="l"><a class="l" href="#482"> 482: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeCategoryName" href="#_scopeCategoryName">scopeCategoryName</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryName</span>)
 </span><span id="483" class="l"><a class="l" href="#483"> 483: </a>    {
-</span><span id="484" class="l"><a class="l" href="#484"> 484: </a>        <span class="php-var">$categoryNames</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="484" class="l"><a class="l" href="#484"> 484: </a>        <span class="php-var">$categoryNames</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryName</span>) ? <span class="php-var">$categoryName</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="485" class="l"><a class="l" href="#485"> 485: </a>
 </span><span id="486" class="l"><a class="l" href="#486"> 486: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryNames</span>) {
 </span><span id="487" class="l"><a class="l" href="#487"> 487: </a>            <span class="php-var">$q</span>-&gt;whereIn(<span class="php-quote">'categories.cat_name'</span>, <span class="php-var">$categoryNames</span>);
@@ -619,7 +619,7 @@
 </span></span><span id="497" class="l"><a class="l" href="#497"> 497: </a><span class="php-comment">     */</span>
 </span><span id="498" class="l"><a class="l" href="#498"> 498: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotCategoryName" href="#_scopeNotCategoryName">scopeNotCategoryName</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$categoryName</span>)
 </span><span id="499" class="l"><a class="l" href="#499"> 499: </a>    {
-</span><span id="500" class="l"><a class="l" href="#500"> 500: </a>        <span class="php-var">$categoryNames</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="500" class="l"><a class="l" href="#500"> 500: </a>        <span class="php-var">$categoryNames</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryName</span>) ? <span class="php-var">$categoryName</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="501" class="l"><a class="l" href="#501"> 501: </a>
 </span><span id="502" class="l"><a class="l" href="#502"> 502: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryNames</span>) {
 </span><span id="503" class="l"><a class="l" href="#503"> 503: </a>            <span class="php-var">$q</span>-&gt;whereNotIn(<span class="php-quote">'categories.cat_name'</span>, <span class="php-var">$categoryNames</span>);
@@ -635,7 +635,7 @@
 </span></span><span id="513" class="l"><a class="l" href="#513"> 513: </a><span class="php-comment">     */</span>
 </span><span id="514" class="l"><a class="l" href="#514"> 514: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeCategoryGroup" href="#_scopeCategoryGroup">scopeCategoryGroup</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$groupId</span>)
 </span><span id="515" class="l"><a class="l" href="#515"> 515: </a>    {
-</span><span id="516" class="l"><a class="l" href="#516"> 516: </a>        <span class="php-var">$groupIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="516" class="l"><a class="l" href="#516"> 516: </a>        <span class="php-var">$groupIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$groupId</span>) ? <span class="php-var">$groupId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="517" class="l"><a class="l" href="#517"> 517: </a>
 </span><span id="518" class="l"><a class="l" href="#518"> 518: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$groupIds</span>) {
 </span><span id="519" class="l"><a class="l" href="#519"> 519: </a>            <span class="php-var">$q</span>-&gt;whereIn(<span class="php-quote">'categories.group_id'</span>, <span class="php-var">$groupIds</span>);
@@ -651,7 +651,7 @@
 </span></span><span id="529" class="l"><a class="l" href="#529"> 529: </a><span class="php-comment">     */</span>
 </span><span id="530" class="l"><a class="l" href="#530"> 530: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotCategoryGroup" href="#_scopeNotCategoryGroup">scopeNotCategoryGroup</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$groupId</span>)
 </span><span id="531" class="l"><a class="l" href="#531"> 531: </a>    {
-</span><span id="532" class="l"><a class="l" href="#532"> 532: </a>        <span class="php-var">$groupIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="532" class="l"><a class="l" href="#532"> 532: </a>        <span class="php-var">$groupIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$groupId</span>) ? <span class="php-var">$groupId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="533" class="l"><a class="l" href="#533"> 533: </a>
 </span><span id="534" class="l"><a class="l" href="#534"> 534: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$groupIds</span>) {
 </span><span id="535" class="l"><a class="l" href="#535"> 535: </a>            <span class="php-var">$q</span>-&gt;whereNotIn(<span class="php-quote">'categories.group_id'</span>, <span class="php-var">$groupIds</span>);
@@ -667,7 +667,7 @@
 </span></span><span id="545" class="l"><a class="l" href="#545"> 545: </a><span class="php-comment">     */</span>
 </span><span id="546" class="l"><a class="l" href="#546"> 546: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeChannel" href="#_scopeChannel">scopeChannel</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$channelName</span>)
 </span><span id="547" class="l"><a class="l" href="#547"> 547: </a>    {
-</span><span id="548" class="l"><a class="l" href="#548"> 548: </a>        <span class="php-var">$channelNames</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="548" class="l"><a class="l" href="#548"> 548: </a>        <span class="php-var">$channelNames</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$channelName</span>) ? <span class="php-var">$channelName</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="549" class="l"><a class="l" href="#549"> 549: </a>
 </span><span id="550" class="l"><a class="l" href="#550"> 550: </a>        <span class="php-var">$channels</span> = self::<span class="php-var">$channelRepository</span>-&gt;getChannelsByName(<span class="php-var">$channelNames</span>);
 </span><span id="551" class="l"><a class="l" href="#551"> 551: </a>
@@ -695,7 +695,7 @@
 </span></span><span id="573" class="l"><a class="l" href="#573"> 573: </a><span class="php-comment">     */</span>
 </span><span id="574" class="l"><a class="l" href="#574"> 574: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotChannel" href="#_scopeNotChannel">scopeNotChannel</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$channelName</span>)
 </span><span id="575" class="l"><a class="l" href="#575"> 575: </a>    {
-</span><span id="576" class="l"><a class="l" href="#576"> 576: </a>        <span class="php-var">$channelNames</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="576" class="l"><a class="l" href="#576"> 576: </a>        <span class="php-var">$channelNames</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$channelName</span>) ? <span class="php-var">$channelName</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="577" class="l"><a class="l" href="#577"> 577: </a>
 </span><span id="578" class="l"><a class="l" href="#578"> 578: </a>        <span class="php-var">$channels</span> = self::<span class="php-var">$channelRepository</span>-&gt;getChannelsByName(<span class="php-var">$channelNames</span>);
 </span><span id="579" class="l"><a class="l" href="#579"> 579: </a>
@@ -723,7 +723,7 @@
 </span></span><span id="601" class="l"><a class="l" href="#601"> 601: </a><span class="php-comment">     */</span>
 </span><span id="602" class="l"><a class="l" href="#602"> 602: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeChannelId" href="#_scopeChannelId">scopeChannelId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$channelId</span>)
 </span><span id="603" class="l"><a class="l" href="#603"> 603: </a>    {
-</span><span id="604" class="l"><a class="l" href="#604"> 604: </a>        <span class="php-var">$channelIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="604" class="l"><a class="l" href="#604"> 604: </a>        <span class="php-var">$channelIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$channelId</span>) ? <span class="php-var">$channelId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="605" class="l"><a class="l" href="#605"> 605: </a>
 </span><span id="606" class="l"><a class="l" href="#606"> 606: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereIn(<span class="php-quote">'channel_titles.channel_id'</span>, <span class="php-var">$channelIds</span>);
 </span><span id="607" class="l"><a class="l" href="#607"> 607: </a>    }
@@ -737,7 +737,7 @@
 </span></span><span id="615" class="l"><a class="l" href="#615"> 615: </a><span class="php-comment">     */</span>
 </span><span id="616" class="l"><a class="l" href="#616"> 616: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotChannelId" href="#_scopeNotChannelId">scopeNotChannelId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$channelId</span>)
 </span><span id="617" class="l"><a class="l" href="#617"> 617: </a>    {
-</span><span id="618" class="l"><a class="l" href="#618"> 618: </a>        <span class="php-var">$channelIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="618" class="l"><a class="l" href="#618"> 618: </a>        <span class="php-var">$channelIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$channelId</span>) ? <span class="php-var">$channelId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="619" class="l"><a class="l" href="#619"> 619: </a>
 </span><span id="620" class="l"><a class="l" href="#620"> 620: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereNotIn(<span class="php-quote">'channel_titles.channel_id'</span>, <span class="php-var">$channelIds</span>);
 </span><span id="621" class="l"><a class="l" href="#621"> 621: </a>    }
@@ -751,7 +751,7 @@
 </span></span><span id="629" class="l"><a class="l" href="#629"> 629: </a><span class="php-comment">     */</span>
 </span><span id="630" class="l"><a class="l" href="#630"> 630: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeAuthorId" href="#_scopeAuthorId">scopeAuthorId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$authorId</span>)
 </span><span id="631" class="l"><a class="l" href="#631"> 631: </a>    {
-</span><span id="632" class="l"><a class="l" href="#632"> 632: </a>        <span class="php-var">$authorIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="632" class="l"><a class="l" href="#632"> 632: </a>        <span class="php-var">$authorIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$authorId</span>) ? <span class="php-var">$authorId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="633" class="l"><a class="l" href="#633"> 633: </a>
 </span><span id="634" class="l"><a class="l" href="#634"> 634: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereIn(<span class="php-quote">'channel_titles.author_id'</span>, <span class="php-var">$authorIds</span>);
 </span><span id="635" class="l"><a class="l" href="#635"> 635: </a>    }
@@ -765,7 +765,7 @@
 </span></span><span id="643" class="l"><a class="l" href="#643"> 643: </a><span class="php-comment">     */</span>
 </span><span id="644" class="l"><a class="l" href="#644"> 644: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotAuthorId" href="#_scopeNotAuthorId">scopeNotAuthorId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$authorId</span>)
 </span><span id="645" class="l"><a class="l" href="#645"> 645: </a>    {
-</span><span id="646" class="l"><a class="l" href="#646"> 646: </a>        <span class="php-var">$authorIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="646" class="l"><a class="l" href="#646"> 646: </a>        <span class="php-var">$authorIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$authorId</span>) ? <span class="php-var">$authorId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="647" class="l"><a class="l" href="#647"> 647: </a>
 </span><span id="648" class="l"><a class="l" href="#648"> 648: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereNotIn(<span class="php-quote">'channel_titles.author_id'</span>, <span class="php-var">$authorIds</span>);
 </span><span id="649" class="l"><a class="l" href="#649"> 649: </a>    }
@@ -815,7 +815,7 @@
 </span></span><span id="693" class="l"><a class="l" href="#693"> 693: </a><span class="php-comment">     */</span>
 </span><span id="694" class="l"><a class="l" href="#694"> 694: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeSiteId" href="#_scopeSiteId">scopeSiteId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$siteId</span>)
 </span><span id="695" class="l"><a class="l" href="#695"> 695: </a>    {
-</span><span id="696" class="l"><a class="l" href="#696"> 696: </a>        <span class="php-var">$siteIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="696" class="l"><a class="l" href="#696"> 696: </a>        <span class="php-var">$siteIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$siteId</span>) ? <span class="php-var">$siteId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="697" class="l"><a class="l" href="#697"> 697: </a>
 </span><span id="698" class="l"><a class="l" href="#698"> 698: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereIn(<span class="php-quote">'channel_titles.site_id'</span>, <span class="php-var">$siteIds</span>);
 </span><span id="699" class="l"><a class="l" href="#699"> 699: </a>    }
@@ -861,7 +861,7 @@
 </span></span><span id="739" class="l"><a class="l" href="#739"> 739: </a><span class="php-comment">     */</span>
 </span><span id="740" class="l"><a class="l" href="#740"> 740: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeEntryId" href="#_scopeEntryId">scopeEntryId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
 </span><span id="741" class="l"><a class="l" href="#741"> 741: </a>    {
-</span><span id="742" class="l"><a class="l" href="#742"> 742: </a>        <span class="php-var">$entryIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="742" class="l"><a class="l" href="#742"> 742: </a>        <span class="php-var">$entryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="743" class="l"><a class="l" href="#743"> 743: </a>
 </span><span id="744" class="l"><a class="l" href="#744"> 744: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereIn(<span class="php-quote">'channel_titles.entry_id'</span>, <span class="php-var">$entryIds</span>);
 </span><span id="745" class="l"><a class="l" href="#745"> 745: </a>    }
@@ -875,7 +875,7 @@
 </span></span><span id="753" class="l"><a class="l" href="#753"> 753: </a><span class="php-comment">     */</span>
 </span><span id="754" class="l"><a class="l" href="#754"> 754: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotEntryId" href="#_scopeNotEntryId">scopeNotEntryId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$notEntryId</span>)
 </span><span id="755" class="l"><a class="l" href="#755"> 755: </a>    {
-</span><span id="756" class="l"><a class="l" href="#756"> 756: </a>        <span class="php-var">$notEntryIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="756" class="l"><a class="l" href="#756"> 756: </a>        <span class="php-var">$notEntryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$notEntryId</span>) ? <span class="php-var">$notEntryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="757" class="l"><a class="l" href="#757"> 757: </a>
 </span><span id="758" class="l"><a class="l" href="#758"> 758: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereNotIn(<span class="php-quote">'channel_titles.entry_id'</span>, <span class="php-var">$notEntryIds</span>);
 </span><span id="759" class="l"><a class="l" href="#759"> 759: </a>    }
@@ -913,7 +913,7 @@
 </span></span><span id="791" class="l"><a class="l" href="#791"> 791: </a><span class="php-comment">     */</span>
 </span><span id="792" class="l"><a class="l" href="#792"> 792: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeGroupId" href="#_scopeGroupId">scopeGroupId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$groupId</span>)
 </span><span id="793" class="l"><a class="l" href="#793"> 793: </a>    {
-</span><span id="794" class="l"><a class="l" href="#794"> 794: </a>        <span class="php-var">$groupIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="794" class="l"><a class="l" href="#794"> 794: </a>        <span class="php-var">$groupIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$groupId</span>) ? <span class="php-var">$groupId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="795" class="l"><a class="l" href="#795"> 795: </a>
 </span><span id="796" class="l"><a class="l" href="#796"> 796: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;requireTable(<span class="php-var">$query</span>, <span class="php-quote">'members'</span>)-&gt;whereIn(<span class="php-quote">'members.group_id'</span>, <span class="php-var">$groupIds</span>);
 </span><span id="797" class="l"><a class="l" href="#797"> 797: </a>    }
@@ -927,7 +927,7 @@
 </span></span><span id="805" class="l"><a class="l" href="#805"> 805: </a><span class="php-comment">     */</span>
 </span><span id="806" class="l"><a class="l" href="#806"> 806: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeNotGroupId" href="#_scopeNotGroupId">scopeNotGroupId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$notGroupId</span>)
 </span><span id="807" class="l"><a class="l" href="#807"> 807: </a>    {
-</span><span id="808" class="l"><a class="l" href="#808"> 808: </a>        <span class="php-var">$notGroupIds</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="808" class="l"><a class="l" href="#808"> 808: </a>        <span class="php-var">$notGroupIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$notGroupId</span>) ? <span class="php-var">$notGroupId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="809" class="l"><a class="l" href="#809"> 809: </a>
 </span><span id="810" class="l"><a class="l" href="#810"> 810: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;requireTable(<span class="php-var">$query</span>, <span class="php-quote">'members'</span>)-&gt;whereNotIn(<span class="php-quote">'members.group_id'</span>, <span class="php-var">$notGroupIds</span>);
 </span><span id="811" class="l"><a class="l" href="#811"> 811: </a>    }
@@ -1021,7 +1021,7 @@
 </span></span><span id="899" class="l"><a class="l" href="#899"> 899: </a><span class="php-comment">     */</span>
 </span><span id="900" class="l"><a class="l" href="#900"> 900: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeStatus" href="#_scopeStatus">scopeStatus</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$status</span>)
 </span><span id="901" class="l"><a class="l" href="#901"> 901: </a>    {
-</span><span id="902" class="l"><a class="l" href="#902"> 902: </a>        <span class="php-var">$statuses</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="902" class="l"><a class="l" href="#902"> 902: </a>        <span class="php-var">$statuses</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$status</span>) ? <span class="php-var">$status</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="903" class="l"><a class="l" href="#903"> 903: </a>
 </span><span id="904" class="l"><a class="l" href="#904"> 904: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereIn(<span class="php-quote">'channel_titles.status'</span>, <span class="php-var">$statuses</span>);
 </span><span id="905" class="l"><a class="l" href="#905"> 905: </a>    }
@@ -1051,7 +1051,7 @@
 </span></span><span id="929" class="l"><a class="l" href="#929"> 929: </a><span class="php-comment">     */</span>
 </span><span id="930" class="l"><a class="l" href="#930"> 930: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeUrlTitle" href="#_scopeUrlTitle">scopeUrlTitle</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$urlTitle</span>)
 </span><span id="931" class="l"><a class="l" href="#931"> 931: </a>    {
-</span><span id="932" class="l"><a class="l" href="#932"> 932: </a>        <span class="php-var">$urlTitles</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="932" class="l"><a class="l" href="#932"> 932: </a>        <span class="php-var">$urlTitles</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$urlTitle</span>) ? <span class="php-var">$urlTitle</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="933" class="l"><a class="l" href="#933"> 933: </a>
 </span><span id="934" class="l"><a class="l" href="#934"> 934: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereIn(<span class="php-quote">'channel_titles.url_title'</span>, <span class="php-var">$urlTitles</span>);
 </span><span id="935" class="l"><a class="l" href="#935"> 935: </a>    }
@@ -1065,7 +1065,7 @@
 </span></span><span id="943" class="l"><a class="l" href="#943"> 943: </a><span class="php-comment">     */</span>
 </span><span id="944" class="l"><a class="l" href="#944"> 944: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeUsername" href="#_scopeUsername">scopeUsername</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$username</span>)
 </span><span id="945" class="l"><a class="l" href="#945"> 945: </a>    {
-</span><span id="946" class="l"><a class="l" href="#946"> 946: </a>        <span class="php-var">$usernames</span> = <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
+</span><span id="946" class="l"><a class="l" href="#946"> 946: </a>        <span class="php-var">$usernames</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$username</span>) ? <span class="php-var">$username</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="947" class="l"><a class="l" href="#947"> 947: </a>
 </span><span id="948" class="l"><a class="l" href="#948"> 948: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;requireTable(<span class="php-var">$query</span>, <span class="php-quote">'members'</span>)-&gt;whereIn(<span class="php-quote">'members.username'</span>, <span class="php-var">$usernames</span>);
 </span><span id="949" class="l"><a class="l" href="#949"> 949: </a>    }
