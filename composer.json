@@ -14,5 +14,9 @@
         "expressodev/laravel-codeigniter-db": "1.*",
         "illuminate/container": "~4.1.0",
         "nesbot/carbon": "1.*"
+    },
+    "require-dev": {
+        "robmorgan/phinx": "0.3.*",
+        "phpunit/phpunit": "4.1.*"
     }
 }
