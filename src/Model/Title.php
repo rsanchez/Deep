@@ -408,7 +408,7 @@ class Title extends AbstractJoinableModel
             ->join($connection->raw("`{$tablePrefix}category_posts` AS `{$tablePrefix}category_posts_2`"), 'category_posts_2.cat_id', '=', 'category_posts.cat_id')
             ->join($connection->raw("`{$tablePrefix}channel_titles` AS `{$tablePrefix}channel_titles_2`"), 'channel_titles_2.entry_id', '=', 'category_posts_2.entry_id')
             ->where('channel_titles_2.url_title', $urlTitle)
-            ->where('channel_titles.entry_id', '!=', $urlTitle)
+            ->where('channel_titles.url_title', '!=', $urlTitle)
             ->groupBy('channel_titles.entry_id');
     }
 
