@@ -17,7 +17,7 @@ use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 
-class TitleTest extends PHPUnit_Framework_TestCase
+class TitleModelTest extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {

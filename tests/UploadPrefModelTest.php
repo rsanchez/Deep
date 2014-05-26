@@ -2,7 +2,7 @@
 
 use rsanchez\Deep\Model\UploadPref;
 
-class UploadPrefTest extends PHPUnit_Framework_TestCase
+class UploadPrefModelTest extends PHPUnit_Framework_TestCase
 {
     public function testCollection()
     {
