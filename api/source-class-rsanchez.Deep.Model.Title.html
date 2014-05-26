@@ -590,8 +590,8 @@
 </span><span id="468" class="l"><a class="l" href="#468"> 468: </a>        <span class="php-var">$categoryIds</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$categoryId</span>) ? <span class="php-var">$categoryId</span> : <span class="php-keyword2">array_slice</span>(<span class="php-keyword2">func_get_args</span>(), <span class="php-num">1</span>);
 </span><span id="469" class="l"><a class="l" href="#469"> 469: </a>
 </span><span id="470" class="l"><a class="l" href="#470"> 470: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;whereHas(<span class="php-quote">'categories'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$q</span>) <span class="php-keyword1">use</span> (<span class="php-var">$categoryIds</span>) {
-</span><span id="471" class="l"><a class="l" href="#471"> 471: </a>            <span class="php-var">$q</span>-&gt;whereNotIn(<span class="php-quote">'categories.cat_id'</span>, <span class="php-var">$categoryIds</span>);
-</span><span id="472" class="l"><a class="l" href="#472"> 472: </a>        });
+</span><span id="471" class="l"><a class="l" href="#471"> 471: </a>            <span class="php-var">$q</span>-&gt;whereIn(<span class="php-quote">'categories.cat_id'</span>, <span class="php-var">$categoryIds</span>);
+</span><span id="472" class="l"><a class="l" href="#472"> 472: </a>        }, <span class="php-quote">'='</span>, <span class="php-num">0</span>);
 </span><span id="473" class="l"><a class="l" href="#473"> 473: </a>    }
 </span><span id="474" class="l"><a class="l" href="#474"> 474: </a>
 </span><span id="475" class="l"><a class="l" href="#475"> 475: </a>    <span class="php-comment">/**
