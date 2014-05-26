@@ -60,4 +60,60 @@ class TitleTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(2, $query->count());
     }
+
+    public function testCategoryScopeSingle()
+    {
+        $entryIds = Title::category(1)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9]));
+    }
+
+    public function testCategoryScopeMultiple()
+    {
+        $entryIds = Title::category(1, 2)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9, 11]));
+    }
+
+    public function testRelatedCategoriesScope()
+    {
+        $entryIds = Title::relatedCategories(7)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([9, 11]));
+    }
+
+    public function testRelatedCategoriesUrlTitleScope()
+    {
+        $entryIds = Title::relatedCategoriesUrlTitle('entry-1')->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([9, 11]));
+    }
+
+    public function testAllCategoriesScope()
+    {
+        $entryIds = Title::allCategories(1, 2)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7]));
+    }
+
+    public function testNotAllCategoriesScope()
+    {
+        $entryIds = Title::entryId(7, 9, 11)->notAllCategories(1, 2)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([9, 11]));
+    }
+
+    public function testCategoryNameScope()
+    {
+        $entryIds = Title::categoryName('category-a')->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9]));
+    }
+
+    public function testNotCategoryNameScope()
+    {
+        $entryIds = Title::entryId(7, 9, 11)->notCategoryName('category-a')->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([11]));
+    }
 }

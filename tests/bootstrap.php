@@ -8,6 +8,7 @@ use Illuminate\Database\Connection;
 use rsanchez\Deep\Model\UploadPref;
 
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/constraints/ArrayHasOnlyValuesConstraint.php';
 
 /**
  * Create and seed an in-memory sqlite database for testing
