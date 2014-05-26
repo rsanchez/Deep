@@ -76,6 +76,8 @@ This registers the `Entries`, `Titles` and `Categories` facades, so you can use 
         return Response::json($entries);
     });
 
+If you are using a table prefix for your database tables (EE uses `exp_` by default, so you most likely are), make sure to set the prefix in Laravel's `app/config/database.php`
+
 ## Using the Phar archive for easier distribution
 
 You can build a Phar archive as an alternative installation method. The best way to package Deep with your custom distributed add-on is to use the Phar archive, since EE doesn't natively support compser installation out of the box.
