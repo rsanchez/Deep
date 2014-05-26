@@ -484,7 +484,7 @@ class Title extends AbstractJoinableModel
         $categoryNames = is_array($categoryName) ? $categoryName : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryNames) {
-            $q->whereIn('categories.cat_name', $categoryNames);
+            $q->whereIn('categories.cat_url_title', $categoryNames);
         });
     }
 
@@ -500,8 +500,8 @@ class Title extends AbstractJoinableModel
         $categoryNames = is_array($categoryName) ? $categoryName : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryNames) {
-            $q->whereNotIn('categories.cat_name', $categoryNames);
-        });
+            $q->whereIn('categories.cat_url_title', $categoryNames);
+        }, '=', 0);
     }
 
     /**
