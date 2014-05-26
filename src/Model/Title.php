@@ -366,7 +366,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeCategory(Builder $query, $categoryId)
     {
-        $categoryIds = array_slice(func_get_args(), 1);
+        $categoryIds = is_array($categoryId) ? $categoryId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
             $q->whereIn('categories.cat_id', $categoryIds);
@@ -419,9 +419,9 @@ class Title extends AbstractJoinableModel
      * @param  dynamic  string                       $categoryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeAllCategories(Builder $query, $categoryId1, $categoryId2)
+    public function scopeAllCategories(Builder $query, $categoryId)
     {
-        $categoryIds = array_slice(func_get_args(), 1);
+        $categoryIds = is_array($categoryId) ? $categoryId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
 
@@ -441,9 +441,9 @@ class Title extends AbstractJoinableModel
      * @param  dynamic  string                       $categoryId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeNotAllCategories(Builder $query, $categoryId1, $categoryId2)
+    public function scopeNotAllCategories(Builder $query, $categoryId)
     {
-        $categoryIds = array_slice(func_get_args(), 1);
+        $categoryIds = is_array($categoryId) ? $categoryId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
 
@@ -465,7 +465,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotCategory(Builder $query, $categoryId)
     {
-        $categoryIds = array_slice(func_get_args(), 1);
+        $categoryIds = is_array($categoryId) ? $categoryId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
             $q->whereNotIn('categories.cat_id', $categoryIds);
@@ -481,7 +481,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeCategoryName(Builder $query, $categoryName)
     {
-        $categoryNames = array_slice(func_get_args(), 1);
+        $categoryNames = is_array($categoryName) ? $categoryName : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryNames) {
             $q->whereIn('categories.cat_name', $categoryNames);
@@ -497,7 +497,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotCategoryName(Builder $query, $categoryName)
     {
-        $categoryNames = array_slice(func_get_args(), 1);
+        $categoryNames = is_array($categoryName) ? $categoryName : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($categoryNames) {
             $q->whereNotIn('categories.cat_name', $categoryNames);
@@ -513,7 +513,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeCategoryGroup(Builder $query, $groupId)
     {
-        $groupIds = array_slice(func_get_args(), 1);
+        $groupIds = is_array($groupId) ? $groupId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($groupIds) {
             $q->whereIn('categories.group_id', $groupIds);
@@ -529,7 +529,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotCategoryGroup(Builder $query, $groupId)
     {
-        $groupIds = array_slice(func_get_args(), 1);
+        $groupIds = is_array($groupId) ? $groupId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($groupIds) {
             $q->whereNotIn('categories.group_id', $groupIds);
@@ -545,7 +545,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeChannel(Builder $query, $channelName)
     {
-        $channelNames = array_slice(func_get_args(), 1);
+        $channelNames = is_array($channelName) ? $channelName : array_slice(func_get_args(), 1);
 
         $channels = self::$channelRepository->getChannelsByName($channelNames);
 
@@ -573,7 +573,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotChannel(Builder $query, $channelName)
     {
-        $channelNames = array_slice(func_get_args(), 1);
+        $channelNames = is_array($channelName) ? $channelName : array_slice(func_get_args(), 1);
 
         $channels = self::$channelRepository->getChannelsByName($channelNames);
 
@@ -601,7 +601,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeChannelId(Builder $query, $channelId)
     {
-        $channelIds = array_slice(func_get_args(), 1);
+        $channelIds = is_array($channelId) ? $channelId : array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.channel_id', $channelIds);
     }
@@ -615,7 +615,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotChannelId(Builder $query, $channelId)
     {
-        $channelIds = array_slice(func_get_args(), 1);
+        $channelIds = is_array($channelId) ? $channelId : array_slice(func_get_args(), 1);
 
         return $query->whereNotIn('channel_titles.channel_id', $channelIds);
     }
@@ -629,7 +629,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeAuthorId(Builder $query, $authorId)
     {
-        $authorIds = array_slice(func_get_args(), 1);
+        $authorIds = is_array($authorId) ? $authorId : array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.author_id', $authorIds);
     }
@@ -643,7 +643,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotAuthorId(Builder $query, $authorId)
     {
-        $authorIds = array_slice(func_get_args(), 1);
+        $authorIds = is_array($authorId) ? $authorId : array_slice(func_get_args(), 1);
 
         return $query->whereNotIn('channel_titles.author_id', $authorIds);
     }
@@ -693,7 +693,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeSiteId(Builder $query, $siteId)
     {
-        $siteIds = array_slice(func_get_args(), 1);
+        $siteIds = is_array($siteId) ? $siteId : array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.site_id', $siteIds);
     }
@@ -739,7 +739,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeEntryId(Builder $query, $entryId)
     {
-        $entryIds = array_slice(func_get_args(), 1);
+        $entryIds = is_array($entryId) ? $entryId : array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.entry_id', $entryIds);
     }
@@ -753,7 +753,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotEntryId(Builder $query, $notEntryId)
     {
-        $notEntryIds = array_slice(func_get_args(), 1);
+        $notEntryIds = is_array($notEntryId) ? $notEntryId : array_slice(func_get_args(), 1);
 
         return $query->whereNotIn('channel_titles.entry_id', $notEntryIds);
     }
@@ -791,7 +791,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeGroupId(Builder $query, $groupId)
     {
-        $groupIds = array_slice(func_get_args(), 1);
+        $groupIds = is_array($groupId) ? $groupId : array_slice(func_get_args(), 1);
 
         return $this->requireTable($query, 'members')->whereIn('members.group_id', $groupIds);
     }
@@ -805,7 +805,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeNotGroupId(Builder $query, $notGroupId)
     {
-        $notGroupIds = array_slice(func_get_args(), 1);
+        $notGroupIds = is_array($notGroupId) ? $notGroupId : array_slice(func_get_args(), 1);
 
         return $this->requireTable($query, 'members')->whereNotIn('members.group_id', $notGroupIds);
     }
@@ -899,7 +899,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeStatus(Builder $query, $status)
     {
-        $statuses = array_slice(func_get_args(), 1);
+        $statuses = is_array($status) ? $status : array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.status', $statuses);
     }
@@ -929,7 +929,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeUrlTitle(Builder $query, $urlTitle)
     {
-        $urlTitles = array_slice(func_get_args(), 1);
+        $urlTitles = is_array($urlTitle) ? $urlTitle : array_slice(func_get_args(), 1);
 
         return $query->whereIn('channel_titles.url_title', $urlTitles);
     }
@@ -943,7 +943,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeUsername(Builder $query, $username)
     {
-        $usernames = array_slice(func_get_args(), 1);
+        $usernames = is_array($username) ? $username : array_slice(func_get_args(), 1);
 
         return $this->requireTable($query, 'members')->whereIn('members.username', $usernames);
     }
