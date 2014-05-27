@@ -18,7 +18,7 @@ class CategoryFieldDataTableSeeder extends AbstractMigration
             'cat_id' => 1,
             'site_id' => 1,
             'group_id' => 1,
-            'field_id_1' => null,
+            'field_id_1' => 'Red',
             'field_ft_1' => 'none',
         ]);
 
@@ -26,7 +26,7 @@ class CategoryFieldDataTableSeeder extends AbstractMigration
             'cat_id' => 2,
             'site_id' => 1,
             'group_id' => 1,
-            'field_id_1' => null,
+            'field_id_1' => 'Blue',
             'field_ft_1' => 'none',
         ]);
 
