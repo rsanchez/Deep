@@ -5,7 +5,6 @@ use Phinx\Config\Config;
 use Phinx\Migration\Manager as MigrationManager;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Connection;
-use rsanchez\Deep\Model\UploadPref;
 
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/constraints/ArrayHasOnlyValuesConstraint.php';
