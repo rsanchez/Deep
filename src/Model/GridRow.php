@@ -82,7 +82,19 @@ class GridRow extends Model
      */
     public function setCols(GridColCollection $cols)
     {
+        $row = $this;
+
         $this->cols = $cols;
+
+        $cols->each(function ($col) use ($row) {
+            $hidden = $row->getHidden();
+
+            $hidden[] = 'col_id_'.$col->col_id;
+
+            $row->setHidden($hidden);
+
+            $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
+        });
     }
 
     /**
@@ -90,12 +102,6 @@ class GridRow extends Model
      */
     public function toArray()
     {
-        $hidden =& $this->hidden;
-
-        $this->cols->each(function ($col) use (&$hidden) {
-            $hidden[] = 'col_id_'.$col->col_id;
-        });
-
         $array = parent::toArray();
 
         foreach ($array as &$row) {
