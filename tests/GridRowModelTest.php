@@ -14,7 +14,7 @@ class GridRowModelTest extends PHPUnit_Framework_TestCase
 
     public function testSetColsAttribute()
     {
-        $row = GridRow::from('channel_grid_field_12')->where('row_id', 1)->get()->first();
+        $row = GridRow::from('channel_grid_field_12')->where('row_id', 1)->first();
 
         $cols = GridCol::fieldId(12)->get();
 
@@ -25,7 +25,7 @@ class GridRowModelTest extends PHPUnit_Framework_TestCase
 
     public function testSetColsHidden()
     {
-        $row = GridRow::from('channel_grid_field_12')->where('row_id', 1)->get()->first();
+        $row = GridRow::from('channel_grid_field_12')->where('row_id', 1)->first();
 
         $cols = GridCol::fieldId(12)->get();
 

@@ -24,7 +24,7 @@ class MemberModelTest extends PHPUnit_Framework_TestCase
 
     public function testWithFieldsScope()
     {
-        $member = Member::withFields()->get()->first();
+        $member = Member::withFields()->first();
 
         $attributes = $member->getAttributes();
 
@@ -33,7 +33,7 @@ class MemberModelTest extends PHPUnit_Framework_TestCase
 
     public function testGetFieldAttribute()
     {
-        $member = Member::withFields()->get()->first();
+        $member = Member::withFields()->first();
 
         $input = $member->member_country;
 
