@@ -10,7 +10,10 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\Field;
+use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
+use rsanchez\Deep\Relations\HasManyRepository;
 
 /**
  * Model for the channels table
@@ -37,6 +40,22 @@ class Channel extends Model
     protected $hidden = array('fields');
 
     /**
+     * Global Field Repository
+     * @var \rsanchez\Deep\Repository\FieldRepository
+     */
+    public static $fieldRepository;
+
+    /**
+     * Set the global FieldRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @return void
+     */
+    public static function setFieldRepository(FieldRepository $fieldRepository)
+    {
+        self::$fieldRepository = $fieldRepository;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param  array                                       $models
@@ -45,6 +64,22 @@ class Channel extends Model
     public function newCollection(array $models = array())
     {
         return new ChannelCollection($models);
+    }
+
+    /**
+     * Define the Fields Eloquent relationship
+     * @return \rsanchez\Deep\Relations\HasManyRepository
+     */
+    public function fields()
+    {
+        return new HasManyRepository(
+            self::$fieldRepository->getModel()->newQuery(),
+            $this,
+            'channel_fields.group_id',
+            'field_group',
+            self::$fieldRepository,
+            'getFieldsByGroup'
+        );
     }
 
     /**

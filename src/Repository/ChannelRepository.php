@@ -11,7 +11,6 @@ namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\ChannelCollection;
 use rsanchez\Deep\Model\Channel;
-use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\RepositoryInterface;
 
 /**
@@ -24,12 +23,6 @@ class ChannelRepository implements RepositoryInterface
      * @var \rsanchez\Deep\Collection\ChannelCollection
      */
     protected $collection;
-
-    /**
-     * Repository of all Fields
-     * @var \rsanchez\Deep\Repository\FieldRepository
-     */
-    protected $fieldRepository;
 
     /**
      * Array of Channels keyed by channel_id
@@ -46,16 +39,13 @@ class ChannelRepository implements RepositoryInterface
     /**
      * Constructor
      *
-     * @param \rsanchez\Deep\Model\Channel              $model
-     * @param \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @param \rsanchez\Deep\Model\Channel $model
      */
-    public function __construct(Channel $model, FieldRepository $fieldRepository)
+    public function __construct(Channel $model)
     {
         $this->collection = $model->all();
-        $this->fieldRepository = $fieldRepository;
 
         foreach ($this->collection as $channel) {
-            $channel->fields = $this->fieldRepository->getFieldsByGroup($channel->field_group);
             $this->channelsById[$channel->channel_id] = $channel;
             $this->channelsByName[$channel->channel_name] = $channel;
         }
