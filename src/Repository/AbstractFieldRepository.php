@@ -116,4 +116,14 @@ abstract class AbstractFieldRepository extends AbstractDeferredRepository
 
         return isset($this->fieldsById[$id]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find($id)
+    {
+        $this->boot();
+
+        return isset($this->fieldsById[$id]) ? $this->fieldsById[$id] : null;
+    }
 }

@@ -12,11 +12,12 @@ namespace rsanchez\Deep\Repository;
 use rsanchez\Deep\Collection\ChannelCollection;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Repository\FieldRepository;
+use rsanchez\Deep\Repository\RepositoryInterface;
 
 /**
  * Repository of all Channels
  */
-class ChannelRepository
+class ChannelRepository implements RepositoryInterface
 {
     /**
      * Collection of all Channels
