@@ -11,14 +11,15 @@ namespace rsanchez\Deep\Repository;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Repository\RepositoryInterface;
 
 /**
  * Repository of all Sites
  */
-abstract class AbstractDeferredRepository
+abstract class AbstractDeferredRepository implements RepositoryInterface
 {
     /**
-     * Site model
+     * Repository Model
      * @var \Illuminate\Database\Eloquent\Model
      */
     protected $model;
@@ -50,5 +51,24 @@ abstract class AbstractDeferredRepository
         }
 
         $this->collection = $this->model->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find($id)
+    {
+        $this->boot();
+
+        return $this->collection->find($id);
+    }
+
+    /**
+     * Get the repository's model instance
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 }
