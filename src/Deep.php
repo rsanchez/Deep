@@ -55,8 +55,16 @@ class Deep extends Container
             return new Field();
         });
 
+        $this->singleton('FieldRepository', function ($app) {
+            return new FieldRepository($app->make('Field'));
+        });
+
         $this->singleton('Channel', function ($app) {
-            return new Channel();
+            $channel = new Channel();
+
+            $channel->setFieldRepository($app->make('FieldRepository'));
+
+            return $channel;
         });
 
         $this->singleton('Site', function ($app) {
@@ -65,10 +73,6 @@ class Deep extends Container
 
         $this->singleton('UploadPref', function ($app) {
             return new UploadPref();
-        });
-
-        $this->singleton('FieldRepository', function ($app) {
-            return new FieldRepository($app->make('Field'));
         });
 
         $this->singleton('CategoryField', function ($app) {
@@ -88,7 +92,7 @@ class Deep extends Container
         });
 
         $this->singleton('ChannelRepository', function ($app) {
-            return new ChannelRepository($app->make('Channel'), $app->make('FieldRepository'));
+            return new ChannelRepository($app->make('Channel'));
         });
 
         $this->singleton('SiteRepository', function ($app) {
