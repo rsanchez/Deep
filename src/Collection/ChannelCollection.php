@@ -16,9 +16,4 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class ChannelCollection extends Collection
 {
-    /**
-     * Fields used by this collection
-     * @var \rsanchez\Deep\Collection\FieldCollection
-     */
-    public $fields;
 }

@@ -13,9 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
-use rsanchez\Deep\Collection\AbstractTitleCollection;
 use Carbon\Carbon;
 use DateTimeZone;
 
@@ -66,23 +64,19 @@ class Entry extends Title
     }
 
     /**
-     * Loop through all the hydrators to set Entry custom field attributes
-     * @return void
+     * {@inheritdoc}
      */
-    public function hydrateCollection(AbstractTitleCollection $collection)
+    public function newCollection(array $models = array())
     {
-        $collection->fields = new FieldCollection();
+        $method = "{$this->collectionClass}::createWithFields";
 
-        foreach ($collection->channels as $channel) {
+        $collection = call_user_func($method, $models, self::$channelRepository, self::$fieldRepository);
 
-            $fields = self::$fieldRepository->getFieldsByGroup($channel->field_group);
-
-            foreach ($fields as $field) {
-                $collection->addField($field);
-            }
+        if ($models) {
+            $this->hydrateCollection($collection);
         }
 
-        parent::hydrateCollection($collection);
+        return $collection;
     }
 
     /**

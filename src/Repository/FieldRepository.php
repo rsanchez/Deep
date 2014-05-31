@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Repository;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Repository\AbstractFieldRepository;
+use rsanchez\Deep\Collection\ChannelCollection;
 
 /**
  * Repository of all Fields
@@ -32,6 +33,9 @@ class FieldRepository extends AbstractFieldRepository
         parent::__construct($model);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function boot()
     {
         if (is_null($this->collection)) {
@@ -58,5 +62,25 @@ class FieldRepository extends AbstractFieldRepository
         $this->boot();
 
         return $groupId && isset($this->fieldsByGroup[$groupId]) ? $this->fieldsByGroup[$groupId] : new FieldCollection();
+    }
+
+    /**
+     * Get the fields used by the channels in the specified collection
+     * @param  \rsanchez\Deep\Collection\ChannelCollection $channels
+     * @return \rsanchez\Deep\Collection\FieldCollection
+     */
+    public function getFieldsByChannelCollection(ChannelCollection $channels)
+    {
+        $this->boot();
+
+        $fields = new FieldCollection();
+
+        foreach ($channels as $channel) {
+            foreach ($channel->fields as $field) {
+                $fields->push($field);
+            }
+        }
+
+        return $fields;
     }
 }

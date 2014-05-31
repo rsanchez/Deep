@@ -212,23 +212,11 @@ class Title extends AbstractJoinableModel
      */
     public function newCollection(array $models = array())
     {
-        $collectionClass = $this->collectionClass;
+        $method = "{$this->collectionClass}::create";
 
-        $collection = new $collectionClass($models);
+        $collection = call_user_func($method, $models, self::$channelRepository);
 
         if ($models) {
-            $entryIds = array();
-            $channelIds = array();
-
-            foreach ($collection as $entry) {
-                $entryIds[] = $entry->entry_id;
-                $channelIds[] = $entry->channel_id;
-            }
-
-            $collection->addEntryIds($entryIds);
-
-            $collection->channels = self::$channelRepository->getChannelsById(array_unique($channelIds));
-
             $this->hydrateCollection($collection);
         }
 

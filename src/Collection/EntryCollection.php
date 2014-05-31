@@ -14,6 +14,9 @@ use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Collection\GridColCollection;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Model\Field;
+use rsanchez\Deep\Collection\FieldCollection;
+use rsanchez\Deep\Repository\ChannelRepository;
+use rsanchez\Deep\Repository\FieldRepository;
 
 /**
  * Collection of \rsanchez\Deep\Model\Entry
@@ -33,53 +36,53 @@ class EntryCollection extends TitleCollection
     protected $gridCols;
 
     /**
-     * All of the entry IDs in this collection (including related entries)
-     * @var array
-     */
-    protected $entryIds = array();
-
-    /**
-     * Fieldtypes used by this collection
-     * @var array
-     */
-    protected $fieldtypes = array();
-
-    /**
-     * Map of fieldtypes to field IDs:
-     *    'fieldtype_name' => array(1, 2, 3),
-     * @var array
-     */
-    protected $fieldIdsByFieldtype = array();
-
-    /**
      * Fields used by this collection
      * @var \rsanchez\Deep\Collection\FieldCollection
      */
-    public $fields;
+    protected $fields;
 
     /**
-     * Get a list of names of fieldtypes used by this  collection
+     * Instantiate a collection of models
+     * @param  array                                       $models
+     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepository   $fieldRepository
+     * @return \rsanchez\Deep\Collection\EntryCollection
+     */
+    public static function createWithFields(array $models, ChannelRepository $channelRepository, FieldRepository $fieldRepository)
+    {
+        $collection = self::create($models, $channelRepository);
+
+        $collection->setFields($fieldRepository->getFieldsByChannelCollection($collection->getChannels()));
+
+        return $collection;
+    }
+
+    /**
+     * Get a list of names of fieldtypes used by this collection
      * @return array
      */
     public function getFieldtypes()
     {
-        return $this->fieldtypes;
+        return $this->fields->getFieldtypes();
     }
 
     /**
-     * Register a field used by this collection
-     * @param  \rsanchez\Deep\Model\Field $field
+     * Get the fields used by this collection
+     * @return \rsanchez\Deep\Collection\FieldCollection
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Get the fields used by this collection
+     * @param  \rsanchez\Deep\Collection\FieldCollection
      * @return void
      */
-    public function addField(Field $field)
+    public function setFields(FieldCollection $fields)
     {
-        $this->fields->push($field);
-
-        if (! in_array($field->field_type, $this->fieldtypes)) {
-            $this->fieldtypes[] = $field->field_type;
-        }
-
-        $this->fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
+        $this->fields = $fields;
     }
 
     /**
@@ -90,7 +93,7 @@ class EntryCollection extends TitleCollection
      */
     public function hasFieldtype($fieldtype)
     {
-        return in_array($fieldtype, $this->fieldtypes);
+        return $this->fields->hasFieldtype($fieldtype);
     }
 
     /**
@@ -109,7 +112,7 @@ class EntryCollection extends TitleCollection
      */
     public function getFieldIdsByFieldtype($fieldtype)
     {
-        return isset($this->fieldIdsByFieldtype[$fieldtype]) ? $this->fieldIdsByFieldtype[$fieldtype] : array();
+        return $this->fields->getFieldIdsByFieldtype($fieldtype);
     }
 
     /**
@@ -120,10 +123,10 @@ class EntryCollection extends TitleCollection
      */
     public function setMatrixCols(MatrixColCollection $matrixCols)
     {
-        $fieldtypes =& $this->fieldtypes;
+        $fields = $this->fields;
 
-        $matrixCols->each(function ($col) use (&$fieldtypes) {
-            $fieldtypes[] = $col->col_type;
+        $matrixCols->each(function ($col) use ($fields) {
+            $fields->addFieldtype($col->col_type);
         });
 
         $this->matrixCols = $matrixCols;
@@ -147,10 +150,10 @@ class EntryCollection extends TitleCollection
      */
     public function setGridCols(GridColCollection $gridCols)
     {
-        $fieldtypes =& $this->fieldtypes;
+        $fields = $this->fields;
 
-        $gridCols->each(function ($col) use (&$fieldtypes) {
-            $fieldtypes[] = $col->col_type;
+        $gridCols->each(function ($col) use (&$fields) {
+            $fields->addFieldtype($col->col_type);
         });
 
         $this->gridCols = $gridCols;
