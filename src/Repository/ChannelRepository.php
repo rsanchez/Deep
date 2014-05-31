@@ -19,6 +19,12 @@ use rsanchez\Deep\Repository\RepositoryInterface;
 class ChannelRepository implements RepositoryInterface
 {
     /**
+     * Repository Channel Model
+     * @var \rsanchez\Deep\Model\Channel
+     */
+    protected $model;
+
+    /**
      * Collection of all Channels
      * @var \rsanchez\Deep\Collection\ChannelCollection
      */
@@ -43,7 +49,9 @@ class ChannelRepository implements RepositoryInterface
      */
     public function __construct(Channel $model)
     {
-        $this->collection = $model->all();
+        $this->model = $model;
+
+        $this->collection = $this->model->all();
 
         foreach ($this->collection as $channel) {
             $this->channelsById[$channel->channel_id] = $channel;
@@ -107,5 +115,14 @@ class ChannelRepository implements RepositoryInterface
     public function getChannelByName($channelName)
     {
         return array_key_exists($channelName, $this->channelsByName) ? $this->channelsByName[$channelName] : null;
+    }
+
+    /**
+     * Get the Channel model
+     * @return \rsanchez\Deep\Model\Channel
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 }
