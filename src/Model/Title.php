@@ -18,7 +18,7 @@ use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
-use rsanchez\Deep\Relations\HasFromRepository;
+use rsanchez\Deep\Relations\HasOneFromRepository;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -104,11 +104,11 @@ class Title extends AbstractJoinableModel
 
     /**
      * Define the Channel Eloquent relationship
-     * @return \rsanchez\Deep\Relations\HasFromRepository
+     * @return \rsanchez\Deep\Relations\HasOneFromRepository
      */
     public function channel()
     {
-        return new HasFromRepository(
+        return new HasOneFromRepository(
             self::$channelRepository->getModel()->newQuery(),
             $this,
             'channels.channel_id',
