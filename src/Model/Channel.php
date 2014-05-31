@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
-use rsanchez\Deep\Relations\HasManyRepository;
+use rsanchez\Deep\Relations\HasFromRepository;
 
 /**
  * Model for the channels table
@@ -68,11 +68,11 @@ class Channel extends Model
 
     /**
      * Define the Fields Eloquent relationship
-     * @return \rsanchez\Deep\Relations\HasManyRepository
+     * @return \rsanchez\Deep\Relations\HasFromRepository
      */
     public function fields()
     {
-        return new HasManyRepository(
+        return new HasFromRepository(
             self::$fieldRepository->getModel()->newQuery(),
             $this,
             'channel_fields.group_id',

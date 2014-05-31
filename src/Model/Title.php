@@ -18,6 +18,7 @@ use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
+use rsanchez\Deep\Relations\HasFromRepository;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -99,6 +100,21 @@ class Title extends AbstractJoinableModel
     public function categories()
     {
         return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Category', 'category_posts', 'entry_id', 'cat_id');
+    }
+
+    /**
+     * Define the Channel Eloquent relationship
+     * @return \rsanchez\Deep\Relations\HasFromRepository
+     */
+    public function channel()
+    {
+        return new HasFromRepository(
+            self::$channelRepository->getModel()->newQuery(),
+            $this,
+            'channels.channel_id',
+            'channel_id',
+            self::$channelRepository
+        );
     }
 
     /**
@@ -207,8 +223,6 @@ class Title extends AbstractJoinableModel
             foreach ($collection as $entry) {
                 $entryIds[] = $entry->entry_id;
                 $channelIds[] = $entry->channel_id;
-
-                $entry->channel = self::$channelRepository->find($entry->channel_id);
             }
 
             $collection->addEntryIds($entryIds);
