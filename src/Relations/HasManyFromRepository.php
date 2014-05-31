@@ -17,7 +17,7 @@ use rsanchez\Deep\Repository\RepositoryInterface;
 /**
  * Relation for fetching related data from repositories instead of models
  */
-class HasFromRepository extends HasMany
+class HasManyFromRepository extends HasMany
 {
     /**
      * @var \rsanchez\Deep\Repository\RepositoryInterface
