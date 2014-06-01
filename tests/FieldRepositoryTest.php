@@ -1,6 +1,7 @@
 <?php
 
 use rsanchez\Deep\Model\Field;
+use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Repository\FieldRepository;
 
 class FieldRepositoryTest extends PHPUnit_Framework_TestCase
@@ -81,6 +82,21 @@ class FieldRepositoryTest extends PHPUnit_Framework_TestCase
     public function testGetFieldsByGroup()
     {
         $fields = $this->repository->getFieldsByGroup(1);
+
+        $ids = [];
+
+        foreach ($fields as $field) {
+            $ids[] = $field->field_id;
+        }
+
+        $this->assertThat($ids, new ArrayHasOnlyValuesConstraint([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]));
+    }
+
+    public function testGetFieldsByChannelCollection()
+    {
+        $channels = Channel::where('channel_id', 1)->get();
+
+        $fields = $this->repository->getFieldsByChannelCollection($channels);
 
         $ids = [];
 

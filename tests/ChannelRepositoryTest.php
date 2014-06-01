@@ -41,4 +41,11 @@ class ChannelRepositoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $channel->channel_id);
     }
+
+    public function testGetModel()
+    {
+        $model = $this->repository->getModel();
+
+        $this->assertInstanceOf('\\rsanchez\\Deep\\Model\\Channel', $model);
+    }
 }
