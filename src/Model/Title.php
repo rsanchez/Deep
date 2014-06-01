@@ -90,7 +90,7 @@ class Title extends AbstractJoinableModel
      */
     public function author()
     {
-        return $this->belongsTo('\\rsanchez\\Deep\\Model\\Member', 'author_id', 'member_id');
+        return $this->hasOne('\\rsanchez\\Deep\\Model\\Member', 'member_id', 'author_id');
     }
 
     /**
@@ -99,7 +99,7 @@ class Title extends AbstractJoinableModel
      */
     public function categories()
     {
-        return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Category', 'category_posts', 'entry_id', 'cat_id');
+        return $this->hasManyThrough('\\rsanchez\\Deep\\Model\\Category', '\\rsanchez\\Deep\\Model\\CategoryPosts', 'entry_id', 'cat_id');
     }
 
     /**
