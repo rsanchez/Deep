@@ -534,8 +534,8 @@ class Title extends AbstractJoinableModel
         $groupIds = is_array($groupId) ? $groupId : array_slice(func_get_args(), 1);
 
         return $query->whereHas('categories', function ($q) use ($groupIds) {
-            $q->whereNotIn('categories.group_id', $groupIds);
-        });
+            $q->whereIn('categories.group_id', $groupIds);
+        }, '=', 0);
     }
 
     /**
