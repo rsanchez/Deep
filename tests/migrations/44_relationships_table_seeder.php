@@ -59,7 +59,7 @@ class RelationshipsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'relationship_id' => 17,
+            'relationship_id' => 33,
             'parent_id' => 8,
             'child_id' => 5,
             'field_id' => 3,
@@ -70,7 +70,7 @@ class RelationshipsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'relationship_id' => 18,
+            'relationship_id' => 34,
             'parent_id' => 8,
             'child_id' => 3,
             'field_id' => 3,
@@ -81,18 +81,7 @@ class RelationshipsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'relationship_id' => 19,
-            'parent_id' => 8,
-            'child_id' => 3,
-            'field_id' => 17,
-            'grid_field_id' => 0,
-            'grid_col_id' => 0,
-            'grid_row_id' => 0,
-            'order' => 1,
-        ]);
-
-        $query->execute([
-            'relationship_id' => 20,
+            'relationship_id' => 36,
             'parent_id' => 8,
             'child_id' => 5,
             'field_id' => 17,
@@ -100,6 +89,17 @@ class RelationshipsTableSeeder extends AbstractMigration
             'grid_col_id' => 0,
             'grid_row_id' => 0,
             'order' => 2,
+        ]);
+
+        $query->execute([
+            'relationship_id' => 35,
+            'parent_id' => 8,
+            'child_id' => 3,
+            'field_id' => 17,
+            'grid_field_id' => 0,
+            'grid_col_id' => 0,
+            'grid_row_id' => 0,
+            'order' => 1,
         ]);
 
 

@@ -63,7 +63,7 @@ class PlayaRelationshipsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'rel_id' => 17,
+            'rel_id' => 33,
             'parent_entry_id' => 8,
             'parent_field_id' => 13,
             'parent_col_id' => 3,
@@ -75,7 +75,7 @@ class PlayaRelationshipsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'rel_id' => 18,
+            'rel_id' => 34,
             'parent_entry_id' => 8,
             'parent_field_id' => 13,
             'parent_col_id' => 3,
@@ -87,19 +87,7 @@ class PlayaRelationshipsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'rel_id' => 19,
-            'parent_entry_id' => 8,
-            'parent_field_id' => 15,
-            'parent_col_id' => null,
-            'parent_row_id' => null,
-            'parent_var_id' => null,
-            'parent_is_draft' => 0,
-            'child_entry_id' => 4,
-            'rel_order' => 0,
-        ]);
-
-        $query->execute([
-            'rel_id' => 20,
+            'rel_id' => 36,
             'parent_entry_id' => 8,
             'parent_field_id' => 15,
             'parent_col_id' => null,
@@ -108,6 +96,18 @@ class PlayaRelationshipsTableSeeder extends AbstractMigration
             'parent_is_draft' => 0,
             'child_entry_id' => 6,
             'rel_order' => 1,
+        ]);
+
+        $query->execute([
+            'rel_id' => 35,
+            'parent_entry_id' => 8,
+            'parent_field_id' => 15,
+            'parent_col_id' => null,
+            'parent_row_id' => null,
+            'parent_var_id' => null,
+            'parent_is_draft' => 0,
+            'child_entry_id' => 4,
+            'rel_order' => 0,
         ]);
 
 

@@ -15,7 +15,7 @@ class AssetsSelectionsTableSeeder extends AbstractMigration
         $query = $this->adapter->getConnection()->prepare('INSERT INTO assets_selections (`file_id`, `entry_id`, `field_id`, `col_id`, `row_id`, `var_id`, `element_id`, `content_type`, `sort_order`, `is_draft`) VALUES (:file_id, :entry_id, :field_id, :col_id, :row_id, :var_id, :element_id, :content_type, :sort_order, :is_draft)');
 
         $query->execute([
-            'file_id' => 4,
+            'file_id' => 6,
             'entry_id' => 8,
             'field_id' => 1,
             'col_id' => null,
@@ -23,7 +23,7 @@ class AssetsSelectionsTableSeeder extends AbstractMigration
             'var_id' => null,
             'element_id' => null,
             'content_type' => null,
-            'sort_order' => 0,
+            'sort_order' => 2,
             'is_draft' => 0,
         ]);
 
@@ -67,7 +67,7 @@ class AssetsSelectionsTableSeeder extends AbstractMigration
         ]);
 
         $query->execute([
-            'file_id' => 6,
+            'file_id' => 4,
             'entry_id' => 8,
             'field_id' => 1,
             'col_id' => null,
@@ -75,7 +75,7 @@ class AssetsSelectionsTableSeeder extends AbstractMigration
             'var_id' => null,
             'element_id' => null,
             'content_type' => null,
-            'sort_order' => 2,
+            'sort_order' => 0,
             'is_draft' => 0,
         ]);
 

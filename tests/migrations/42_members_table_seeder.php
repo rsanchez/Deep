@@ -55,7 +55,7 @@ class MembersTableSeeder extends AbstractMigration
             'ip_address' => '127.0.0.1',
             'join_date' => 1399513396,
             'last_visit' => 1401161075,
-            'last_activity' => 1401626163,
+            'last_activity' => 1401628884,
             'total_entries' => 10,
             'total_comments' => 0,
             'total_forum_topics' => 0,
