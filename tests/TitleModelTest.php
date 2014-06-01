@@ -116,4 +116,18 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([11]));
     }
+
+    public function testCategoryGroupScope()
+    {
+        $entryIds = Title::categoryGroup(1)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9, 11]));
+    }
+
+    public function testNotCategoryGroupScope()
+    {
+        $entryIds = Title::notCategoryGroup(1)->channel('entries')->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([8, 10]));
+    }
 }
