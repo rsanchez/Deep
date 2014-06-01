@@ -270,7 +270,7 @@ class ChannelTitlesTableSeeder extends AbstractMigration
             'entry_id' => 10,
             'site_id' => 1,
             'channel_id' => 1,
-            'author_id' => 1,
+            'author_id' => 2,
             'forum_topic_id' => null,
             'ip_address' => '127.0.0.1',
             'title' => 'Entry 4',
@@ -289,7 +289,7 @@ class ChannelTitlesTableSeeder extends AbstractMigration
             'day' => '08',
             'expiration_date' => 0,
             'comment_expiration_date' => 0,
-            'edit_date' => 20140509023445,
+            'edit_date' => 20140601123724,
             'recent_comment_date' => 0,
             'comment_total' => 0,
         ]);

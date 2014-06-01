@@ -19,6 +19,11 @@ class MemberDataTableSeeder extends AbstractMigration
             'm_field_id_1' => 'USA',
         ]);
 
+        $query->execute([
+            'member_id' => 2,
+            'm_field_id_1' => null,
+        ]);
+
 
     }
 
