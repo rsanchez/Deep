@@ -8,6 +8,8 @@ use Illuminate\Database\Connection;
 
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/constraints/ArrayHasOnlyValuesConstraint.php';
+require_once __DIR__.'/constraints/ArrayHasValueConstraint.php';
+require_once __DIR__.'/constraints/ArrayDoesNotHaveValueConstraint.php';
 
 /**
  * Create and seed an in-memory sqlite database for testing
