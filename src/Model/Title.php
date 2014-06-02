@@ -662,9 +662,10 @@ class Title extends AbstractJoinableModel
         if (! $showExpired) {
             $prefix = $query->getQuery()->getConnection()->getTablePrefix();
 
-            $query->whereRaw(
-                "(`{$prefix}channel_titles`.`expiration_date` = '' OR  `{$prefix}channel_titles`.`expiration_date` > NOW())"
-            );
+            $query->where(function ($query) {
+                return $query->where('expiration_date', '')
+                    ->orWhere('expiration_date', '>', time());
+            });
         }
 
         return $query;
@@ -709,7 +710,7 @@ class Title extends AbstractJoinableModel
      */
     public function scopeFixedOrder(Builder $query, $fixedOrder)
     {
-        $fixedOrder = array_slice(func_get_args(), 1);
+        $fixedOrder = is_array($fixedOrder) ? $fixedOrder : array_slice(func_get_args(), 1);
 
         call_user_func_array(array($this, 'scopeEntryId'), func_get_args());
 
@@ -726,7 +727,18 @@ class Title extends AbstractJoinableModel
     public function scopeSticky(Builder $query, $sticky = true)
     {
         if ($sticky) {
-            array_unshift($query->getQuery()->orders, array('channel_titles.sticky', 'desc'));
+            $orders =& $query->getQuery()->orders;
+
+            $order = array(
+                'column' => 'channel_titles.sticky',
+                'direction' => 'desc',
+            );
+
+            if ($orders) {
+                array_unshift($orders, $order);
+            } else {
+                $orders = array($order);
+            }
         }
 
         return $query;
