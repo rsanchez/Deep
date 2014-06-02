@@ -98,9 +98,9 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testNotAllCategoriesScope()
     {
-        $entryIds = Title::entryId(7, 9, 11)->notAllCategories(1, 2)->get()->fetch('entry_id')->all();
+        $entryIds = Title::notAllCategories(1, 2)->get()->fetch('entry_id')->all();
 
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([9, 11]));
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(7));
     }
 
     public function testCategoryNameScope()
@@ -112,9 +112,9 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testNotCategoryNameScope()
     {
-        $entryIds = Title::entryId(7, 9, 11)->notCategoryName('category-a')->get()->fetch('entry_id')->all();
+        $entryIds = Title::notCategoryName('category-a')->get()->fetch('entry_id')->all();
 
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([11]));
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(7));
     }
 
     public function testCategoryGroupScope()
@@ -126,8 +126,100 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testNotCategoryGroupScope()
     {
-        $entryIds = Title::notCategoryGroup(1)->channel('entries')->get()->fetch('entry_id')->all();
+        $groupIds = [];
 
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([8, 10]));
+        $entries = Title::notCategoryGroup(1)->with('categories')->get();
+
+        foreach ($entries as $entry) {
+            foreach ($entry->categories as $category) {
+                $groupIds[] = $category->group_id;
+            }
+        }
+
+       $this->assertThat($groupIds, new ArrayDoesNotHaveValueConstraint(1));
+    }
+
+    public function testAuthorIdScope()
+    {
+        $entryIds = array_unique(Title::authorId(2)->get()->fetch('author_id')->all());
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([2]));
+    }
+
+    public function testNotAuthorIdScope()
+    {
+        $authorIds = Title::notAuthorId(2)->get()->fetch('author_id')->all();
+
+        $this->assertThat($authorIds, new ArrayDoesNotHaveValueConstraint(2));
+    }
+
+    public function testShowExpiredScopeFalse()
+    {
+        $entryIds = Title::showExpired(false)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+    }
+
+    public function testShowExpiredScope()
+    {
+        $entryIds = Title::showExpired(true)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasValueConstraint(9));
+    }
+
+    public function testShowFutureEntriesScopeFalse()
+    {
+        $entryIds = Title::showFutureEntries(false)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+    }
+
+    public function testShowFutureEntriesScope()
+    {
+        $entryIds = Title::showFutureEntries()->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasValueConstraint(10));
+    }
+
+    public function testSiteIdScope()
+    {
+        $query = Title::siteId(0)->get();
+
+        $this->assertEquals(0, $query->count());
+    }
+
+    public function testFixedOrderScope()
+    {
+        $entryIds = Title::fixedOrder(7, 8, 9)->get()->fetch('entry_id')->all();
+
+        $this->assertEquals([7, 8, 9], $entryIds);
+    }
+
+    public function testStickyScope()
+    {
+        $entry = Title::sticky()->first();
+
+        $this->assertEquals(8, $entry->entry_id);
+    }
+
+    public function testEntryIdScope()
+    {
+        $entry = Title::entryId(1)->first();
+
+        $this->assertEquals(1, $entry->entry_id);
+    }
+
+    public function testEntryIdFromScope()
+    {
+        $entryIds = Title::entryIdFrom(8)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(7));
+    }
+
+    public function testEntryIdToScope()
+    {
+        $entryIds = Title::entryIdTo(8)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
     }
 }
