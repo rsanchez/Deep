@@ -308,7 +308,7 @@ abstract class AbstractFilterableCollection extends Collection
 
         $collection = $this->createClone();
 
-        $ignore = array('fixed_order', 'orderby', 'sort', 'offset', 'limit', 'var_prefix');
+        $ignore = array('fixed_order', 'orderby', 'sort', 'offset', 'limit', 'var_prefix', 'backspace');
 
         $filters = array_diff_key($params, array_flip($ignore));
 

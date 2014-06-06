@@ -326,13 +326,13 @@ abstract class BasePlugin
 
             if ($spacePosition !== false) {
                 $name = substr($tag, 0, $spacePosition);
-                $params = ee()->functions->assign_parameters(substr($tag, $spacePosition));
+                $tagparams = ee()->functions->assign_parameters(substr($tag, $spacePosition));
             } elseif (preg_match('#^([a-z_]+)=([\042\047]?)?(.*?)\\2$#', $tag, $match)) {
                 $name = $match[1];
-                $params = $match[3] ? array($match[3]) : array('');
+                $tagparams = $match[3] ? array($match[3]) : array('');
             } else {
                 $name = $tag;
-                $params = array();
+                $tagparams = array();
             }
 
             if ($prefix && strncmp($name, $prefix, $prefixLength) !== 0) {
@@ -342,12 +342,12 @@ abstract class BasePlugin
             $singleTags[] = (object) array(
                 'name' => $prefix ? substr($name, $prefixLength) : $name,
                 'key' => $tag,
-                'params' => $params,
+                'params' => $tagparams,
                 'tagdata' => '',
             );
         }
 
-        foreach ($varPair as $tag => $params) {
+        foreach ($varPair as $tag => $tagparams) {
             $spacePosition = strpos($tag, ' ');
 
             $name = $spacePosition === false ? $tag : substr($tag, 0, $spacePosition);
@@ -362,7 +362,7 @@ abstract class BasePlugin
                 $pairTags[] = (object) array(
                     'name' => $prefix ? substr($name, $prefixLength) : $name,
                     'key' => $key,
-                    'params' => $params ?: array(),
+                    'params' => $tagparams ?: array(),
                     'tagdata' => $matches[2][$i],
                 );
             }
