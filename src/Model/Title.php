@@ -106,7 +106,7 @@ class Title extends AbstractJoinableModel
      * Define the Channel Eloquent relationship
      * @return \rsanchez\Deep\Relations\HasOneFromRepository
      */
-    public function channel()
+    public function chan()
     {
         return new HasOneFromRepository(
             self::$channelRepository->getModel()->newQuery(),
@@ -129,6 +129,20 @@ class Title extends AbstractJoinableModel
         }
 
         return parent::__call($name, $args);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Alias chan to channel
+     */
+    public function __get($name)
+    {
+        if ($name === 'channel') {
+            return $this->chan;
+        }
+
+        return parent::__get($name);
     }
 
     /**
