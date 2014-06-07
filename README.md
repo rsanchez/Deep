@@ -1,5 +1,9 @@
 # Deep
 
+[![Build Status](https://travis-ci.org/rsanchez/Deep.svg?branch=tests)](https://travis-ci.org/rsanchez/Deep)
+[![Total Downloads](https://poser.pugx.org/rsanchez/deep/downloads.png)](https://packagist.org/packages/rsanchez/deep)
+[![Latest Stable Version](https://poser.pugx.org/rsanchez/deep/v/stable.png)](https://packagist.org/packages/rsanchez/deep)
+
 A read-only set of [Eloquent](http://laravel.com/docs/eloquent) models for ExpressionEngine Channel Entries. This library has a few goals in mind:
 
 - replicate as much of the `{exp:channel:entries}` functionality as possible using Eloquent [query scopes](http://laravel.com/docs/eloquent#query-scopes)
