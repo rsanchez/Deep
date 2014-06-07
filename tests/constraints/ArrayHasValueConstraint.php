@@ -14,7 +14,7 @@ class ArrayHasValueConstraint extends PHPUnit_Framework_Constraint
         $this->expected = $expected;
     }
 
-    public function matches(array $input)
+    public function matches($input)
     {
         return in_array($this->expected, $input);
     }
