@@ -136,7 +136,7 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
             }
         }
 
-       $this->assertThat($groupIds, new ArrayDoesNotHaveValueConstraint(1));
+        $this->assertThat($groupIds, new ArrayDoesNotHaveValueConstraint(1));
     }
 
     public function testAuthorIdScope()
