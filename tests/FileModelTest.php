@@ -41,7 +41,7 @@ class FileModelTest extends PHPUnit_Framework_TestCase
         $entry = new Entry();
 
         $entry->field_id_1 = '{filedir_1}1eecbed0063a0253.jpg';
-        $entry->channel = $channel;
+        $entry->chan = $entry->channel = $channel;
 
         $entries = new EntryCollection([$entry]);
 
