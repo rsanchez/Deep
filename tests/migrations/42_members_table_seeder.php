@@ -54,8 +54,8 @@ class MembersTableSeeder extends AbstractMigration
             'last_bulletin_date' => 0,
             'ip_address' => '127.0.0.1',
             'join_date' => 1399513396,
-            'last_visit' => 1401161075,
-            'last_activity' => 1401628884,
+            'last_visit' => 1402107425,
+            'last_activity' => 1402256751,
             'total_entries' => 10,
             'total_comments' => 0,
             'total_forum_topics' => 0,
@@ -95,7 +95,7 @@ class MembersTableSeeder extends AbstractMigration
 
         $query->execute([
             'member_id' => 2,
-            'group_id' => 1,
+            'group_id' => 5,
             'username' => 'editor',
             'screen_name' => 'editor',
             'password' => 'e25116e415ae6399b19770642463a1056db9ef9930f7eb01e7c6da883fa1c998def21bd72ead305c6ff62c6e31c7ebe1c93d9983c3146fef092730e6585cfaf1',
