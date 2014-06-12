@@ -46,7 +46,7 @@ class Title extends AbstractJoinableModel
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
+    protected $hidden = array('chan', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
 
     /**
      * The class used when creating a new Collection
@@ -132,17 +132,12 @@ class Title extends AbstractJoinableModel
     }
 
     /**
-     * {@inheritdoc}
-     *
      * Alias chan to channel
+     * @var \rsanchez\Deep\Model\Channel
      */
-    public function __get($name)
+    public function getChannelAttribute()
     {
-        if ($name === 'channel') {
-            return $this->chan;
-        }
-
-        return parent::__get($name);
+        return $this->chan;
     }
 
     /**
