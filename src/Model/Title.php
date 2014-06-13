@@ -928,6 +928,20 @@ class Title extends AbstractJoinableModel
     }
 
     /**
+     * Filter by Entry Status
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  dynamic  string                       $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotStatus(Builder $query, $status)
+    {
+        $statuses = is_array($status) ? $status : array_slice(func_get_args(), 1);
+
+        return $query->whereNotIn('channel_titles.status', $statuses);
+    }
+
+    /**
      * Filter out entries after the specified date
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
