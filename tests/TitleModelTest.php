@@ -63,16 +63,12 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testCategoryScopeSingle()
     {
-        $entryIds = Title::category(1)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9]));
+        $this->assertThat(Title::category(1)->get(), new CollectionNestedPropertyHasOneValueConstraint(1, 'categories', 'cat_id'));
     }
 
     public function testCategoryScopeMultiple()
     {
-        $entryIds = Title::category(1, 2)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9, 11]));
+        $this->assertThat(Title::category(1, 2)->get(), new CollectionNestedPropertyHasOneValueConstraint([1, 2], 'categories', 'cat_id'));
     }
 
     public function testRelatedCategoriesScope()
@@ -91,73 +87,47 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testAllCategoriesScope()
     {
-        $entryIds = Title::allCategories(1, 2)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7]));
+        $this->assertThat(Title::allCategories(1, 2)->get(), new CollectionNestedPropertyHasAllValuesConstraint([1, 2], 'categories', 'cat_id'));
     }
 
     public function testNotAllCategoriesScope()
     {
-        $entryIds = Title::notAllCategories(1, 2)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(7));
+        $this->assertThat(Title::notAllCategories(1, 2)->get(), new CollectionNestedPropertyDoesNotHaveAllValuesConstraint([1, 2], 'categories', 'cat_id'));
     }
 
     public function testCategoryNameScope()
     {
-        $entryIds = Title::categoryName('category-a')->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9]));
+        $this->assertThat(Title::categoryName('category-a')->get(), new CollectionNestedPropertyHasOneValueConstraint('category-a', 'categories', 'cat_url_title'));
     }
 
     public function testNotCategoryNameScope()
     {
-        $entryIds = Title::notCategoryName('category-a')->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(7));
+        $this->assertThat(Title::notCategoryName('category-a')->get(), new CollectionNestedPropertyDoesNotHaveAllValuesConstraint('category-a', 'categories', 'cat_url_title'));
     }
 
     public function testCategoryGroupScope()
     {
-        $entryIds = Title::categoryGroup(1)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([7, 9, 11]));
+        $this->assertThat(Title::categoryGroup(1)->get(), new CollectionNestedPropertyHasOneValueConstraint(1, 'categories', 'group_id'));
     }
 
     public function testNotCategoryGroupScope()
     {
-        $groupIds = [];
-
-        $entries = Title::notCategoryGroup(1)->with('categories')->get();
-
-        foreach ($entries as $entry) {
-            foreach ($entry->categories as $category) {
-                $groupIds[] = $category->group_id;
-            }
-        }
-
-        $this->assertThat($groupIds, new ArrayDoesNotHaveValueConstraint(1));
+        $this->assertThat(Title::notCategoryGroup(1)->get(), new CollectionNestedPropertyDoesNotHaveAllValuesConstraint(1, 'categories', 'group_id'));
     }
 
     public function testAuthorIdScope()
     {
-        $entryIds = array_unique(Title::authorId(2)->get()->fetch('author_id')->all());
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([2]));
+        $this->assertThat(Title::authorId(2)->get(), new CollectionPropertyHasOneValueConstraint(2, 'author_id'));
     }
 
     public function testNotAuthorIdScope()
     {
-        $authorIds = Title::notAuthorId(2)->get()->fetch('author_id')->all();
-
-        $this->assertThat($authorIds, new ArrayDoesNotHaveValueConstraint(2));
+        $this->assertThat(Title::notAuthorId(2)->get(), new CollectionPropertyDoesNotHaveValueConstraint(2, 'author_id'));
     }
 
     public function testShowExpiredScopeFalse()
     {
-        $entryIds = Title::showExpired(false)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+        $this->assertThat(Title::showExpired(false)->get(), new CollectionPropertyCompareValueConstraint(time(), 'expiration_date', '<'));
     }
 
     public function testShowExpiredScope()
@@ -221,5 +191,83 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
         $entryIds = Title::entryIdTo(8)->get()->fetch('entry_id')->all();
 
         $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+    }
+
+    public function testGroupIdScope()
+    {
+        $entryIds = Title::groupId(5)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([10]));
+    }
+
+    public function testNotGroupIdScope()
+    {
+        $entryIds = Title::notGroupId(5)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+    }
+
+    public function testOffsetScope()
+    {
+        //sqlite cannot do offset without limit
+        $entryIds = Title::limit(99999)->offset(1)->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(1));
+    }
+
+    public function testScopeShowPages()
+    {
+        $channelIds = Title::showPages(false)->get()->fetch('channel_id')->all();
+
+        $this->assertThat($channelIds, new ArrayDoesNotHaveValueConstraint(2));
+    }
+
+    public function testScopeShowPagesOnly()
+    {
+        $channelIds = Title::showPagesOnly()->get()->fetch('channel_id')->all();
+
+        $this->assertThat($channelIds, new ArrayDoesNotHaveValueConstraint(1));
+    }
+
+    public function testScopeStartOn()
+    {
+        $entryIds = Title::startOn(strtotime('2014-01-01'))->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+    }
+
+    public function testScopeStartOnDateTime()
+    {
+        $entryIds = Title::startOn(DateTime::createFromFormat('Y-m-d', '2014-01-01'))->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+    }
+
+    public function testStatusScope()
+    {
+        $entryIds = Title::status('open')->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(11));
+    }
+
+    public function testNotStatusScope()
+    {
+        $entryIds = Title::notStatus('closed')->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(11));
+    }
+
+    public function testScopeStopBefore()
+    {
+        $entryIds = Title::stopBefore(strtotime('2014-12-31'))->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+    }
+
+    public function testScopeStopBeforeDateTime()
+    {
+        $entryIds = Title::stopBefore(DateTime::createFromFormat('Y-m-d', '2014-12-31'))->get()->fetch('entry_id')->all();
+
+        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
     }
 }
