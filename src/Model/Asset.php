@@ -54,12 +54,6 @@ class Asset extends AbstractJoinableModel implements FileInterface
     protected $uploadPref;
 
     /**
-     * The date format used when converting to array / json
-     * @var string
-     */
-    protected static $dateFormat = 'Y-m-d\TH:i:s\Z';
-
-    /**
      * Set the UploadPref
      * @var \rsanchez\Deep\Model\UploadPref $uploadPref
      * @return void
@@ -78,15 +72,6 @@ class Asset extends AbstractJoinableModel implements FileInterface
     public function newCollection(array $assets = array())
     {
         return new AssetCollection($assets);
-    }
-
-    /**
-     * Set the default date format
-     * @param string $dateFormat
-     */
-    public static function setDateFormat($dateFormat)
-    {
-        self::$dateFormat = $dateFormat;
     }
 
     /**
@@ -150,9 +135,7 @@ class Asset extends AbstractJoinableModel implements FileInterface
 
         foreach (array('date', 'date_modified') as $key) {
             if ($attributes[$key] instanceof Carbon) {
-                $date = clone $attributes[$key];
-                $date->setTimezone(new DateTimeZone('UTC'));
-                $attributes[$key] = $date->format(self::$dateFormat);
+                $attributes[$key] = (string) $attributes[$key];
             }
         }
 

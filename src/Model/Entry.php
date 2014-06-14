@@ -89,10 +89,8 @@ class Entry extends Title
         $attributes = $this->attributes;
 
         foreach ($attributes as $key => $value) {
-            if ($value instanceof Carbon) {
-                $date = clone $value;
-                $date->setTimezone(new DateTimeZone('UTC'));
-                $attributes[$key] = $date->format(self::$dateFormat);
+            if ($attributes[$key] instanceof Carbon) {
+                $attributes[$key] = (string) $attributes[$key];
             }
         }
 
