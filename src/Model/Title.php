@@ -669,8 +669,6 @@ class Title extends AbstractJoinableModel
     public function scopeShowExpired(Builder $query, $showExpired = true)
     {
         if (! $showExpired) {
-            $prefix = $query->getQuery()->getConnection()->getTablePrefix();
-
             $query->where(function ($query) {
                 return $query->where('expiration_date', '')
                     ->orWhere('expiration_date', '>', time());
