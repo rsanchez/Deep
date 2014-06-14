@@ -1,6 +1,6 @@
 <?php
 
-class CollectionNestedPropertyHasOneValueConstraint extends PHPUnit_Framework_Constraint
+class CollectionNestedPropertyDoesNotHaveValueConstraint extends PHPUnit_Framework_Constraint
 {
     /**
      * @var mixed
@@ -19,7 +19,7 @@ class CollectionNestedPropertyHasOneValueConstraint extends PHPUnit_Framework_Co
     public function matches($input)
     {
         foreach ($input as $row) {
-            if (! in_array($row->{$this->mainProperty}->{$this->secondaryProperty}, $this->expected)) {
+            if (in_array($row->{$this->mainProperty}->{$this->secondaryProperty}, $this->expected)) {
                 return false;
             }
         }

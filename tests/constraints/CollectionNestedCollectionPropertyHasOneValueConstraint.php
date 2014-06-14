@@ -1,6 +1,6 @@
 <?php
 
-class CollectionNestedPropertyDoesNotHaveAllValuesConstraint extends PHPUnit_Framework_Constraint
+class CollectionNestedCollectionPropertyHasOneValueConstraint extends PHPUnit_Framework_Constraint
 {
     /**
      * @var mixed
@@ -19,17 +19,15 @@ class CollectionNestedPropertyDoesNotHaveAllValuesConstraint extends PHPUnit_Fra
     public function matches($input)
     {
         foreach ($input as $row) {
-            $expected = $this->expected;
+            $found = false;
 
             foreach ($row->{$this->mainProperty} as $secondaryRow) {
-                $index = array_search($secondaryRow->{$this->secondaryProperty}, $expected);
-
-                if ($index !== false) {
-                    unset($expected[$index]);
+                if (in_array($secondaryRow->{$this->secondaryProperty}, $this->expected)) {
+                    $found = true;
                 }
             }
 
-            if (! $expected) {
+            if (! $found) {
                 return false;
             }
         }
@@ -39,6 +37,6 @@ class CollectionNestedPropertyDoesNotHaveAllValuesConstraint extends PHPUnit_Fra
 
     public function toString()
     {
-        return sprintf('%s.%s does not have all the values %s', $this->mainProperty, $this->secondaryProperty, json_encode($this->expected));
+        return sprintf('%s.%s does not have the value %s', $this->mainProperty, $this->secondaryProperty, json_encode($this->expected));
     }
 }

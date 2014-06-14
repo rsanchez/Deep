@@ -1,6 +1,6 @@
 <?php
 
-class CollectionPropertyCompareValueConstraint extends PHPUnit_Framework_Constraint
+class CollectionPropertyCompareDateTimeConstraint extends PHPUnit_Framework_Constraint
 {
     /**
      * @var mixed
@@ -32,32 +32,31 @@ class CollectionPropertyCompareValueConstraint extends PHPUnit_Framework_Constra
         }
     }
 
-    protected function compare($value)
+    protected function compare(DateTime $value)
     {
-        if (is_object($value)) {
-            $value = (string) $value;
-        }
+        $expected = $this->expected instanceof DateTime ? $this->expected->format('U') : $this->expected;
+        $value = $value->format('U');
 
         switch ($this->comparisonOperator)
         {
             case '==':
-                return $value == $this->expected;
+                return $value == $expected;
             case '===':
-                return $value === $this->expected;
+                return $value === $expected;
             case '!=':
-                return $value != $this->expected;
+                return $value != $expected;
             case '<>':
-                return $value <> $this->expected;
+                return $value <> $expected;
             case '!==':
-                return $value !== $this->expected;
+                return $value !== $expected;
             case '<':
-                return $value < $this->expected;
+                return $value < $expected;
             case '>':
-                return $value > $this->expected;
+                return $value > $expected;
             case '<=':
-                return $value <= $this->expected;
+                return $value <= $expected;
             case '>=':
-                return $value >= $this->expected;
+                return $value >= $expected;
         }
     }
 

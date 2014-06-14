@@ -12,10 +12,13 @@ require_once __DIR__.'/constraints/ArrayHasValueConstraint.php';
 require_once __DIR__.'/constraints/ArrayDoesNotHaveValueConstraint.php';
 require_once __DIR__.'/constraints/CollectionPropertyHasOneValueConstraint.php';
 require_once __DIR__.'/constraints/CollectionPropertyCompareValueConstraint.php';
+require_once __DIR__.'/constraints/CollectionPropertyCompareDateTimeConstraint.php';
 require_once __DIR__.'/constraints/CollectionPropertyDoesNotHaveValueConstraint.php';
 require_once __DIR__.'/constraints/CollectionNestedPropertyHasOneValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedPropertyHasAllValuesConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedPropertyDoesNotHaveAllValuesConstraint.php';
+require_once __DIR__.'/constraints/CollectionNestedPropertyDoesNotHaveValueConstraint.php';
+require_once __DIR__.'/constraints/CollectionNestedCollectionPropertyHasOneValueConstraint.php';
+require_once __DIR__.'/constraints/CollectionNestedCollectionPropertyHasAllValuesConstraint.php';
+require_once __DIR__.'/constraints/CollectionNestedCollectionPropertyDoesNotHaveAllValuesConstraint.php';
 
 /**
  * Create and seed an in-memory sqlite database for testing

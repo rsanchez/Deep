@@ -315,9 +315,9 @@ class ChannelTitlesTableSeeder extends AbstractMigration
             'year' => '2014',
             'month' => '05',
             'day' => '08',
-            'expiration_date' => 0,
+            'expiration_date' => 1718369880,
             'comment_expiration_date' => 0,
-            'edit_date' => 20140526192227,
+            'edit_date' => 20140614125841,
             'recent_comment_date' => 0,
             'comment_total' => 0,
         ]);

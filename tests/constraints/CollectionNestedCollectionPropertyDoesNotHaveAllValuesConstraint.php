@@ -1,6 +1,11 @@
 <?php
 
-class CollectionNestedPropertyHasAllValuesConstraint extends PHPUnit_Framework_Constraint
+/**
+ * Check each item's specified collection property for the lack of the specified values
+ *
+ * e.g. Check an entry's categories for a specific cat_id
+ */
+class CollectionNestedCollectionPropertyDoesNotHaveAllValuesConstraint extends PHPUnit_Framework_Constraint
 {
     /**
      * @var mixed
@@ -11,7 +16,7 @@ class CollectionNestedPropertyHasAllValuesConstraint extends PHPUnit_Framework_C
     {
         parent::__construct();
 
-        $this->expected = $expected;
+        $this->expected = is_array($expected) ? $expected : [$expected];
         $this->mainProperty = $mainProperty;
         $this->secondaryProperty = $secondaryProperty;
     }
@@ -29,7 +34,7 @@ class CollectionNestedPropertyHasAllValuesConstraint extends PHPUnit_Framework_C
                 }
             }
 
-            if ($expected) {
+            if (! $expected) {
                 return false;
             }
         }

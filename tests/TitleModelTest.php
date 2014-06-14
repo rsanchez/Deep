@@ -63,56 +63,72 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testCategoryScopeSingle()
     {
-        $this->assertThat(Title::category(1)->get(), new CollectionNestedPropertyHasOneValueConstraint(1, 'categories', 'cat_id'));
+        $this->assertThat(Title::category(1)->get(), new CollectionNestedCollectionPropertyHasOneValueConstraint(1, 'categories', 'cat_id'));
     }
 
     public function testCategoryScopeMultiple()
     {
-        $this->assertThat(Title::category(1, 2)->get(), new CollectionNestedPropertyHasOneValueConstraint([1, 2], 'categories', 'cat_id'));
+        $this->assertThat(Title::category(1, 2)->get(), new CollectionNestedCollectionPropertyHasOneValueConstraint([1, 2], 'categories', 'cat_id'));
     }
 
     public function testRelatedCategoriesScope()
     {
-        $entryIds = Title::relatedCategories(7)->get()->fetch('entry_id')->all();
+        $entryId = 7;
 
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([9, 11]));
+        $entry = Title::entryId($entryId)->get()->first();
+
+        $expected = [];
+
+        foreach ($entry->categories as $category) {
+            $expected[] = $category->cat_id;
+        }
+
+        $this->assertThat(Title::relatedCategories($entryId)->get(), new CollectionNestedCollectionPropertyHasOneValueConstraint($expected, 'categories', 'cat_id'));
     }
 
     public function testRelatedCategoriesUrlTitleScope()
     {
-        $entryIds = Title::relatedCategoriesUrlTitle('entry-1')->get()->fetch('entry_id')->all();
+        $urlTitle = 'entry-1';
 
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([9, 11]));
+        $entry = Title::urlTitle($urlTitle)->get()->first();
+
+        $expected = [];
+
+        foreach ($entry->categories as $category) {
+            $expected[] = $category->cat_id;
+        }
+
+        $this->assertThat(Title::relatedCategoriesUrlTitle($urlTitle)->get(), new CollectionNestedCollectionPropertyHasOneValueConstraint($expected, 'categories', 'cat_id'));
     }
 
     public function testAllCategoriesScope()
     {
-        $this->assertThat(Title::allCategories(1, 2)->get(), new CollectionNestedPropertyHasAllValuesConstraint([1, 2], 'categories', 'cat_id'));
+        $this->assertThat(Title::allCategories(1, 2)->get(), new CollectionNestedCollectionPropertyHasAllValuesConstraint([1, 2], 'categories', 'cat_id'));
     }
 
     public function testNotAllCategoriesScope()
     {
-        $this->assertThat(Title::notAllCategories(1, 2)->get(), new CollectionNestedPropertyDoesNotHaveAllValuesConstraint([1, 2], 'categories', 'cat_id'));
+        $this->assertThat(Title::notAllCategories(1, 2)->get(), new CollectionNestedCollectionPropertyDoesNotHaveAllValuesConstraint([1, 2], 'categories', 'cat_id'));
     }
 
     public function testCategoryNameScope()
     {
-        $this->assertThat(Title::categoryName('category-a')->get(), new CollectionNestedPropertyHasOneValueConstraint('category-a', 'categories', 'cat_url_title'));
+        $this->assertThat(Title::categoryName('category-a')->get(), new CollectionNestedCollectionPropertyHasOneValueConstraint('category-a', 'categories', 'cat_url_title'));
     }
 
     public function testNotCategoryNameScope()
     {
-        $this->assertThat(Title::notCategoryName('category-a')->get(), new CollectionNestedPropertyDoesNotHaveAllValuesConstraint('category-a', 'categories', 'cat_url_title'));
+        $this->assertThat(Title::notCategoryName('category-a')->get(), new CollectionNestedCollectionPropertyDoesNotHaveAllValuesConstraint('category-a', 'categories', 'cat_url_title'));
     }
 
     public function testCategoryGroupScope()
     {
-        $this->assertThat(Title::categoryGroup(1)->get(), new CollectionNestedPropertyHasOneValueConstraint(1, 'categories', 'group_id'));
+        $this->assertThat(Title::categoryGroup(1)->get(), new CollectionNestedCollectionPropertyHasOneValueConstraint(1, 'categories', 'group_id'));
     }
 
     public function testNotCategoryGroupScope()
     {
-        $this->assertThat(Title::notCategoryGroup(1)->get(), new CollectionNestedPropertyDoesNotHaveAllValuesConstraint(1, 'categories', 'group_id'));
+        $this->assertThat(Title::notCategoryGroup(1)->get(), new CollectionNestedCollectionPropertyDoesNotHaveAllValuesConstraint(1, 'categories', 'group_id'));
     }
 
     public function testAuthorIdScope()
@@ -127,31 +143,30 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testShowExpiredScopeFalse()
     {
-        $this->assertThat(Title::showExpired(false)->get(), new CollectionPropertyCompareValueConstraint(time(), 'expiration_date', '<'));
+        $this->assertThat(Title::showExpired(false)->where('expiration_date', '>', 0)->get(), new CollectionPropertyCompareDateTimeConstraint(time(), 'expiration_date', '>'));
     }
 
     public function testShowExpiredScope()
     {
-        $entryIds = Title::showExpired(true)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasValueConstraint(9));
+        $this->assertThat(Title::showExpired(true)->where('expiration_date', '>', 0)->where('expiration_date', '<', time())->get(), new CollectionPropertyCompareDateTimeConstraint(time(), 'expiration_date', '<'));
     }
 
     public function testShowFutureEntriesScopeFalse()
     {
-        $entryIds = Title::showFutureEntries(false)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+        $this->assertThat(Title::showFutureEntries(false)->get(), new CollectionPropertyCompareDateTimeConstraint(time(), 'entry_date', '<='));
     }
 
     public function testShowFutureEntriesScope()
     {
-        $entryIds = Title::showFutureEntries()->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasValueConstraint(10));
+        $this->assertThat(Title::showFutureEntries(true)->where('entry_date', '>', time())->get(), new CollectionPropertyCompareDateTimeConstraint(time(), 'entry_date', '>'));
     }
 
     public function testSiteIdScope()
+    {
+        $this->assertThat(Title::siteId(1)->get(), new CollectionPropertyHasOneValueConstraint(1, 'site_id'));
+    }
+
+    public function testSiteIdInvalidScope()
     {
         $query = Title::siteId(0)->get();
 
@@ -167,44 +182,32 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testStickyScope()
     {
-        $entry = Title::sticky()->first();
-
-        $this->assertEquals(8, $entry->entry_id);
+        $this->assertThat(Title::sticky()->limit(1)->get(), new CollectionPropertyHasOneValueConstraint('y', 'sticky'));
     }
 
     public function testEntryIdScope()
     {
-        $entry = Title::entryId(1)->first();
-
-        $this->assertEquals(1, $entry->entry_id);
+        $this->assertThat(Title::entryId(1)->get(), new CollectionPropertyHasOneValueConstraint(1, 'entry_id'));
     }
 
     public function testEntryIdFromScope()
     {
-        $entryIds = Title::entryIdFrom(8)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(7));
+        $this->assertThat(Title::entryIdFrom(8)->get(), new CollectionPropertyCompareValueConstraint(8, 'entry_id', '>='));
     }
 
     public function testEntryIdToScope()
     {
-        $entryIds = Title::entryIdTo(8)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+        $this->assertThat(Title::entryIdTo(8)->get(), new CollectionPropertyCompareValueConstraint(8, 'entry_id', '<='));
     }
 
     public function testGroupIdScope()
     {
-        $entryIds = Title::groupId(5)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayHasOnlyValuesConstraint([10]));
+        $this->assertThat(Title::groupId(5)->get(), new CollectionNestedPropertyHasOneValueConstraint(5, 'author', 'group_id'));
     }
 
     public function testNotGroupIdScope()
     {
-        $entryIds = Title::notGroupId(5)->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+        $this->assertThat(Title::notGroupId(5)->get(), new CollectionNestedPropertyDoesNotHaveValueConstraint(5, 'author', 'group_id'));
     }
 
     public function testOffsetScope()
