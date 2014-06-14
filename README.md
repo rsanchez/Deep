@@ -78,7 +78,7 @@ This registers the `Entries`, `Titles` and `Categories` facades, so you can use 
 
 If you are using a table prefix for your database tables (EE uses `exp_` by default, so you most likely are), make sure to set the prefix in Laravel's `app/config/database.php`
 
-## Using the Phar archive for easier distribution
+### Using the Phar archive for easier distribution
 
 You can build a Phar archive as an alternative installation method. The best way to package Deep with your custom distributed add-on is to use the Phar archive, since EE doesn't natively support compser installation out of the box.
 
@@ -644,6 +644,8 @@ $entry->expiration_date
 $entry->comment_expiration_date
 $entry->recent_comment_date
 ```
+
+Dates are serialized to ISO-8601 format during toArray and toJson. To do this, Deep sets Carbon's default format to `DateTime::ISO8601` or `Y-m-d\TH:i:sO`. If you wish to change the default format, you should call `\Carbon\Carbon::setToStringFormat($yourDateFormatString)` prior to serialization. If you wish to reset this attribute globally in Carbon to the original default, you should call `Carbon::resetToStringFormat()`.
 
 ### Channel object
 
