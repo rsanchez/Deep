@@ -79,12 +79,6 @@ class Title extends AbstractJoinableModel
     protected $extraHydrators = array();
 
     /**
-     * The date format used when converting to array / json
-     * @var string
-     */
-    protected static $dateFormat = 'Y-m-d\TH:i:s\Z';
-
-    /**
      * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -186,15 +180,6 @@ class Title extends AbstractJoinableModel
     }
 
     /**
-     * Set the default date format
-     * @param string $dateFormat
-     */
-    public static function setDateFormat($dateFormat)
-    {
-        self::$dateFormat = $dateFormat;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * Joins with the channel data table, and eager load channels, fields and fieldtypes
@@ -263,9 +248,7 @@ class Title extends AbstractJoinableModel
 
         foreach (array('entry_date', 'edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date') as $key) {
             if ($attributes[$key] instanceof Carbon) {
-                $date = clone $attributes[$key];
-                $date->setTimezone(new DateTimeZone('UTC'));
-                $attributes[$key] = $date->format(self::$dateFormat);
+                $attributes[$key] = (string) $attributes[$key];
             }
         }
 

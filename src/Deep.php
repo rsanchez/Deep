@@ -30,6 +30,7 @@ use rsanchez\Deep\Repository\ConfigUploadPrefRepository;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
+use Carbon\Carbon;
 use CI_Controller;
 use Closure;
 
@@ -47,6 +48,8 @@ class Deep extends Container
      */
     public function __construct($config = array())
     {
+        Carbon::setToStringFormat(Carbon::ISO8601);
+
         $this->singleton('config', function ($app) use ($config) {
             return $config;
         });
