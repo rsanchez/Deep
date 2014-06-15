@@ -9,15 +9,18 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\AbstractJoinableModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Repository\MemberFieldRepository;
+use rsanchez\Deep\Model\JoinableTrait;
 
 /**
  * Model for the members table
  */
-class Member extends AbstractJoinableModel
+class Member extends Model
 {
+    use JoinableTrait;
+
     /**
      * {@inheritdoc}
      *

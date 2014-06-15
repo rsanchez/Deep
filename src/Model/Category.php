@@ -9,17 +9,20 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\AbstractJoinableModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
+use rsanchez\Deep\Model\JoinableTrait;
 
 /**
  * Model for the categories table
  */
-class Category extends AbstractJoinableModel
+class Category extends Model
 {
+    use JoinableTrait;
+
     /**
      * {@inheritdoc}
      *

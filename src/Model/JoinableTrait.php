@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Abstract Model which can optionally join the specified table(s)
+ * Model which can optionally join the specified table(s)
  */
-abstract class AbstractJoinableModel extends Model
+trait JoinableTrait
 {
     /**
      * Return a structured array of joinable tables
