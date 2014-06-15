@@ -206,8 +206,8 @@ class ChannelTitlesTableSeeder extends AbstractMigration
             'expiration_date' => 0,
             'comment_expiration_date' => 0,
             'edit_date' => 20140526192714,
-            'recent_comment_date' => 0,
-            'comment_total' => 0,
+            'recent_comment_date' => 1402777896,
+            'comment_total' => 1,
         ]);
 
         $query->execute([
