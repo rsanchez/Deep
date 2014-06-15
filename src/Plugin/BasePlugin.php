@@ -15,7 +15,7 @@ use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
-use rsanchez\Deep\Collection\AbstractFilterableCollection;
+use rsanchez\Deep\Collection\FilterableInterface;
 use rsanchez\Deep\Collection\CategoryCollection;
 use Illuminate\Support\Collection;
 use DateTime;
@@ -483,7 +483,7 @@ abstract class BasePlugin
                             $tag->vars['var_pair'],
                             $tag->vars['var_single']
                         );
-                    } elseif ($value instanceof AbstractFilterableCollection) {
+                    } elseif ($value instanceof FilterableInterface) {
                         $value = $value($tag->params)->toArray();
                     } elseif (is_object($value) && method_exists($value, 'toArray')) {
                         $value = $value->toArray();

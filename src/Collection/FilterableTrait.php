@@ -9,18 +9,16 @@
 
 namespace rsanchez\Deep\Collection;
 
-use Illuminate\Database\Eloquent\Collection;
-
 /**
  * {@inheritdoc}
  *
  * A model collection that is sortable and filterable by common parameters
  */
-abstract class AbstractFilterableCollection extends Collection
+trait FilterableTrait
 {
     /**
      * Create a copy of this Collection
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function createClone()
     {
@@ -34,7 +32,7 @@ abstract class AbstractFilterableCollection extends Collection
      * @param  array                                                  $values
      * @param  bool                                                   $and
      * @param  bool                                                   $not
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeContains($attribute, array $values, $and = false, $not = false)
     {
@@ -72,7 +70,7 @@ abstract class AbstractFilterableCollection extends Collection
      *
      * @param  string                                                 $attribute name of the attribute on which to filter
      * @param  string                                                 $filter    pipe-delimited list of values, optionaly prefixed by not
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeInString($attribute, $filter)
     {
@@ -91,7 +89,7 @@ abstract class AbstractFilterableCollection extends Collection
      * @param  string                                                 $attribute name of the attribute on which to filter
      * @param  array                                                  $values
      * @param  bool                                                   $not
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeIn($attribute, array $values, $not = false)
     {
@@ -106,7 +104,7 @@ abstract class AbstractFilterableCollection extends Collection
      * @param  string                                                 $attribute name of the attribute on which to filter
      * @param  mixed                                                  $value
      * @param  string                                                 $operator  >, >=, <, <=
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeComparison($attribute, $value, $operator)
     {
@@ -141,7 +139,7 @@ abstract class AbstractFilterableCollection extends Collection
      *
      * @param  string                                                 $attribute name of the attribute on which to filter
      * @param  string                                                 $filter    a string describing the filter
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttribute($attribute, $filter)
     {
@@ -187,7 +185,7 @@ abstract class AbstractFilterableCollection extends Collection
      * Filter by model ID
      *
      * @param  int                                                    $id,... one or more IDs
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterById($id)
     {
@@ -205,7 +203,7 @@ abstract class AbstractFilterableCollection extends Collection
      *
      * @param  int                                                    $limit
      * @param  int                                                    $offset
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function limit($limit, $offset = 0)
     {
@@ -219,7 +217,7 @@ abstract class AbstractFilterableCollection extends Collection
      *
      * @param  int                                                    $limit
      * @param  int                                                    $offset
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function offset($offset, $limit = null)
     {
@@ -233,7 +231,7 @@ abstract class AbstractFilterableCollection extends Collection
      *
      * @param  array|int                                              $id   one or more IDs
      * @param  array|string                                           $sort sort direction
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function sortByAttribute($attribute, $sort = 'asc')
     {
@@ -270,7 +268,7 @@ abstract class AbstractFilterableCollection extends Collection
      * Sort by model ID in the specified order
      *
      * @param  int                                                    $id,... one or more IDs
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function sortByFixedOrder($id)
     {
@@ -298,7 +296,7 @@ abstract class AbstractFilterableCollection extends Collection
      * - any model attribute (ex. row_id)
      *
      * @param  array                                                  $params
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function tagparams(array $params)
     {
@@ -363,7 +361,7 @@ abstract class AbstractFilterableCollection extends Collection
      * Alias to tagparams
      *
      * @param  array                                                  $params
-     * @return \rsanchez\Deep\Collection\AbstractFilterableCollection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function __invoke(array $params)
     {

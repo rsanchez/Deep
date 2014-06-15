@@ -9,13 +9,17 @@
 
 namespace rsanchez\Deep\Collection;
 
-use rsanchez\Deep\Collection\AbstractFilterableCollection;
+use rsanchez\Deep\Collection\FilterableTrait;
+use rsanchez\Deep\Collection\FilterableInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Collection of \rsanchez\Deep\Model\Category
  */
-class CategoryCollection extends AbstractFilterableCollection
+class CategoryCollection extends Collection implements FilterableInterface
 {
+    use FilterableTrait;
+
     /**
      * Filter by cat_id attribute
      *
