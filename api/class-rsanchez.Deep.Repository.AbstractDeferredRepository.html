@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.8.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
 
 	<title>Class rsanchez\Deep\Repository\AbstractDeferredRepository</title>
 
-	<script type="text/javascript" src="resources/combined.js?2228357306"></script>
-	<script type="text/javascript" src="elementlist.js?3023966795"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360">
+	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
+	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -40,13 +40,15 @@
 						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.Plugin.html">Plugin</a>
 						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Relations.html">Relations</a>
+						</li>
 				<li class="active main"><a href="namespace-rsanchez.Deep.Repository.html">Repository</a>
 						</li>
 							</ul></li></ul></li>
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 
 		<div id="elements">
@@ -65,6 +67,7 @@
 
 			<h3>Interfaces</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Repository.RepositoryInterface.html">RepositoryInterface</a></li>
 				<li><a href="class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html">UploadPrefRepositoryInterface</a></li>
 			</ul>
 
@@ -80,10 +83,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -116,6 +119,15 @@
 
 	</div>
 
+	<dl class="tree">
+		<dd style="padding-left:0px">
+<b><span>rsanchez\Deep\Repository\AbstractDeferredRepository</span></b>			
+			 implements 
+				<a href="class-rsanchez.Deep.Repository.RepositoryInterface.html"><span>rsanchez\Deep\Repository\RepositoryInterface</span></a>
+			
+			
+		</dd>
+	</dl>
 
 
 	<div>
@@ -137,12 +149,12 @@
 
 
 	<div class="info">
-		<b>Abstract</b><br>
+		<b>Abstract</b><br />
 		
-		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Repository.html">Repository</a><br>
+		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Repository.html">Repository</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#15-54" title="Go to source code">Repository/AbstractDeferredRepository.php</a><br>
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#16-74" title="Go to source code">Repository/AbstractDeferredRepository.php</a><br />
 	</div>
 
 
@@ -160,7 +172,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#32-40" title="Go to source code">__construct</a>( <span>Illuminate\Database\Eloquent\Model <var>$model</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#33-41" title="Go to source code">__construct</a>( <span>Illuminate\Database\Eloquent\Model <var>$model</var></span> )</code>
 
 		<div class="description short">
 			
@@ -198,7 +210,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_boot">#</a>
-		<code><a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#42-53" title="Go to source code">boot</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#43-54" title="Go to source code">boot</a>( )</code>
 
 		<div class="description short">
 			
@@ -213,6 +225,82 @@
 
 
 
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="find" id="_find">
+
+		<td class="attributes"><code>
+			 public 
+			Illuminate\Database\Eloquent\Model|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_find">#</a>
+		<code><a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#56-64" title="Go to source code">find</a>( <span>mixed <var>$id</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Find an entity by ID</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Find an entity by ID</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Illuminate\Database\Eloquent\Model|null</code><br />
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-rsanchez.Deep.Repository.RepositoryInterface.html#_find">rsanchez\Deep\Repository\RepositoryInterface::find()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getModel" id="_getModel">
+
+		<td class="attributes"><code>
+			 public 
+			Illuminate\Database\Eloquent\Model
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getModel">#</a>
+		<code><a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#66-73" title="Go to source code">getModel</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the repository's model instance</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the repository's model instance</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Illuminate\Database\Eloquent\Model</code><br />
+				</div>
 
 
 
@@ -242,7 +330,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#20-24" title="Go to source code"><var>$model</var></a>
+				<a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#21-25" title="Go to source code"><var>$model</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
@@ -250,13 +338,13 @@
 
 			<div class="description short">
 				
-<p>Site model</p>
+<p>Repository Model</p>
 
 			</div>
 
 			<div class="description detailed hidden">
 				
-<p>Site model</p>
+<p>Repository Model</p>
 
 
 			</div>
@@ -269,7 +357,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#26-30" title="Go to source code"><var>$collection</var></a>
+				<a href="source-class-rsanchez.Deep.Repository.AbstractDeferredRepository.html#27-31" title="Go to source code"><var>$collection</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>

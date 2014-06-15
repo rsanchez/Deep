@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.8.0">
-	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+	<meta name="robots" content="noindex" />
 
 	<title>File Plugin/BasePlugin.php</title>
 
-	<script type="text/javascript" src="resources/combined.js?2228357306"></script>
-	<script type="text/javascript" src="elementlist.js?3023966795"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360">
+	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
+	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -41,13 +41,15 @@
 						</li>
 				<li class="active main"><a href="namespace-rsanchez.Deep.Plugin.html">Plugin</a>
 						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Relations.html">Relations</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.Repository.html">Repository</a>
 						</li>
 							</ul></li></ul></li>
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 
 		<div id="elements">
@@ -69,10 +71,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -424,13 +426,13 @@
 </span><span id="326" class="l"><a class="l" href="#326">326: </a>
 </span><span id="327" class="l"><a class="l" href="#327">327: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$spacePosition</span> !== <span class="php-keyword1">false</span>) {
 </span><span id="328" class="l"><a class="l" href="#328">328: </a>                <span class="php-var">$name</span> = <span class="php-keyword2">substr</span>(<span class="php-var">$tag</span>, <span class="php-num">0</span>, <span class="php-var">$spacePosition</span>);
-</span><span id="329" class="l"><a class="l" href="#329">329: </a>                <span class="php-var">$params</span> = ee()-&gt;functions-&gt;assign_parameters(<span class="php-keyword2">substr</span>(<span class="php-var">$tag</span>, <span class="php-var">$spacePosition</span>));
+</span><span id="329" class="l"><a class="l" href="#329">329: </a>                <span class="php-var">$tagparams</span> = ee()-&gt;functions-&gt;assign_parameters(<span class="php-keyword2">substr</span>(<span class="php-var">$tag</span>, <span class="php-var">$spacePosition</span>));
 </span><span id="330" class="l"><a class="l" href="#330">330: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-keyword2">preg_match</span>(<span class="php-quote">'#^([a-z_]+)=([\042\047]?)?(.*?)\\2$#'</span>, <span class="php-var">$tag</span>, <span class="php-var">$match</span>)) {
 </span><span id="331" class="l"><a class="l" href="#331">331: </a>                <span class="php-var">$name</span> = <span class="php-var">$match</span>[<span class="php-num">1</span>];
-</span><span id="332" class="l"><a class="l" href="#332">332: </a>                <span class="php-var">$params</span> = <span class="php-var">$match</span>[<span class="php-num">3</span>] ? <span class="php-keyword1">array</span>(<span class="php-var">$match</span>[<span class="php-num">3</span>]) : <span class="php-keyword1">array</span>(<span class="php-quote">''</span>);
+</span><span id="332" class="l"><a class="l" href="#332">332: </a>                <span class="php-var">$tagparams</span> = <span class="php-var">$match</span>[<span class="php-num">3</span>] ? <span class="php-keyword1">array</span>(<span class="php-var">$match</span>[<span class="php-num">3</span>]) : <span class="php-keyword1">array</span>(<span class="php-quote">''</span>);
 </span><span id="333" class="l"><a class="l" href="#333">333: </a>            } <span class="php-keyword1">else</span> {
 </span><span id="334" class="l"><a class="l" href="#334">334: </a>                <span class="php-var">$name</span> = <span class="php-var">$tag</span>;
-</span><span id="335" class="l"><a class="l" href="#335">335: </a>                <span class="php-var">$params</span> = <span class="php-keyword1">array</span>();
+</span><span id="335" class="l"><a class="l" href="#335">335: </a>                <span class="php-var">$tagparams</span> = <span class="php-keyword1">array</span>();
 </span><span id="336" class="l"><a class="l" href="#336">336: </a>            }
 </span><span id="337" class="l"><a class="l" href="#337">337: </a>
 </span><span id="338" class="l"><a class="l" href="#338">338: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$prefix</span> &amp;&amp; <span class="php-keyword2">strncmp</span>(<span class="php-var">$name</span>, <span class="php-var">$prefix</span>, <span class="php-var">$prefixLength</span>) !== <span class="php-num">0</span>) {
@@ -440,12 +442,12 @@
 </span><span id="342" class="l"><a class="l" href="#342">342: </a>            <span class="php-var">$singleTags</span>[] = (object) <span class="php-keyword1">array</span>(
 </span><span id="343" class="l"><a class="l" href="#343">343: </a>                <span class="php-quote">'name'</span> =&gt; <span class="php-var">$prefix</span> ? <span class="php-keyword2">substr</span>(<span class="php-var">$name</span>, <span class="php-var">$prefixLength</span>) : <span class="php-var">$name</span>,
 </span><span id="344" class="l"><a class="l" href="#344">344: </a>                <span class="php-quote">'key'</span> =&gt; <span class="php-var">$tag</span>,
-</span><span id="345" class="l"><a class="l" href="#345">345: </a>                <span class="php-quote">'params'</span> =&gt; <span class="php-var">$params</span>,
+</span><span id="345" class="l"><a class="l" href="#345">345: </a>                <span class="php-quote">'params'</span> =&gt; <span class="php-var">$tagparams</span>,
 </span><span id="346" class="l"><a class="l" href="#346">346: </a>                <span class="php-quote">'tagdata'</span> =&gt; <span class="php-quote">''</span>,
 </span><span id="347" class="l"><a class="l" href="#347">347: </a>            );
 </span><span id="348" class="l"><a class="l" href="#348">348: </a>        }
 </span><span id="349" class="l"><a class="l" href="#349">349: </a>
-</span><span id="350" class="l"><a class="l" href="#350">350: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$varPair</span> <span class="php-keyword1">as</span> <span class="php-var">$tag</span> =&gt; <span class="php-var">$params</span>) {
+</span><span id="350" class="l"><a class="l" href="#350">350: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$varPair</span> <span class="php-keyword1">as</span> <span class="php-var">$tag</span> =&gt; <span class="php-var">$tagparams</span>) {
 </span><span id="351" class="l"><a class="l" href="#351">351: </a>            <span class="php-var">$spacePosition</span> = <span class="php-keyword2">strpos</span>(<span class="php-var">$tag</span>, <span class="php-quote">' '</span>);
 </span><span id="352" class="l"><a class="l" href="#352">352: </a>
 </span><span id="353" class="l"><a class="l" href="#353">353: </a>            <span class="php-var">$name</span> = <span class="php-var">$spacePosition</span> === <span class="php-keyword1">false</span> ? <span class="php-var">$tag</span> : <span class="php-keyword2">substr</span>(<span class="php-var">$tag</span>, <span class="php-num">0</span>, <span class="php-var">$spacePosition</span>);
@@ -460,7 +462,7 @@
 </span><span id="362" class="l"><a class="l" href="#362">362: </a>                <span class="php-var">$pairTags</span>[] = (object) <span class="php-keyword1">array</span>(
 </span><span id="363" class="l"><a class="l" href="#363">363: </a>                    <span class="php-quote">'name'</span> =&gt; <span class="php-var">$prefix</span> ? <span class="php-keyword2">substr</span>(<span class="php-var">$name</span>, <span class="php-var">$prefixLength</span>) : <span class="php-var">$name</span>,
 </span><span id="364" class="l"><a class="l" href="#364">364: </a>                    <span class="php-quote">'key'</span> =&gt; <span class="php-var">$key</span>,
-</span><span id="365" class="l"><a class="l" href="#365">365: </a>                    <span class="php-quote">'params'</span> =&gt; <span class="php-var">$params</span> ?: <span class="php-keyword1">array</span>(),
+</span><span id="365" class="l"><a class="l" href="#365">365: </a>                    <span class="php-quote">'params'</span> =&gt; <span class="php-var">$tagparams</span> ?: <span class="php-keyword1">array</span>(),
 </span><span id="366" class="l"><a class="l" href="#366">366: </a>                    <span class="php-quote">'tagdata'</span> =&gt; <span class="php-var">$matches</span>[<span class="php-num">2</span>][<span class="php-var">$i</span>],
 </span><span id="367" class="l"><a class="l" href="#367">367: </a>                );
 </span><span id="368" class="l"><a class="l" href="#368">368: </a>            }

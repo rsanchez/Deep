@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+	<meta name="robots" content="noindex" />
+
+	<title>File Repository/RepositoryInterface.php</title>
+
+	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
+	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-rsanchez.html">rsanchez<span></span></a>
+						<ul>
+				<li class="active main"><a href="namespace-rsanchez.Deep.html">Deep<span></span></a>
+						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
+						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
+						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
+						</li>
+							</ul></li></ul></li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Collection.html">Collection</a>
+						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Hydrator.html">Hydrator</a>
+						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Model.html">Model</a>
+						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Plugin.html">Plugin</a>
+						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Relations.html">Relations</a>
+						</li>
+				<li class="active main"><a href="namespace-rsanchez.Deep.Repository.html">Repository</a>
+						</li>
+							</ul></li></ul></li>
+			</ul>
+		</div>
+
+		<hr />
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Repository.AbstractDeferredRepository.html">AbstractDeferredRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.AbstractFieldRepository.html">AbstractFieldRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.CategoryFieldRepository.html">CategoryFieldRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">ChannelRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.ConfigUploadPrefRepository.html">ConfigUploadPrefRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.FieldRepository.html">FieldRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.MemberFieldRepository.html">MemberFieldRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.SiteRepository.html">SiteRepository</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.UploadPrefRepository.html">UploadPrefRepository</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li class="active"><a href="class-rsanchez.Deep.Repository.RepositoryInterface.html">RepositoryInterface</a></li>
+				<li><a href="class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html">UploadPrefRepositoryInterface</a></li>
+			</ul>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-rsanchez.Deep.Repository.html" title="Summary of rsanchez\Deep\Repository"><span>Namespace</span></a>
+			</li>
+			<li>
+				<a href="class-rsanchez.Deep.Repository.RepositoryInterface.html" title="Summary of rsanchez\Deep\Repository\RepositoryInterface"><span>Class</span></a>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<pre><code><span id="1" class="l"><a class="l" href="#1"> 1: </a><span class="xlang">&lt;?php</span>
+</span><span id="2" class="l"><a class="l" href="#2"> 2: </a>
+</span><span id="3" class="l"><a class="l" href="#3"> 3: </a><span class="php-comment">/**
+</span></span><span id="4" class="l"><a class="l" href="#4"> 4: </a><span class="php-comment"> * Deep
+</span></span><span id="5" class="l"><a class="l" href="#5"> 5: </a><span class="php-comment"> *
+</span></span><span id="6" class="l"><a class="l" href="#6"> 6: </a><span class="php-comment"> * @package      rsanchez\Deep
+</span></span><span id="7" class="l"><a class="l" href="#7"> 7: </a><span class="php-comment"> * @author       Rob Sanchez &lt;info@robsanchez.com&gt;
+</span></span><span id="8" class="l"><a class="l" href="#8"> 8: </a><span class="php-comment"> */</span>
+</span><span id="9" class="l"><a class="l" href="#9"> 9: </a>
+</span><span id="10" class="l"><a class="l" href="#10">10: </a><span class="php-keyword1">namespace</span> rsanchez\Deep\Repository;
+</span><span id="11" class="l"><a class="l" href="#11">11: </a>
+</span><span id="12" class="l"><a class="l" href="#12">12: </a><span class="php-comment">/**
+</span></span><span id="13" class="l"><a class="l" href="#13">13: </a><span class="php-comment"> * Repository of all UploadPrefs
+</span></span><span id="14" class="l"><a class="l" href="#14">14: </a><span class="php-comment"> */</span>
+</span><span id="15" class="l"><a class="l" href="#15">15: </a><span class="php-keyword1">interface</span> <a id="RepositoryInterface" href="#RepositoryInterface">RepositoryInterface</a>
+</span><span id="16" class="l"><a class="l" href="#16">16: </a>{
+</span><span id="17" class="l"><a class="l" href="#17">17: </a>    <span class="php-comment">/**
+</span></span><span id="18" class="l"><a class="l" href="#18">18: </a><span class="php-comment">     * Find an entity by ID
+</span></span><span id="19" class="l"><a class="l" href="#19">19: </a><span class="php-comment">     * @var int $id
+</span></span><span id="20" class="l"><a class="l" href="#20">20: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Model|null
+</span></span><span id="21" class="l"><a class="l" href="#21">21: </a><span class="php-comment">     */</span>
+</span><span id="22" class="l"><a class="l" href="#22">22: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_find" href="#_find">find</a>(<span class="php-var">$id</span>);
+</span><span id="23" class="l"><a class="l" href="#23">23: </a>}
+</span><span id="24" class="l"><a class="l" href="#24">24: </a></span></code></pre>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>

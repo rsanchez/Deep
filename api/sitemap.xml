@@ -31,6 +31,9 @@
 	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.Plugin.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.Relations.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.Repository.html</loc>
 </url>
 
@@ -183,7 +186,13 @@
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.CategoryField.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.CategoryPosts.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.Channel.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.Comment.html</loc>
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.Entry.html</loc>
@@ -234,6 +243,12 @@
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Plugin.BasePlugin.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Relations.HasManyFromRepository.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Relations.HasOneFromRepository.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Repository.AbstractDeferredRepository.html</loc>
 </url>
 <url>
@@ -265,6 +280,9 @@
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.FileInterface.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Repository.RepositoryInterface.html</loc>
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html</loc>

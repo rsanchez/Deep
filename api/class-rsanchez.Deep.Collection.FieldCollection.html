@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.8.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
 
 	<title>Class rsanchez\Deep\Collection\FieldCollection</title>
 
-	<script type="text/javascript" src="resources/combined.js?2228357306"></script>
-	<script type="text/javascript" src="elementlist.js?3023966795"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360">
+	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
+	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -40,13 +40,15 @@
 						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.Plugin.html">Plugin</a>
 						</li>
+				<li class="main"><a href="namespace-rsanchez.Deep.Relations.html">Relations</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.Repository.html">Repository</a>
 						</li>
 							</ul></li></ul></li>
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 
 		<div id="elements">
@@ -87,10 +89,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -130,14 +132,14 @@ Illuminate\Database\Eloquent\Collection
 			
 		</dd>
 		<dd style="padding-left:30px">
-			<img src="resources/inherit.png" alt="Extended by">
+			<img src="resources/inherit.png" alt="Extended by" />
 			<a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html"><span>rsanchez\Deep\Collection\AbstractFieldCollection</span></a>
 			
 			
 			
 		</dd>
 		<dd style="padding-left:60px">
-			<img src="resources/inherit.png" alt="Extended by">
+			<img src="resources/inherit.png" alt="Extended by" />
 <b><span>rsanchez\Deep\Collection\FieldCollection</span></b>			
 			
 			
@@ -154,23 +156,245 @@ Illuminate\Database\Eloquent\Collection
 	<div class="info">
 		
 		
-		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Collection.html">Collection</a><br>
+		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Collection.html">Collection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#14-19" title="Go to source code">Collection/FieldCollection.php</a><br>
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#14-100" title="Go to source code">Collection/FieldCollection.php</a><br />
 	</div>
 
 
 
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#32-44" title="Go to source code">__construct</a>( <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#___construct">rsanchez\Deep\Collection\AbstractFieldCollection::__construct()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="push" id="_push">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_push">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#46-56" title="Go to source code">push</a>( <span>mixed <var>$field</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#_push">rsanchez\Deep\Collection\AbstractFieldCollection::push()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasFieldtype" id="_hasFieldtype">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasFieldtype">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#58-67" title="Go to source code">hasFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Check if this collection uses the specified fieldtype</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Check if this collection uses the specified fieldtype</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFieldIdsByFieldtype" id="_getFieldIdsByFieldtype">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFieldIdsByFieldtype">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#69-78" title="Go to source code">getFieldIdsByFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Get the field IDs for the specified fieldtype</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the field IDs for the specified fieldtype</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFieldtypes" id="_getFieldtypes">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFieldtypes">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#80-87" title="Go to source code">getFieldtypes</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get a list of names of fieldtypes in this collection</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get a list of names of fieldtypes in this collection</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addFieldtype" id="_addFieldtype">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addFieldtype">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#89-99" title="Go to source code">addFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Add a fieldtype to the list of fieldtypes in this collection</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Add a fieldtype to the list of fieldtypes in this collection</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#methods">rsanchez\Deep\Collection\AbstractFieldCollection</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#___construct">__construct()</a>, 
 			<a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#_getFieldId">getFieldId()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#_hasField">hasField()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#_push">push()</a>
+			<a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#_hasField">hasField()</a>
 		</code></td>
 	</tr>
 	</table>
@@ -185,6 +409,64 @@ Illuminate\Database\Eloquent\Collection
 
 
 
+	<table class="summary" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="fieldtypes" id="$fieldtypes">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#19-23" title="Go to source code"><var>$fieldtypes</var></a>
+		</td>
+		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
+		<td class="description"><div>
+			<a href="#$fieldtypes" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Fieldtypes used by this collection</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Fieldtypes used by this collection</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="fieldIdsByFieldtype" id="$fieldIdsByFieldtype">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#25-30" title="Go to source code"><var>$fieldIdsByFieldtype</var></a>
+		</td>
+		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
+		<td class="description"><div>
+			<a href="#$fieldIdsByFieldtype" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Map of fieldtypes to field IDs:<br />
+'fieldtype_name' =&gt; array(1, 2, 3),</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Map of fieldtypes to field IDs: 'fieldtype_name' =&gt; array(1, 2, 3),</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html#properties">rsanchez\Deep\Collection\AbstractFieldCollection</a></caption>
