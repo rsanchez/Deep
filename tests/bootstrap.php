@@ -6,19 +6,10 @@ use Phinx\Migration\Manager as MigrationManager;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Connection;
 
-require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/constraints/ArrayHasOnlyValuesConstraint.php';
-require_once __DIR__.'/constraints/ArrayHasValueConstraint.php';
-require_once __DIR__.'/constraints/ArrayDoesNotHaveValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionPropertyHasOneValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionPropertyCompareValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionPropertyCompareDateTimeConstraint.php';
-require_once __DIR__.'/constraints/CollectionPropertyDoesNotHaveValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedPropertyHasOneValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedPropertyDoesNotHaveValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedCollectionPropertyHasOneValueConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedCollectionPropertyHasAllValuesConstraint.php';
-require_once __DIR__.'/constraints/CollectionNestedCollectionPropertyDoesNotHaveAllValuesConstraint.php';
+$loader = require_once __DIR__.'/../vendor/autoload.php';
+
+// auto-load custom PHPUnit constraints
+$loader->add('', __DIR__.'/constraints/');
 
 /**
  * Create and seed an in-memory sqlite database for testing
