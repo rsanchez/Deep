@@ -22,7 +22,6 @@ use rsanchez\Deep\Relations\HasOneFromRepository;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
-use DateTimeZone;
 
 /**
  * Model for the channel_titles table
@@ -80,7 +79,7 @@ class Title extends AbstractJoinableModel
 
     /**
      * Define the Author Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function author()
     {
@@ -89,7 +88,7 @@ class Title extends AbstractJoinableModel
 
     /**
      * Define the Categories Eloquent relationship
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     public function categories()
     {
@@ -109,6 +108,15 @@ class Title extends AbstractJoinableModel
             'channel_id',
             self::$channelRepository
         );
+    }
+
+    /**
+     * Define the Comments Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('\\rsanchez\\Deep\\Model\\Comment', 'entry_id', 'entry_id');
     }
 
     /**
@@ -1291,6 +1299,24 @@ class Title extends AbstractJoinableModel
             }
 
             return $query->withFields();
+        });
+    }
+
+    /**
+     * Eager load author
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Closure|null                          $callback eager load constraint
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithComments(Builder $query, Closure $callback = null)
+    {
+        return $query->with(array('comments' => function ($query) use ($callback) {
+            if ($callback) {
+                $callback($query);
+            }
+
+            return $query->with('author');
         });
     }
 
