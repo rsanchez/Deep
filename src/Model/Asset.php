@@ -11,7 +11,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\AbstractJoinableModel;
+use rsanchez\Deep\Model\JoinableTrait;
 use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Model\UploadPref;
@@ -21,8 +21,10 @@ use DateTimeZone;
 /**
  * Model for the assets_files table, joined with assets_selections
  */
-class Asset extends AbstractJoinableModel implements FileInterface
+class Asset extends Model implements FileInterface
 {
+    use JoinableTrait;
+
     /**
      * {@inheritdoc}
      *

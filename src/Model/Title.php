@@ -12,7 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
-use rsanchez\Deep\Model\AbstractJoinableModel;
+use rsanchez\Deep\Model\JoinableTrait;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
@@ -26,8 +26,10 @@ use DateTime;
 /**
  * Model for the channel_titles table
  */
-class Title extends AbstractJoinableModel
+class Title extends Model
 {
+    use JoinableTrait;
+
     /**
      * {@inheritdoc}
      *

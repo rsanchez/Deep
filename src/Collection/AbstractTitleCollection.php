@@ -9,15 +9,19 @@
 
 namespace rsanchez\Deep\Collection;
 
-use rsanchez\Deep\Collection\AbstractFilterableCollection;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
+use rsanchez\Deep\Collection\FilterableTrait;
+use rsanchez\Deep\Collection\FilterableInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Collection of \rsanchez\Deep\Model\Title
  */
-abstract class AbstractTitleCollection extends AbstractFilterableCollection
+abstract class AbstractTitleCollection extends Collection implements FilterableInterface
 {
+    use FilterableTrait;
+
     /**
      * All of the entry IDs in this collection (including related entries)
      * @var array
