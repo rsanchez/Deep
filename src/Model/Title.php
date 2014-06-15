@@ -1317,7 +1317,7 @@ class Title extends AbstractJoinableModel
             }
 
             return $query->with('author');
-        });
+        }));
     }
 
     /**
