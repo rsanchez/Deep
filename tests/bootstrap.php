@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Output\NullOutput;
 use Phinx\Config\Config;
 use Phinx\Migration\Manager as MigrationManager;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -32,7 +32,6 @@ $config = new Config([
         'default_migration_table' => 'phinxlog',
         'default_database' => 'test',
         'test' => [
-            //'name' => __DIR__.'/test',
             'name' => ':memory:',
             'adapter' => 'sqlite',
             'memory' => true,
@@ -40,10 +39,7 @@ $config = new Config([
     ],
 ]);
 
-// Print the migrations to the command line
-$output = new StreamOutput(fopen('php://stdout', 'w'));
-
-$migrationManager = new MigrationManager($config, $output);
+$migrationManager = new MigrationManager($config, new NullOutput());
 
 // get the PDO object used by Phinx
 $pdo = $migrationManager->getEnvironment('test')->getAdapter()->getConnection();
