@@ -448,6 +448,14 @@ Eager load the `siblings` attribute (native EE relationship fields only).
 Entries::withSiblings()->get();
 ```
 
+#### With Comments
+
+Eager load the `comments` attribute, a collection of Comment models.
+
+```
+Entries::withComments()->get();
+```
+
 ### Custom Field Scopes
 
 This set of scopes allows you to use the traditional some Eloquent methods with custom field names instead of `field_id_X`.
@@ -811,6 +819,30 @@ $entry->author->pmember_id
 $entry->author->rte_enabled
 $entry->author->rte_toolset_id
 $entry->author->your_custom_field
+```
+
+### Comments
+
+Each `Entry` object has a `comments` property which is a collection of `Comment` objects. Use the `withComments` scope to eager load this relationship.
+
+```
+$entry->comment->comment_id
+$entry->comment->site_id
+$entry->comment->entry_id
+$entry->comment->channel_id
+$entry->comment->author_id
+$entry->comment->status
+$entry->comment->name
+$entry->comment->email
+$entry->comment->url
+$entry->comment->location
+$entry->comment->ip_address
+$entry->comment->comment_date
+$entry->comment->edit_date
+$entry->comment->comment
+$entry->comment->author->member_id
+$entry->comment->author->username
+$entry->comment->author->screen_name
 ```
 
 ### Custom Fields

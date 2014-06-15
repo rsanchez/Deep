@@ -45,7 +45,7 @@ class Title extends AbstractJoinableModel
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('chan', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled');
+    protected $hidden = array('chan', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'comments');
 
     /**
      * The class used when creating a new Collection
