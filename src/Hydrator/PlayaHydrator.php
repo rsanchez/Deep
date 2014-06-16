@@ -62,7 +62,10 @@ class PlayaHydrator extends AbstractHydrator
 
                 $cols->each(function ($col) use ($entry, $field, $row, $relatedEntries) {
                     $row->setAttribute($col->col_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field, $row, $col) {
-                        return $entry->getKey() === $relatedEntry->parent_entry_id && $field->field_id === $relatedEntry->parent_field_id && $col->col_id === $relatedEntry->parent_col_id;
+                        return $entry->getKey() === $relatedEntry->parent_entry_id
+                            && $field->field_id === $relatedEntry->parent_field_id
+                            && $col->col_id === $relatedEntry->parent_col_id
+                            && $row->row_id === $relatedEntry->parent_row_id;
                     }));
                 });
 
