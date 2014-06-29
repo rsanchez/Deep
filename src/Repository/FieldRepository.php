@@ -40,19 +40,11 @@ class FieldRepository extends AbstractFieldRepository
     {
         if (is_null($this->collection)) {
 
-            $this->collection = $this->model->orderBy('field_order', 'asc')->get();
-
-            $this->collection->sort(function ($a, $b) {
-                if ($a->field_type === 'matrix' || $a->field_type === 'grid') {
-                    return true;
-                }
-
-                if ($a->field_type === 'playa' || $a->field_type === 'relationship') {
-                    return true;
-                }
-
-                return $a->field_order >= $b->field_order;
-            });
+            $this->collection = $this->model
+                ->orderByRaw("field_type IN ('matrix', 'grid') DESC")
+                ->orderByRaw("field_type IN ('playa', 'relationship') DESC")
+                ->orderBy('field_order', 'asc')
+                ->get();
 
             foreach ($this->collection as $field) {
                 if (! array_key_exists($field->group_id, $this->fieldsByGroup)) {
