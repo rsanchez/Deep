@@ -6,7 +6,7 @@ use Phinx\Migration\Manager as MigrationManager;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Connection;
 
-$loader = require_once __DIR__.'/../vendor/autoload.php';
+$loader = require __DIR__.'/../vendor/autoload.php';
 
 // auto-load custom PHPUnit constraints
 $loader->add('', __DIR__.'/constraints/');
