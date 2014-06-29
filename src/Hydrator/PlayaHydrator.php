@@ -15,6 +15,7 @@ use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\PlayaEntry;
+use rsanchez\Deep\Collection\PlayaCollection;
 
 /**
  * Hydrator for the Playa fieldtype
@@ -39,7 +40,7 @@ class PlayaHydrator extends AbstractHydrator
                 $this->entries[$type][$entityId][$propertyId] = new PlayaCollection();
             }
 
-            $this->entries[$type][$entityId][$propertyId]->push($asset);
+            $this->entries[$type][$entityId][$propertyId]->push($entry);
         }
 
         // add these entry IDs to the main collection

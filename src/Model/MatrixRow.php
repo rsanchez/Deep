@@ -18,7 +18,7 @@ use rsanchez\Deep\Collection\MatrixColCollection;
 /**
  * Model for the matrix_data table
  */
-class MatrixRow extends Model
+class MatrixRow extends AbstractEntity
 {
     /**
      * {@inheritdoc}

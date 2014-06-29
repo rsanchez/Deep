@@ -40,7 +40,7 @@ class RelationshipHydrator extends AbstractHydrator
                 $this->entries[$type][$entityId][$propertyId] = new RelationshipCollection();
             }
 
-            $this->entries[$type][$entityId][$propertyId]->push($asset);
+            $this->entries[$type][$entityId][$propertyId]->push($entry);
         }
 
         // add these entry IDs to the main collection
