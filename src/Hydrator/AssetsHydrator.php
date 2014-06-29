@@ -12,7 +12,8 @@ namespace rsanchez\Deep\Hydrator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\Asset;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
@@ -23,10 +24,10 @@ use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 class AssetsHydrator extends AbstractHydrator
 {
     /**
-     * All Asset selections for this collection
-     * @var \rsanchez\Deep\Collection\AssetCollection
+     * Asset selections sorted out by entity (entry or matrix or grid)
+     * @var array
      */
-    protected $selections;
+    protected $selections = array();
 
     /**
      * UploadPref model repository
@@ -53,11 +54,27 @@ class AssetsHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $this->selections = Asset::entryId($entryIds)->get();
+        $assets = Asset::entryId($entryIds)->get();
 
-        foreach ($this->selections as $asset) {
-            if ($asset->filedir_id && $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {
-                $asset->setUploadPref($uploadPref);
+        foreach ($assets as $asset) {
+            if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {
+                continue;
+            }
+
+            $asset->setUploadPref($uploadPref);
+
+            if ($asset->content_type === 'matrix' || $asset->content_type === 'grid') {
+                if (! isset($this->selections[$asset->content_type][$asset->row_id][$asset->col_id])) {
+                    $this->selections[$asset->content_type][$asset->row_id][$asset->col_id] = new AssetCollection();
+                }
+
+                $this->selections[$asset->content_type][$asset->row_id][$asset->col_id]->push($asset);
+            } else {
+                if (! isset($this->selections['entry'][$asset->entry_id][$asset->field_id])) {
+                    $this->selections['entry'][$asset->entry_id][$asset->field_id] = new AssetCollection();
+                }
+
+                $this->selections['entry'][$asset->entry_id][$asset->field_id]->push($asset);
             }
         }
     }
@@ -65,58 +82,14 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(Entry $entry)
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $fieldtype = $this->fieldtype;
-        $collection = $this->collection;
-        $selections = $this->selections;
+        if (isset($this->selections[$entity->getType()][$entity->getId()][$property->getId()])) {
+            $value = $this->selections[$entity->getType()][$entity->getId()][$property->getId()];
+        } else {
+            $value = new AssetCollection();
+        }
 
-        // loop through all assets fields
-        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $selections) {
-
-            $entry->setAttribute($field->field_name, $selections->filter(function ($selection) use ($entry, $field) {
-                return $entry->getKey() === $selection->getKey() && $field->field_id === $selection->field_id;
-            }));
-
-        });
-
-        // loop through all matrix fields
-        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($collection, $entry, $selections, $fieldtype) {
-
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $selections, $field, $fieldtype) {
-
-                $cols = $collection->getMatrixCols()->filter(function ($col) use ($field, $fieldtype) {
-                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
-                });
-
-                $cols->each(function ($col) use ($entry, $field, $row, $selections) {
-                    $row->setAttribute($col->col_name, $selections->filter(function ($selection) use ($entry, $field, $row, $col) {
-                        return $entry->getKey() === $selection->getKey() && $col->col_id === $selection->col_id && $selection->content_type === 'matrix';
-                    }));
-                });
-
-            });
-
-        });
-
-        // loop through all grid fields
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $selections, $fieldtype) {
-
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $selections, $field, $fieldtype) {
-
-                $cols = $collection->getGridCols()->filter(function ($col) use ($field, $fieldtype) {
-                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
-                });
-
-                $cols->each(function ($col) use ($entry, $field, $row, $selections) {
-                    $value = $selections->filter(function ($selection) use ($entry, $field, $row, $col) {
-                        return $entry->getKey() === $selection->getKey() && $col->col_id === $selection->col_id;
-                    });
-                    $row->setAttribute($col->col_name, $value);
-                });
-
-            });
-
-        });
+        $entity->setAttribute($property->getName(), $value);
     }
 }

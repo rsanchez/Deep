@@ -29,6 +29,8 @@ class FieldCollection extends AbstractFieldCollection
      */
     protected $fieldIdsByFieldtype = array();
 
+    protected $fieldsByFieldtype = array();
+
     /**
      * {@inheritdoc}
      */
@@ -40,6 +42,12 @@ class FieldCollection extends AbstractFieldCollection
             $this->addFieldtype($field->field_type);
 
             $this->fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
+
+            if (! isset($this->fieldsByFieldtype[$field->field_type])) {
+                $this->fieldsByFieldtype[$field->field_type] = new FieldCollection();
+            }
+
+            $this->fieldsByFieldtype[$field->field_type]->items[] = $field;
         }
     }
 
@@ -51,6 +59,12 @@ class FieldCollection extends AbstractFieldCollection
         $this->addFieldtype($field->field_type);
 
         $this->fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
+
+        if (! isset($this->fieldsByFieldtype[$field->field_type])) {
+            $this->fieldsByFieldtype[$field->field_type] = new FieldCollection();
+        }
+
+        $this->fieldsByFieldtype[$field->field_type]->items[] = $field;
 
         return parent::push($field);
     }
@@ -75,6 +89,11 @@ class FieldCollection extends AbstractFieldCollection
     public function getFieldIdsByFieldtype($fieldtype)
     {
         return isset($this->fieldIdsByFieldtype[$fieldtype]) ? $this->fieldIdsByFieldtype[$fieldtype] : array();
+    }
+
+    public function getFieldsByFieldtype($fieldtype)
+    {
+        return isset($this->fieldsByFieldtype[$fieldtype]) ? $this->fieldsByFieldtype[$fieldtype] : new FieldCollection();
     }
 
     /**

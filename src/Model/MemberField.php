@@ -53,4 +53,36 @@ class MemberField extends AbstractField
     {
         return $this->getAttribute('m_field_id');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->m_field_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'm_field_id_'.$this->m_field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->m_field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->m_field_type;
+    }
 }

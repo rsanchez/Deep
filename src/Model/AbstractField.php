@@ -9,12 +9,12 @@
 
 namespace rsanchez\Deep\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\AbstractProperty;
 
 /**
  * Interface for field models
  */
-abstract class AbstractField extends Model
+abstract class AbstractField extends AbstractProperty
 {
     /**
      * Get the field short name

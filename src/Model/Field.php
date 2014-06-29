@@ -41,4 +41,41 @@ class Field extends AbstractField
     {
         return new FieldCollection($fields);
     }
+
+    public function hasRows()
+    {
+        return $this->field_type === 'matrix' || $this->field_type === 'grid';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->field_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'field_id_'.$this->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->field_type;
+    }
 }

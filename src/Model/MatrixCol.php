@@ -11,12 +11,13 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Collection\MatrixColCollection;
 
 /**
  * Model for the matrix_cols table
  */
-class MatrixCol extends Model
+class MatrixCol extends AbstractProperty
 {
     /**
      * {@inheritdoc}
@@ -55,5 +56,37 @@ class MatrixCol extends Model
     public function newCollection(array $models = array())
     {
         return new MatrixColCollection($models);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->col_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'col_id_'.$this->col_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->col_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->col_type;
     }
 }

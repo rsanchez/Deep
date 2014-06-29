@@ -37,4 +37,36 @@ class CategoryField extends AbstractField
     {
         return new CategoryFieldCollection($fields);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->field_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'field_id_'.$this->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->field_type;
+    }
 }

@@ -127,9 +127,9 @@ class File extends Model implements FileInterface
      */
     public function scopeFromEntryCollection(Builder $query, EntryCollection $collection)
     {
-        $collection->each(function ($entry) use ($query) {
+        foreach ($collection as $entry) {
 
-            $entry->channel->fieldsByType('file')->each(function ($field) use ($entry, $query) {
+            foreach ($entry->channel->fieldsByType('file') as $field) {
 
                 $value = $entry->getAttribute('field_id_'.$field->field_id);
 
@@ -144,9 +144,9 @@ class File extends Model implements FileInterface
                     return $query->where('file_name', $filename)
                         ->where('upload_location_id', $filedir);
                 });
-            });
+            }
 
-        });
+        }
 
         return $query;
     }
