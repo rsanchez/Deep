@@ -55,5 +55,7 @@ class PlayaHydrator extends AbstractHydrator
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : new PlayaCollection();
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

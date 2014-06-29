@@ -77,5 +77,7 @@ class FileHydrator extends AbstractHydrator
         $value = $value && isset($this->files[$value]) ? $this->files[$value] : null;
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

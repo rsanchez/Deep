@@ -56,5 +56,7 @@ class RelationshipHydrator extends AbstractHydrator
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : new RelationshipCollection();
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

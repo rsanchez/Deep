@@ -91,5 +91,7 @@ class AssetsHydrator extends AbstractHydrator
         }
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

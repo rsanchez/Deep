@@ -90,5 +90,7 @@ class GridHydrator extends AbstractHydrator
         $rows = isset($this->rows[$entity->getId()][$property->getId()]) ? $this->rows[$entity->getId()][$property->getId()] : new GridRowCollection();
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

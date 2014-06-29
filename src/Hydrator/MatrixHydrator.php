@@ -86,5 +86,7 @@ class MatrixHydrator extends AbstractHydrator
         $rows = isset($this->rows[$entity->getId()][$property->getId()]) ? $this->rows[$entity->getId()][$property->getId()] : new MatrixRowCollection();
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

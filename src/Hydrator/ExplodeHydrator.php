@@ -30,5 +30,7 @@ class ExplodeHydrator extends AbstractHydrator
         $value = $value ? explode("\n", $value) : null;
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

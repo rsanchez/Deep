@@ -60,6 +60,8 @@ class WysiwygHydrator extends AbstractHydrator
         $value = $this->parse($entity->getAttribute($property->getIdentifer()));
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 
     /**

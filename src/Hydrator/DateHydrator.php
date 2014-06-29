@@ -31,5 +31,7 @@ class DateHydrator extends AbstractHydrator
         $value = $value ? Carbon::createFromFormat('U', $value) : null;
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

@@ -51,5 +51,7 @@ class SiblingsHydrator extends AbstractHydrator
         $value = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : new RelationshipCollection();
 
         $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }
