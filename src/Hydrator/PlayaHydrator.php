@@ -23,28 +23,41 @@ use rsanchez\Deep\Collection\PlayaCollection;
 class PlayaHydrator extends AbstractHydrator
 {
     /**
+     * List of entries in this collection, organized by
+     * type, entity and property
+     * @var array
+     */
+    protected $entries;
+
+    /**
+     * Collection of entries being loaded by the parent collection
+     * @var \rsanchez\Deep\Collection\PlayaCollection
+     */
+    protected $playaCollection;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(EntryCollection $collection, $fieldtype)
     {
         parent::__construct($collection, $fieldtype);
 
-        $entries = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+        $this->playaCollection = PlayaEntry::parentEntryId($collection->modelKeys())->get();
 
-        foreach ($entries as $entry) {
+        foreach ($this->playaCollection as $entry) {
             $type = $entry->parent_row_id ? 'matrix' : 'entry';
             $entityId = $entry->parent_row_id ? $entry->parent_row_id : $entry->parent_entry_id;
             $propertyId = $entry->parent_row_id ? $entry->parent_col_id : $entry->parent_field_id;
 
             if (! isset($this->entries[$type][$entityId][$propertyId])) {
-                $this->entries[$type][$entityId][$propertyId] = new PlayaCollection();
+                $this->entries[$type][$entityId][$propertyId] = array();
             }
 
-            $this->entries[$type][$entityId][$propertyId]->push($entry);
+            $this->entries[$type][$entityId][$propertyId][] = $entry;
         }
 
         // add these entry IDs to the main collection
-        $collection->addEntryIds($entries->modelKeys());
+        $collection->addEntryIds($this->playaCollection->modelKeys());
     }
 
     /**
@@ -52,8 +65,10 @@ class PlayaHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
-            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : new PlayaCollection();
+        $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
+            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
+
+        $value = $this->playaCollection->createChildCollection($entries);
 
         $entity->setAttribute($property->getName(), $value);
 

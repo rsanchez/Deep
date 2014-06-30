@@ -44,6 +44,8 @@ abstract class AbstractTitleCollection extends Collection implements FilterableI
     {
         $collection = new static($models);
 
+        $collection->setChannelRepository($channelRepository);
+
         $channelIds = array();
 
         foreach ($models as $model) {
@@ -57,6 +59,29 @@ abstract class AbstractTitleCollection extends Collection implements FilterableI
         $collection->setChannels($channelRepository->getChannelsById($channelIds));
 
         return $collection;
+    }
+
+    /**
+     * Create a new collection using the current instance's properties
+     * as injected dependencies.
+     *
+     * Useful when making a collection of a subset of this collection
+     * @param  array                                             $models
+     * @return \rsanchez\Deep\Collection\AbstractTitleCollection
+     */
+    public function createChildCollection(array $models)
+    {
+        return self::create($models, $this->channelRepository);
+    }
+
+    /**
+     * Set the Channel Repository
+     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @return void
+     */
+    public function setChannelRepository(ChannelRepository $channelRepository)
+    {
+        $this->channelRepository = $channelRepository;
     }
 
     /**

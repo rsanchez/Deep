@@ -15,7 +15,6 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
 use rsanchez\Deep\Model\UploadPref;
 use Carbon\Carbon;
-use DateTimeZone;
 
 /**
  * Model for the files table

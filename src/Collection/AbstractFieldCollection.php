@@ -37,8 +37,8 @@ abstract class AbstractFieldCollection extends Collection
     /**
      * Get the field_id for the specified field name
      *
-     * @param  string                     $field name of the field
-     * @return \rsanchez\Deep\Model\Field
+     * @param  string $field name of the field
+     * @return string
      */
     public function getFieldId($field)
     {

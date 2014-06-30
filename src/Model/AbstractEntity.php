@@ -17,13 +17,13 @@ use Illuminate\Database\Eloquent\Model;
 abstract class AbstractEntity extends Model
 {
     /**
-     * Get the entity ID
+     * Get the entity ID (eg. entry_id or row_id)
      * @return string|int
      */
     abstract public function getId();
 
     /**
-     * Get the entity type (eg. matrix or grid or entry)
+     * Get the entity type (eg. 'matrix' or 'grid' or 'entry')
      * @return string|null
      */
     abstract public function getType();

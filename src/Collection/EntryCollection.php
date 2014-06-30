@@ -52,9 +52,33 @@ class EntryCollection extends TitleCollection
     {
         $collection = self::create($models, $channelRepository);
 
-        $collection->setFields($fieldRepository->getFieldsByChannelCollection($collection->getChannels()));
+        $collection->setFieldRepository($fieldRepository);
+
+        $channels = $collection->getChannels();
+
+        $fields = $fieldRepository->getFieldsByChannelCollection($channels);
+
+        $collection->setFields($fields);
 
         return $collection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createChildCollection(array $models)
+    {
+        return self::createWithFields($models, $this->channelRepository, $this->fieldRepository);
+    }
+
+    /**
+     * Set the Field Repository
+     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @return void
+     */
+    public function setFieldRepository(FieldRepository $fieldRepository)
+    {
+        $this->fieldRepository = $fieldRepository;
     }
 
     /**

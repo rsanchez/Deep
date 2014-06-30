@@ -93,7 +93,7 @@ abstract class BasePlugin
     /**
      * Get an EntryCollection based on the state of ee()->TMPL
      *
-     * @param  Closure|null $callback receieves a query builder object as the first parameter
+     * @param  Closure|null                              $callback receieves a query builder object as the first parameter
      * @return \rsanchez\Deep\Collection\EntryCollection
      */
     protected function getEntries(Closure $callback = null)

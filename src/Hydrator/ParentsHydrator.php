@@ -29,18 +29,18 @@ class ParentsHydrator extends AbstractHydrator
     {
         parent::__construct($collection, $fieldtype);
 
-        $entries = RelationshipEntry::parents($collection->modelKeys())->get();
+        $this->relationshipCollection = RelationshipEntry::parents($collection->modelKeys())->get();
 
-        foreach ($entries as $entry) {
+        foreach ($this->relationshipCollection as $entry) {
             if (! isset($this->entries[$entry->child_id])) {
-                $this->entries[$entry->child_id] = new RelationshipCollection();
+                $this->entries[$entry->child_id] = array();
             }
 
-            $this->entries[$entry->child_id]->push($entry);
+            $this->entries[$entry->child_id][] = $entry;
         }
 
         // add these entry IDs to the main collection
-        $collection->addEntryIds($entries->modelKeys());
+        $collection->addEntryIds($this->relationshipCollection->modelKeys());
     }
 
     /**
@@ -48,7 +48,9 @@ class ParentsHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : new RelationshipCollection();
+        $entries = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
+
+        $value = $this->relationshipCollection->createChildCollection($entries);
 
         $entity->setAttribute($property->getName(), $value);
 

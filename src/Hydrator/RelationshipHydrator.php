@@ -29,22 +29,22 @@ class RelationshipHydrator extends AbstractHydrator
     {
         parent::__construct($collection, $fieldtype);
 
-        $entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
+        $this->relationshipCollection = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
 
-        foreach ($entries as $entry) {
+        foreach ($this->relationshipCollection as $entry) {
             $type = $entry->grid_field_id ? 'grid' : 'entry';
             $entityId = $entry->grid_field_id ? $entry->grid_row_id : $entry->parent_id;
             $propertyId = $entry->grid_field_id ? $entry->grid_col_id : $entry->field_id;
 
             if (! isset($this->entries[$type][$entityId][$propertyId])) {
-                $this->entries[$type][$entityId][$propertyId] = new RelationshipCollection();
+                $this->entries[$type][$entityId][$propertyId] = array();
             }
 
-            $this->entries[$type][$entityId][$propertyId]->push($entry);
+            $this->entries[$type][$entityId][$propertyId][] = $entry;
         }
 
         // add these entry IDs to the main collection
-        $collection->addEntryIds($entries->modelKeys());
+        $collection->addEntryIds($this->relationshipCollection->modelKeys());
     }
 
     /**
@@ -52,8 +52,10 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
-            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : new RelationshipCollection();
+        $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
+            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
+
+        $value = $this->relationshipCollection->createChildCollection($entries);
 
         $entity->setAttribute($property->getName(), $value);
 

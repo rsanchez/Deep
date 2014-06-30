@@ -259,7 +259,7 @@ class Title extends AbstractEntity
 
             // loop again to actually hydrate
             foreach ($collection as $entry) {
-                foreach ($entry->fields as $field) {
+                foreach ($entry->channel->fields as $field) {
                     if (isset($hydrators[$field->getType()])) {
                         $hydrators[$field->getType()]->hydrate($entry, $field);
                     } else {

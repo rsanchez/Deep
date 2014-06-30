@@ -27,10 +27,12 @@ interface HydratorInterface
     public function preload(array $entryIds);
 
     /**
-     * Hydrate an Entry's custom field
-     * @param  AbstractEntity $entity
+     * Hydrate the specified property (channel field or Matrix/Grid col)
+     * on the specified entity (channel entry or Matrix/Grid row)
+     *
+     * @param  AbstractEntity   $entity
      * @param  AbstractProperty $property
-     * @return void
+     * @return mixed            the entity property value
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property);
 }
