@@ -12,7 +12,8 @@ namespace rsanchez\Deep\Hydrator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
@@ -54,66 +55,13 @@ class WysiwygHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(Entry $entry)
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $fieldtype = $this->fieldtype;
-        $collection = $this->collection;
-        $uploadPrefRepository = $this->uploadPrefRepository;
+        $value = $this->parse($entity->getAttribute($property->getIdentifer()));
 
-        $parse = array($this, 'parse');
+        $entity->setAttribute($property->getName(), $value);
 
-        // loop through all this fields
-        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $parse) {
-
-            $value = $entry->getAttribute('field_id_'.$field->field_id);
-
-            $value = call_user_func($parse, $value);
-
-            $entry->setAttribute($field->field_name, $value);
-
-        });
-
-        // loop through all matrix fields
-        $entry->channel->fieldsByType('matrix')->each(function ($field) use ($collection, $entry, $fieldtype, $parse) {
-
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $field, $fieldtype, $parse) {
-
-                $cols = $collection->getMatrixCols()->filter(function ($col) use ($field, $fieldtype) {
-                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
-                });
-
-                $cols->each(function ($col) use ($row, $parse) {
-                    $value = $row->getAttribute('col_id_'.$col->col_id);
-
-                    $value = call_user_func($parse, $value);
-
-                    $row->setAttribute($col->col_name, $value);
-                });
-
-            });
-
-        });
-
-        // loop through all grid fields
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $fieldtype, $parse) {
-
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $field, $fieldtype, $parse) {
-
-                $cols = $collection->getGridCols()->filter(function ($col) use ($field, $fieldtype) {
-                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
-                });
-
-                $cols->each(function ($col) use ($row, $parse) {
-                    $value = $row->getAttribute('col_id_'.$col->col_id);
-
-                    $value = call_user_func($parse, $value);
-
-                    $row->setAttribute($col->col_name, $value);
-                });
-
-            });
-
-        });
+        return $value;
     }
 
     /**
@@ -126,6 +74,10 @@ class WysiwygHydrator extends AbstractHydrator
      */
     public function parse($value)
     {
+        if ($value === null || $value === false || $value === '') {
+            return '';
+        }
+
         preg_match_all('#{page_(\d+)}#', $value, $pageMatches);
 
         foreach ($pageMatches[1] as $i => $entryId) {

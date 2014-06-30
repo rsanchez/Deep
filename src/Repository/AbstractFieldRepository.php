@@ -81,8 +81,8 @@ abstract class AbstractFieldRepository extends AbstractDeferredRepository
     /**
      * Get the field_id for the specified field name
      *
-     * @param  int                        $id id of the field
-     * @return \rsanchez\Deep\Model\Field
+     * @param  int    $id id of the field
+     * @return string
      */
     public function getFieldName($id)
     {

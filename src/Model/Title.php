@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\Channel;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\JoinableTrait;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
@@ -26,7 +27,7 @@ use DateTime;
 /**
  * Model for the channel_titles table
  */
-class Title extends Model
+class Title extends AbstractEntity
 {
     use JoinableTrait;
 
@@ -136,6 +137,22 @@ class Title extends Model
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->entry_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'entry';
+    }
+
+    /**
      * Alias chan to channel
      * @var \rsanchez\Deep\Model\Channel
      */
@@ -242,8 +259,24 @@ class Title extends Model
 
             // loop again to actually hydrate
             foreach ($collection as $entry) {
-                foreach ($hydrators as $hydrator) {
-                    $hydrator->hydrate($entry);
+                foreach ($entry->channel->fields as $field) {
+                    if (isset($hydrators[$field->getType()])) {
+                        $hydrators[$field->getType()]->hydrate($entry, $field);
+                    } else {
+                        $entry->setAttribute($field->field_name, $entry->getAttribute('field_id_'.$field->field_id));
+                    }
+
+                    if ($field->hasRows()) {
+                        foreach ($entry->getAttribute($field->field_name) as $row) {
+                            foreach ($row->getCols() as $col) {
+                                if (isset($hydrators[$col->getType()])) {
+                                    $hydrators[$col->getType()]->hydrate($row, $col);
+                                } else {
+                                    $row->setAttribute($col->getName(), $row->getAttribute($col->getIdentifier()));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

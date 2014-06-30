@@ -89,9 +89,7 @@ class Channel extends Model
      */
     public function fieldsByType($type)
     {
-        return $this->fields->filter(function ($field) use ($type) {
-            return $field->field_type === $type;
-        });
+        return $this->fields->getFieldsByFieldtype($type);
     }
 
     /**

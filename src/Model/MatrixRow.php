@@ -11,13 +11,14 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Collection\MatrixRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 
 /**
  * Model for the matrix_data table
  */
-class MatrixRow extends Model
+class MatrixRow extends AbstractEntity
 {
     /**
      * {@inheritdoc}
@@ -56,6 +57,22 @@ class MatrixRow extends Model
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->row_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'matrix';
+    }
+
+    /**
      * Filter by Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -90,6 +107,11 @@ class MatrixRow extends Model
 
             $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
         });
+    }
+
+    public function getCols()
+    {
+        return $this->cols;
     }
 
     /**

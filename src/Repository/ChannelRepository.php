@@ -67,6 +67,10 @@ class ChannelRepository implements RepositoryInterface
      */
     public function getChannelsById(array $channelIds)
     {
+        if (empty($channelIds)) {
+            return new ChannelCollection();
+        }
+
         return $this->collection->filter(function ($channel) use ($channelIds) {
             return in_array($channel->channel_id, $channelIds);
         });
@@ -80,6 +84,10 @@ class ChannelRepository implements RepositoryInterface
      */
     public function getChannelsByName(array $channelNames)
     {
+        if (empty($channelNames)) {
+            return new ChannelCollection();
+        }
+
         return $this->collection->filter(function ($channel) use ($channelNames) {
             return in_array($channel->channel_name, $channelNames);
         });

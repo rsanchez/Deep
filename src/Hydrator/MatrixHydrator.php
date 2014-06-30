@@ -11,10 +11,13 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\MatrixCol;
 use rsanchez\Deep\Model\MatrixRow;
+use rsanchez\Deep\Collection\MatrixColCollection;
+use rsanchez\Deep\Collection\MatrixRowCollection;
 
 /**
  * Hydrator for the Matrix fieldtype
@@ -42,9 +45,17 @@ class MatrixHydrator extends AbstractHydrator
 
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $this->cols = MatrixCol::fieldId($fieldIds)->get();
+        $cols = MatrixCol::fieldId($fieldIds)->get();
 
-        $collection->setMatrixCols($this->cols);
+        foreach ($cols as $col) {
+            if (! isset($this->cols[$col->field_id])) {
+                $this->cols[$col->field_id] = new MatrixColCollection();
+            }
+
+            $this->cols[$col->field_id]->push($col);
+        }
+
+        $collection->setMatrixCols($cols);
     }
 
     /**
@@ -52,31 +63,30 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $this->rows = MatrixRow::entryId($entryIds)->orderBy('row_order', 'asc')->get();
+        $rows = MatrixRow::entryId($entryIds)->orderBy('row_order', 'asc')->get();
+
+        foreach ($rows as $row) {
+            if (! isset($this->rows[$row->entry_id][$row->field_id])) {
+                $this->rows[$row->entry_id][$row->field_id] = new MatrixRowCollection();
+            }
+
+            $cols = isset($this->cols[$row->field_id]) ? $this->cols[$row->field_id] : new MatrixColCollection();
+
+            $row->setCols($cols);
+
+            $this->rows[$row->entry_id][$row->field_id]->push($row);
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hydrate(Entry $entry)
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $cols = $this->cols;
-        $rows = $this->rows;
+        $value = isset($this->rows[$entity->getId()][$property->getId()]) ? $this->rows[$entity->getId()][$property->getId()] : new MatrixRowCollection();
 
-        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $rows, $cols) {
+        $entity->setAttribute($property->getName(), $value);
 
-            $fieldCols = $cols->filter(function ($col) use ($field) {
-                return $col->field_id === $field->field_id;
-            });
-
-            $fieldRows = $rows->filter(function ($row) use ($entry, $field) {
-                return $entry->getKey() === $row->entry_id && $field->field_id === $row->field_id;
-            })->each(function ($row) use ($fieldCols) {
-                $row->setCols($fieldCols);
-            });
-
-            $entry->setAttribute($field->field_name, $fieldRows);
-
-        });
+        return $value;
     }
 }

@@ -11,10 +11,13 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\GridCol;
 use rsanchez\Deep\Model\GridRow;
+use rsanchez\Deep\Collection\GridColCollection;
+use rsanchez\Deep\Collection\GridRowCollection;
 
 /**
  * Hydrator for the Grid fieldtype
@@ -42,9 +45,17 @@ class GridHydrator extends AbstractHydrator
 
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $this->cols = GridCol::fieldId($fieldIds)->get();
+        $cols = GridCol::fieldId($fieldIds)->get();
 
-        $collection->setGridCols($this->cols);
+        foreach ($cols as $col) {
+            if (! isset($this->cols[$col->field_id])) {
+                $this->cols[$col->field_id] = new GridColCollection();
+            }
+
+            $this->cols[$col->field_id]->push($col);
+        }
+
+        $collection->setGridCols($cols);
     }
 
     /**
@@ -55,34 +66,31 @@ class GridHydrator extends AbstractHydrator
         $fieldIds = $this->collection->getFieldIdsByFieldtype($this->fieldtype);
 
         foreach ($fieldIds as $fieldId) {
-            $this->rows[$fieldId] = GridRow::fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
+            $rows = GridRow::fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
+
+            foreach ($rows as $row) {
+                if (! isset($this->rows[$row->entry_id][$row->field_id])) {
+                    $this->rows[$row->entry_id][$row->field_id] = new GridRowCollection();
+                }
+
+                $cols = isset($this->cols[$row->field_id]) ? $this->cols[$row->field_id] : new GridColCollection();
+
+                $row->setCols($cols);
+
+                $this->rows[$row->entry_id][$row->field_id]->push($row);
+            }
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hydrate(Entry $entry)
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $cols = $this->cols;
-        $rowsByFieldId = $this->rows;
+        $value = isset($this->rows[$entity->getId()][$property->getId()]) ? $this->rows[$entity->getId()][$property->getId()] : new GridRowCollection();
 
-        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $rowsByFieldId, $cols) {
+        $entity->setAttribute($property->getName(), $value);
 
-            $rows = $rowsByFieldId[$field->field_id];
-
-            $fieldCols = $cols->filter(function ($col) use ($field) {
-                return $col->field_id === $field->field_id;
-            });
-
-            $fieldRows = $rows->filter(function ($row) use ($entry) {
-                return $entry->getKey() === $row->entry_id;
-            })->each(function ($row) use ($fieldCols) {
-                $row->setCols($fieldCols);
-            });
-
-            $entry->setAttribute($field->field_name, $fieldRows);
-
-        });
+        return $value;
     }
 }

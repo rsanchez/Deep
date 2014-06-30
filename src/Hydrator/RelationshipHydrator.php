@@ -11,7 +11,9 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Collection\RelationshipCollection;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\RelationshipEntry;
 
@@ -27,50 +29,36 @@ class RelationshipHydrator extends AbstractHydrator
     {
         parent::__construct($collection, $fieldtype);
 
-        $this->entries = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
+        $this->relationshipCollection = RelationshipEntry::parentEntryId($collection->modelKeys())->get();
+
+        foreach ($this->relationshipCollection as $entry) {
+            $type = $entry->grid_field_id ? 'grid' : 'entry';
+            $entityId = $entry->grid_field_id ? $entry->grid_row_id : $entry->parent_id;
+            $propertyId = $entry->grid_field_id ? $entry->grid_col_id : $entry->field_id;
+
+            if (! isset($this->entries[$type][$entityId][$propertyId])) {
+                $this->entries[$type][$entityId][$propertyId] = array();
+            }
+
+            $this->entries[$type][$entityId][$propertyId][] = $entry;
+        }
 
         // add these entry IDs to the main collection
-        $collection->addEntryIds($this->entries->modelKeys());
+        $collection->addEntryIds($this->relationshipCollection->modelKeys());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hydrate(Entry $entry)
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $fieldtype = $this->fieldtype;
-        $collection = $this->collection;
-        $relatedEntries = $this->entries;
+        $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
+            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 
-        // loop through all relationship fields
-        $entry->channel->fieldsByType($this->fieldtype)->each(function ($field) use ($entry, $relatedEntries) {
+        $value = $this->relationshipCollection->createChildCollection($entries);
 
-            $entry->setAttribute($field->field_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field) {
-                return $entry->getKey() === $relatedEntry->parent_id && $field->field_id === $relatedEntry->field_id;
-            }));
+        $entity->setAttribute($property->getName(), $value);
 
-        });
-
-        // loop through all grid fields
-        $entry->channel->fieldsByType('grid')->each(function ($field) use ($collection, $entry, $relatedEntries, $fieldtype) {
-
-            $entry->getAttribute($field->field_name)->each(function ($row) use ($collection, $entry, $relatedEntries, $field, $fieldtype) {
-
-                $cols = $collection->getGridCols()->filter(function ($col) use ($field, $fieldtype) {
-                    return $col->field_id === $field->field_id && $col->col_type === $fieldtype;
-                });
-
-                $cols->each(function ($col) use ($entry, $field, $row, $relatedEntries) {
-                    $row->setAttribute($col->col_name, $relatedEntries->filter(function ($relatedEntry) use ($entry, $field, $row, $col) {
-                        return $entry->getKey() === $relatedEntry->parent_id
-                            && $field->field_id === $relatedEntry->grid_field_id
-                            && $col->col_id === $relatedEntry->grid_col_id
-                            && $row->row_id === $relatedEntry->grid_row_id;
-                    }));
-                });
-
-            });
-
-        });
+        return $value;
     }
 }

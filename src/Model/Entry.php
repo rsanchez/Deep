@@ -15,7 +15,6 @@ use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Repository\FieldRepository;
 use Carbon\Carbon;
-use DateTimeZone;
 
 /**
  * Model for the channel_titles table, joined with channel_data

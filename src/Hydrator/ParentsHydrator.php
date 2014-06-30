@@ -11,7 +11,9 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Collection\RelationshipCollection;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\RelationshipEntry;
 
@@ -27,19 +29,31 @@ class ParentsHydrator extends AbstractHydrator
     {
         parent::__construct($collection, $fieldtype);
 
-        $this->entries = RelationshipEntry::parents($collection->modelKeys())->get();
+        $this->relationshipCollection = RelationshipEntry::parents($collection->modelKeys())->get();
+
+        foreach ($this->relationshipCollection as $entry) {
+            if (! isset($this->entries[$entry->child_id])) {
+                $this->entries[$entry->child_id] = array();
+            }
+
+            $this->entries[$entry->child_id][] = $entry;
+        }
 
         // add these entry IDs to the main collection
-        $collection->addEntryIds($this->entries->modelKeys());
+        $collection->addEntryIds($this->relationshipCollection->modelKeys());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hydrate(Entry $entry)
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $entry->setAttribute($this->fieldtype, $this->entries->filter(function ($parentEntry) use ($entry) {
-            return $entry->getKey() === $parentEntry->child_id && $entry->getKey() !== $parentEntry->getKey();
-        }));
+        $entries = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
+
+        $value = $this->relationshipCollection->createChildCollection($entries);
+
+        $entity->setAttribute($property->getName(), $value);
+
+        return $value;
     }
 }

@@ -11,12 +11,13 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Collection\GridColCollection;
 
 /**
  * Model for the grid_columns table
  */
-class GridCol extends Model
+class GridCol extends AbstractProperty
 {
     /**
      * {@inheritdoc}
@@ -55,5 +56,37 @@ class GridCol extends Model
     public function newCollection(array $models = array())
     {
         return new GridColCollection($models);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->col_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'col_id_'.$this->col_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->col_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->col_type;
     }
 }

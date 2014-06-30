@@ -16,7 +16,6 @@ use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Model\UploadPref;
 use Carbon\Carbon;
-use DateTimeZone;
 
 /**
  * Model for the assets_files table, joined with assets_selections

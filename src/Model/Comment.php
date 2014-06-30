@@ -53,7 +53,7 @@ class Comment extends Model
     /**
      * Get the edit_date column as a Carbon object
      *
-     * @param  int            $value unix time
+     * @param  int                 $value unix time
      * @return \Carbon\Carbon|null
      */
     public function getEditDateAttribute($value)

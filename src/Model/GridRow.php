@@ -11,13 +11,14 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Collection\GridRowCollection;
 use rsanchez\Deep\Collection\GridColCollection;
 
 /**
  * Model for the channel_grid_field_X table(s)
  */
-class GridRow extends Model
+class GridRow extends AbstractEntity
 {
     /**
      * {@inheritdoc}
@@ -46,6 +47,22 @@ class GridRow extends Model
     public function newCollection(array $models = array())
     {
         return new GridRowCollection($models);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->row_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'grid';
     }
 
     /**

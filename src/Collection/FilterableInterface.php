@@ -25,10 +25,10 @@ interface FilterableInterface
     /**
      * Filter by model attribute contains
      *
-     * @param  string                                                 $attribute name of the attribute on which to filter
-     * @param  array                                                  $values
-     * @param  bool                                                   $and
-     * @param  bool                                                   $not
+     * @param  string                                   $attribute name of the attribute on which to filter
+     * @param  array                                    $values
+     * @param  bool                                     $and
+     * @param  bool                                     $not
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeContains($attribute, array $values, $and = false, $not = false);
@@ -36,8 +36,8 @@ interface FilterableInterface
     /**
      * Filter by model attribute in array string
      *
-     * @param  string                                                 $attribute name of the attribute on which to filter
-     * @param  string                                                 $filter    pipe-delimited list of values, optionaly prefixed by not
+     * @param  string                                   $attribute name of the attribute on which to filter
+     * @param  string                                   $filter    pipe-delimited list of values, optionaly prefixed by not
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeInString($attribute, $filter);
@@ -45,9 +45,9 @@ interface FilterableInterface
     /**
      * Filter by model attribute in array
      *
-     * @param  string                                                 $attribute name of the attribute on which to filter
-     * @param  array                                                  $values
-     * @param  bool                                                   $not
+     * @param  string                                   $attribute name of the attribute on which to filter
+     * @param  array                                    $values
+     * @param  bool                                     $not
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeIn($attribute, array $values, $not = false);
@@ -55,9 +55,9 @@ interface FilterableInterface
     /**
      * Filter by model attribute numerical comparison
      *
-     * @param  string                                                 $attribute name of the attribute on which to filter
-     * @param  mixed                                                  $value
-     * @param  string                                                 $operator  >, >=, <, <=
+     * @param  string                                   $attribute name of the attribute on which to filter
+     * @param  mixed                                    $value
+     * @param  string                                   $operator  >, >=, <, <=
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttributeComparison($attribute, $value, $operator);
@@ -75,8 +75,8 @@ interface FilterableInterface
      * - 'foo\W|bar'
      * - '>=3'
      *
-     * @param  string                                                 $attribute name of the attribute on which to filter
-     * @param  string                                                 $filter    a string describing the filter
+     * @param  string                                   $attribute name of the attribute on which to filter
+     * @param  string                                   $filter    a string describing the filter
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterByAttribute($attribute, $filter);
@@ -84,7 +84,7 @@ interface FilterableInterface
     /**
      * Filter by model ID
      *
-     * @param  int                                                    $id,... one or more IDs
+     * @param  int                                      $id,... one or more IDs
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function filterById($id);
@@ -92,8 +92,8 @@ interface FilterableInterface
     /**
      * Limit the collection
      *
-     * @param  int                                                    $limit
-     * @param  int                                                    $offset
+     * @param  int                                      $limit
+     * @param  int                                      $offset
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function limit($limit, $offset = 0);
@@ -101,8 +101,8 @@ interface FilterableInterface
     /**
      * Offset the collection
      *
-     * @param  int                                                    $limit
-     * @param  int                                                    $offset
+     * @param  int                                      $limit
+     * @param  int                                      $offset
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function offset($offset, $limit = null);
@@ -110,8 +110,8 @@ interface FilterableInterface
     /**
      * Sort by one or more model attributes
      *
-     * @param  array|int                                              $id   one or more IDs
-     * @param  array|string                                           $sort sort direction
+     * @param  array|int                                $id   one or more IDs
+     * @param  array|string                             $sort sort direction
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function sortByAttribute($attribute, $sort = 'asc');
@@ -119,7 +119,7 @@ interface FilterableInterface
     /**
      * Sort by model ID in the specified order
      *
-     * @param  int                                                    $id,... one or more IDs
+     * @param  int                                      $id,... one or more IDs
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function sortByFixedOrder($id);
@@ -136,7 +136,7 @@ interface FilterableInterface
      * - sort
      * - any model attribute (ex. row_id)
      *
-     * @param  array                                                  $params
+     * @param  array                                    $params
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function tagparams(array $params);
@@ -144,7 +144,7 @@ interface FilterableInterface
     /**
      * Alias to tagparams
      *
-     * @param  array                                                  $params
+     * @param  array                                    $params
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function __invoke(array $params);

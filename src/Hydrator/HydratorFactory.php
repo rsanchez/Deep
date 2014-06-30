@@ -83,13 +83,14 @@ class HydratorFactory
                     $hydrators[$type] = $this->newHydrator($collection, $type);
                 }
             }
-
+/*
             // create default hydrators for fieldtypes not accounted for
             foreach ($collection->getFieldtypes() as $type) {
                 if (! isset($hydrators[$type])) {
                     $hydrators[$type] = new DefaultHydrator($collection, $type);
                 }
             }
+*/
         }
 
         foreach ($extraHydrators as $type) {

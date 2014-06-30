@@ -9,7 +9,8 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\AbstractEntity;
+use rsanchez\Deep\Model\AbstractProperty;
 
 /**
  * Hydrator interface
@@ -26,9 +27,12 @@ interface HydratorInterface
     public function preload(array $entryIds);
 
     /**
-     * Hydrate an Entry's custom field(s) that match the current hydrator type
-     * @param  Entry $entry
-     * @return void
+     * Hydrate the specified property (channel field or Matrix/Grid col)
+     * on the specified entity (channel entry or Matrix/Grid row)
+     *
+     * @param  AbstractEntity   $entity
+     * @param  AbstractProperty $property
+     * @return mixed            the entity property value
      */
-    public function hydrate(Entry $entry);
+    public function hydrate(AbstractEntity $entity, AbstractProperty $property);
 }
