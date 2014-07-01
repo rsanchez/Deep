@@ -81,6 +81,13 @@ class Title extends AbstractEntity
     protected $extraHydrators = array();
 
     /**
+     * When extending this class, set this property to automatically
+     * load from the specified channel
+     * @var string|null
+     */
+    protected $defaultChannelName;
+
+    /**
      * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -217,6 +224,10 @@ class Title extends AbstractEntity
     public function newQuery($excludeDeleted = true)
     {
         $query = parent::newQuery($excludeDeleted);
+
+        if ($this->defaultChannelName) {
+            $this->scopeChannel($query, $this->defaultChannelName);
+        }
 
         $query->select('channel_titles.*');
 
