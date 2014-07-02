@@ -135,7 +135,7 @@ class Asset extends Model implements FileInterface
         $attributes = parent::attributesToArray();
 
         foreach (array('date', 'date_modified') as $key) {
-            if ($attributes[$key] instanceof Carbon) {
+            if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }
         }
