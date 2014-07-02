@@ -255,7 +255,7 @@ class Title extends AbstractJoinableModel
         $attributes = parent::attributesToArray();
 
         foreach (array('entry_date', 'edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date') as $key) {
-            if ($attributes[$key] instanceof Carbon) {
+            if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }
         }

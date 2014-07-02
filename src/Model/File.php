@@ -159,7 +159,7 @@ class File extends Model implements FileInterface
         $attributes = parent::attributesToArray();
 
         foreach (array('upload_date', 'modified_date') as $key) {
-            if ($attributes[$key] instanceof Carbon) {
+            if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }
         }
