@@ -24,7 +24,7 @@ class ExplodeHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = $entity->getAttribute($property->getIdentifer());
+        $value = $entity->getAttribute($property->getIdentifier());
 
         $value = $value ? explode("\n", $value) : null;
 
