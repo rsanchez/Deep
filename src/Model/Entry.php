@@ -101,14 +101,14 @@ class Entry extends Title
      */
     public function toArray()
     {
+        $array = parent::toArray();
+
         // remove field_id_X fields from the array
-        foreach (array_keys($this->attributes) as $key) {
+        foreach ($this->attributes as $key => $value) {
             if (preg_match('#^field_(id|dt|ft)_#', $key)) {
-                $this->hidden[] = $key;
+                unset($array[$key]);
             }
         }
-
-        $array = parent::toArray();
 
         $this->channel->fields->each(function ($field) use (&$array) {
             if (isset($array[$field->field_name]) && method_exists($array[$field->field_name], 'toArray')) {

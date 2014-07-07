@@ -20,6 +20,7 @@ use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Relations\HasOneFromRepository;
+use rsanchez\Deep\Model\GlobalAttributeVisibilityTrait;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -29,7 +30,7 @@ use DateTime;
  */
 class Title extends AbstractEntity
 {
-    use JoinableTrait;
+    use JoinableTrait, GlobalAttributeVisibilityTrait;
 
     /**
      * {@inheritdoc}
@@ -46,9 +47,25 @@ class Title extends AbstractEntity
     protected $primaryKey = 'entry_id';
 
     /**
-     * {@inheritdoc}
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
      */
-    protected $hidden = array('chan', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'comments');
+    protected static $globalHidden = [
+        'chan',
+        'site_id',
+        'forum_topic_id',
+        'ip_address',
+        'versioning_enabled',
+        'comments',
+    ];
+
+    /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array
+     */
+    protected static $globalVisible = [];
 
     /**
      * The class used when creating a new Collection
