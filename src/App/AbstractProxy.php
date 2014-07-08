@@ -17,10 +17,23 @@ use rsanchez\Deep\Deep;
 abstract class AbstractProxy
 {
     /**
-     * Name of IoC accessor
-     * @var string
+     * Run whenever __callStatic is invoked.
+     * Be sure to make idempotent when using this
+     * @return mixd
      */
-    protected static $accessor = '';
+    protected static function boot()
+    {
+        // do stuff here
+    }
+
+    /**
+     * Name of IoC accessor
+     * @return string
+     */
+    protected static function getAccessor()
+    {
+        return '';
+    }
 
     /**
      * Static method call handler
@@ -28,6 +41,8 @@ abstract class AbstractProxy
      */
     public static function __callStatic($name, $args)
     {
-        return call_user_func_array(array(Deep::getInstance()->make(static::$accessor), $name), $args);
+        static::boot();
+
+        return call_user_func_array(array(Deep::getInstance()->make(static::getAccessor()), $name), $args);
     }
 }

@@ -19,5 +19,8 @@ class Entries extends AbstractProxy
     /**
      * {@inheritdoc}
      */
-    protected static $accessor = 'Entry';
+    protected static function getAccessor()
+    {
+        return 'Entry';
+    }
 }

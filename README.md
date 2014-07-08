@@ -13,7 +13,8 @@ For more detailed information, see the [auto-generated API docs](http://rsanchez
 ```
 <?php
 
-use rsanchez\Deep\App\Entries;
+// this particular wrapper class is for use *inside* EE
+use rsanchez\Deep\App\EE\Entries;
 
 $entries = Entries::channel('blog')
                 ->limit(10)
@@ -52,9 +53,19 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
 
     require_once FCPATH.'vendor/autoload.php'
 
-Unless you are [extending the `BasePlugin` class](#extending-the-baseplugin-class), you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
+Then you can create your own plugin that uses Deep by [extending the `BasePlugin` class](#extending-the-baseplugin-class). Or you can use the built-in wrapper class, which bootstraps Deep with EE for you:
 
-    \rsanchez\Deep\Deep::bootEloquent(ee());
+```
+use rsanchez\Deep\App\EE\Entries;
+
+$entries = Entries::channel('blog')
+                ->limit(10)
+                ->get();
+```
+
+If you are not [extending the `BasePlugin` class](#extending-the-baseplugin-class) or using the `Entries` or `Titles` proxy, you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
+
+    \rsanchez\Deep\Deep::bootEE(ee());
 
 ### Laravel
 
@@ -78,6 +89,34 @@ This registers the `Entries`, `Titles` and `Categories` facades, so you can use 
 
 If you are using a table prefix for your database tables (EE uses `exp_` by default, so you most likely are), make sure to set the prefix in Laravel's `app/config/database.php`
 
+### Generic PHP (or other framework)
+
+First you must bootstrap Eloquent for use outside of Laravel. There are [many](https://laracasts.com/lessons/how-to-use-eloquent-outside-of-laravel) [guides](http://www.slimframework.com/news/slim-and-laravel-eloquent-orm) [out](http://www.edzynda.com/use-laravels-eloquent-orm-outside-of-laravel/) [there](http://jenssegers.be/blog/53/using-eloquent-without-laravel) on how to do this.
+
+Then you can simply use the generic wrapper:
+
+```
+use rsanchez\Deep\App\Entries;
+
+$entries = Entries::channel('blog')
+                ->limit(10)
+                ->get();
+```
+
+Or instantiate your own instance of the Deep DI container if you prefer:
+
+```
+use rsanchez\Deep\Deep;
+
+$deep = new Deep();
+
+$entries = $deep->make('Entry')
+                ->channel('blog')
+                ->limit(10)
+                ->get();
+```
+
+
 ### Using the Phar archive for easier distribution
 
 You can build a Phar archive as an alternative installation method. The best way to package Deep with your custom distributed add-on is to use the Phar archive, since EE doesn't natively support compser installation out of the box.
@@ -87,7 +126,12 @@ To build the Phar archive, you must have [box](http://box-project.org/) installe
 Now you can package that single Phar archive with your add-on (say, in a `phar` folder in your add-on root) and load it like so:
 
 ```
-Phar::loadPhar(PATH_THIRD.'my_addon/phar/deep.phar');
+// this is a courtesy check in case other add-ons are also
+// using deep.phar
+if ( ! class_exists('\\rsanchez\\Deep\\Deep'))
+{
+    require_once PATH_THIRD.'your_addon/phar/deep.phar';
+}
 ```
 
 ## Query Scopes
@@ -1133,9 +1177,11 @@ NOTE: The `Title` model does NOT implement the [Search](#search) and [Custom Fie
 ```
 <?php
 
-use rsanchez\Deep\App\Titles;
+use rsanchez\Deep\App\EE\Titles;
 
 $entries = Titles::channel('blog')
                 ->limit(1)
                 ->get();
 ```
+
+Note: Use `rsanchez\Deep\App\Titles` (or use the Service Provider in Laravel) *outside* of an EE context.

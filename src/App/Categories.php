@@ -19,5 +19,8 @@ class Categories extends AbstractProxy
     /**
      * {@inheritdoc}
      */
-    protected static $accessor = 'Category';
+    protected static function getAccessor()
+    {
+        return 'Category';
+    }
 }

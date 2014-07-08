@@ -7,20 +7,20 @@
  * @author       Rob Sanchez <info@robsanchez.com>
  */
 
-namespace rsanchez\Deep\App;
+namespace rsanchez\Deep\App\EE;
 
-use rsanchez\Deep\App\AbstractProxy;
+use rsanchez\Deep\App\EE\AbstractProxy;
 
 /**
- * Static proxy to the Title model
+ * Static proxy to the Category model
  */
-class Titles extends AbstractProxy
+class Categories extends AbstractProxy
 {
     /**
      * {@inheritdoc}
      */
     protected static function getAccessor()
     {
-        return 'Title';
+        return 'Category';
     }
 }

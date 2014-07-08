@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Plugin;
 
 use rsanchez\Deep\Deep;
-use rsanchez\Deep\App\Entries;
+use rsanchez\Deep\App\EE\AbstractProxy;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
@@ -44,11 +44,7 @@ abstract class BasePlugin
     {
         $this->app = Deep::getInstance();
 
-        $this->app->extend('config', function () {
-            return ee()->config->config;
-        });
-
-        $this->app->bootEloquent(ee());
+        $this->app->bootEE(ee());
 
         ee()->load->library(array('pagination', 'typography'));
     }
