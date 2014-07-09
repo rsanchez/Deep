@@ -193,7 +193,7 @@ class Deep extends Container
             return $ee->config->config;
         });
 
-        $uploadPrefs = $ee->config->item('upload_prefs');
+        $uploadPrefs = $ee->config->item('upload_preferences');
 
         if ($uploadPrefs) {
             self::extendInstance('UploadPrefRepository', function ($app) use ($uploadPrefs) {
