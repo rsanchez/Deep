@@ -11,7 +11,6 @@ namespace rsanchez\Deep\App\EE;
 
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\App\AbstractProxy as BaseProxy;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Static proxy to the IoC container

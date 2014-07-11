@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Plugin;
 
 use rsanchez\Deep\Deep;
-use rsanchez\Deep\App\EE\AbstractProxy;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
