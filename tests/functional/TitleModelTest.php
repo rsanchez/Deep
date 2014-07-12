@@ -232,23 +232,40 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
     public function testOffsetScope()
     {
         //sqlite cannot do offset without limit
-        $entryIds = Title::limit(99999)->offset(1)->get()->fetch('entry_id')->all();
+        $a = Title::limit(100)->get();
+        $b = Title::limit(100)->offset(1)->get();
 
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(1));
+        $this->assertEquals($a->count() - 1, $b->count());
     }
 
     public function testScopeShowPages()
     {
-        $channelIds = Title::showPages(false)->get()->fetch('channel_id')->all();
+        $this->assertThat(Title::showPages(false)->get(), new CollectionPropertyCompareValueConstraint(null, 'page_uri'));
+    }
 
-        $this->assertThat($channelIds, new ArrayDoesNotHaveValueConstraint(2));
+    public function testScopeShowPagesTrue()
+    {
+        $pageUris = [];
+
+        Title::showPages()->get()->each(function ($entry) use (&$pageUris) {
+            $pageUris[] = $entry->page_uri;
+        });
+
+        // remove null page uris
+        $pageUris = array_filter($pageUris);
+
+        $this->assertGreaterThan(0, count($pageUris));
     }
 
     public function testScopeShowPagesOnly()
     {
-        $channelIds = Title::showPagesOnly()->get()->fetch('channel_id')->all();
+        $pageUris = [];
 
-        $this->assertThat($channelIds, new ArrayDoesNotHaveValueConstraint(1));
+        Title::showPagesOnly()->get()->each(function ($entry) use (&$pageUris) {
+            $pageUris[] = $entry->page_uri;
+        });
+
+        $this->assertContainsOnly('string', $pageUris);
     }
 
     public function testScopeStartOn()

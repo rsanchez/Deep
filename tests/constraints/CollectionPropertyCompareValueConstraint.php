@@ -19,7 +19,7 @@ class CollectionPropertyCompareValueConstraint extends PHPUnit_Framework_Constra
         '>=',
     ];
 
-    public function __construct($expected, $property, $comparisonOperator)
+    public function __construct($expected, $property, $comparisonOperator = '===')
     {
         parent::__construct();
 
