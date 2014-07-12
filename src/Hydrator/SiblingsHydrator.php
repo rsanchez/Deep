@@ -23,13 +23,20 @@ use rsanchez\Deep\Model\RelationshipEntry;
 class SiblingsHydrator extends AbstractHydrator
 {
     /**
+     * @var \rsanchez\Deep\Model\RelationshipEntry
+     */
+    protected $model;
+
+    /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection, $fieldtype)
+    public function __construct(EntryCollection $collection, $fieldtype, RelationshipEntry $model)
     {
         parent::__construct($collection, $fieldtype);
 
-        $this->relationshipCollection = RelationshipEntry::siblings($collection->modelKeys())->get();
+        $this->model = $model;
+
+        $this->relationshipCollection = $this->model->siblings($collection->modelKeys())->get();
 
         foreach ($this->relationshipCollection as $entry) {
             if (! isset($this->entries[$entry->sibling_id])) {

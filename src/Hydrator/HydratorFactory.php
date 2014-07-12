@@ -14,6 +14,14 @@ use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\DefaultHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
+use rsanchez\Deep\Model\Asset;
+use rsanchez\Deep\Model\File;
+use rsanchez\Deep\Model\GridCol;
+use rsanchez\Deep\Model\GridRow;
+use rsanchez\Deep\Model\MatrixCol;
+use rsanchez\Deep\Model\MatrixRow;
+use rsanchez\Deep\Model\PlayaEntry;
+use rsanchez\Deep\Model\RelationshipEntry;
 
 /**
  * Factory for building new Hydrators
@@ -50,7 +58,7 @@ class HydratorFactory
 
     /**
      * UploadPref model repository
-     * @var \rsanchez\Deep\Repository\UploadPredRepository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepository
      */
     protected $uploadPrefRepository;
 
@@ -60,10 +68,28 @@ class HydratorFactory
      * @var \rsanchez\Deep\Repository\SiteRepository                $siteRepository
      * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository)
-    {
+    public function __construct(
+        SiteRepository $siteRepository,
+        UploadPrefRepositoryInterface $uploadPrefRepository,
+        Asset $asset,
+        File $file,
+        GridCol $gridCol,
+        GridRow $gridRow,
+        MatrixCol $matrixCol,
+        MatrixRow $matrixRow,
+        PlayaEntry $playaEntry,
+        RelationshipEntry $relationshipEntry
+    ) {
         $this->siteRepository = $siteRepository;
         $this->uploadPrefRepository = $uploadPrefRepository;
+        $this->asset = $asset;
+        $this->file =  $file;
+        $this->gridCol = $gridCol;
+        $this->gridRow = $gridRow;
+        $this->matrixCol = $matrixCol;
+        $this->matrixRow = $matrixRow;
+        $this->playaEntry = $playaEntry;
+        $this->relationshipEntry = $relationshipEntry;
     }
 
     /**
@@ -132,7 +158,7 @@ class HydratorFactory
      */
     public function newAssetsHydrator(EntryCollection $collection, $fieldtype)
     {
-        return new AssetsHydrator($collection, $fieldtype, $this->uploadPrefRepository);
+        return new AssetsHydrator($collection, $fieldtype, $this->asset, $this->uploadPrefRepository);
     }
 
     /**
@@ -143,7 +169,73 @@ class HydratorFactory
      */
     public function newFileHydrator(EntryCollection $collection, $fieldtype)
     {
-        return new FileHydrator($collection, $fieldtype, $this->uploadPrefRepository);
+        return new FileHydrator($collection, $fieldtype, $this->file, $this->uploadPrefRepository);
+    }
+
+    /**
+     * Create a new GridHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\GridHydrator
+     */
+    public function newGridHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new GridHydrator($collection, $fieldtype, $this->gridCol, $this->gridRow);
+    }
+
+    /**
+     * Create a new MatrixHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\MatrixHydrator
+     */
+    public function newMatrixHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new MatrixHydrator($collection, $fieldtype, $this->matrixCol, $this->matrixRow);
+    }
+
+    /**
+     * Create a new PlayaHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
+     * @param  string                                    $fieldtype
+     * @return \rsanchez\Deep\Hydrator\PlayaHydrator
+     */
+    public function newPlayaHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new PlayaHydrator($collection, $fieldtype, $this->playaEntry);
+    }
+
+    /**
+     * Create a new RelationshipHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param  string                                       $fieldtype
+     * @return \rsanchez\Deep\Hydrator\RelationshipHydrator
+     */
+    public function newRelationshipHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new RelationshipHydrator($collection, $fieldtype, $this->relationshipEntry);
+    }
+
+    /**
+     * Create a new ParentsHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param  string                                       $fieldtype
+     * @return \rsanchez\Deep\Hydrator\ParentsHydrator
+     */
+    public function newParentsHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new ParentsHydrator($collection, $fieldtype, $this->relationshipEntry);
+    }
+
+    /**
+     * Create a new SIblingsHydrator object
+     * @param  \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param  string                                       $fieldtype
+     * @return \rsanchez\Deep\Hydrator\SiblingsHydrator
+     */
+    public function newSiblingsHydrator(EntryCollection $collection, $fieldtype)
+    {
+        return new SiblingsHydrator($collection, $fieldtype, $this->relationshipEntry);
     }
 
     /**

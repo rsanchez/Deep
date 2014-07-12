@@ -25,6 +25,16 @@ use rsanchez\Deep\Collection\MatrixRowCollection;
 class MatrixHydrator extends AbstractHydrator
 {
     /**
+     * @var \rsanchez\Deep\Model\MatrixCol
+     */
+    protected $colModel;
+
+    /**
+     * @var \rsanchez\Deep\Model\MatrixRow
+     */
+    protected $rowModel;
+
+    /**
      * All Matrix cols used by this collection
      * @var \rsanchez\Deep\Collection\MatrixColCollection
      */
@@ -39,13 +49,16 @@ class MatrixHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection, $fieldtype)
+    public function __construct(EntryCollection $collection, $fieldtype, MatrixCol $colModel, MatrixRow $rowModel)
     {
         parent::__construct($collection, $fieldtype);
 
+        $this->colModel = $colModel;
+        $this->rowModel = $rowModel;
+
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $cols = MatrixCol::fieldId($fieldIds)->get();
+        $cols = $this->colModel->fieldId($fieldIds)->get();
 
         foreach ($cols as $col) {
             if (! isset($this->cols[$col->field_id])) {
@@ -63,7 +76,7 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $rows = MatrixRow::entryId($entryIds)->orderBy('row_order', 'asc')->get();
+        $rows = $this->rowModel->entryId($entryIds)->orderBy('row_order', 'asc')->get();
 
         foreach ($rows as $row) {
             if (! isset($this->rows[$row->entry_id][$row->field_id])) {
