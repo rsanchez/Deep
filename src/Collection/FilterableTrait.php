@@ -358,6 +358,18 @@ trait FilterableTrait
     }
 
     /**
+     * Get the first Model's given attribute
+     * @param  string     $name
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        $model = $this->first();
+
+        return $model ? $model->$name : null;
+    }
+
+    /**
      * Alias to tagparams
      *
      * @param  array                                    $params

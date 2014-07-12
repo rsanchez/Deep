@@ -170,6 +170,41 @@ class Deep extends Container
     }
 
     /**
+     * Set Eloquent to use CodeIgniter's DB connection
+     *
+     * Set Deep to use upload prefs from config.php,
+     * rather than from DB, if applicable.
+     *
+     * @return void
+     */
+    public static function bootEE(CI_Controller $ee)
+    {
+        static $booted = false;
+
+        if ($booted) {
+            return;
+        }
+
+        if (! Model::getConnectionResolver() instanceof CodeIgniterConnectionResolver) {
+            Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
+        }
+
+        self::extendInstance('config', function ($app) use ($ee) {
+            return $ee->config->config;
+        });
+
+        $uploadPrefs = $ee->config->item('upload_preferences');
+
+        if ($uploadPrefs) {
+            self::extendInstance('UploadPrefRepository', function ($app) use ($uploadPrefs) {
+                return new ConfigUploadPrefRepository($uploadPrefs);
+            });
+        }
+
+        $booted = true;
+    }
+
+    /**
      * Extend an abstract type in the global instance
      * @param  string  $abstract
      * @param  Closure $closure

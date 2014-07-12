@@ -20,6 +20,7 @@ use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Relations\HasOneFromRepository;
+use rsanchez\Deep\Model\GlobalAttributeVisibilityTrait;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -29,7 +30,7 @@ use DateTime;
  */
 class Title extends AbstractEntity
 {
-    use JoinableTrait;
+    use JoinableTrait, GlobalAttributeVisibilityTrait;
 
     /**
      * {@inheritdoc}
@@ -46,9 +47,25 @@ class Title extends AbstractEntity
     protected $primaryKey = 'entry_id';
 
     /**
-     * {@inheritdoc}
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
      */
-    protected $hidden = array('chan', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'comments');
+    protected static $globalHidden = [
+        'chan',
+        'site_id',
+        'forum_topic_id',
+        'ip_address',
+        'versioning_enabled',
+        'comments',
+    ];
+
+    /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array
+     */
+    protected static $globalVisible = [];
 
     /**
      * The class used when creating a new Collection
@@ -79,6 +96,13 @@ class Title extends AbstractEntity
      * @var array
      */
     protected $extraHydrators = array();
+
+    /**
+     * When extending this class, set this property to automatically
+     * load from the specified channel
+     * @var string|null
+     */
+    protected $defaultChannelName;
 
     /**
      * Define the Author Eloquent relationship
@@ -218,6 +242,10 @@ class Title extends AbstractEntity
     {
         $query = parent::newQuery($excludeDeleted);
 
+        if ($this->defaultChannelName) {
+            $this->scopeChannel($query, $this->defaultChannelName);
+        }
+
         $query->select('channel_titles.*');
 
         return $query;
@@ -290,7 +318,7 @@ class Title extends AbstractEntity
         $attributes = parent::attributesToArray();
 
         foreach (array('entry_date', 'edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date') as $key) {
-            if ($attributes[$key] instanceof Carbon) {
+            if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }
         }
