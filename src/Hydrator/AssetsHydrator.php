@@ -25,6 +25,11 @@ use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 class AssetsHydrator extends AbstractHydrator
 {
     /**
+     * @var \rsanchez\Deep\Model\Asset
+     */
+    protected $model;
+
+    /**
      * Asset selections sorted out by entity (entry or matrix or grid)
      * @var array
      */
@@ -43,9 +48,11 @@ class AssetsHydrator extends AbstractHydrator
      * @param string                                    $fieldtype
      * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
         parent::__construct($collection, $fieldtype);
+
+        $this->model = $model;
 
         $this->uploadPrefRepository = $uploadPrefRepository;
     }
@@ -55,7 +62,7 @@ class AssetsHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $assets = Asset::entryId($entryIds)->get();
+        $assets = $this->model->entryId($entryIds)->get();
 
         foreach ($assets as $asset) {
             if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {

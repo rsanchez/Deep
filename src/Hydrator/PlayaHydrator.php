@@ -23,6 +23,11 @@ use rsanchez\Deep\Collection\PlayaCollection;
 class PlayaHydrator extends AbstractHydrator
 {
     /**
+     * @var \rsanchez\Deep\Model\PlayaEntry
+     */
+    protected $model;
+
+    /**
      * List of entries in this collection, organized by
      * type, entity and property
      * @var array
@@ -38,11 +43,13 @@ class PlayaHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection, $fieldtype)
+    public function __construct(EntryCollection $collection, $fieldtype, PlayaEntry $model)
     {
         parent::__construct($collection, $fieldtype);
 
-        $this->playaCollection = PlayaEntry::parentEntryId($collection->modelKeys())->get();
+        $this->model = $model;
+
+        $this->playaCollection = $this->model->parentEntryId($collection->modelKeys())->get();
 
         foreach ($this->playaCollection as $entry) {
             $type = $entry->parent_row_id ? 'matrix' : 'entry';

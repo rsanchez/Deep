@@ -25,6 +25,16 @@ use rsanchez\Deep\Collection\GridRowCollection;
 class GridHydrator extends AbstractHydrator
 {
     /**
+     * @var \rsanchez\Deep\Model\GridCol
+     */
+    protected $colModel;
+
+    /**
+     * @var \rsanchez\Deep\Model\GridRow
+     */
+    protected $rowModel;
+
+    /**
      * All Grid cols used by this collection
      * @var \rsanchez\Deep\Collection\GridColCollection
      */
@@ -39,13 +49,16 @@ class GridHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntryCollection $collection, $fieldtype)
+    public function __construct(EntryCollection $collection, $fieldtype, GridCol $colModel, GridRow $rowModel)
     {
         parent::__construct($collection, $fieldtype);
 
+        $this->colModel = $colModel;
+        $this->rowModel = $rowModel;
+
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $cols = GridCol::fieldId($fieldIds)->get();
+        $cols = $this->colModel->fieldId($fieldIds)->get();
 
         foreach ($cols as $col) {
             if (! isset($this->cols[$col->field_id])) {
@@ -66,7 +79,7 @@ class GridHydrator extends AbstractHydrator
         $fieldIds = $this->collection->getFieldIdsByFieldtype($this->fieldtype);
 
         foreach ($fieldIds as $fieldId) {
-            $rows = GridRow::fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
+            $rows = $this->rowModel->fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
 
             foreach ($rows as $row) {
                 if (! isset($this->rows[$row->entry_id][$row->field_id])) {

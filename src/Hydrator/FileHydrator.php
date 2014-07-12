@@ -24,6 +24,11 @@ use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 class FileHydrator extends AbstractHydrator
 {
     /**
+     * @var \rsanchez\Deep\Model\File
+     */
+    protected $model;
+
+    /**
      * File selections sorted by name
      * @var array
      */
@@ -42,9 +47,11 @@ class FileHydrator extends AbstractHydrator
      * @param string                                    $fieldtype
      * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, $fieldtype, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
         parent::__construct($collection, $fieldtype);
+
+        $this->model = $model;
 
         $this->uploadPrefRepository = $uploadPrefRepository;
     }
@@ -54,7 +61,7 @@ class FileHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $files = File::fromEntryCollection($this->collection)->get();
+        $files = $this->model->fromEntryCollection($this->collection)->get();
 
         foreach ($files as $file) {
             if (! $file->upload_location_id || ! $uploadPref = $this->uploadPrefRepository->find($file->upload_location_id)) {

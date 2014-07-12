@@ -22,6 +22,14 @@ use rsanchez\Deep\Model\Member;
 use rsanchez\Deep\Model\CategoryField;
 use rsanchez\Deep\Model\MemberField;
 use rsanchez\Deep\Model\UploadPref;
+use rsanchez\Deep\Model\Asset;
+use rsanchez\Deep\Model\File;
+use rsanchez\Deep\Model\GridCol;
+use rsanchez\Deep\Model\GridRow;
+use rsanchez\Deep\Model\MatrixCol;
+use rsanchez\Deep\Model\MatrixRow;
+use rsanchez\Deep\Model\PlayaEntry;
+use rsanchez\Deep\Model\RelationshipEntry;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
@@ -110,8 +118,51 @@ class Deep extends Container
             return new UploadPrefRepository($app->make('UploadPref'));
         });
 
+        $this->singleton('Asset', function ($app) {
+            return new Asset();
+        });
+
+        $this->singleton('File', function ($app) {
+            return new File();
+        });
+
+        $this->singleton('GridCol', function ($app) {
+            return new GridCol();
+        });
+
+        $this->singleton('GridRow', function ($app) {
+            return new GridRow();
+        });
+
+        $this->singleton('MatrixCol', function ($app) {
+            return new MatrixCol();
+        });
+
+        $this->singleton('MatrixRow', function ($app) {
+            return new MatrixRow();
+        });
+
+        $this->singleton('PlayaEntry', function ($app) {
+            return new PlayaEntry();
+        });
+
+        $this->singleton('RelationshipEntry', function ($app) {
+            return new RelationshipEntry();
+        });
+
         $this->singleton('HydratorFactory', function ($app) {
-            return new HydratorFactory($app->make('SiteRepository'), $app->make('UploadPrefRepository'));
+            return new HydratorFactory(
+                $app->make('SiteRepository'),
+                $app->make('UploadPrefRepository'),
+                $app->make('Asset'),
+                $app->make('File'),
+                $app->make('GridCol'),
+                $app->make('GridRow'),
+                $app->make('MatrixCol'),
+                $app->make('MatrixRow'),
+                $app->make('PlayaEntry'),
+                $app->make('RelationshipEntry')
+            );
         });
 
         $this->singleton('Category', function ($app) {
