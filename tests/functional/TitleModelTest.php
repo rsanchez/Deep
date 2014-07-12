@@ -9,6 +9,14 @@ use rsanchez\Deep\Model\Member;
 use rsanchez\Deep\Model\CategoryField;
 use rsanchez\Deep\Model\MemberField;
 use rsanchez\Deep\Model\UploadPref;
+use rsanchez\Deep\Model\Asset;
+use rsanchez\Deep\Model\File;
+use rsanchez\Deep\Model\GridCol;
+use rsanchez\Deep\Model\GridRow;
+use rsanchez\Deep\Model\MatrixCol;
+use rsanchez\Deep\Model\MatrixRow;
+use rsanchez\Deep\Model\PlayaEntry;
+use rsanchez\Deep\Model\RelationshipEntry;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
@@ -35,7 +43,18 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
         $uploadPrefRepository = new UploadPrefRepository(new UploadPref());
 
-        $hydratorFactory = new HydratorFactory($siteRepository, $uploadPrefRepository);
+        $hydratorFactory = new HydratorFactory(
+            $siteRepository,
+            $uploadPrefRepository,
+            new Asset(),
+            new File(),
+            new GridCol(),
+            new GridRow(),
+            new MatrixCol(),
+            new MatrixRow(),
+            new PlayaEntry(),
+            new RelationshipEntry()
+        );
 
         Category::setCategoryFieldRepository($categoryFieldRepository);
         Category::setChannelRepository($channelRepository);
