@@ -297,4 +297,9 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
     {
         $this->assertThat(Title::stopBefore(DateTime::createFromFormat('Y-m-d', '2014-12-31'))->get(), new CollectionPropertyCompareDateTimeConstraint(DateTime::createFromFormat('Y-m-d', '2014-12-31'), 'entry_date', '<'));
     }
+
+    public function testUsernameScope()
+    {
+        $this->assertThat(Title::username('admin')->get(), new CollectionPropertyHasOneValueConstraint('admin', 'username'));
+    }
 }
