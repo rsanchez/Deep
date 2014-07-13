@@ -240,11 +240,6 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testScopeShowPages()
     {
-        $this->assertThat(Title::showPages(false)->get(), new CollectionPropertyCompareValueConstraint(null, 'page_uri'));
-    }
-
-    public function testScopeShowPagesTrue()
-    {
         $pageUris = [];
 
         Title::showPages()->get()->each(function ($entry) use (&$pageUris) {
@@ -255,6 +250,11 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
         $pageUris = array_filter($pageUris);
 
         $this->assertGreaterThan(0, count($pageUris));
+    }
+
+    public function testScopeShowPagesFalse()
+    {
+        $this->assertThat(Title::showPages(false)->get(), new CollectionPropertyCompareValueConstraint(null, 'page_uri'));
     }
 
     public function testScopeShowPagesOnly()
@@ -270,43 +270,31 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
     public function testScopeStartOn()
     {
-        $entryIds = Title::startOn(strtotime('2014-01-01'))->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+        $this->assertThat(Title::startOn(strtotime('2014-01-01'))->get(), new CollectionPropertyCompareDateTimeConstraint(DateTime::createFromFormat('Y-m-d', '2014-01-01'), 'entry_date', '>'));
     }
 
     public function testScopeStartOnDateTime()
     {
-        $entryIds = Title::startOn(DateTime::createFromFormat('Y-m-d', '2014-01-01'))->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(9));
+        $this->assertThat(Title::startOn(DateTime::createFromFormat('Y-m-d', '2014-01-01'))->get(), new CollectionPropertyCompareDateTimeConstraint(DateTime::createFromFormat('Y-m-d', '2014-01-01'), 'entry_date', '>'));
     }
 
     public function testStatusScope()
     {
-        $entryIds = Title::status('open')->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(11));
+        $this->assertThat(Title::status('open')->get(), new CollectionPropertyHasOneValueConstraint('open', 'status'));
     }
 
     public function testNotStatusScope()
     {
-        $entryIds = Title::notStatus('closed')->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(11));
+        $this->assertThat(Title::notStatus('closed')->get(), new CollectionPropertyDoesNotHaveValueConstraint('closed', 'status'));
     }
 
     public function testScopeStopBefore()
     {
-        $entryIds = Title::stopBefore(strtotime('2014-12-31'))->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+        $this->assertThat(Title::stopBefore(strtotime('2014-12-31'))->get(), new CollectionPropertyCompareDateTimeConstraint(DateTime::createFromFormat('Y-m-d', '2014-12-31'), 'entry_date', '<'));
     }
 
     public function testScopeStopBeforeDateTime()
     {
-        $entryIds = Title::stopBefore(DateTime::createFromFormat('Y-m-d', '2014-12-31'))->get()->fetch('entry_id')->all();
-
-        $this->assertThat($entryIds, new ArrayDoesNotHaveValueConstraint(10));
+        $this->assertThat(Title::stopBefore(DateTime::createFromFormat('Y-m-d', '2014-12-31'))->get(), new CollectionPropertyCompareDateTimeConstraint(DateTime::createFromFormat('Y-m-d', '2014-12-31'), 'entry_date', '<'));
     }
 }
