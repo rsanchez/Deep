@@ -302,4 +302,19 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
     {
         $this->assertThat(Title::username('admin')->get(), new CollectionPropertyHasOneValueConstraint('admin', 'username'));
     }
+
+    public function testYearScope()
+    {
+        $this->assertThat(Title::year(2014)->get(), new CollectionPropertyHasOneValueConstraint('2014', 'year'));
+    }
+
+    public function testMonthScope()
+    {
+        $this->assertThat(Title::month(5)->get(), new CollectionPropertyHasOneValueConstraint('05', 'month'));
+    }
+
+    public function testDayScope()
+    {
+        $this->assertThat(Title::day(8)->get(), new CollectionPropertyHasOneValueConstraint('08', 'day'));
+    }
 }
