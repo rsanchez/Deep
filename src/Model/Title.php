@@ -412,6 +412,16 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Get the username of the entry's author
+     *
+     * @return string
+     */
+    public function getUsernameAttribute()
+    {
+        return $this->author->username;
+    }
+
+    /**
      * Save the entry (not yet supported)
      *
      * @param  array $options
