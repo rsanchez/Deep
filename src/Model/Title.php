@@ -1063,24 +1063,24 @@ class Title extends AbstractEntity
      * Filter by Month
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  int                                   $month
+     * @param  string|int                            $month
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeMonth(Builder $query, $month)
     {
-        return $query->where('channel_titles.month', $month);
+        return $query->where('channel_titles.month', str_pad($month, 2, '0', STR_PAD_LEFT));
     }
 
     /**
      * Filter by Day
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  int                                   $day
+     * @param  string|int                            $day
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeDay(Builder $query, $day)
     {
-        return $query->where('channel_titles.day', $day);
+        return $query->where('channel_titles.day', str_pad($day, 2, '0', STR_PAD_LEFT));
     }
 
     /**
