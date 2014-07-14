@@ -18,6 +18,34 @@ use Illuminate\Database\Eloquent\Builder;
 trait JoinableTrait
 {
     /**
+     * Find a model by its primary key.
+     *
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|Collection
+     */
+    public static function find($id, $columns = array('*'))
+    {
+        $instance = new static;
+
+        if (is_array($id) && empty($id)) {
+            return $instance->newCollection();
+        }
+
+        $query = $instance->newQuery();
+
+        $key = $instance->table.'.'.$instance->primaryKey;
+
+        if (is_array($id)) {
+            return $query->whereIn($key, $id)
+                ->get($columns);
+        }
+
+        return $query->where($key, '=', $id)
+            ->first($columns);
+    }
+
+    /**
      * Return a structured array of joinable tables
      * ex.
      *     'members' => array('members.member_id', 'channel_titles.author_id'),
