@@ -55,8 +55,6 @@ class Entry extends Title
     {
         $query = parent::newQuery($excludeDeleted);
 
-        $query->addSelect('channel_data.*');
-
         $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
 
         return $query;

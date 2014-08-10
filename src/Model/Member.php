@@ -59,9 +59,7 @@ class Member extends Model
      */
     public function scopeWithFields(Builder $query)
     {
-        return $this->requireTable($query, 'member_data')
-            ->addSelect('members.*')
-            ->addSelect('member_data.*');
+        return $this->requireTable($query, 'member_data');
     }
 
     /**

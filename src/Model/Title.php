@@ -246,8 +246,6 @@ class Title extends AbstractEntity
             $this->scopeChannel($query, $this->defaultChannelName);
         }
 
-        $query->select('channel_titles.*');
-
         return $query;
     }
 

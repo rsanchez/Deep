@@ -37,7 +37,6 @@ class PlayaEntry extends Entry
     {
         return array_merge(parent::joinTables(), array(
             'playa_relationships' => function ($query) {
-                $query->addSelect('playa_relationships.*');
                 $query->join('playa_relationships', 'playa_relationships.child_entry_id', '=', 'channel_titles.entry_id');
             },
         ));

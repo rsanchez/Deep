@@ -37,7 +37,6 @@ class RelationshipEntry extends Entry
     {
         return array_merge(parent::joinTables(), array(
             'relationships' => function ($query) {
-                $query->addSelect('relationships.*');
                 $query->join('relationships', 'relationships.child_id', '=', 'channel_titles.entry_id');
             },
         ));
@@ -69,7 +68,6 @@ class RelationshipEntry extends Entry
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $query->join('relationships', 'relationships.parent_id', '=', 'channel_titles.entry_id')
-            ->addSelect('relationships.*')
             ->whereIn('relationships.child_id', $entryId)
             ->orderBy('relationships.order', 'asc')
             ->groupBy('relationships.child_id')
@@ -93,7 +91,7 @@ class RelationshipEntry extends Entry
 
         return $query->join('relationships', 'relationships.child_id', '=', 'channel_titles.entry_id')
             ->join($connection->raw("`{$tablePrefix}relationships` AS `{$tablePrefix}relationships_2`"), 'relationships_2.parent_id', '=', 'relationships.parent_id')
-            ->addSelect('relationships.*')
+            ->addSelect('*')
             ->addSelect('relationships_2.child_id AS sibling_id')
             ->whereIn('relationships_2.child_id', $entryId)
             ->orderBy('relationships.order', 'asc')

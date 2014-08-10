@@ -112,9 +112,7 @@ class Category extends Model
      */
     public function scopeWithFields(Builder $query)
     {
-        return $this->requireTable($query, 'category_field_data')
-            ->addSelect('categories.*')
-            ->addSelect('category_field_data.*');
+        return $this->requireTable($query, 'category_field_data');
     }
 
     /**
@@ -216,18 +214,6 @@ class Category extends Model
         }
 
         return new CategoryCollection($models);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function newQuery($excludeDeleted = true)
-    {
-        $query = parent::newQuery($excludeDeleted);
-
-        $query->select($this->table.'.*');
-
-        return $query;
     }
 
     /**
