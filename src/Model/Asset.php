@@ -41,7 +41,7 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref');
+    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref', 'source_type', 'folder_name', 'full_path', 'parent_id');
 
     /**
      * {@inheritdoc}
@@ -80,7 +80,7 @@ class Asset extends Model implements FileInterface
      */
     public function getUrlAttribute()
     {
-        return $this->uploadPref->url.$this->file_name;
+        return $this->uploadPref->url.$this->full_path.$this->file_name;
     }
 
     /**
@@ -88,7 +88,7 @@ class Asset extends Model implements FileInterface
      */
     public function getServerPathAttribute()
     {
-        return $this->uploadPref->server_path.$this->file_name;
+        return $this->uploadPref->server_path.$this->full_path.$this->file_name;
     }
 
     /**
@@ -154,11 +154,22 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
+    public static function defaultJoinTables()
+    {
+        return ['assets_folders'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected static function joinTables()
     {
         return array(
             'assets_selections' => function ($query) {
                 $query->join('assets_selections', 'assets_selections.file_id', '=', 'assets_files.file_id');
+            },
+            'assets_folders' => function ($query) {
+                $query->join('assets_folders', 'assets_folders.folder_id', '=', 'assets_files.folder_id');
             },
         );
     }

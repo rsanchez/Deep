@@ -14,7 +14,7 @@ class ArrayHasOnlyValuesConstraint extends PHPUnit_Framework_Constraint
         $this->expected = $expected;
     }
 
-    public function matches(array $input)
+    public function matches($input)
     {
         return ! array_diff($this->expected, $input) && ! array_diff($input, $this->expected);
     }
