@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
+use rsanchez\Deep\Model\JoinableScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -46,6 +47,28 @@ trait JoinableTrait
     }
 
     /**
+     * Set the global eloquent scope
+     * @return void
+     */
+    protected static function bootJoinableTrait()
+    {
+        $tables = static::defaultJoinTables();
+
+        if ($tables) {
+            static::addGlobalScope(new JoinableScope($tables));
+        }
+    }
+
+    /**
+     * Set which tables should be joined automatically
+     * @return array
+     */
+    public static function defaultJoinTables()
+    {
+        return [];
+    }
+
+    /**
      * Return a structured array of joinable tables
      * ex.
      *     'members' => array('members.member_id', 'channel_titles.author_id'),
@@ -54,7 +77,7 @@ trait JoinableTrait
      */
     protected static function joinTables()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -64,7 +87,7 @@ trait JoinableTrait
      * @param  string                                $table   table name
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    protected function requireTable(Builder $builder, $table)
+    public function requireTable(Builder $builder, $table)
     {
         $tables = static::joinTables();
 
