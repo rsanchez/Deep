@@ -1,6 +1,6 @@
 # Deep
 
-[![Build Status](https://travis-ci.org/rsanchez/Deep.svg?branch=tests)](https://travis-ci.org/rsanchez/Deep)
+[![Build Status](https://travis-ci.org/rsanchez/Deep.svg?branch=1.1)](https://travis-ci.org/rsanchez/Deep)
 [![Total Downloads](https://poser.pugx.org/rsanchez/deep/downloads.png)](https://packagist.org/packages/rsanchez/deep)
 [![Latest Stable Version](https://poser.pugx.org/rsanchez/deep/v/stable.png)](https://packagist.org/packages/rsanchez/deep)
 
@@ -42,12 +42,12 @@ $entries = Entries::channel('blog')
 Add this to your `composer.json`:
 
     "require": {
-        "rsanchez/deep": "1.0.*"
+        "rsanchez/deep": "1.1.*@dev"
     }
 
 Or run:
 
-    composer require rsanchez/deep 1.0.*
+    composer require rsanchez/deep 1.1.*@dev
 
 ## Setup
 
@@ -67,7 +67,7 @@ $entries = Entries::channel('blog')
                 ->get();
 ```
 
-If you are not [extending the `BasePlugin` class](#extending-the-baseplugin-class) or using the `Entries` or `Titles` proxy, you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
+If you are not [extending the `BasePlugin` class](#extending-the-baseplugin-class) or using the `Entries` or `Titles` wrapper class, you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
 
     \rsanchez\Deep\Deep::bootEE(ee());
 

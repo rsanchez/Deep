@@ -192,7 +192,7 @@ class Asset extends Model implements FileInterface
                 $query->join('assets_folders', 'assets_folders.folder_id', '=', 'assets_files.folder_id');
             },
             'assets_sources' => function ($query) {
-                $query->join('assets_sources', 'assets_sources.source_id', '=', 'assets_files.source_id');
+                $query->leftJoin('assets_sources', 'assets_sources.source_id', '=', 'assets_files.source_id');
             },
         );
     }
