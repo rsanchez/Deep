@@ -66,7 +66,11 @@ class AssetsHydrator extends AbstractHydrator
 
         foreach ($assets as $asset) {
             if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {
-                continue;
+                if ( ! is_null($asset->source_id) && $asset->source_settings) {
+                    $uploadPref = null;
+                } else {
+                    continue;
+                }
             }
 
             $asset->setUploadPref($uploadPref);
