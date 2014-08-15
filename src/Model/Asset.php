@@ -41,7 +41,7 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref', 'source_type', 'folder_name', 'full_path', 'parent_id');
+    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref', 'source_type', 'folder_name', 'full_path', 'parent_id', 'name', 'settings', );
 
     /**
      * {@inheritdoc}
@@ -56,10 +56,10 @@ class Asset extends Model implements FileInterface
 
     /**
      * Set the UploadPref
-     * @var \rsanchez\Deep\Model\UploadPref $uploadPref
+     * @var \rsanchez\Deep\Model\UploadPref $uploadPref|null
      * @return void
      */
-    public function setUploadPref(UploadPref $uploadPref)
+    public function setUploadPref(UploadPref $uploadPref = null)
     {
         $this->uploadPref = $uploadPref;
     }
@@ -80,7 +80,13 @@ class Asset extends Model implements FileInterface
      */
     public function getUrlAttribute()
     {
-        return $this->uploadPref->url.$this->full_path.$this->file_name;
+        if (is_null($this->uploadPref) && $this->source_settings) {
+            $base = $this->source_settings->url_prefix;
+        } else {
+            $base = $this->uploadPref->url.$this->full_path;
+        }
+
+        return $base.$this->file_name;
     }
 
     /**
@@ -88,6 +94,10 @@ class Asset extends Model implements FileInterface
      */
     public function getServerPathAttribute()
     {
+        if (is_null($this->uploadPref) && $this->source_settings) {
+            return null;
+        }
+
         return $this->uploadPref->server_path.$this->full_path.$this->file_name;
     }
 
@@ -128,6 +138,16 @@ class Asset extends Model implements FileInterface
     }
 
     /**
+     * Get the json decoded settings for the source
+     * @param  string $value json settings
+     * @return array
+     */
+    public function getSourceSettingsAttribute($value)
+    {
+        return json_decode($this->settings);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function attributesToArray()
@@ -156,7 +176,7 @@ class Asset extends Model implements FileInterface
      */
     public static function defaultJoinTables()
     {
-        return ['assets_folders'];
+        return ['assets_folders', 'assets_sources', ];
     }
 
     /**
@@ -170,6 +190,9 @@ class Asset extends Model implements FileInterface
             },
             'assets_folders' => function ($query) {
                 $query->join('assets_folders', 'assets_folders.folder_id', '=', 'assets_files.folder_id');
+            },
+            'assets_sources' => function ($query) {
+                $query->join('assets_sources', 'assets_sources.source_id', '=', 'assets_files.source_id');
             },
         );
     }
