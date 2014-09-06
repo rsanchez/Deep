@@ -1,6 +1,6 @@
 # Deep
 
-[![Build Status](https://travis-ci.org/rsanchez/Deep.svg?branch=1.1)](https://travis-ci.org/rsanchez/Deep)
+[![Build Status](https://travis-ci.org/rsanchez/Deep.svg?branch=master)](https://travis-ci.org/rsanchez/Deep)
 [![Total Downloads](https://poser.pugx.org/rsanchez/deep/downloads.png)](https://packagist.org/packages/rsanchez/deep)
 [![Latest Stable Version](https://poser.pugx.org/rsanchez/deep/v/stable.png)](https://packagist.org/packages/rsanchez/deep)
 
@@ -42,12 +42,12 @@ $entries = Entries::channel('blog')
 Add this to your `composer.json`:
 
     "require": {
-        "rsanchez/deep": "1.1.*@dev"
+        "rsanchez/deep": "~1.1"
     }
 
-Or run:
+Or run the command in your terminal:
 
-    composer require rsanchez/deep 1.1.*@dev
+    composer require "rsanchez/deep" "~1.1"
 
 ## Setup
 
