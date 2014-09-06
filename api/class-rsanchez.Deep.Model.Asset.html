@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Model\Asset</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -54,8 +56,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></li>
 				<li><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></li>
-				<li><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></li>
+				<li><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></li>
 				<li class="active"><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Category.html">Category</a></li>
 				<li><a href="class-rsanchez.Deep.Model.CategoryField.html">CategoryField</a></li>
@@ -68,6 +71,7 @@
 				<li><a href="class-rsanchez.Deep.Model.File.html">File</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridCol.html">GridCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridRow.html">GridRow</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixRow.html">MatrixRow</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Member.html">Member</a></li>
@@ -84,6 +88,11 @@
 				<li><a href="class-rsanchez.Deep.Model.FileInterface.html">FileInterface</a></li>
 			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></li>
+			</ul>
 
 
 
@@ -140,17 +149,12 @@ Illuminate\Database\Eloquent\Model
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by" />
-			<a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html"><span>rsanchez\Deep\Model\AbstractJoinableModel</span></a>
-			
-			
-			
-		</dd>
-		<dd style="padding-left:60px">
-			<img src="resources/inherit.png" alt="Extended by" />
 <b><span>rsanchez\Deep\Model\Asset</span></b>			
 			 implements 
 				<a href="class-rsanchez.Deep.Model.FileInterface.html"><span>rsanchez\Deep\Model\FileInterface</span></a>
 			
+			 uses 
+				<a href="class-rsanchez.Deep.Model.JoinableTrait.html"><span>rsanchez\Deep\Model\JoinableTrait</span></a>
 			
 		</dd>
 	</dl>
@@ -168,7 +172,7 @@ Illuminate\Database\Eloquent\Model
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Model.html">Model</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.Asset.html#21-164" title="Go to source code">Model/Asset.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.Asset.html#20-199" title="Go to source code">Model/Asset.php</a><br />
 	</div>
 
 
@@ -186,7 +190,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setUploadPref">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#56-64" title="Go to source code">setUploadPref</a>( <span><code><a href="class-rsanchez.Deep.Model.UploadPref.html">rsanchez\Deep\Model\UploadPref</a></code> <var>$uploadPref</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#57-65" title="Go to source code">setUploadPref</a>( <span><code><a href="class-rsanchez.Deep.Model.UploadPref.html">rsanchez\Deep\Model\UploadPref</a></code> <var>$uploadPref</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -205,7 +209,7 @@ Illuminate\Database\Eloquent\Model
 
 				<h4>Var</h4>
 				<div class="list">
-						\rsanchez\Deep\Model\UploadPref $uploadPref<br />
+						\rsanchez\Deep\Model\UploadPref $uploadPref|null<br />
 				</div>
 
 
@@ -223,7 +227,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newCollection">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#66-75" title="Go to source code">newCollection</a>( <span>array <var>$assets</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#67-76" title="Go to source code">newCollection</a>( <span>array <var>$assets</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -261,7 +265,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getUrlAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#77-83" title="Go to source code">getUrlAttribute</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#78-90" title="Go to source code">getUrlAttribute</a>( )</code>
 
 		<div class="description short">
 			
@@ -300,7 +304,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getServerPathAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#85-91" title="Go to source code">getServerPathAttribute</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#92-102" title="Go to source code">getServerPathAttribute</a>( )</code>
 
 		<div class="description short">
 			
@@ -339,7 +343,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDateAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#93-102" title="Go to source code">getDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#104-113" title="Go to source code">getDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -381,7 +385,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDateModifiedAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#104-113" title="Go to source code">getDateModifiedAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#115-124" title="Go to source code">getDateModifiedAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -423,7 +427,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeEntryId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#115-127" title="Go to source code">scopeEntryId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string|array <var>$entryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#126-138" title="Go to source code">scopeEntryId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string|array <var>$entryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -456,6 +460,48 @@ Illuminate\Database\Eloquent\Model
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="getSourceSettingsAttribute" id="_getSourceSettingsAttribute">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getSourceSettingsAttribute">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#140-148" title="Go to source code">getSourceSettingsAttribute</a>( <span>string <var>$value</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Get the json decoded settings for the source</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the json decoded settings for the source</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$value</var></dt>
+					<dd><code>string</code><br>$value json settings</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="attributesToArray" id="_attributesToArray">
 
 		<td class="attributes"><code>
@@ -467,7 +513,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_attributesToArray">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#129-143" title="Go to source code">attributesToArray</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#150-164" title="Go to source code">attributesToArray</a>( )</code>
 
 		<div class="description short">
 			
@@ -496,7 +542,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#___toString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#145-151" title="Go to source code">__toString</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#166-172" title="Go to source code">__toString</a>( )</code>
 
 		<div class="description short">
 			
@@ -524,58 +570,77 @@ Illuminate\Database\Eloquent\Model
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="defaultJoinTables" id="_defaultJoinTables">
+
+		<td class="attributes"><code>
+			 public static
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultJoinTables">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#174-180" title="Go to source code">defaultJoinTables</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="joinTables" id="_joinTables">
 
 		<td class="attributes"><code>
 			 protected static
-			array
+			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_joinTables">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#153-163" title="Go to source code">joinTables</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Asset.html#182-198" title="Go to source code">joinTables</a>( )</code>
 
 		<div class="description short">
 			
-<p>Return a structured array of joinable tables ex.<br />
-'members' =&gt; array('members.member_id', 'channel_titles.author_id'),</p>
-
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Return a structured array of joinable tables ex. 'members' =&gt;
-array('members.member_id', 'channel_titles.author_id'),</p>
 
 
 
 
-				<h4>Returns</h4>
-				<div class="list">
-					<code>array</code><br />
-				</div>
 
 
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html#_joinTables">rsanchez\Deep\Model\AbstractJoinableModel::joinTables()</a></code></div>
 
 		</div>
 		</div></td>
 	</tr>
 	</table>
 
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html#methods">rsanchez\Deep\Model\AbstractJoinableModel</a></caption>
+
+	<table class="summary used">
+	<caption>Methods used from <a href="class-rsanchez.Deep.Model.JoinableTrait.html#methods">rsanchez\Deep\Model\JoinableTrait</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html#_requireTable">requireTable()</a>
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_bootJoinableTrait">()</a>, 
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_find">()</a>, 
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_requireTable">()</a>
 		</code></td>
 	</tr>
 	</table>
-
 
 
 
@@ -595,7 +660,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Asset.html#26-31" title="Go to source code"><var>$table</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Asset.html#27-32" title="Go to source code"><var>$table</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'assets_files'</span></code></td>
 		<td class="description"><div>
@@ -618,7 +683,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Asset.html#33-38" title="Go to source code"><var>$primaryKey</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Asset.html#34-39" title="Go to source code"><var>$primaryKey</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'file_id'</span></code></td>
 		<td class="description"><div>
@@ -641,9 +706,9 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Asset.html#40-43" title="Go to source code"><var>$hidden</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Asset.html#41-44" title="Go to source code"><var>$hidden</var></a>
 		</td>
-		<td class="value"><code><span class="php-keyword1">array</span>(<span class="php-quote">'file_id'</span>, <span class="php-quote">'folder_id'</span>, <span class="php-quote">'source_type'</span>, <span class="php-quote">'source_id'</span>, <span class="php-quote">'filedir_id'</span>, <span class="php-quote">'entry_id'</span>, <span class="php-quote">'field_id'</span>, <span class="php-quote">'col_id'</span>, <span class="php-quote">'row_id'</span>, <span class="php-quote">'var_id'</span>, <span class="php-quote">'element_id'</span>, <span class="php-quote">'content_type'</span>, <span class="php-quote">'sort_order'</span>, <span class="php-quote">'is_draft'</span>, <span class="php-quote">'uploadPref'</span>)</code></td>
+		<td class="value"><code><span class="php-keyword1">array</span>(<span class="php-quote">'file_id'</span>, <span class="php-quote">'folder_id'</span>, <span class="php-quote">'source_type'</span>, <span class="php-quote">'source_id'</span>, <span class="php-quote">'filedir_id'</span>, <span class="php-quote">'entry_id'</span>, <span class="php-quote">'field_id'</span>, <span class="php-quote">'col_id'</span>, <span class="php-quote">'row_id'</span>, <span class="php-quote">'var_id'</span>, <span class="php-quote">'element_id'</span>, <span class="php-quote">'content_type'</span>, <span class="php-quote">'sort_order'</span>, <span class="php-quote">'is_draft'</span>, <span class="php-quote">'uploadPref'</span>, <span class="php-quote">'source_type'</span>, <span class="php-quote">'folder_name'</span>, <span class="php-quote">'full_path'</span>, <span class="php-quote">'parent_id'</span>, <span class="php-quote">'name'</span>, <span class="php-quote">'settings'</span>, )</code></td>
 		<td class="description"><div>
 			<a href="#$hidden" class="anchor">#</a>
 
@@ -664,7 +729,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Asset.html#45-48" title="Go to source code"><var>$appends</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Asset.html#46-49" title="Go to source code"><var>$appends</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>(<span class="php-quote">'url'</span>)</code></td>
 		<td class="description"><div>
@@ -687,7 +752,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Asset.html#50-54" title="Go to source code"><var>$uploadPref</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Asset.html#51-55" title="Go to source code"><var>$uploadPref</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>

@@ -13,6 +13,9 @@
 	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.App.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.App.EE.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/namespace-rsanchez.Deep.App.Laravel.html</loc>
 </url>
 <url>
@@ -45,6 +48,18 @@
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Categories.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.EE.AbstractProxy.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.EE.Categories.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.EE.Entries.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.EE.Titles.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.App.Entries.html</loc>
 </url>
 <url>
@@ -64,9 +79,6 @@
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Collection.AbstractFieldCollection.html</loc>
-</url>
-<url>
-	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Collection.AbstractFilterableCollection.html</loc>
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Collection.AbstractTitleCollection.html</loc>
@@ -135,9 +147,6 @@
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Hydrator.DateHydrator.html</loc>
 </url>
 <url>
-	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Hydrator.DefaultHydrator.html</loc>
-</url>
-<url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Hydrator.ExplodeHydrator.html</loc>
 </url>
 <url>
@@ -171,10 +180,13 @@
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Hydrator.WysiwygHydrator.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.AbstractEntity.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.AbstractField.html</loc>
 </url>
 <url>
-	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.AbstractJoinableModel.html</loc>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.AbstractProperty.html</loc>
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.Asset.html</loc>
@@ -211,6 +223,9 @@
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.GridRow.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.JoinableScope.html</loc>
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.MatrixCol.html</loc>
@@ -276,6 +291,9 @@
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Repository.UploadPrefRepository.html</loc>
 </url>
 <url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Collection.FilterableInterface.html</loc>
+</url>
+<url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Hydrator.HydratorInterface.html</loc>
 </url>
 <url>
@@ -286,5 +304,14 @@
 </url>
 <url>
 	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Collection.FilterableTrait.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html</loc>
+</url>
+<url>
+	<loc>http://rsanchez.github.io/Deep/api/class-rsanchez.Deep.Model.JoinableTrait.html</loc>
 </url>
 </urlset>

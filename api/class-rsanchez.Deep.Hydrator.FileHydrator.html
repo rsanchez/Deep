@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Hydrator\FileHydrator</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -57,7 +59,6 @@
 				<li><a href="class-rsanchez.Deep.Hydrator.AbstractHydrator.html">AbstractHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.AssetsHydrator.html">AssetsHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.DateHydrator.html">DateHydrator</a></li>
-				<li><a href="class-rsanchez.Deep.Hydrator.DefaultHydrator.html">DefaultHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.ExplodeHydrator.html">ExplodeHydrator</a></li>
 				<li class="active"><a href="class-rsanchez.Deep.Hydrator.FileHydrator.html">FileHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.GridHydrator.html">GridHydrator</a></li>
@@ -154,7 +155,7 @@
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Hydrator.html">Hydrator</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#20-121" title="Go to source code">Hydrator/FileHydrator.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#21-90" title="Go to source code">Hydrator/FileHydrator.php</a><br />
 	</div>
 
 
@@ -172,7 +173,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#37-49" title="Go to source code">__construct</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span>, <span><code><a href="class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html">rsanchez\Deep\Repository\UploadPrefRepositoryInterface</a></code> <var>$uploadPrefRepository</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#43-57" title="Go to source code">__construct</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span>, <span><code><a href="class-rsanchez.Deep.Model.File.html">rsanchez\Deep\Model\File</a></code> <var>$model</var></span>, <span><code><a href="class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html">rsanchez\Deep\Repository\UploadPrefRepositoryInterface</a></code> <var>$uploadPrefRepository</var></span> )</code>
 
 		<div class="description short">
 			
@@ -192,6 +193,8 @@
 					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
 					<dt><var>$fieldtype</var></dt>
 					<dd><code>string</code><br>$fieldtype</dd>
+					<dt><var>$model</var></dt>
+					<dd></dd>
 					<dt><var>$uploadPrefRepository</var></dt>
 					<dd></dd>
 				</dl></div>
@@ -220,7 +223,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_preload">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#51-63" title="Go to source code">preload</a>( <span>array <var>$entryIds</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#59-75" title="Go to source code">preload</a>( <span>array <var>$entryIds</var></span> )</code>
 
 		<div class="description short">
 			
@@ -253,33 +256,41 @@
 
 		<td class="attributes"><code>
 			 public 
-			
+			mixed
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hydrate">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#65-120" title="Go to source code">hydrate</a>( <span><code><a href="class-rsanchez.Deep.Model.Entry.html">rsanchez\Deep\Model\Entry</a></code> <var>$entry</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#77-89" title="Go to source code">hydrate</a>( <span><code><a href="class-rsanchez.Deep.Model.AbstractEntity.html">rsanchez\Deep\Model\AbstractEntity</a></code> <var>$entity</var></span>, <span><code><a href="class-rsanchez.Deep.Model.AbstractProperty.html">rsanchez\Deep\Model\AbstractProperty</a></code> <var>$property</var></span> )</code>
 
 		<div class="description short">
 			
-<p>Hydrate an Entry's custom field(s) that match the current hydrator type</p>
+<p>Hydrate the specified property (channel field or Matrix/Grid col) on the
+specified entity (channel entry or Matrix/Grid row)</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Hydrate an Entry's custom field(s) that match the current hydrator type</p>
+<p>Hydrate the specified property (channel field or Matrix/Grid col) on the
+specified entity (channel entry or Matrix/Grid row)</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$entry</var></dt>
-					<dd><code><code><a href="class-rsanchez.Deep.Model.Entry.html">rsanchez\Deep\Model\Entry</a></code></code><br>$entry</dd>
+					<dt><var>$entity</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Model.AbstractEntity.html">rsanchez\Deep\Model\AbstractEntity</a></code></code><br>$entity</dd>
+					<dt><var>$property</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Model.AbstractProperty.html">rsanchez\Deep\Model\AbstractProperty</a></code></code><br>$property</dd>
 				</dl></div>
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br>the entity property value<br />
+				</div>
 
 
 
@@ -302,14 +313,37 @@
 
 	<table class="summary" id="properties">
 	<caption>Properties summary</caption>
-	<tr data-order="files" id="$files">
+	<tr data-order="model" id="$model">
 		<td class="attributes"><code>
 			protected  
-			<code><a href="class-rsanchez.Deep.Collection.FileCollection.html">rsanchez\Deep\Collection\FileCollection</a></code>
+			<code><a href="class-rsanchez.Deep.Model.File.html">rsanchez\Deep\Model\File</a></code>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#25-29" title="Go to source code"><var>$files</var></a>
+				<a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#26-29" title="Go to source code"><var>$model</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$model" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="files" id="$files">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#31-35" title="Go to source code"><var>$files</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
@@ -317,13 +351,13 @@
 
 			<div class="description short">
 				
-<p>All File selections for this collection</p>
+<p>File selections sorted by name</p>
 
 			</div>
 
 			<div class="description detailed hidden">
 				
-<p>All File selections for this collection</p>
+<p>File selections sorted by name</p>
 
 
 			</div>
@@ -336,7 +370,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#31-35" title="Go to source code"><var>$uploadPrefRepository</var></a>
+				<a href="source-class-rsanchez.Deep.Hydrator.FileHydrator.html#37-41" title="Go to source code"><var>$uploadPrefRepository</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>

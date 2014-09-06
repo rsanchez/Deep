@@ -7,7 +7,7 @@
 	<title>Namespace rsanchez\Deep\Model</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -54,8 +56,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></li>
 				<li><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></li>
-				<li><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></li>
+				<li><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Category.html">Category</a></li>
 				<li><a href="class-rsanchez.Deep.Model.CategoryField.html">CategoryField</a></li>
@@ -68,6 +71,7 @@
 				<li><a href="class-rsanchez.Deep.Model.File.html">File</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridCol.html">GridCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridRow.html">GridRow</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixRow.html">MatrixRow</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Member.html">Member</a></li>
@@ -84,6 +88,11 @@
 				<li><a href="class-rsanchez.Deep.Model.FileInterface.html">FileInterface</a></li>
 			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></li>
+			</ul>
 
 
 
@@ -129,12 +138,16 @@
 <table class="summary" id="classes">
 <caption>Classes summary</caption>
 <tr>
+	<td class="name"><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></td>
+	<td>Model for the channel entries, matrix rows and grid rows</td>
+</tr>
+<tr>
 	<td class="name"><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></td>
 	<td>Interface for field models</td>
 </tr>
 <tr>
-	<td class="name"><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></td>
-	<td>Abstract Model which can optionally join the specified table(s)</td>
+	<td class="name"><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></td>
+	<td>Interface for field/col models</td>
 </tr>
 <tr>
 	<td class="name"><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></td>
@@ -185,6 +198,10 @@
 	<td>Model for the channel_grid_field_X table(s)</td>
 </tr>
 <tr>
+	<td class="name"><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></td>
+	<td>Global Joinable scope to automatically join the specified tables</td>
+</tr>
+<tr>
 	<td class="name"><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></td>
 	<td>Model for the matrix_cols table</td>
 </tr>
@@ -230,6 +247,18 @@
 </tr>
 </table>
 
+<table class="summary" id="traits">
+<caption>Traits summary</caption>
+<tr>
+	<td class="name"><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></td>
+	<td>Trait for Eloquent models that allows you to set the model's hidden or visible
+attributes globally for all instances of the model.</td>
+</tr>
+<tr>
+	<td class="name"><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></td>
+	<td>Model which can optionally join the specified table(s)</td>
+</tr>
+</table>
 
 
 

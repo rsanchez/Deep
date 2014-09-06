@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Collection\AbstractTitleCollection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -55,7 +57,6 @@
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html">AbstractFieldCollection</a></li>
-				<li><a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html">AbstractFilterableCollection</a></li>
 				<li class="active"><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">AbstractTitleCollection</a></li>
 				<li><a href="class-rsanchez.Deep.Collection.AssetCollection.html">AssetCollection</a></li>
 				<li><a href="class-rsanchez.Deep.Collection.CategoryCollection.html">CategoryCollection</a></li>
@@ -76,7 +77,15 @@
 				<li><a href="class-rsanchez.Deep.Collection.UploadPrefCollection.html">UploadPrefCollection</a></li>
 			</ul>
 
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Collection.FilterableInterface.html">FilterableInterface</a></li>
+			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Collection.FilterableTrait.html">FilterableTrait</a></li>
+			</ul>
 
 
 
@@ -133,15 +142,12 @@ Illuminate\Database\Eloquent\Collection
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by" />
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html"><span>rsanchez\Deep\Collection\AbstractFilterableCollection</span></a>
-			
-			
-			
-		</dd>
-		<dd style="padding-left:60px">
-			<img src="resources/inherit.png" alt="Extended by" />
 <b><span>rsanchez\Deep\Collection\AbstractTitleCollection</span></b>			
+			 implements 
+				<a href="class-rsanchez.Deep.Collection.FilterableInterface.html"><span>rsanchez\Deep\Collection\FilterableInterface</span></a>
 			
+			 uses 
+				<a href="class-rsanchez.Deep.Collection.FilterableTrait.html"><span>rsanchez\Deep\Collection\FilterableTrait</span></a>
 			
 		</dd>
 	</dl>
@@ -169,7 +175,7 @@ Illuminate\Database\Eloquent\Collection
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Collection.html">Collection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#16-136" title="Go to source code">Collection/AbstractTitleCollection.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#18-165" title="Go to source code">Collection/AbstractTitleCollection.php</a><br />
 	</div>
 
 
@@ -187,7 +193,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_create">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#33-56" title="Go to source code">create</a>( <span>array <var>$models</var></span>, <span><code><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">rsanchez\Deep\Repository\ChannelRepository</a></code> <var>$channelRepository</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#37-62" title="Go to source code">create</a>( <span>array <var>$models</var></span>, <span><code><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">rsanchez\Deep\Repository\ChannelRepository</a></code> <var>$channelRepository</var></span> )</code>
 
 		<div class="description short">
 			
@@ -220,6 +226,90 @@ Illuminate\Database\Eloquent\Collection
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="createChildCollection" id="_createChildCollection">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">rsanchez\Deep\Collection\AbstractTitleCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createChildCollection">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#64-75" title="Go to source code">createChildCollection</a>( <span>array <var>$models</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new collection using the current instance's properties as injected
+dependencies.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new collection using the current instance's properties as injected
+dependencies.</p>
+
+<p>Useful when making a collection of a subset of this collection</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$models</var></dt>
+					<dd><code>array</code><br>$models</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">rsanchez\Deep\Collection\AbstractTitleCollection</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setChannelRepository" id="_setChannelRepository">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setChannelRepository">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#77-85" title="Go to source code">setChannelRepository</a>( <span><code><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">rsanchez\Deep\Repository\ChannelRepository</a></code> <var>$channelRepository</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Set the Channel Repository</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set the Channel Repository</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$channelRepository</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">rsanchez\Deep\Repository\ChannelRepository</a></code></code><br>$channelRepository</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setChannels" id="_setChannels">
 
 		<td class="attributes"><code>
@@ -231,7 +321,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setChannels">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#58-66" title="Go to source code">setChannels</a>( <span><code><a href="class-rsanchez.Deep.Collection.ChannelCollection.html">rsanchez\Deep\Collection\ChannelCollection</a></code> <var>$channels</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#87-95" title="Go to source code">setChannels</a>( <span><code><a href="class-rsanchez.Deep.Collection.ChannelCollection.html">rsanchez\Deep\Collection\ChannelCollection</a></code> <var>$channels</var></span> )</code>
 
 		<div class="description short">
 			
@@ -269,7 +359,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getChannels">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#68-75" title="Go to source code">getChannels</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#97-104" title="Go to source code">getChannels</a>( )</code>
 
 		<div class="description short">
 			
@@ -306,7 +396,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getEntryIds">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#77-87" title="Go to source code">getEntryIds</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#106-116" title="Go to source code">getEntryIds</a>( )</code>
 
 		<div class="description short">
 			
@@ -345,7 +435,7 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addEntryId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#89-100" title="Go to source code">addEntryId</a>( <span>string|integer <var>$entryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#118-129" title="Go to source code">addEntryId</a>( <span>string|integer <var>$entryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -383,7 +473,7 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addEntryIds">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#102-113" title="Go to source code">addEntryIds</a>( <span>array <var>$entryIds</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#131-142" title="Go to source code">addEntryIds</a>( <span>array <var>$entryIds</var></span> )</code>
 
 		<div class="description short">
 			
@@ -421,7 +511,7 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasCustomFields">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#115-123" title="Go to source code">hasCustomFields</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#144-152" title="Go to source code">hasCustomFields</a>( )</code>
 
 		<div class="description short">
 			
@@ -458,7 +548,7 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_toJson">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#125-135" title="Go to source code">toJson</a>( <span>mixed <var>$options</var> = <span class="php-num">0</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#154-164" title="Go to source code">toJson</a>( <span>mixed <var>$options</var> = <span class="php-num">0</span></span> )</code>
 
 		<div class="description short">
 			
@@ -479,26 +569,47 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 	</table>
 
 	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#methods">rsanchez\Deep\Collection\AbstractFilterableCollection</a></caption>
+	<caption>Methods inherited from <a href="class-rsanchez.Deep.Collection.FilterableInterface.html#methods">rsanchez\Deep\Collection\FilterableInterface</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#___invoke">__invoke()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_createClone">createClone()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_filterByAttribute">filterByAttribute()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_filterByAttributeComparison">filterByAttributeComparison()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_filterByAttributeContains">filterByAttributeContains()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_filterByAttributeIn">filterByAttributeIn()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_filterByAttributeInString">filterByAttributeInString()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_filterById">filterById()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_limit">limit()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_offset">offset()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_sortByAttribute">sortByAttribute()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_sortByFixedOrder">sortByFixedOrder()</a>, 
-			<a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html#_tagparams">tagparams()</a>
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#___invoke">__invoke()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_createClone">createClone()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_filterByAttribute">filterByAttribute()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_filterByAttributeComparison">filterByAttributeComparison()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_filterByAttributeContains">filterByAttributeContains()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_filterByAttributeIn">filterByAttributeIn()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_filterByAttributeInString">filterByAttributeInString()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_filterById">filterById()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_limit">limit()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_offset">offset()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_sortByAttribute">sortByAttribute()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_sortByFixedOrder">sortByFixedOrder()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableInterface.html#_tagparams">tagparams()</a>
 		</code></td>
 	</tr>
 	</table>
 
+	<table class="summary used">
+	<caption>Methods used from <a href="class-rsanchez.Deep.Collection.FilterableTrait.html#methods">rsanchez\Deep\Collection\FilterableTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#___get">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#___invoke">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_createClone">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_filterByAttribute">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_filterByAttributeComparison">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_filterByAttributeContains">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_filterByAttributeIn">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_filterByAttributeInString">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_filterById">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_limit">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_offset">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_sortByAttribute">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_sortByFixedOrder">()</a>, 
+			<a href="class-rsanchez.Deep.Collection.FilterableTrait.html#_tagparams">()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -518,7 +629,7 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#21-25" title="Go to source code"><var>$entryIds</var></a>
+				<a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#25-29" title="Go to source code"><var>$entryIds</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
@@ -545,7 +656,7 @@ directly in this collection, and entries found in Playa/Relationship fields</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#27-31" title="Go to source code"><var>$channels</var></a>
+				<a href="source-class-rsanchez.Deep.Collection.AbstractTitleCollection.html#31-35" title="Go to source code"><var>$channels</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>

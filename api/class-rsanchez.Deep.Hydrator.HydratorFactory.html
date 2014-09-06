@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Hydrator\HydratorFactory</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -57,7 +59,6 @@
 				<li><a href="class-rsanchez.Deep.Hydrator.AbstractHydrator.html">AbstractHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.AssetsHydrator.html">AssetsHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.DateHydrator.html">DateHydrator</a></li>
-				<li><a href="class-rsanchez.Deep.Hydrator.DefaultHydrator.html">DefaultHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.ExplodeHydrator.html">ExplodeHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.FileHydrator.html">FileHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.GridHydrator.html">GridHydrator</a></li>
@@ -138,7 +139,7 @@
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Hydrator.html">Hydrator</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#18-158" title="Go to source code">Hydrator/HydratorFactory.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#26-243" title="Go to source code">Hydrator/HydratorFactory.php</a><br />
 	</div>
 
 
@@ -156,7 +157,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#57-67" title="Go to source code">__construct</a>( <span><code><a href="class-rsanchez.Deep.Repository.SiteRepository.html">rsanchez\Deep\Repository\SiteRepository</a></code> <var>$siteRepository</var></span>, <span><code><a href="class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html">rsanchez\Deep\Repository\UploadPrefRepositoryInterface</a></code> <var>$uploadPrefRepository</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#65-93" title="Go to source code">__construct</a>( <span><code><a href="class-rsanchez.Deep.Repository.SiteRepository.html">rsanchez\Deep\Repository\SiteRepository</a></code> <var>$siteRepository</var></span>, <span><code><a href="class-rsanchez.Deep.Repository.UploadPrefRepositoryInterface.html">rsanchez\Deep\Repository\UploadPrefRepositoryInterface</a></code> <var>$uploadPrefRepository</var></span>, <span><code><a href="class-rsanchez.Deep.Model.Asset.html">rsanchez\Deep\Model\Asset</a></code> <var>$asset</var></span>, <span><code><a href="class-rsanchez.Deep.Model.File.html">rsanchez\Deep\Model\File</a></code> <var>$file</var></span>, <span><code><a href="class-rsanchez.Deep.Model.GridCol.html">rsanchez\Deep\Model\GridCol</a></code> <var>$gridCol</var></span>, <span><code><a href="class-rsanchez.Deep.Model.GridRow.html">rsanchez\Deep\Model\GridRow</a></code> <var>$gridRow</var></span>, <span><code><a href="class-rsanchez.Deep.Model.MatrixCol.html">rsanchez\Deep\Model\MatrixCol</a></code> <var>$matrixCol</var></span>, <span><code><a href="class-rsanchez.Deep.Model.MatrixRow.html">rsanchez\Deep\Model\MatrixRow</a></code> <var>$matrixRow</var></span>, <span><code><a href="class-rsanchez.Deep.Model.PlayaEntry.html">rsanchez\Deep\Model\PlayaEntry</a></code> <var>$playaEntry</var></span>, <span><code><a href="class-rsanchez.Deep.Model.RelationshipEntry.html">rsanchez\Deep\Model\RelationshipEntry</a></code> <var>$relationshipEntry</var></span> )</code>
 
 		<div class="description short">
 			
@@ -194,7 +195,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getHydrators">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#69-102" title="Go to source code">getHydrators</a>( <span><code><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">rsanchez\Deep\Collection\AbstractTitleCollection</a></code> <var>$collection</var></span>, <span>array <var>$extraHydrators</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#95-121" title="Go to source code">getHydrators</a>( <span><code><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">rsanchez\Deep\Collection\AbstractTitleCollection</a></code> <var>$collection</var></span>, <span>array <var>$extraHydrators</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -240,7 +241,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newHydrator">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#104-124" title="Go to source code">newHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#123-143" title="Go to source code">newHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -284,7 +285,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newAssetsHydrator">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#126-135" title="Go to source code">newAssetsHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#145-154" title="Go to source code">newAssetsHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -328,7 +329,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newFileHydrator">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#137-146" title="Go to source code">newFileHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#156-165" title="Go to source code">newFileHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -361,6 +362,270 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="newGridHydrator" id="_newGridHydrator">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Hydrator.GridHydrator.html">rsanchez\Deep\Hydrator\GridHydrator</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newGridHydrator">#</a>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#167-176" title="Go to source code">newGridHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new GridHydrator object</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new GridHydrator object</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$collection</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Hydrator.GridHydrator.html">rsanchez\Deep\Hydrator\GridHydrator</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newMatrixHydrator" id="_newMatrixHydrator">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Hydrator.MatrixHydrator.html">rsanchez\Deep\Hydrator\MatrixHydrator</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newMatrixHydrator">#</a>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#178-187" title="Go to source code">newMatrixHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new MatrixHydrator object</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new MatrixHydrator object</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$collection</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Hydrator.MatrixHydrator.html">rsanchez\Deep\Hydrator\MatrixHydrator</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newPlayaHydrator" id="_newPlayaHydrator">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Hydrator.PlayaHydrator.html">rsanchez\Deep\Hydrator\PlayaHydrator</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newPlayaHydrator">#</a>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#189-198" title="Go to source code">newPlayaHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new PlayaHydrator object</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new PlayaHydrator object</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$collection</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Hydrator.PlayaHydrator.html">rsanchez\Deep\Hydrator\PlayaHydrator</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newRelationshipHydrator" id="_newRelationshipHydrator">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Hydrator.RelationshipHydrator.html">rsanchez\Deep\Hydrator\RelationshipHydrator</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newRelationshipHydrator">#</a>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#200-209" title="Go to source code">newRelationshipHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new RelationshipHydrator object</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new RelationshipHydrator object</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$collection</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Hydrator.RelationshipHydrator.html">rsanchez\Deep\Hydrator\RelationshipHydrator</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newParentsHydrator" id="_newParentsHydrator">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Hydrator.ParentsHydrator.html">rsanchez\Deep\Hydrator\ParentsHydrator</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newParentsHydrator">#</a>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#211-220" title="Go to source code">newParentsHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new ParentsHydrator object</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new ParentsHydrator object</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$collection</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Hydrator.ParentsHydrator.html">rsanchez\Deep\Hydrator\ParentsHydrator</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newSiblingsHydrator" id="_newSiblingsHydrator">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-rsanchez.Deep.Hydrator.SiblingsHydrator.html">rsanchez\Deep\Hydrator\SiblingsHydrator</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newSiblingsHydrator">#</a>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#222-231" title="Go to source code">newSiblingsHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new SIblingsHydrator object</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new SIblingsHydrator object</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$collection</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code></code><br>$collection</dd>
+					<dt><var>$fieldtype</var></dt>
+					<dd><code>string</code><br>$fieldtype</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-rsanchez.Deep.Hydrator.SiblingsHydrator.html">rsanchez\Deep\Hydrator\SiblingsHydrator</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="newWysiwygHydrator" id="_newWysiwygHydrator">
 
 		<td class="attributes"><code>
@@ -372,7 +637,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newWysiwygHydrator">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#148-157" title="Go to source code">newWysiwygHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#233-242" title="Go to source code">newWysiwygHydrator</a>( <span><code><a href="class-rsanchez.Deep.Collection.EntryCollection.html">rsanchez\Deep\Collection\EntryCollection</a></code> <var>$collection</var></span>, <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -427,7 +692,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#23-43" title="Go to source code"><var>$hydrators</var></a>
+				<a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#31-51" title="Go to source code"><var>$hydrators</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>(
     <span class="php-quote">'matrix'</span>                =&gt; <span class="php-quote">'\\rsanchez\\Deep\\Hydrator\\MatrixHydrator'</span>,
@@ -470,7 +735,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#45-49" title="Go to source code"><var>$siteRepository</var></a>
+				<a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#53-57" title="Go to source code"><var>$siteRepository</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
@@ -493,11 +758,11 @@
 	<tr data-order="uploadPrefRepository" id="$uploadPrefRepository">
 		<td class="attributes"><code>
 			protected  
-			rsanchez\Deep\Repository\UploadPredRepository
+			<code><a href="class-rsanchez.Deep.Repository.UploadPrefRepository.html">rsanchez\Deep\Repository\UploadPrefRepository</a></code>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#51-55" title="Go to source code"><var>$uploadPrefRepository</var></a>
+				<a href="source-class-rsanchez.Deep.Hydrator.HydratorFactory.html#59-63" title="Go to source code"><var>$uploadPrefRepository</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>

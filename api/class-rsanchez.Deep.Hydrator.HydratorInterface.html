@@ -7,7 +7,7 @@
 	<title>Interface rsanchez\Deep\Hydrator\HydratorInterface</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -57,7 +59,6 @@
 				<li><a href="class-rsanchez.Deep.Hydrator.AbstractHydrator.html">AbstractHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.AssetsHydrator.html">AssetsHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.DateHydrator.html">DateHydrator</a></li>
-				<li><a href="class-rsanchez.Deep.Hydrator.DefaultHydrator.html">DefaultHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.ExplodeHydrator.html">ExplodeHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.FileHydrator.html">FileHydrator</a></li>
 				<li><a href="class-rsanchez.Deep.Hydrator.GridHydrator.html">GridHydrator</a></li>
@@ -139,17 +140,16 @@
 		<h4>Indirect known implementers</h4>
 			<a href="class-rsanchez.Deep.Hydrator.AssetsHydrator.html">rsanchez\Deep\Hydrator\AssetsHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.DateHydrator.html">rsanchez\Deep\Hydrator\DateHydrator</a>, 
-			<a href="class-rsanchez.Deep.Hydrator.RelationshipHydrator.html">rsanchez\Deep\Hydrator\RelationshipHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.SiblingsHydrator.html">rsanchez\Deep\Hydrator\SiblingsHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.WysiwygHydrator.html">rsanchez\Deep\Hydrator\WysiwygHydrator</a>, 
-			<a href="class-rsanchez.Deep.Hydrator.DefaultHydrator.html">rsanchez\Deep\Hydrator\DefaultHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.ExplodeHydrator.html">rsanchez\Deep\Hydrator\ExplodeHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.FileHydrator.html">rsanchez\Deep\Hydrator\FileHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.GridHydrator.html">rsanchez\Deep\Hydrator\GridHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.MatrixHydrator.html">rsanchez\Deep\Hydrator\MatrixHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.ParentsHydrator.html">rsanchez\Deep\Hydrator\ParentsHydrator</a>, 
 			<a href="class-rsanchez.Deep.Hydrator.PipeHydrator.html">rsanchez\Deep\Hydrator\PipeHydrator</a>, 
-			<a href="class-rsanchez.Deep.Hydrator.PlayaHydrator.html">rsanchez\Deep\Hydrator\PlayaHydrator</a>
+			<a href="class-rsanchez.Deep.Hydrator.PlayaHydrator.html">rsanchez\Deep\Hydrator\PlayaHydrator</a>, 
+			<a href="class-rsanchez.Deep.Hydrator.RelationshipHydrator.html">rsanchez\Deep\Hydrator\RelationshipHydrator</a>
 	</div>
 
 
@@ -160,7 +160,7 @@
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Hydrator.html">Hydrator</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Hydrator.HydratorInterface.html#14-34" title="Go to source code">Hydrator/HydratorInterface.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Hydrator.HydratorInterface.html#15-38" title="Go to source code">Hydrator/HydratorInterface.php</a><br />
 	</div>
 
 
@@ -178,7 +178,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_preload">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorInterface.html#21-26" title="Go to source code">preload</a>( <span>array <var>$entryIds</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorInterface.html#22-27" title="Go to source code">preload</a>( <span>array <var>$entryIds</var></span> )</code>
 
 		<div class="description short">
 			
@@ -209,33 +209,41 @@
 
 		<td class="attributes"><code>
 			 public 
-			
+			mixed
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hydrate">#</a>
-		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorInterface.html#28-33" title="Go to source code">hydrate</a>( <span><code><a href="class-rsanchez.Deep.Model.Entry.html">rsanchez\Deep\Model\Entry</a></code> <var>$entry</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Hydrator.HydratorInterface.html#29-37" title="Go to source code">hydrate</a>( <span><code><a href="class-rsanchez.Deep.Model.AbstractEntity.html">rsanchez\Deep\Model\AbstractEntity</a></code> <var>$entity</var></span>, <span><code><a href="class-rsanchez.Deep.Model.AbstractProperty.html">rsanchez\Deep\Model\AbstractProperty</a></code> <var>$property</var></span> )</code>
 
 		<div class="description short">
 			
-<p>Hydrate an Entry's custom field(s) that match the current hydrator type</p>
+<p>Hydrate the specified property (channel field or Matrix/Grid col) on the
+specified entity (channel entry or Matrix/Grid row)</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Hydrate an Entry's custom field(s) that match the current hydrator type</p>
+<p>Hydrate the specified property (channel field or Matrix/Grid col) on the
+specified entity (channel entry or Matrix/Grid row)</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$entry</var></dt>
-					<dd><code><code><a href="class-rsanchez.Deep.Model.Entry.html">rsanchez\Deep\Model\Entry</a></code></code><br>$entry</dd>
+					<dt><var>$entity</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Model.AbstractEntity.html">rsanchez\Deep\Model\AbstractEntity</a></code></code><br>$entity</dd>
+					<dt><var>$property</var></dt>
+					<dd><code><code><a href="class-rsanchez.Deep.Model.AbstractProperty.html">rsanchez\Deep\Model\AbstractProperty</a></code></code><br>$property</dd>
 				</dl></div>
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br>the entity property value<br />
+				</div>
 
 
 

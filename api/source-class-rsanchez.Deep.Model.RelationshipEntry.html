@@ -8,7 +8,7 @@
 	<title>File Model/RelationshipEntry.php</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -28,6 +28,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -55,8 +57,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></li>
 				<li><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></li>
-				<li><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></li>
+				<li><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Category.html">Category</a></li>
 				<li><a href="class-rsanchez.Deep.Model.CategoryField.html">CategoryField</a></li>
@@ -69,6 +72,7 @@
 				<li><a href="class-rsanchez.Deep.Model.File.html">File</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridCol.html">GridCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridRow.html">GridRow</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixRow.html">MatrixRow</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Member.html">Member</a></li>
@@ -85,6 +89,11 @@
 				<li><a href="class-rsanchez.Deep.Model.FileInterface.html">FileInterface</a></li>
 			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></li>
+			</ul>
 
 
 
@@ -163,72 +172,70 @@
 </span><span id="37" class="l"><a class="l" href="#37"> 37: </a>    {
 </span><span id="38" class="l"><a class="l" href="#38"> 38: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">array_merge</span>(parent::joinTables(), <span class="php-keyword1">array</span>(
 </span><span id="39" class="l"><a class="l" href="#39"> 39: </a>            <span class="php-quote">'relationships'</span> =&gt; <span class="php-keyword1">function</span> (<span class="php-var">$query</span>) {
-</span><span id="40" class="l"><a class="l" href="#40"> 40: </a>                <span class="php-var">$query</span>-&gt;addSelect(<span class="php-quote">'relationships.*'</span>);
-</span><span id="41" class="l"><a class="l" href="#41"> 41: </a>                <span class="php-var">$query</span>-&gt;<span class="php-keyword2">join</span>(<span class="php-quote">'relationships'</span>, <span class="php-quote">'relationships.child_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'channel_titles.entry_id'</span>);
-</span><span id="42" class="l"><a class="l" href="#42"> 42: </a>            },
-</span><span id="43" class="l"><a class="l" href="#43"> 43: </a>        ));
-</span><span id="44" class="l"><a class="l" href="#44"> 44: </a>    }
-</span><span id="45" class="l"><a class="l" href="#45"> 45: </a>
-</span><span id="46" class="l"><a class="l" href="#46"> 46: </a>    <span class="php-comment">/**
-</span></span><span id="47" class="l"><a class="l" href="#47"> 47: </a><span class="php-comment">     * Filter by Parent Entry ID
-</span></span><span id="48" class="l"><a class="l" href="#48"> 48: </a><span class="php-comment">     *
-</span></span><span id="49" class="l"><a class="l" href="#49"> 49: </a><span class="php-comment">     * @param  \Illuminate\Database\Eloquent\Builder $query
-</span></span><span id="50" class="l"><a class="l" href="#50"> 50: </a><span class="php-comment">     * @param  int|array                             $entryId
-</span></span><span id="51" class="l"><a class="l" href="#51"> 51: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
-</span></span><span id="52" class="l"><a class="l" href="#52"> 52: </a><span class="php-comment">     */</span>
-</span><span id="53" class="l"><a class="l" href="#53"> 53: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeParentEntryId" href="#_scopeParentEntryId">scopeParentEntryId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
-</span><span id="54" class="l"><a class="l" href="#54"> 54: </a>    {
-</span><span id="55" class="l"><a class="l" href="#55"> 55: </a>        <span class="php-var">$entryId</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword1">array</span>(<span class="php-var">$entryId</span>);
-</span><span id="56" class="l"><a class="l" href="#56"> 56: </a>
-</span><span id="57" class="l"><a class="l" href="#57"> 57: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;requireTable(<span class="php-var">$query</span>, <span class="php-quote">'relationships'</span>, <span class="php-keyword1">true</span>)-&gt;whereIn(<span class="php-quote">'relationships.parent_id'</span>, <span class="php-var">$entryId</span>);
-</span><span id="58" class="l"><a class="l" href="#58"> 58: </a>    }
-</span><span id="59" class="l"><a class="l" href="#59"> 59: </a>
-</span><span id="60" class="l"><a class="l" href="#60"> 60: </a>    <span class="php-comment">/**
-</span></span><span id="61" class="l"><a class="l" href="#61"> 61: </a><span class="php-comment">     * Get the parents of the specified entry ID
-</span></span><span id="62" class="l"><a class="l" href="#62"> 62: </a><span class="php-comment">     *
-</span></span><span id="63" class="l"><a class="l" href="#63"> 63: </a><span class="php-comment">     * @param  \Illuminate\Database\Eloquent\Builder $query
-</span></span><span id="64" class="l"><a class="l" href="#64"> 64: </a><span class="php-comment">     * @param  int|array                             $entryId
-</span></span><span id="65" class="l"><a class="l" href="#65"> 65: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
-</span></span><span id="66" class="l"><a class="l" href="#66"> 66: </a><span class="php-comment">     */</span>
-</span><span id="67" class="l"><a class="l" href="#67"> 67: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeParents" href="#_scopeParents">scopeParents</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
-</span><span id="68" class="l"><a class="l" href="#68"> 68: </a>    {
-</span><span id="69" class="l"><a class="l" href="#69"> 69: </a>        <span class="php-var">$entryId</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword1">array</span>(<span class="php-var">$entryId</span>);
-</span><span id="70" class="l"><a class="l" href="#70"> 70: </a>
-</span><span id="71" class="l"><a class="l" href="#71"> 71: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;<span class="php-keyword2">join</span>(<span class="php-quote">'relationships'</span>, <span class="php-quote">'relationships.parent_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'channel_titles.entry_id'</span>)
-</span><span id="72" class="l"><a class="l" href="#72"> 72: </a>            -&gt;addSelect(<span class="php-quote">'relationships.*'</span>)
-</span><span id="73" class="l"><a class="l" href="#73"> 73: </a>            -&gt;whereIn(<span class="php-quote">'relationships.child_id'</span>, <span class="php-var">$entryId</span>)
-</span><span id="74" class="l"><a class="l" href="#74"> 74: </a>            -&gt;orderBy(<span class="php-quote">'relationships.order'</span>, <span class="php-quote">'asc'</span>)
-</span><span id="75" class="l"><a class="l" href="#75"> 75: </a>            -&gt;groupBy(<span class="php-quote">'relationships.child_id'</span>)
-</span><span id="76" class="l"><a class="l" href="#76"> 76: </a>            -&gt;groupBy(<span class="php-quote">'relationships.field_id'</span>)
-</span><span id="77" class="l"><a class="l" href="#77"> 77: </a>            -&gt;groupBy(<span class="php-quote">'channel_titles.entry_id'</span>);
-</span><span id="78" class="l"><a class="l" href="#78"> 78: </a>    }
-</span><span id="79" class="l"><a class="l" href="#79"> 79: </a>
-</span><span id="80" class="l"><a class="l" href="#80"> 80: </a>    <span class="php-comment">/**
-</span></span><span id="81" class="l"><a class="l" href="#81"> 81: </a><span class="php-comment">     * Get the siblings of the specified entry ID
-</span></span><span id="82" class="l"><a class="l" href="#82"> 82: </a><span class="php-comment">     *
-</span></span><span id="83" class="l"><a class="l" href="#83"> 83: </a><span class="php-comment">     * @param  \Illuminate\Database\Eloquent\Builder $query
-</span></span><span id="84" class="l"><a class="l" href="#84"> 84: </a><span class="php-comment">     * @param  int|array                             $entryId
-</span></span><span id="85" class="l"><a class="l" href="#85"> 85: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
-</span></span><span id="86" class="l"><a class="l" href="#86"> 86: </a><span class="php-comment">     */</span>
-</span><span id="87" class="l"><a class="l" href="#87"> 87: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeSiblings" href="#_scopeSiblings">scopeSiblings</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
-</span><span id="88" class="l"><a class="l" href="#88"> 88: </a>    {
-</span><span id="89" class="l"><a class="l" href="#89"> 89: </a>        <span class="php-var">$entryId</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword1">array</span>(<span class="php-var">$entryId</span>);
-</span><span id="90" class="l"><a class="l" href="#90"> 90: </a>
-</span><span id="91" class="l"><a class="l" href="#91"> 91: </a>        <span class="php-var">$connection</span> = <span class="php-var">$query</span>-&gt;getQuery()-&gt;getConnection();
-</span><span id="92" class="l"><a class="l" href="#92"> 92: </a>        <span class="php-var">$tablePrefix</span> = <span class="php-var">$connection</span>-&gt;getTablePrefix();
-</span><span id="93" class="l"><a class="l" href="#93"> 93: </a>
-</span><span id="94" class="l"><a class="l" href="#94"> 94: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;<span class="php-keyword2">join</span>(<span class="php-quote">'relationships'</span>, <span class="php-quote">'relationships.child_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'channel_titles.entry_id'</span>)
-</span><span id="95" class="l"><a class="l" href="#95"> 95: </a>            -&gt;<span class="php-keyword2">join</span>(<span class="php-var">$connection</span>-&gt;raw(<span class="php-quote">&quot;`</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">relationships` AS `</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">relationships_2`&quot;</span>), <span class="php-quote">'relationships_2.parent_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'relationships.parent_id'</span>)
-</span><span id="96" class="l"><a class="l" href="#96"> 96: </a>            -&gt;addSelect(<span class="php-quote">'relationships.*'</span>)
-</span><span id="97" class="l"><a class="l" href="#97"> 97: </a>            -&gt;addSelect(<span class="php-quote">'relationships_2.child_id AS sibling_id'</span>)
-</span><span id="98" class="l"><a class="l" href="#98"> 98: </a>            -&gt;whereIn(<span class="php-quote">'relationships_2.child_id'</span>, <span class="php-var">$entryId</span>)
-</span><span id="99" class="l"><a class="l" href="#99"> 99: </a>            -&gt;orderBy(<span class="php-quote">'relationships.order'</span>, <span class="php-quote">'asc'</span>)
-</span><span id="100" class="l"><a class="l" href="#100">100: </a>            -&gt;groupBy(<span class="php-quote">'relationships_2.child_id'</span>)
-</span><span id="101" class="l"><a class="l" href="#101">101: </a>            -&gt;groupBy(<span class="php-quote">'relationships.field_id'</span>)
-</span><span id="102" class="l"><a class="l" href="#102">102: </a>            -&gt;groupBy(<span class="php-quote">'channel_titles.entry_id'</span>);
-</span><span id="103" class="l"><a class="l" href="#103">103: </a>    }
-</span><span id="104" class="l"><a class="l" href="#104">104: </a>}
-</span><span id="105" class="l"><a class="l" href="#105">105: </a></span></code></pre>
+</span><span id="40" class="l"><a class="l" href="#40"> 40: </a>                <span class="php-var">$query</span>-&gt;<span class="php-keyword2">join</span>(<span class="php-quote">'relationships'</span>, <span class="php-quote">'relationships.child_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'channel_titles.entry_id'</span>);
+</span><span id="41" class="l"><a class="l" href="#41"> 41: </a>            },
+</span><span id="42" class="l"><a class="l" href="#42"> 42: </a>        ));
+</span><span id="43" class="l"><a class="l" href="#43"> 43: </a>    }
+</span><span id="44" class="l"><a class="l" href="#44"> 44: </a>
+</span><span id="45" class="l"><a class="l" href="#45"> 45: </a>    <span class="php-comment">/**
+</span></span><span id="46" class="l"><a class="l" href="#46"> 46: </a><span class="php-comment">     * Filter by Parent Entry ID
+</span></span><span id="47" class="l"><a class="l" href="#47"> 47: </a><span class="php-comment">     *
+</span></span><span id="48" class="l"><a class="l" href="#48"> 48: </a><span class="php-comment">     * @param  \Illuminate\Database\Eloquent\Builder $query
+</span></span><span id="49" class="l"><a class="l" href="#49"> 49: </a><span class="php-comment">     * @param  int|array                             $entryId
+</span></span><span id="50" class="l"><a class="l" href="#50"> 50: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
+</span></span><span id="51" class="l"><a class="l" href="#51"> 51: </a><span class="php-comment">     */</span>
+</span><span id="52" class="l"><a class="l" href="#52"> 52: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeParentEntryId" href="#_scopeParentEntryId">scopeParentEntryId</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
+</span><span id="53" class="l"><a class="l" href="#53"> 53: </a>    {
+</span><span id="54" class="l"><a class="l" href="#54"> 54: </a>        <span class="php-var">$entryId</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword1">array</span>(<span class="php-var">$entryId</span>);
+</span><span id="55" class="l"><a class="l" href="#55"> 55: </a>
+</span><span id="56" class="l"><a class="l" href="#56"> 56: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;requireTable(<span class="php-var">$query</span>, <span class="php-quote">'relationships'</span>, <span class="php-keyword1">true</span>)-&gt;whereIn(<span class="php-quote">'relationships.parent_id'</span>, <span class="php-var">$entryId</span>);
+</span><span id="57" class="l"><a class="l" href="#57"> 57: </a>    }
+</span><span id="58" class="l"><a class="l" href="#58"> 58: </a>
+</span><span id="59" class="l"><a class="l" href="#59"> 59: </a>    <span class="php-comment">/**
+</span></span><span id="60" class="l"><a class="l" href="#60"> 60: </a><span class="php-comment">     * Get the parents of the specified entry ID
+</span></span><span id="61" class="l"><a class="l" href="#61"> 61: </a><span class="php-comment">     *
+</span></span><span id="62" class="l"><a class="l" href="#62"> 62: </a><span class="php-comment">     * @param  \Illuminate\Database\Eloquent\Builder $query
+</span></span><span id="63" class="l"><a class="l" href="#63"> 63: </a><span class="php-comment">     * @param  int|array                             $entryId
+</span></span><span id="64" class="l"><a class="l" href="#64"> 64: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
+</span></span><span id="65" class="l"><a class="l" href="#65"> 65: </a><span class="php-comment">     */</span>
+</span><span id="66" class="l"><a class="l" href="#66"> 66: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeParents" href="#_scopeParents">scopeParents</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
+</span><span id="67" class="l"><a class="l" href="#67"> 67: </a>    {
+</span><span id="68" class="l"><a class="l" href="#68"> 68: </a>        <span class="php-var">$entryId</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword1">array</span>(<span class="php-var">$entryId</span>);
+</span><span id="69" class="l"><a class="l" href="#69"> 69: </a>
+</span><span id="70" class="l"><a class="l" href="#70"> 70: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;<span class="php-keyword2">join</span>(<span class="php-quote">'relationships'</span>, <span class="php-quote">'relationships.parent_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'channel_titles.entry_id'</span>)
+</span><span id="71" class="l"><a class="l" href="#71"> 71: </a>            -&gt;whereIn(<span class="php-quote">'relationships.child_id'</span>, <span class="php-var">$entryId</span>)
+</span><span id="72" class="l"><a class="l" href="#72"> 72: </a>            -&gt;orderBy(<span class="php-quote">'relationships.order'</span>, <span class="php-quote">'asc'</span>)
+</span><span id="73" class="l"><a class="l" href="#73"> 73: </a>            -&gt;groupBy(<span class="php-quote">'relationships.child_id'</span>)
+</span><span id="74" class="l"><a class="l" href="#74"> 74: </a>            -&gt;groupBy(<span class="php-quote">'relationships.field_id'</span>)
+</span><span id="75" class="l"><a class="l" href="#75"> 75: </a>            -&gt;groupBy(<span class="php-quote">'channel_titles.entry_id'</span>);
+</span><span id="76" class="l"><a class="l" href="#76"> 76: </a>    }
+</span><span id="77" class="l"><a class="l" href="#77"> 77: </a>
+</span><span id="78" class="l"><a class="l" href="#78"> 78: </a>    <span class="php-comment">/**
+</span></span><span id="79" class="l"><a class="l" href="#79"> 79: </a><span class="php-comment">     * Get the siblings of the specified entry ID
+</span></span><span id="80" class="l"><a class="l" href="#80"> 80: </a><span class="php-comment">     *
+</span></span><span id="81" class="l"><a class="l" href="#81"> 81: </a><span class="php-comment">     * @param  \Illuminate\Database\Eloquent\Builder $query
+</span></span><span id="82" class="l"><a class="l" href="#82"> 82: </a><span class="php-comment">     * @param  int|array                             $entryId
+</span></span><span id="83" class="l"><a class="l" href="#83"> 83: </a><span class="php-comment">     * @return \Illuminate\Database\Eloquent\Builder
+</span></span><span id="84" class="l"><a class="l" href="#84"> 84: </a><span class="php-comment">     */</span>
+</span><span id="85" class="l"><a class="l" href="#85"> 85: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_scopeSiblings" href="#_scopeSiblings">scopeSiblings</a>(Builder <span class="php-var">$query</span>, <span class="php-var">$entryId</span>)
+</span><span id="86" class="l"><a class="l" href="#86"> 86: </a>    {
+</span><span id="87" class="l"><a class="l" href="#87"> 87: </a>        <span class="php-var">$entryId</span> = <span class="php-keyword2">is_array</span>(<span class="php-var">$entryId</span>) ? <span class="php-var">$entryId</span> : <span class="php-keyword1">array</span>(<span class="php-var">$entryId</span>);
+</span><span id="88" class="l"><a class="l" href="#88"> 88: </a>
+</span><span id="89" class="l"><a class="l" href="#89"> 89: </a>        <span class="php-var">$connection</span> = <span class="php-var">$query</span>-&gt;getQuery()-&gt;getConnection();
+</span><span id="90" class="l"><a class="l" href="#90"> 90: </a>        <span class="php-var">$tablePrefix</span> = <span class="php-var">$connection</span>-&gt;getTablePrefix();
+</span><span id="91" class="l"><a class="l" href="#91"> 91: </a>
+</span><span id="92" class="l"><a class="l" href="#92"> 92: </a>        <span class="php-keyword1">return</span> <span class="php-var">$query</span>-&gt;<span class="php-keyword2">join</span>(<span class="php-quote">'relationships'</span>, <span class="php-quote">'relationships.child_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'channel_titles.entry_id'</span>)
+</span><span id="93" class="l"><a class="l" href="#93"> 93: </a>            -&gt;<span class="php-keyword2">join</span>(<span class="php-var">$connection</span>-&gt;raw(<span class="php-quote">&quot;`</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">relationships` AS `</span><span class="php-var">{$tablePrefix}</span><span class="php-quote">relationships_2`&quot;</span>), <span class="php-quote">'relationships_2.parent_id'</span>, <span class="php-quote">'='</span>, <span class="php-quote">'relationships.parent_id'</span>)
+</span><span id="94" class="l"><a class="l" href="#94"> 94: </a>            -&gt;addSelect(<span class="php-quote">'*'</span>)
+</span><span id="95" class="l"><a class="l" href="#95"> 95: </a>            -&gt;addSelect(<span class="php-quote">'relationships_2.child_id AS sibling_id'</span>)
+</span><span id="96" class="l"><a class="l" href="#96"> 96: </a>            -&gt;whereIn(<span class="php-quote">'relationships_2.child_id'</span>, <span class="php-var">$entryId</span>)
+</span><span id="97" class="l"><a class="l" href="#97"> 97: </a>            -&gt;orderBy(<span class="php-quote">'relationships.order'</span>, <span class="php-quote">'asc'</span>)
+</span><span id="98" class="l"><a class="l" href="#98"> 98: </a>            -&gt;groupBy(<span class="php-quote">'relationships_2.child_id'</span>)
+</span><span id="99" class="l"><a class="l" href="#99"> 99: </a>            -&gt;groupBy(<span class="php-quote">'relationships.field_id'</span>)
+</span><span id="100" class="l"><a class="l" href="#100">100: </a>            -&gt;groupBy(<span class="php-quote">'channel_titles.entry_id'</span>);
+</span><span id="101" class="l"><a class="l" href="#101">101: </a>    }
+</span><span id="102" class="l"><a class="l" href="#102">102: </a>}
+</span><span id="103" class="l"><a class="l" href="#103">103: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>

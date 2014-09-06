@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Model\Title</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -54,8 +56,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></li>
 				<li><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></li>
-				<li><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></li>
+				<li><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Category.html">Category</a></li>
 				<li><a href="class-rsanchez.Deep.Model.CategoryField.html">CategoryField</a></li>
@@ -68,6 +71,7 @@
 				<li><a href="class-rsanchez.Deep.Model.File.html">File</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridCol.html">GridCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridRow.html">GridRow</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixRow.html">MatrixRow</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Member.html">Member</a></li>
@@ -84,6 +88,11 @@
 				<li><a href="class-rsanchez.Deep.Model.FileInterface.html">FileInterface</a></li>
 			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></li>
+			</ul>
 
 
 
@@ -140,7 +149,7 @@ Illuminate\Database\Eloquent\Model
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by" />
-			<a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html"><span>rsanchez\Deep\Model\AbstractJoinableModel</span></a>
+			<a href="class-rsanchez.Deep.Model.AbstractEntity.html"><span>rsanchez\Deep\Model\AbstractEntity</span></a>
 			
 			
 			
@@ -149,6 +158,10 @@ Illuminate\Database\Eloquent\Model
 			<img src="resources/inherit.png" alt="Extended by" />
 <b><span>rsanchez\Deep\Model\Title</span></b>			
 			
+			 uses 
+				<a href="class-rsanchez.Deep.Model.JoinableTrait.html"><span>rsanchez\Deep\Model\JoinableTrait</span></a>, 
+			
+				<a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html"><span>rsanchez\Deep\Model\GlobalAttributeVisibilityTrait</span></a>
 			
 		</dd>
 	</dl>
@@ -175,7 +188,7 @@ Illuminate\Database\Eloquent\Model
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Model.html">Model</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.Title.html#26-1455" title="Go to source code">Model/Title.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.Title.html#28-1526" title="Go to source code">Model/Title.php</a><br />
 	</div>
 
 
@@ -193,7 +206,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_author">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#80-87" title="Go to source code">author</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#107-114" title="Go to source code">author</a>( )</code>
 
 		<div class="description short">
 			
@@ -230,7 +243,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_categories">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#89-96" title="Go to source code">categories</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#116-123" title="Go to source code">categories</a>( )</code>
 
 		<div class="description short">
 			
@@ -267,7 +280,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_chan">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#98-111" title="Go to source code">chan</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#125-138" title="Go to source code">chan</a>( )</code>
 
 		<div class="description short">
 			
@@ -304,7 +317,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_comments">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#113-120" title="Go to source code">comments</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#140-147" title="Go to source code">comments</a>( )</code>
 
 		<div class="description short">
 			
@@ -341,7 +354,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#___call">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#122-134" title="Go to source code">__call</a>( <span>mixed <var>$name</var></span>, <span>mixed <var>$args</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#149-161" title="Go to source code">__call</a>( <span>mixed <var>$name</var></span>, <span>mixed <var>$args</var></span> )</code>
 
 		<div class="description short">
 			
@@ -361,6 +374,80 @@ Illuminate\Database\Eloquent\Model
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="getId" id="_getId">
+
+		<td class="attributes"><code>
+			 public 
+			string|integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getId">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#163-169" title="Go to source code">getId</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the entity ID (eg. entry_id or row_id)</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the entity ID (eg. entry_id or row_id)</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string|integer</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getType" id="_getType">
+
+		<td class="attributes"><code>
+			 public 
+			string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getType">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#171-177" title="Go to source code">getType</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the entity type (eg. 'matrix' or 'grid' or 'entry')</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the entity type (eg. 'matrix' or 'grid' or 'entry')</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string|null</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="getChannelAttribute" id="_getChannelAttribute">
 
 		<td class="attributes"><code>
@@ -372,7 +459,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getChannelAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#136-143" title="Go to source code">getChannelAttribute</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#179-186" title="Go to source code">getChannelAttribute</a>( )</code>
 
 		<div class="description short">
 			
@@ -409,7 +496,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setChannelRepository">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#145-153" title="Go to source code">setChannelRepository</a>( <span><code><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">rsanchez\Deep\Repository\ChannelRepository</a></code> <var>$channelRepository</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#188-196" title="Go to source code">setChannelRepository</a>( <span><code><a href="class-rsanchez.Deep.Repository.ChannelRepository.html">rsanchez\Deep\Repository\ChannelRepository</a></code> <var>$channelRepository</var></span> )</code>
 
 		<div class="description short">
 			
@@ -447,7 +534,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSiteRepository">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#155-163" title="Go to source code">setSiteRepository</a>( <span><code><a href="class-rsanchez.Deep.Repository.SiteRepository.html">rsanchez\Deep\Repository\SiteRepository</a></code> <var>$siteRepository</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#198-206" title="Go to source code">setSiteRepository</a>( <span><code><a href="class-rsanchez.Deep.Repository.SiteRepository.html">rsanchez\Deep\Repository\SiteRepository</a></code> <var>$siteRepository</var></span> )</code>
 
 		<div class="description short">
 			
@@ -485,7 +572,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setHydratorFactory">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#165-173" title="Go to source code">setHydratorFactory</a>( <span><code><a href="class-rsanchez.Deep.Hydrator.HydratorFactory.html">rsanchez\Deep\Hydrator\HydratorFactory</a></code> <var>$hydratorFactory</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#208-216" title="Go to source code">setHydratorFactory</a>( <span><code><a href="class-rsanchez.Deep.Hydrator.HydratorFactory.html">rsanchez\Deep\Hydrator\HydratorFactory</a></code> <var>$hydratorFactory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -516,39 +603,27 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="attributes"><code>
 			 protected static
-			array
+			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_joinTables">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#175-188" title="Go to source code">joinTables</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#218-231" title="Go to source code">joinTables</a>( )</code>
 
 		<div class="description short">
 			
-<p>Return a structured array of joinable tables ex.<br />
-'members' =&gt; array('members.member_id', 'channel_titles.author_id'),</p>
-
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Return a structured array of joinable tables ex. 'members' =&gt;
-array('members.member_id', 'channel_titles.author_id'),</p>
 
 
 
 
-				<h4>Returns</h4>
-				<div class="list">
-					<code>array</code><br />
-				</div>
 
 
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html#_joinTables">rsanchez\Deep\Model\AbstractJoinableModel::joinTables()</a></code></div>
 
 		</div>
 		</div></td>
@@ -564,7 +639,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newQuery">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#190-205" title="Go to source code">newQuery</a>( <span>boolean <var>$excludeDeleted</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#233-250" title="Go to source code">newQuery</a>( <span>boolean <var>$excludeDeleted</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -605,7 +680,7 @@ fieldtypes</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newCollection">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#207-226" title="Go to source code">newCollection</a>( <span>array <var>$models</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#252-271" title="Go to source code">newCollection</a>( <span>array <var>$models</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -645,7 +720,7 @@ fieldtypes</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hydrateCollection">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#228-248" title="Go to source code">hydrateCollection</a>( <span><code><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">rsanchez\Deep\Collection\AbstractTitleCollection</a></code> <var>$collection</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#273-309" title="Go to source code">hydrateCollection</a>( <span><code><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">rsanchez\Deep\Collection\AbstractTitleCollection</a></code> <var>$collection</var></span> )</code>
 
 		<div class="description short">
 			
@@ -683,7 +758,7 @@ fieldtypes</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_attributesToArray">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#250-264" title="Go to source code">attributesToArray</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#311-325" title="Go to source code">attributesToArray</a>( )</code>
 
 		<div class="description short">
 			
@@ -712,7 +787,7 @@ fieldtypes</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getEntryDateAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#266-275" title="Go to source code">getEntryDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#327-336" title="Go to source code">getEntryDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -754,7 +829,7 @@ fieldtypes</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getExpirationDateAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#277-286" title="Go to source code">getExpirationDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#338-347" title="Go to source code">getExpirationDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -798,7 +873,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getCommentExpirationDateAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#288-297" title="Go to source code">getCommentExpirationDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#349-358" title="Go to source code">getCommentExpirationDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -842,7 +917,7 @@ is no expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getRecentCommentDateAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#299-308" title="Go to source code">getRecentCommentDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#360-369" title="Go to source code">getRecentCommentDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -886,7 +961,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getEditDateAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#310-319" title="Go to source code">getEditDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#371-380" title="Go to source code">getEditDateAttribute</a>( <span>integer <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -928,7 +1003,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getPageUriAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#321-329" title="Go to source code">getPageUriAttribute</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#382-390" title="Go to source code">getPageUriAttribute</a>( )</code>
 
 		<div class="description short">
 			
@@ -965,7 +1040,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getChannelNameAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#331-339" title="Go to source code">getChannelNameAttribute</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#392-400" title="Go to source code">getChannelNameAttribute</a>( )</code>
 
 		<div class="description short">
 			
@@ -1002,7 +1077,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getChannelShortNameAttribute">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#341-349" title="Go to source code">getChannelShortNameAttribute</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#402-410" title="Go to source code">getChannelShortNameAttribute</a>( )</code>
 
 		<div class="description short">
 			
@@ -1013,6 +1088,43 @@ expiration date</p>
 		<div class="description detailed hidden">
 			
 <p>Get the channel_name of the entry's channel</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getUsernameAttribute" id="_getUsernameAttribute">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getUsernameAttribute">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#412-420" title="Go to source code">getUsernameAttribute</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the username of the entry's author</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the username of the entry's author</p>
 
 
 
@@ -1039,7 +1151,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_save">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#351-360" title="Go to source code">save</a>( <span>array <var>$options</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#422-431" title="Go to source code">save</a>( <span>array <var>$options</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -1077,7 +1189,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeCategory">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#362-376" title="Go to source code">scopeCategory</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#433-447" title="Go to source code">scopeCategory</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1121,7 +1233,7 @@ expiration date</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeRelatedCategories">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#378-395" title="Go to source code">scopeRelatedCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$entryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#449-466" title="Go to source code">scopeRelatedCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$entryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1167,7 +1279,7 @@ ID</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeRelatedCategoriesUrlTitle">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#397-415" title="Go to source code">scopeRelatedCategoriesUrlTitle</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$urlTitle</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#468-486" title="Go to source code">scopeRelatedCategoriesUrlTitle</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$urlTitle</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1213,7 +1325,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeAllCategories">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#417-437" title="Go to source code">scopeAllCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#488-508" title="Go to source code">scopeAllCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1257,7 +1369,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotAllCategories">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#439-459" title="Go to source code">scopeNotAllCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#510-530" title="Go to source code">scopeNotAllCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1301,7 +1413,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotCategory">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#461-475" title="Go to source code">scopeNotCategory</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#532-546" title="Go to source code">scopeNotCategory</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1345,7 +1457,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeCategoryName">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#477-491" title="Go to source code">scopeCategoryName</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryName</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#548-562" title="Go to source code">scopeCategoryName</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1389,7 +1501,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotCategoryName">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#493-507" title="Go to source code">scopeNotCategoryName</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryName</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#564-578" title="Go to source code">scopeNotCategoryName</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$categoryName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1433,7 +1545,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeCategoryGroup">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#509-523" title="Go to source code">scopeCategoryGroup</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$groupId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#580-594" title="Go to source code">scopeCategoryGroup</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$groupId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1477,7 +1589,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotCategoryGroup">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#525-539" title="Go to source code">scopeNotCategoryGroup</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$groupId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#596-610" title="Go to source code">scopeNotCategoryGroup</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$groupId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1521,7 +1633,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeChannel">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#541-567" title="Go to source code">scopeChannel</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelName</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#612-638" title="Go to source code">scopeChannel</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1565,7 +1677,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotChannel">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#569-595" title="Go to source code">scopeNotChannel</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelName</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#640-666" title="Go to source code">scopeNotChannel</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1609,7 +1721,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeChannelId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#597-609" title="Go to source code">scopeChannelId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#668-680" title="Go to source code">scopeChannelId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1653,7 +1765,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotChannelId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#611-623" title="Go to source code">scopeNotChannelId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#682-694" title="Go to source code">scopeNotChannelId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$channelId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1697,7 +1809,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeAuthorId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#625-637" title="Go to source code">scopeAuthorId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$authorId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#696-708" title="Go to source code">scopeAuthorId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$authorId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1741,7 +1853,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotAuthorId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#639-651" title="Go to source code">scopeNotAuthorId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$authorId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#710-722" title="Go to source code">scopeNotAuthorId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$authorId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1785,7 +1897,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowExpired">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#653-670" title="Go to source code">scopeShowExpired</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean <var>$showExpired</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#724-741" title="Go to source code">scopeShowExpired</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean <var>$showExpired</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1829,7 +1941,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowFutureEntries">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#672-686" title="Go to source code">scopeShowFutureEntries</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean <var>$showFutureEntries</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#743-757" title="Go to source code">scopeShowFutureEntries</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean <var>$showFutureEntries</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1873,7 +1985,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeSiteId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#688-700" title="Go to source code">scopeSiteId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$siteId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#759-771" title="Go to source code">scopeSiteId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$siteId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1917,7 +2029,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeFixedOrder">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#702-716" title="Go to source code">scopeFixedOrder</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$fixedOrder</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#773-787" title="Go to source code">scopeFixedOrder</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$fixedOrder</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1961,7 +2073,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeSticky">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#718-743" title="Go to source code">scopeSticky</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean <var>$sticky</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#789-814" title="Go to source code">scopeSticky</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean <var>$sticky</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -2005,7 +2117,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeEntryId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#745-757" title="Go to source code">scopeEntryId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$entryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#816-828" title="Go to source code">scopeEntryId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$entryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2049,7 +2161,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotEntryId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#759-771" title="Go to source code">scopeNotEntryId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$notEntryId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#830-842" title="Go to source code">scopeNotEntryId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$notEntryId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2093,7 +2205,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeEntryIdFrom">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#773-783" title="Go to source code">scopeEntryIdFrom</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$entryIdFrom</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#844-854" title="Go to source code">scopeEntryIdFrom</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$entryIdFrom</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2137,7 +2249,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeEntryIdTo">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#785-795" title="Go to source code">scopeEntryIdTo</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$entryIdTo</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#856-866" title="Go to source code">scopeEntryIdTo</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$entryIdTo</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2181,7 +2293,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeGroupId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#797-809" title="Go to source code">scopeGroupId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$groupId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#868-880" title="Go to source code">scopeGroupId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$groupId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2225,7 +2337,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotGroupId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#811-823" title="Go to source code">scopeNotGroupId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$notGroupId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#882-894" title="Go to source code">scopeNotGroupId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$notGroupId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2269,7 +2381,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeLimit">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#825-835" title="Go to source code">scopeLimit</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$limit</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#896-906" title="Go to source code">scopeLimit</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$limit</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2313,7 +2425,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeOffset">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#837-847" title="Go to source code">scopeOffset</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$offset</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#908-918" title="Go to source code">scopeOffset</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$offset</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2357,7 +2469,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowPages">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#849-867" title="Go to source code">scopeShowPages</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean|string <var>$showPages</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#920-938" title="Go to source code">scopeShowPages</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean|string <var>$showPages</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -2401,7 +2513,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowPagesOnly">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#869-887" title="Go to source code">scopeShowPagesOnly</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean|string <var>$showPagesOnly</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#940-958" title="Go to source code">scopeShowPagesOnly</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>boolean|string <var>$showPagesOnly</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -2445,7 +2557,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeStartOn">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#889-903" title="Go to source code">scopeStartOn</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer|DateTime <var>$startOn</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#960-974" title="Go to source code">scopeStartOn</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer|DateTime <var>$startOn</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2489,7 +2601,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeStatus">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#905-917" title="Go to source code">scopeStatus</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$status</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#976-988" title="Go to source code">scopeStatus</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$status</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2533,7 +2645,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeNotStatus">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#919-931" title="Go to source code">scopeNotStatus</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$status</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#990-1002" title="Go to source code">scopeNotStatus</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$status</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2577,7 +2689,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeStopBefore">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#933-947" title="Go to source code">scopeStopBefore</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer|DateTime <var>$stopBefore</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1004-1018" title="Go to source code">scopeStopBefore</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer|DateTime <var>$stopBefore</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2621,7 +2733,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeUrlTitle">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#949-961" title="Go to source code">scopeUrlTitle</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$urlTitle</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1020-1032" title="Go to source code">scopeUrlTitle</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$urlTitle</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2665,7 +2777,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeUsername">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#963-975" title="Go to source code">scopeUsername</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$username</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1034-1046" title="Go to source code">scopeUsername</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>dynamic <var>$username</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2709,7 +2821,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeYear">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#977-987" title="Go to source code">scopeYear</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$year</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1048-1058" title="Go to source code">scopeYear</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$year</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2753,7 +2865,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeMonth">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#989-999" title="Go to source code">scopeMonth</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$month</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1060-1070" title="Go to source code">scopeMonth</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string|integer <var>$month</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2772,7 +2884,7 @@ url title</p>
 					<dt><var>$query</var></dt>
 					<dd><code>Illuminate\Database\Eloquent\Builder</code><br>$query</dd>
 					<dt><var>$month</var></dt>
-					<dd><code>integer</code><br>$month</dd>
+					<dd><code>string|integer</code><br>$month</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -2797,7 +2909,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeDay">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1001-1011" title="Go to source code">scopeDay</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer <var>$day</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1072-1082" title="Go to source code">scopeDay</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string|integer <var>$day</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2816,7 +2928,7 @@ url title</p>
 					<dt><var>$query</var></dt>
 					<dd><code>Illuminate\Database\Eloquent\Builder</code><br>$query</dd>
 					<dt><var>$day</var></dt>
-					<dd><code>integer</code><br>$day</dd>
+					<dd><code>string|integer</code><br>$day</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -2841,7 +2953,7 @@ url title</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeArrayFromString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1013-1039" title="Go to source code">scopeArrayFromString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span>, <span>string <var>$scope</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1084-1110" title="Go to source code">scopeArrayFromString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span>, <span>string <var>$scope</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2887,7 +2999,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeAuthorIdString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1041-1051" title="Go to source code">scopeAuthorIdString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1112-1122" title="Go to source code">scopeAuthorIdString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2931,7 +3043,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeCategoryString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1053-1079" title="Go to source code">scopeCategoryString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1124-1150" title="Go to source code">scopeCategoryString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2975,7 +3087,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeCategoryGroupString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1081-1091" title="Go to source code">scopeCategoryGroupString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1152-1162" title="Go to source code">scopeCategoryGroupString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3019,7 +3131,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeCategoryNameString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1093-1103" title="Go to source code">scopeCategoryNameString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1164-1174" title="Go to source code">scopeCategoryNameString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3063,7 +3175,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeChannelString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1105-1115" title="Go to source code">scopeChannelString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1176-1186" title="Go to source code">scopeChannelString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3107,7 +3219,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeEntryIdString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1117-1127" title="Go to source code">scopeEntryIdString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1188-1198" title="Go to source code">scopeEntryIdString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3151,7 +3263,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeFixedOrderString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1129-1139" title="Go to source code">scopeFixedOrderString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1200-1210" title="Go to source code">scopeFixedOrderString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3195,7 +3307,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeGroupIdString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1141-1151" title="Go to source code">scopeGroupIdString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1212-1222" title="Go to source code">scopeGroupIdString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3239,7 +3351,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowExpiredString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1153-1163" title="Go to source code">scopeShowExpiredString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1224-1234" title="Go to source code">scopeShowExpiredString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3283,7 +3395,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowFutureEntriesString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1165-1175" title="Go to source code">scopeShowFutureEntriesString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1236-1246" title="Go to source code">scopeShowFutureEntriesString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3327,7 +3439,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeShowPagesString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1177-1191" title="Go to source code">scopeShowPagesString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1248-1262" title="Go to source code">scopeShowPagesString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3371,7 +3483,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeStatusString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1193-1203" title="Go to source code">scopeStatusString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1264-1274" title="Go to source code">scopeStatusString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3415,7 +3527,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeStickyString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1205-1215" title="Go to source code">scopeStickyString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1276-1286" title="Go to source code">scopeStickyString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3459,7 +3571,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeUrlTitleString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1217-1227" title="Go to source code">scopeUrlTitleString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1288-1298" title="Go to source code">scopeUrlTitleString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3503,7 +3615,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeUsernameString">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1229-1239" title="Go to source code">scopeUsernameString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1300-1310" title="Go to source code">scopeUsernameString</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$string</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3547,7 +3659,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithCategories">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1241-1253" title="Go to source code">scopeWithCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1312-1324" title="Go to source code">scopeWithCategories</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -3591,7 +3703,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithCategoryFields">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1255-1271" title="Go to source code">scopeWithCategoryFields</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1326-1342" title="Go to source code">scopeWithCategoryFields</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -3635,7 +3747,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithAuthor">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1273-1285" title="Go to source code">scopeWithAuthor</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1344-1356" title="Go to source code">scopeWithAuthor</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -3679,7 +3791,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithAuthorFields">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1287-1303" title="Go to source code">scopeWithAuthorFields</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1358-1374" title="Go to source code">scopeWithAuthorFields</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -3723,7 +3835,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithComments">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1305-1321" title="Go to source code">scopeWithComments</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1376-1392" title="Go to source code">scopeWithComments</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>Closure <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -3767,7 +3879,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeDynamicParameters">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1323-1340" title="Go to source code">scopeDynamicParameters</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>array <var>$allowedParameters</var></span>, <span>array <var>$request</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1394-1411" title="Go to source code">scopeDynamicParameters</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>array <var>$allowedParameters</var></span>, <span>array <var>$request</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3813,7 +3925,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithParents">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1342-1353" title="Go to source code">scopeWithParents</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1413-1424" title="Go to source code">scopeWithParents</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3855,7 +3967,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeWithSiblings">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1355-1366" title="Go to source code">scopeWithSiblings</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1426-1437" title="Go to source code">scopeWithSiblings</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3897,7 +4009,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeTagparam">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1368-1419" title="Go to source code">scopeTagparam</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$key</var></span>, <span>string <var>$value</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1439-1490" title="Go to source code">scopeTagparam</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>string <var>$key</var></span>, <span>string <var>$value</var></span> )</code>
 
 		<div class="description short">
 			
@@ -3943,7 +4055,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeTagparams">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1421-1454" title="Go to source code">scopeTagparams</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>array <var>$parameters</var></span>, <span>array <var>$request</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.Title.html#1492-1525" title="Go to source code">scopeTagparams</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>array <var>$parameters</var></span>, <span>array <var>$request</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -3980,15 +4092,30 @@ Calls the not version of the scope if the string begins with not eg 'not
 	</tr>
 	</table>
 
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html#methods">rsanchez\Deep\Model\AbstractJoinableModel</a></caption>
+
+	<table class="summary used">
+	<caption>Methods used from <a href="class-rsanchez.Deep.Model.JoinableTrait.html#methods">rsanchez\Deep\Model\JoinableTrait</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html#_requireTable">requireTable()</a>
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_bootJoinableTrait">()</a>, 
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_defaultJoinTables">()</a>, 
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_find">()</a>, 
+			<a href="class-rsanchez.Deep.Model.JoinableTrait.html#_requireTable">()</a>
 		</code></td>
 	</tr>
 	</table>
-
+	<table class="summary used">
+	<caption>Methods used from <a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html#methods">rsanchez\Deep\Model\GlobalAttributeVisibilityTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html#_getArrayableItems">()</a>, 
+			<a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html#_getGlobalHidden">()</a>, 
+			<a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html#_getGlobalVisible">()</a>, 
+			<a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html#_setGlobalHidden">()</a>, 
+			<a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html#_setGlobalVisible">()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -4008,7 +4135,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#31-36" title="Go to source code"><var>$table</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#35-40" title="Go to source code"><var>$table</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'channel_titles'</span></code></td>
 		<td class="description"><div>
@@ -4031,7 +4158,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#38-43" title="Go to source code"><var>$primaryKey</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#42-47" title="Go to source code"><var>$primaryKey</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'entry_id'</span></code></td>
 		<td class="description"><div>
@@ -4047,25 +4174,63 @@ Calls the not version of the scope if the string begins with not eg 'not
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="hidden" id="$hidden">
+	<tr data-order="globalHidden" id="$globalHidden">
 		<td class="attributes"><code>
-			protected  
+			protected static 
 			array
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#45-48" title="Go to source code"><var>$hidden</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#49-61" title="Go to source code"><var>$globalHidden</var></a>
 		</td>
-		<td class="value"><code><span class="php-keyword1">array</span>(<span class="php-quote">'chan'</span>, <span class="php-quote">'site_id'</span>, <span class="php-quote">'forum_topic_id'</span>, <span class="php-quote">'ip_address'</span>, <span class="php-quote">'versioning_enabled'</span>, <span class="php-quote">'comments'</span>)</code></td>
+		<td class="value"><code>[
+    <span class="php-quote">'chan'</span>,
+    <span class="php-quote">'site_id'</span>,
+    <span class="php-quote">'forum_topic_id'</span>,
+    <span class="php-quote">'ip_address'</span>,
+    <span class="php-quote">'versioning_enabled'</span>,
+    <span class="php-quote">'comments'</span>,
+]</code></td>
 		<td class="description"><div>
-			<a href="#$hidden" class="anchor">#</a>
+			<a href="#$globalHidden" class="anchor">#</a>
 
 			<div class="description short">
 				
+<p>The attributes that should be hidden for arrays.</p>
+
 			</div>
 
 			<div class="description detailed hidden">
 				
+<p>The attributes that should be hidden for arrays.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="globalVisible" id="$globalVisible">
+		<td class="attributes"><code>
+			protected static 
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-rsanchez.Deep.Model.Title.html#63-68" title="Go to source code"><var>$globalVisible</var></a>
+		</td>
+		<td class="value"><code>[]</code></td>
+		<td class="description"><div>
+			<a href="#$globalVisible" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>The attributes that should be visible in arrays.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>The attributes that should be visible in arrays.</p>
+
 
 			</div>
 		</div></td>
@@ -4077,7 +4242,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#50-54" title="Go to source code"><var>$collectionClass</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#70-74" title="Go to source code"><var>$collectionClass</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'\\rsanchez\\Deep\\Collection\\TitleCollection'</span></code></td>
 		<td class="description"><div>
@@ -4104,7 +4269,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#56-60" title="Go to source code"><var>$channelRepository</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#76-80" title="Go to source code"><var>$channelRepository</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
@@ -4131,7 +4296,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#62-66" title="Go to source code"><var>$siteRepository</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#82-86" title="Go to source code"><var>$siteRepository</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
@@ -4158,7 +4323,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#68-72" title="Go to source code"><var>$hydratorFactory</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#88-92" title="Go to source code"><var>$hydratorFactory</var></a>
 		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
@@ -4185,7 +4350,7 @@ Calls the not version of the scope if the string begins with not eg 'not
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.Title.html#74-78" title="Go to source code"><var>$extraHydrators</var></a>
+				<a href="source-class-rsanchez.Deep.Model.Title.html#94-98" title="Go to source code"><var>$extraHydrators</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
@@ -4200,6 +4365,35 @@ Calls the not version of the scope if the string begins with not eg 'not
 			<div class="description detailed hidden">
 				
 <p>List of extra hydrators to load (e.g. parents or siblings)</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultChannelName" id="$defaultChannelName">
+		<td class="attributes"><code>
+			protected  
+			string|null
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-rsanchez.Deep.Model.Title.html#100-105" title="Go to source code"><var>$defaultChannelName</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$defaultChannelName" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>When extending this class, set this property to automatically load from the
+specified channel</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>When extending this class, set this property to automatically load from the
+specified channel</p>
 
 
 			</div>

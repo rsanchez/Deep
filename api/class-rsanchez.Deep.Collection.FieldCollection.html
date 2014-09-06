@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Collection\FieldCollection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -55,7 +57,6 @@
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-rsanchez.Deep.Collection.AbstractFieldCollection.html">AbstractFieldCollection</a></li>
-				<li><a href="class-rsanchez.Deep.Collection.AbstractFilterableCollection.html">AbstractFilterableCollection</a></li>
 				<li><a href="class-rsanchez.Deep.Collection.AbstractTitleCollection.html">AbstractTitleCollection</a></li>
 				<li><a href="class-rsanchez.Deep.Collection.AssetCollection.html">AssetCollection</a></li>
 				<li><a href="class-rsanchez.Deep.Collection.CategoryCollection.html">CategoryCollection</a></li>
@@ -76,7 +77,15 @@
 				<li><a href="class-rsanchez.Deep.Collection.UploadPrefCollection.html">UploadPrefCollection</a></li>
 			</ul>
 
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Collection.FilterableInterface.html">FilterableInterface</a></li>
+			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Collection.FilterableTrait.html">FilterableTrait</a></li>
+			</ul>
 
 
 
@@ -159,7 +168,7 @@ Illuminate\Database\Eloquent\Collection
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Collection.html">Collection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#14-100" title="Go to source code">Collection/FieldCollection.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#14-119" title="Go to source code">Collection/FieldCollection.php</a><br />
 	</div>
 
 
@@ -177,7 +186,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#32-44" title="Go to source code">__construct</a>( <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#34-52" title="Go to source code">__construct</a>( <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -208,7 +217,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_push">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#46-56" title="Go to source code">push</a>( <span>mixed <var>$field</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#54-70" title="Go to source code">push</a>( <span>mixed <var>$field</var></span> )</code>
 
 		<div class="description short">
 			
@@ -239,7 +248,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFieldtype">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#58-67" title="Go to source code">hasFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#72-81" title="Go to source code">hasFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -281,7 +290,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFieldIdsByFieldtype">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#69-78" title="Go to source code">getFieldIdsByFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#83-92" title="Go to source code">getFieldIdsByFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -312,6 +321,35 @@ Illuminate\Database\Eloquent\Collection
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="getFieldsByFieldtype" id="_getFieldsByFieldtype">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFieldsByFieldtype">#</a>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#94-97" title="Go to source code">getFieldsByFieldtype</a>( <span>mixed <var>$fieldtype</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="getFieldtypes" id="_getFieldtypes">
 
 		<td class="attributes"><code>
@@ -323,7 +361,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFieldtypes">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#80-87" title="Go to source code">getFieldtypes</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#99-106" title="Go to source code">getFieldtypes</a>( )</code>
 
 		<div class="description short">
 			
@@ -360,7 +398,7 @@ Illuminate\Database\Eloquent\Collection
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addFieldtype">#</a>
-		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#89-99" title="Go to source code">addFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#108-118" title="Go to source code">addFieldtype</a>( <span>string <var>$fieldtype</var></span> )</code>
 
 		<div class="description short">
 			
@@ -462,6 +500,29 @@ Illuminate\Database\Eloquent\Collection
 				
 <p>Map of fieldtypes to field IDs: 'fieldtype_name' =&gt; array(1, 2, 3),</p>
 
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="fieldsByFieldtype" id="$fieldsByFieldtype">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-rsanchez.Deep.Collection.FieldCollection.html#32" title="Go to source code"><var>$fieldsByFieldtype</var></a>
+		</td>
+		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
+		<td class="description"><div>
+			<a href="#$fieldsByFieldtype" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
 
 			</div>
 		</div></td>

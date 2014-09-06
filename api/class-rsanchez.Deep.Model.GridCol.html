@@ -7,7 +7,7 @@
 	<title>Class rsanchez\Deep\Model\GridCol</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -54,8 +56,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></li>
 				<li><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></li>
-				<li><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></li>
+				<li><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Category.html">Category</a></li>
 				<li><a href="class-rsanchez.Deep.Model.CategoryField.html">CategoryField</a></li>
@@ -68,6 +71,7 @@
 				<li><a href="class-rsanchez.Deep.Model.File.html">File</a></li>
 				<li class="active"><a href="class-rsanchez.Deep.Model.GridCol.html">GridCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridRow.html">GridRow</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixRow.html">MatrixRow</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Member.html">Member</a></li>
@@ -84,6 +88,11 @@
 				<li><a href="class-rsanchez.Deep.Model.FileInterface.html">FileInterface</a></li>
 			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></li>
+			</ul>
 
 
 
@@ -140,6 +149,13 @@ Illuminate\Database\Eloquent\Model
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by" />
+			<a href="class-rsanchez.Deep.Model.AbstractProperty.html"><span>rsanchez\Deep\Model\AbstractProperty</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.png" alt="Extended by" />
 <b><span>rsanchez\Deep\Model\GridCol</span></b>			
 			
 			
@@ -159,7 +175,7 @@ Illuminate\Database\Eloquent\Model
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Model.html">Model</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.GridCol.html#16-59" title="Go to source code">Model/GridCol.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.GridCol.html#17-92" title="Go to source code">Model/GridCol.php</a><br />
 	</div>
 
 
@@ -177,7 +193,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_scopeFieldId">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#35-47" title="Go to source code">scopeFieldId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer|array <var>$fieldId</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#36-48" title="Go to source code">scopeFieldId</a>( <span>Illuminate\Database\Eloquent\Builder <var>$query</var></span>, <span>integer|array <var>$fieldId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -221,7 +237,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newCollection">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#49-58" title="Go to source code">newCollection</a>( <span>array <var>$models</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#50-59" title="Go to source code">newCollection</a>( <span>array <var>$models</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -240,6 +256,156 @@ Illuminate\Database\Eloquent\Model
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-rsanchez.Deep.Collection.GridColCollection.html">rsanchez\Deep\Collection\GridColCollection</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getName" id="_getName">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getName">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#61-67" title="Go to source code">getName</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the property short name (eg. the field_name or col_name)</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the property short name (eg. the field_name or col_name)</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getIdentifier" id="_getIdentifier">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getIdentifier">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#69-75" title="Go to source code">getIdentifier</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the property ID with column suffix (eg. field_id<sub>13</sub> or
+col_id<sub>13</sub>)</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the property ID with column suffix (eg. field_id<sub>13</sub> or
+col_id<sub>13</sub>)</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getId" id="_getId">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getId">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#77-83" title="Go to source code">getId</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the property ID (eg. the field_id or col_id)</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the property ID (eg. the field_id or col_id)</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getType" id="_getType">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getType">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.GridCol.html#85-91" title="Go to source code">getType</a>( )</code>
+
+		<div class="description short">
+			
+<p>Get the property type (eg. the field_type or col_type)</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the property type (eg. the field_type or col_type)</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
 				</div>
 
 
@@ -270,7 +436,7 @@ Illuminate\Database\Eloquent\Model
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.GridCol.html#21-26" title="Go to source code"><var>$table</var></a>
+				<a href="source-class-rsanchez.Deep.Model.GridCol.html#22-27" title="Go to source code"><var>$table</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'grid_columns'</span></code></td>
 		<td class="description"><div>
@@ -293,7 +459,7 @@ Illuminate\Database\Eloquent\Model
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-rsanchez.Deep.Model.GridCol.html#28-33" title="Go to source code"><var>$primaryKey</var></a>
+				<a href="source-class-rsanchez.Deep.Model.GridCol.html#29-34" title="Go to source code"><var>$primaryKey</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">'col_id'</span></code></td>
 		<td class="description"><div>

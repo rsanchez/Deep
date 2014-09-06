@@ -4,10 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="generator" content="ApiGen 2.8.0" />
 
-	<title>Class rsanchez\Deep\Model\AbstractJoinableModel</title>
+	<title>Trait rsanchez\Deep\Model\JoinableTrait</title>
 
 	<script type="text/javascript" src="resources/combined.js?2562029583"></script>
-	<script type="text/javascript" src="elementlist.js?3846125685"></script>
+	<script type="text/javascript" src="elementlist.js?1092224943"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -27,6 +27,8 @@
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.html">App<span></span></a>
 						<ul>
+				<li class="main"><a href="namespace-rsanchez.Deep.App.EE.html">EE</a>
+						</li>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.html">Laravel<span></span></a>
 						<ul>
 				<li class="main"><a href="namespace-rsanchez.Deep.App.Laravel.Facade.html">Facade</a>
@@ -54,8 +56,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-rsanchez.Deep.Model.AbstractEntity.html">AbstractEntity</a></li>
 				<li><a href="class-rsanchez.Deep.Model.AbstractField.html">AbstractField</a></li>
-				<li class="active"><a href="class-rsanchez.Deep.Model.AbstractJoinableModel.html">AbstractJoinableModel</a></li>
+				<li><a href="class-rsanchez.Deep.Model.AbstractProperty.html">AbstractProperty</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Asset.html">Asset</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Category.html">Category</a></li>
 				<li><a href="class-rsanchez.Deep.Model.CategoryField.html">CategoryField</a></li>
@@ -68,6 +71,7 @@
 				<li><a href="class-rsanchez.Deep.Model.File.html">File</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridCol.html">GridCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.GridRow.html">GridRow</a></li>
+				<li><a href="class-rsanchez.Deep.Model.JoinableScope.html">JoinableScope</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixCol.html">MatrixCol</a></li>
 				<li><a href="class-rsanchez.Deep.Model.MatrixRow.html">MatrixRow</a></li>
 				<li><a href="class-rsanchez.Deep.Model.Member.html">Member</a></li>
@@ -84,6 +88,11 @@
 				<li><a href="class-rsanchez.Deep.Model.FileInterface.html">FileInterface</a></li>
 			</ul>
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-rsanchez.Deep.Model.GlobalAttributeVisibilityTrait.html">GlobalAttributeVisibilityTrait</a></li>
+				<li class="active"><a href="class-rsanchez.Deep.Model.JoinableTrait.html">JoinableTrait</a></li>
+			</ul>
 
 
 
@@ -123,32 +132,23 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class AbstractJoinableModel</h1>
+	<h1>Trait JoinableTrait</h1>
 
 
 	<div class="description">
 	
-<p>Abstract Model which can optionally join the specified table(s)</p>
+<p>Model which can optionally join the specified table(s)</p>
 
 	</div>
 
-	<dl class="tree">
-		<dd style="padding-left:0px">
-Illuminate\Database\Eloquent\Model
-			
-			
-		</dd>
-		<dd style="padding-left:30px">
-			<img src="resources/inherit.png" alt="Extended by" />
-<b><span>rsanchez\Deep\Model\AbstractJoinableModel</span></b>			
-			
-			
-		</dd>
-	</dl>
+
+
+
+
 
 
 	<div>
-		<h4>Direct known subclasses</h4>
+		<h4>Direct Known Users</h4>
 			<a href="class-rsanchez.Deep.Model.Asset.html">rsanchez\Deep\Model\Asset</a>, 
 			<a href="class-rsanchez.Deep.Model.Category.html">rsanchez\Deep\Model\Category</a>, 
 			<a href="class-rsanchez.Deep.Model.Member.html">rsanchez\Deep\Model\Member</a>, 
@@ -156,29 +156,139 @@ Illuminate\Database\Eloquent\Model
 	</div>
 
 	<div>
-		<h4>Indirect known subclasses</h4>
+		<h4>Indirect Known Users</h4>
 			<a href="class-rsanchez.Deep.Model.Entry.html">rsanchez\Deep\Model\Entry</a>, 
 			<a href="class-rsanchez.Deep.Model.PlayaEntry.html">rsanchez\Deep\Model\PlayaEntry</a>, 
 			<a href="class-rsanchez.Deep.Model.RelationshipEntry.html">rsanchez\Deep\Model\RelationshipEntry</a>
 	</div>
 
-
-
-
-
 	<div class="info">
-		<b>Abstract</b><br />
+		
 		
 		<b>Namespace:</b> <a href="namespace-rsanchez.html">rsanchez</a>\<a href="namespace-rsanchez.Deep.html">Deep</a>\<a href="namespace-rsanchez.Deep.Model.html">Model</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.AbstractJoinableModel.html#15-64" title="Go to source code">Model/AbstractJoinableModel.php</a><br />
+		<b>Located at</b> <a href="source-class-rsanchez.Deep.Model.JoinableTrait.html#16-115" title="Go to source code">Model/JoinableTrait.php</a><br />
 	</div>
 
 
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="find" id="_find">
+
+		<td class="attributes"><code>
+			 public static
+			Illuminate\Database\Eloquent\Model|Collection
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_find">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.JoinableTrait.html#21-47" title="Go to source code">find</a>( <span>mixed <var>$id</var></span>, <span>array <var>$columns</var> = <span class="php-keyword1">array</span>(<span class="php-quote">'*'</span>)</span> )</code>
+
+		<div class="description short">
+			
+<p>Find a model by its primary key.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Find a model by its primary key.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$id</var></dt>
+					<dd><code>mixed</code><br>$id</dd>
+					<dt><var>$columns</var></dt>
+					<dd><code>array</code><br>$columns</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Illuminate\Database\Eloquent\Model|Collection</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="bootJoinableTrait" id="_bootJoinableTrait">
+
+		<td class="attributes"><code>
+			 protected static
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_bootJoinableTrait">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.JoinableTrait.html#49-60" title="Go to source code">bootJoinableTrait</a>( )</code>
+
+		<div class="description short">
+			
+<p>Set the global eloquent scope</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set the global eloquent scope</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultJoinTables" id="_defaultJoinTables">
+
+		<td class="attributes"><code>
+			 public static
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultJoinTables">#</a>
+		<code><a href="source-class-rsanchez.Deep.Model.JoinableTrait.html#62-69" title="Go to source code">defaultJoinTables</a>( )</code>
+
+		<div class="description short">
+			
+<p>Set which tables should be joined automatically</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set which tables should be joined automatically</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="joinTables" id="_joinTables">
 
 		<td class="attributes"><code>
@@ -190,7 +300,7 @@ Illuminate\Database\Eloquent\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_joinTables">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.AbstractJoinableModel.html#20-30" title="Go to source code">joinTables</a>( )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.JoinableTrait.html#71-81" title="Go to source code">joinTables</a>( )</code>
 
 		<div class="description short">
 			
@@ -221,7 +331,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 	<tr data-order="requireTable" id="_requireTable">
 
 		<td class="attributes"><code>
-			 protected 
+			 public 
 			Illuminate\Database\Eloquent\Builder
 			
 			</code>
@@ -229,7 +339,7 @@ array('members.member_id', 'channel_titles.author_id'),</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_requireTable">#</a>
-		<code><a href="source-class-rsanchez.Deep.Model.AbstractJoinableModel.html#32-63" title="Go to source code">requireTable</a>( <span>Illuminate\Database\Eloquent\Builder <var>$builder</var></span>, <span>string <var>$table</var></span> )</code>
+		<code><a href="source-class-rsanchez.Deep.Model.JoinableTrait.html#83-114" title="Go to source code">requireTable</a>( <span>Illuminate\Database\Eloquent\Builder <var>$builder</var></span>, <span>string <var>$table</var></span> )</code>
 
 		<div class="description short">
 			
