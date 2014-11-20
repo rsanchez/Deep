@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Model\JoinableTrait;
 use rsanchez\Deep\Model\FileInterface;

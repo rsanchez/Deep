@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Model;
 
 use rsanchez\Deep\Model\JoinableScope;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
