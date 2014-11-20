@@ -72,8 +72,12 @@ class FileModelTest extends PHPUnit_Framework_TestCase
 
     public function testGetHumanFileSizeAttribute()
     {
-        $file = new File(['file_size' => 0]);
+        $file = new File();
 
+        $file->file_size = null;
+        $this->assertEquals('0 B', $file->human_file_size);
+
+        $file->file_size = 0;
         $this->assertEquals('0 B', $file->human_file_size);
 
         $file->file_size = 1023;
