@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\Model;
 
 /**
  * Model for the channel entries, matrix rows and grid rows

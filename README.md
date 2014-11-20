@@ -93,6 +93,14 @@ This registers the `Entries`, `Titles` and `Categories` facades, so you can use 
 
 If you are using a table prefix for your database tables (EE uses `exp_` by default, so you most likely are), make sure to set the prefix in Laravel's `app/config/database.php`
 
+If you need to use a DB connection other than Laravel's default connection, you should add the following configuration to `app/config/database.php`:
+
+    'deep' => array(
+        'connection' => 'your_connection_name',
+    ),
+
+The specified connection will be used for all of Deep's models.
+
 ### Generic PHP (or other framework)
 
 First you must bootstrap Eloquent for use outside of Laravel. There are [many](https://laracasts.com/lessons/how-to-use-eloquent-outside-of-laravel) [guides](http://www.slimframework.com/news/slim-and-laravel-eloquent-orm) [out](http://www.edzynda.com/use-laravels-eloquent-orm-outside-of-laravel/) [there](http://jenssegers.be/blog/53/using-eloquent-without-laravel) on how to do this.
