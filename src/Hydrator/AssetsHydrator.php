@@ -44,13 +44,14 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection $collection
-     * @param string                                    $fieldtype
-     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
+     * @param \rsanchez\Deep\Collection\EntryCollection               $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
+     * @param string                                                  $fieldtype
+     * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($collection, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 

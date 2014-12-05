@@ -39,13 +39,14 @@ class WysiwygHydrator extends AbstractHydrator
      * {@inheritdoc}
      *
      * @param \rsanchez\Deep\Collection\EntryCollection               $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
      * @param string                                                  $fieldtype
      * @param \rsanchez\Deep\Repository\SiteRepository                $siteRepository
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, $fieldtype, SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($collection, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->siteRepository = $siteRepository;
 

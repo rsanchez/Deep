@@ -42,10 +42,15 @@ class PlayaHydrator extends AbstractHydrator
 
     /**
      * {@inheritdoc}
+     *
+     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     * @param string                                     $fieldtype
+     * @param \rsanchez\Deep\Model\PlayaEntry            $model
      */
-    public function __construct(EntryCollection $collection, $fieldtype, PlayaEntry $model)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, PlayaEntry $model)
     {
-        parent::__construct($collection, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 

@@ -43,13 +43,14 @@ class FileHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection $collection
-     * @param string                                    $fieldtype
-     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
+     * @param \rsanchez\Deep\Collection\EntryCollection               $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
+     * @param string                                                  $fieldtype
+     * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($collection, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 
@@ -61,7 +62,23 @@ class FileHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $files = $this->model->fromEntryCollection($this->collection)->get();
+        $query = $this->model->fromEntryCollection($this->collection);
+
+        if (isset($this->hydrators['matrix'])) {
+            $query->fromMatrix(
+                $this->hydrators['matrix']->getCols(),
+                $this->hydrators['matrix']->getRows()
+            );
+        }
+
+        if (isset($this->hydrators['grid'])) {
+            $query->fromGrid(
+                $this->hydrators['grid']->getCols(),
+                $this->hydrators['grid']->getRows()
+            );
+        }
+
+        $files = $query->get();
 
         foreach ($files as $file) {
             if (! $file->upload_location_id || ! $uploadPref = $this->uploadPrefRepository->find($file->upload_location_id)) {

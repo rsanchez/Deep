@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
 use rsanchez\Deep\Model\UploadPref;
+use rsanchez\Deep\Collection\GridColCollection;
+use rsanchez\Deep\Collection\GridRowCollection;
+use rsanchez\Deep\Collection\MatrixColCollection;
+use rsanchez\Deep\Collection\MatrixRowCollection;
 use Carbon\Carbon;
 
 /**
@@ -127,27 +131,104 @@ class File extends Model implements FileInterface
     public function scopeFromEntryCollection(Builder $query, EntryCollection $collection)
     {
         foreach ($collection as $entry) {
-
             foreach ($entry->channel->fieldsByType('file') as $field) {
-
                 $value = $entry->getAttribute('field_id_'.$field->field_id);
 
-                if (! preg_match('#^{filedir_(\d+)}(.*)$#', $value, $match)) {
-                    return;
-                }
-
-                $filedir = $match[1];
-                $filename = $match[2];
-
-                $query->orWhere(function ($query) use ($filedir, $filename) {
-                    return $query->where('file_name', $filename)
-                        ->where('upload_location_id', $filedir);
-                });
+                $this->scopeFileTag($query, $value);
             }
-
         }
 
         return $query;
+    }
+
+    /**
+     * Filter by files belonging to a set of Matrix Rows and Cols
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder         $query
+     * @param  \rsanchez\Deep\Collection\MatrixColCollection $cols
+     * @param  \rsanchez\Deep\Collection\MatrixRowCollection $rows
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFromMatrix(Builder $query, MatrixColCollection $cols, MatrixRowCollection $rows)
+    {
+        $fileCols = [];
+
+        foreach ($cols as $col) {
+            if ($col->col_type === 'file') {
+                $fileCols[] = $col;
+            }
+        }
+
+        if (! $fileCols) {
+            return $query;
+        }
+
+        foreach ($rows as $row) {
+            foreach ($fileCols as $col) {
+                $value = $row->getAttribute('col_id_'.$col->col_id);
+
+                $this->scopeFileTag($query, $value);
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Filter by files belonging to a set of Matrix Rows and Cols
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder       $query
+     * @param  \rsanchez\Deep\Collection\GridColCollection $cols
+     * @param  \rsanchez\Deep\Collection\GridRowCollection $rows
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFromGrid(Builder $query, GridColCollection $cols, GridRowCollection $rows)
+    {
+        $fileCols = [];
+
+        foreach ($cols as $col) {
+            if ($col->col_type === 'file') {
+                $fileCols[] = $col;
+            }
+        }
+
+        if (! $fileCols) {
+            return $query;
+        }
+
+        foreach ($rows as $row) {
+            foreach ($fileCols as $col) {
+                $value = $row->getAttribute('col_id_'.$col->col_id);
+
+                $this->scopeFileTag($query, $value);
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Add an OR WHERE to the query according to the specified "tag"
+     *
+     * A "tag" follows this format: {filedir_1}your_file.jpg
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $tag
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFileTag(Builder $query, $tag)
+    {
+        if (! preg_match('#^{filedir_(\d+)}(.*)$#', $tag, $match)) {
+            return $query;
+        }
+
+        $filedir = $match[1];
+        $filename = $match[2];
+
+        return $query->orWhere(function ($query) use ($filename, $filedir) {
+            return $query->where('file_name', $filename)
+                ->where('upload_location_id', $filedir);
+        });
     }
 
     /**

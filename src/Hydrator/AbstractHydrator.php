@@ -28,6 +28,12 @@ abstract class AbstractHydrator implements HydratorInterface
     protected $collection;
 
     /**
+     * The other hydrators
+     * @var \rsanchez\Deep\Hydrator\HydratorCollection
+     */
+    protected $hydrators;
+
+    /**
      * The name of the fieldtype
      * @var string
      */
@@ -37,12 +43,14 @@ abstract class AbstractHydrator implements HydratorInterface
      * Constructor
      *
      * Set the EntryCollection and load any global elements the hydrator might need
-     * @param \rsanchez\Deep\Collection\EntryCollection $collection
-     * @param string                                    $fieldtype
+     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     * @param string                                     $fieldtype
      */
-    public function __construct(EntryCollection $collection, $fieldtype)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
         $this->collection = $collection;
+        $this->hydrators = $hydrators;
         $this->fieldtype = $fieldtype;
     }
 

@@ -47,28 +47,46 @@ class MatrixHydrator extends AbstractHydrator
     protected $rows;
 
     /**
-     * {@inheritdoc}
+     * Array of col collections sorted by field_id
+     * @var array
      */
-    public function __construct(EntryCollection $collection, $fieldtype, MatrixCol $colModel, MatrixRow $rowModel)
+    protected $sortedCols = [];
+
+    /**
+     * Array of row collections sorted by entry_id and field_id
+     * @var array
+     */
+    protected $sortedRows = [];
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     * @param string                                     $fieldtype
+     * @param \rsanchez\Deep\Model\MatrixCol             $colModel
+     * @param \rsanchez\Deep\Model\MatrixRow             $rowModel
+     */
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, MatrixCol $colModel, MatrixRow $rowModel)
     {
-        parent::__construct($collection, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->colModel = $colModel;
         $this->rowModel = $rowModel;
 
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $cols = $this->colModel->fieldId($fieldIds)->get();
+        $this->cols = $this->colModel->fieldId($fieldIds)->get();
 
-        foreach ($cols as $col) {
-            if (! isset($this->cols[$col->field_id])) {
-                $this->cols[$col->field_id] = new MatrixColCollection();
+        foreach ($this->cols as $col) {
+            if (! isset($this->sortedCols[$col->field_id])) {
+                $this->sortedCols[$col->field_id] = new MatrixColCollection();
             }
 
-            $this->cols[$col->field_id]->push($col);
+            $this->sortedCols[$col->field_id]->push($col);
         }
 
-        $collection->setMatrixCols($cols);
+        $collection->setMatrixCols($this->cols);
     }
 
     /**
@@ -76,18 +94,18 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $rows = $this->rowModel->entryId($entryIds)->orderBy('row_order', 'asc')->get();
+        $this->rows = $this->rowModel->entryId($entryIds)->orderBy('row_order', 'asc')->get();
 
-        foreach ($rows as $row) {
-            if (! isset($this->rows[$row->entry_id][$row->field_id])) {
-                $this->rows[$row->entry_id][$row->field_id] = new MatrixRowCollection();
+        foreach ($this->rows as $row) {
+            if (! isset($this->sortedRows[$row->entry_id][$row->field_id])) {
+                $this->sortedRows[$row->entry_id][$row->field_id] = new MatrixRowCollection();
             }
 
-            $cols = isset($this->cols[$row->field_id]) ? $this->cols[$row->field_id] : new MatrixColCollection();
+            $cols = isset($this->sortedCols[$row->field_id]) ? $this->sortedCols[$row->field_id] : new MatrixColCollection();
 
             $row->setCols($cols);
 
-            $this->rows[$row->entry_id][$row->field_id]->push($row);
+            $this->sortedRows[$row->entry_id][$row->field_id]->push($row);
         }
     }
 
@@ -96,10 +114,30 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = isset($this->rows[$entity->getId()][$property->getId()]) ? $this->rows[$entity->getId()][$property->getId()] : new MatrixRowCollection();
+        $value = isset($this->sortedRows[$entity->getId()][$property->getId()]) ? $this->sortedRows[$entity->getId()][$property->getId()] : new MatrixRowCollection();
 
         $entity->setAttribute($property->getName(), $value);
 
         return $value;
+    }
+
+    /**
+     * Get rows preloaded by this hydrator
+     *
+     * @return \rsanchez\Deep\Collection\MatrixRowCollection
+     */
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    /**
+     * Get cols preloaded by this hydrator
+     *
+     * @return \rsanchez\Deep\Collection\MatrixColCollection
+     */
+    public function getCols()
+    {
+        return $this->cols;
     }
 }

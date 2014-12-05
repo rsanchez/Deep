@@ -277,7 +277,9 @@ class Title extends AbstractEntity
      */
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
-        if ($hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators)) {
+        $hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators);
+
+        if (! $hydrators->isEmpty()) {
             // loop through the hydrators for preloading
             foreach ($hydrators as $hydrator) {
                 $hydrator->preload($collection->getEntryIds());

@@ -41,34 +41,52 @@ class GridHydrator extends AbstractHydrator
     protected $cols;
 
     /**
-     * Array of field_id => \rsanchez\Deep\Collection\GridRowCollection
+     * Collection of Grid rows in this collection
+     * @var \rsanchez\Deep\Collection\GridRowCollection
+     */
+    protected $rows;
+
+    /**
+     * Array of col collections sorted by field_id
      * @var array
      */
-    protected $rows = array();
+    protected $sortedCols = [];
+
+    /**
+     * Array of row collections sorted by entry_id and field_id
+     * @var array
+     */
+    protected $sortedRows = [];
 
     /**
      * {@inheritdoc}
+     *
+     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     * @param string                                     $fieldtype
+     * @param \rsanchez\Deep\Model\GridCol               $colModel
+     * @param \rsanchez\Deep\Model\GridRow               $rowModel
      */
-    public function __construct(EntryCollection $collection, $fieldtype, GridCol $colModel, GridRow $rowModel)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
     {
-        parent::__construct($collection, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->colModel = $colModel;
         $this->rowModel = $rowModel;
 
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $cols = $this->colModel->fieldId($fieldIds)->get();
+        $this->cols = $this->colModel->fieldId($fieldIds)->get();
 
-        foreach ($cols as $col) {
-            if (! isset($this->cols[$col->field_id])) {
-                $this->cols[$col->field_id] = new GridColCollection();
+        foreach ($this->cols as $col) {
+            if (! isset($this->sortedCols[$col->field_id])) {
+                $this->sortedCols[$col->field_id] = new GridColCollection();
             }
 
-            $this->cols[$col->field_id]->push($col);
+            $this->sortedCols[$col->field_id]->push($col);
         }
 
-        $collection->setGridCols($cols);
+        $collection->setGridCols($this->cols);
     }
 
     /**
@@ -78,19 +96,23 @@ class GridHydrator extends AbstractHydrator
     {
         $fieldIds = $this->collection->getFieldIdsByFieldtype($this->fieldtype);
 
+        $this->rows = new GridRowCollection();
+
         foreach ($fieldIds as $fieldId) {
             $rows = $this->rowModel->fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
 
             foreach ($rows as $row) {
-                if (! isset($this->rows[$row->entry_id][$row->field_id])) {
-                    $this->rows[$row->entry_id][$row->field_id] = new GridRowCollection();
+                if (! isset($this->sortedRows[$row->entry_id][$row->field_id])) {
+                    $this->sortedRows[$row->entry_id][$row->field_id] = new GridRowCollection();
                 }
 
-                $cols = isset($this->cols[$row->field_id]) ? $this->cols[$row->field_id] : new GridColCollection();
+                $cols = isset($this->sortedCols[$row->field_id]) ? $this->sortedCols[$row->field_id] : new GridColCollection();
 
                 $row->setCols($cols);
 
-                $this->rows[$row->entry_id][$row->field_id]->push($row);
+                $this->sortedRows[$row->entry_id][$row->field_id]->push($row);
+
+                $this->rows->push($row);
             }
         }
     }
@@ -100,10 +122,30 @@ class GridHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = isset($this->rows[$entity->getId()][$property->getId()]) ? $this->rows[$entity->getId()][$property->getId()] : new GridRowCollection();
+        $value = isset($this->sortedRows[$entity->getId()][$property->getId()]) ? $this->sortedRows[$entity->getId()][$property->getId()] : new GridRowCollection();
 
         $entity->setAttribute($property->getName(), $value);
 
         return $value;
+    }
+
+    /**
+     * Get rows preloaded by this hydrator
+     *
+     * @return \rsanchez\Deep\Collection\GridRowCollection
+     */
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    /**
+     * Get cols preloaded by this hydrator
+     *
+     * @return \rsanchez\Deep\Collection\GridColCollection
+     */
+    public function getCols()
+    {
+        return $this->cols;
     }
 }
