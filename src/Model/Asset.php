@@ -81,12 +81,16 @@ class Asset extends Model implements FileInterface
     public function getUrlAttribute()
     {
         if (is_null($this->uploadPref) && $this->source_settings) {
-            $base = $this->source_settings->url_prefix.$this->full_path;
+            $base = $this->source_settings->url_prefix;
+
+            if (! empty($this->source_settings->subfolder)) {
+                $base .= $this->source_settings->subfolder.'/';
+            }
         } else {
-            $base = $this->uploadPref->url.$this->full_path;
+            $base = $this->uploadPref->url;
         }
 
-        return $base.$this->file_name;
+        return $base.$this->full_path.$this->file_name;
     }
 
     /**
