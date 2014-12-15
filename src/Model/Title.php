@@ -279,29 +279,29 @@ class Title extends AbstractEntity
     {
         $hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators);
 
-        if (! $hydrators->isEmpty()) {
-            // loop through the hydrators for preloading
-            foreach ($hydrators as $hydrator) {
-                $hydrator->preload($collection->getEntryIds());
-            }
+        $hasHydrators = ! $hydrators->isEmpty();
 
-            // loop again to actually hydrate
-            foreach ($collection as $entry) {
-                foreach ($entry->channel->fields as $field) {
-                    if (isset($hydrators[$field->getType()])) {
-                        $hydrators[$field->getType()]->hydrate($entry, $field);
-                    } else {
-                        $entry->setAttribute($field->field_name, $entry->getAttribute('field_id_'.$field->field_id));
-                    }
+        // loop through the hydrators for preloading
+        foreach ($hydrators as $hydrator) {
+            $hydrator->preload($collection->getEntryIds());
+        }
 
-                    if ($field->hasRows()) {
-                        foreach ($entry->getAttribute($field->field_name) as $row) {
-                            foreach ($row->getCols() as $col) {
-                                if (isset($hydrators[$col->getType()])) {
-                                    $hydrators[$col->getType()]->hydrate($row, $col);
-                                } else {
-                                    $row->setAttribute($col->getName(), $row->getAttribute($col->getIdentifier()));
-                                }
+        // loop again to actually hydrate
+        foreach ($collection as $entry) {
+            foreach ($entry->channel->fields as $field) {
+                if (isset($hydrators[$field->getType()])) {
+                    $hydrators[$field->getType()]->hydrate($entry, $field);
+                } else {
+                    $entry->setAttribute($field->field_name, $entry->getAttribute('field_id_'.$field->field_id));
+                }
+
+                if ($hasHydrators && $field->hasRows()) {
+                    foreach ($entry->getAttribute($field->field_name) as $row) {
+                        foreach ($row->getCols() as $col) {
+                            if (isset($hydrators[$col->getType()])) {
+                                $hydrators[$col->getType()]->hydrate($row, $col);
+                            } else {
+                                $row->setAttribute($col->getName(), $row->getAttribute($col->getIdentifier()));
                             }
                         }
                     }
