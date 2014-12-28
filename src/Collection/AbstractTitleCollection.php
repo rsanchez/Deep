@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
 use rsanchez\Deep\Collection\FilterableTrait;
@@ -161,5 +162,23 @@ abstract class AbstractTitleCollection extends Collection implements FilterableI
         }
 
         return parent::toJson($options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function push($item)
+    {
+        $this->add($item);
+    }
+
+    /**
+     * Add a Title to this collection
+     * @param  \rsanchez\Deep\Model\Title $item
+     * @return void
+     */
+    public function add(Title $item)
+    {
+        $this->items[] = $item;
     }
 }

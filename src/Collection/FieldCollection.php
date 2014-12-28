@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Collection\AbstractFieldCollection;
 
 /**
@@ -54,7 +55,17 @@ class FieldCollection extends AbstractFieldCollection
     /**
      * {@inheritdoc}
      */
-    public function push($field)
+    public function push($item)
+    {
+        $this->add($item);
+    }
+
+    /**
+     * Add a Field to this collection
+     * @param  \rsanchez\Deep\Model\Field $field
+     * @return void
+     */
+    public function add(Field $field)
     {
         $this->addFieldtype($field->field_type);
 
@@ -66,7 +77,7 @@ class FieldCollection extends AbstractFieldCollection
 
         $this->fieldsByFieldtype[$field->field_type]->items[] = $field;
 
-        return parent::push($field);
+        $this->items[] = $field;
     }
 
     /**

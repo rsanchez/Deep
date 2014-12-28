@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\PlayaEntry;
 use rsanchez\Deep\Collection\EntryCollection;
 
 /**
@@ -16,6 +17,16 @@ use rsanchez\Deep\Collection\EntryCollection;
  */
 class PlayaCollection extends EntryCollection
 {
+    /**
+     * Add a PlayaEntry to this collection
+     * @param  \rsanchez\Deep\Model\PlayaEntry $item
+     * @return void
+     */
+    public function add(PlayaEntry $item)
+    {
+        parent::add($item);
+    }
+
     /**
      * {@inheritdoc}
      */

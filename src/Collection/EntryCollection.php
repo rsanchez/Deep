@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\Entry;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Collection\GridColCollection;
@@ -191,5 +192,15 @@ class EntryCollection extends TitleCollection
     public function getGridCols()
     {
         return $this->gridCols;
+    }
+
+    /**
+     * Add a Entry to this collection
+     * @param  \rsanchez\Deep\Model\Entry $item
+     * @return void
+     */
+    public function add(Entry $item)
+    {
+        parent::add($item);
     }
 }

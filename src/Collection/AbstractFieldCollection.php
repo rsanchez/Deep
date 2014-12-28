@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\AbstractField;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -48,7 +49,17 @@ abstract class AbstractFieldCollection extends Collection
     /**
      * {@inheritdoc}
      */
-    public function push($field)
+    public function push($item)
+    {
+        $this->add($item);
+    }
+
+    /**
+     * Add an AbstractField to this collection
+     * @param  \rsanchez\Deep\Model\AbstractField $item
+     * @return void
+     */
+    public function add(AbstractField $field)
     {
         $this->fieldsByName[$field->field_name] = $field;
 

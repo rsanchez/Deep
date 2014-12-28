@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\MemberField;
 use rsanchez\Deep\Collection\AbstractFieldCollection;
 
 /**
@@ -16,4 +17,13 @@ use rsanchez\Deep\Collection\AbstractFieldCollection;
  */
 class MemberFieldCollection extends AbstractFieldCollection
 {
+    /**
+     * Add a MemberField to this collection
+     * @param  \rsanchez\Deep\Model\MemberField $item
+     * @return void
+     */
+    public function add(MemberField $item)
+    {
+        parent::add($item);
+    }
 }

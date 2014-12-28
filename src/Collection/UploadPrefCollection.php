@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\UploadPref;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -16,4 +17,21 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class UploadPrefCollection extends Collection
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function push($item)
+    {
+        $this->add($item);
+    }
+
+    /**
+     * Add a UploadPref to this collection
+     * @param  \rsanchez\Deep\Model\UploadPref $item
+     * @return void
+     */
+    public function add(UploadPref $item)
+    {
+        $this->items[] = $item;
+    }
 }

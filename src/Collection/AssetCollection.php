@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\Asset;
 use rsanchez\Deep\Collection\FilterableTrait;
 use rsanchez\Deep\Collection\FilterableInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,6 +20,24 @@ use Illuminate\Database\Eloquent\Collection;
 class AssetCollection extends Collection implements FilterableInterface
 {
     use FilterableTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function push($item)
+    {
+        $this->add($item);
+    }
+
+    /**
+     * Add a Asset to this collection
+     * @param  \rsanchez\Deep\Model\Asset $item
+     * @return void
+     */
+    public function add(Asset $item)
+    {
+        $this->items[] = $item;
+    }
 
     /**
      * Get the URL of the first item in the collection

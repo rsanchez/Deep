@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\CategoryField;
 use rsanchez\Deep\Collection\AbstractFieldCollection;
 
 /**
@@ -16,4 +17,13 @@ use rsanchez\Deep\Collection\AbstractFieldCollection;
  */
 class CategoryFieldCollection extends AbstractFieldCollection
 {
+    /**
+     * Add a CategoryField to this collection
+     * @param  \rsanchez\Deep\Model\CategoryField $item
+     * @return void
+     */
+    public function add(CategoryField $item)
+    {
+        parent::add($item);
+    }
 }

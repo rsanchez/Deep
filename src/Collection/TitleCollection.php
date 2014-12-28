@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\Title;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 
@@ -17,4 +18,13 @@ use rsanchez\Deep\Collection\AbstractTitleCollection;
  */
 class TitleCollection extends AbstractTitleCollection
 {
+    /**
+     * Add a Title to this collection
+     * @param  \rsanchez\Deep\Model\Title $item
+     * @return void
+     */
+    public function add(Title $item)
+    {
+        parent::add($item);
+    }
 }

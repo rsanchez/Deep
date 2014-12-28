@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\RelationshipEntry;
 use rsanchez\Deep\Collection\EntryCollection;
 
 /**
@@ -16,6 +17,16 @@ use rsanchez\Deep\Collection\EntryCollection;
  */
 class RelationshipCollection extends EntryCollection
 {
+    /**
+     * Add a RelationshipEntry to this collection
+     * @param  \rsanchez\Deep\Model\RelationshipEntry $item
+     * @return void
+     */
+    public function add(RelationshipEntry $item)
+    {
+        parent::add($item);
+    }
+
     /**
      * {@inheritdoc}
      */

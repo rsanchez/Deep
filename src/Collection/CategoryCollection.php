@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Collection;
 
+use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Collection\FilterableTrait;
 use rsanchez\Deep\Collection\FilterableInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,6 +20,24 @@ use Illuminate\Database\Eloquent\Collection;
 class CategoryCollection extends Collection implements FilterableInterface
 {
     use FilterableTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function push($item)
+    {
+        $this->add($item);
+    }
+
+    /**
+     * Add a Category to this collection
+     * @param  \rsanchez\Deep\Model\Category $item
+     * @return void
+     */
+    public function add(Category $item)
+    {
+        $this->items[] = $item;
+    }
 
     /**
      * Filter by cat_id attribute
