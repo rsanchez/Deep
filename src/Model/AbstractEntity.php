@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 
 /**
  * Model for the channel entries, matrix rows and grid rows

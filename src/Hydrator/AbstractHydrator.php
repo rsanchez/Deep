@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\AbstractProperty;

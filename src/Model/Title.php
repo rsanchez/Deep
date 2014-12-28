@@ -9,18 +9,13 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\Channel;
-use rsanchez\Deep\Model\AbstractEntity;
-use rsanchez\Deep\Model\JoinableTrait;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Relations\HasOneFromRepository;
-use rsanchez\Deep\Model\GlobalAttributeVisibilityTrait;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -500,7 +495,7 @@ class Title extends AbstractEntity
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
 
-            $q->where(function($qq) use ($categoryIds) {
+            $q->where(function ($qq) use ($categoryIds) {
                 foreach ($categoryIds as $categoryId) {
                     $qq->orWhere('categories.cat_id', $categoryId);
                 }
@@ -522,7 +517,7 @@ class Title extends AbstractEntity
 
         return $query->whereHas('categories', function ($q) use ($categoryIds) {
 
-            $q->where(function($qq) use ($categoryIds) {
+            $q->where(function ($qq) use ($categoryIds) {
                 foreach ($categoryIds as $categoryId) {
                     $qq->orWhere('categories.cat_id', $categoryId);
                 }
@@ -798,7 +793,7 @@ class Title extends AbstractEntity
     public function scopeSticky(Builder $query, $sticky = true)
     {
         if ($sticky) {
-            $orders =& $query->getQuery()->orders;
+            $orders = & $query->getQuery()->orders;
 
             $order = array(
                 'column' => 'channel_titles.sticky',

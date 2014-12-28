@@ -11,9 +11,6 @@ namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Repository\ChannelRepository;
-use rsanchez\Deep\Collection\ChannelCollection;
-use rsanchez\Deep\Collection\FilterableTrait;
-use rsanchez\Deep\Collection\FilterableInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 /**

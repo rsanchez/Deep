@@ -9,9 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Repository\FieldRepository;
 use Carbon\Carbon;

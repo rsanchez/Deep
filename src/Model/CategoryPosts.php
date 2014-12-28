@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 
 /**
  * Model for the category_posts table
@@ -43,5 +42,4 @@ class CategoryPosts extends Model
      * @var bool
      */
     public $timestamps = false;
-
 }

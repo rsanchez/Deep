@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\RelationshipEntry;
-use rsanchez\Deep\Collection\EntryCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\RelationshipEntry

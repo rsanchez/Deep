@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\AbstractField;
 use rsanchez\Deep\Collection\CategoryFieldCollection;
 
 /**

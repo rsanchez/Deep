@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
-use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\File;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;

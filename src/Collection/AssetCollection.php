@@ -10,8 +10,6 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Asset;
-use rsanchez\Deep\Collection\FilterableTrait;
-use rsanchez\Deep\Collection\FilterableInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 /**

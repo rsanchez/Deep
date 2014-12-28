@@ -9,8 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
-use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
 use rsanchez\Deep\Relations\HasManyFromRepository;

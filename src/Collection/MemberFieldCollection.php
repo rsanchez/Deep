@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\MemberField;
-use rsanchez\Deep\Collection\AbstractFieldCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\MemberField

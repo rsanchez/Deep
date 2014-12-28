@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\PlayaEntry;
-use rsanchez\Deep\Collection\EntryCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\PlayaEntry

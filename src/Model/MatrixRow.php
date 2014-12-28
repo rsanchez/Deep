@@ -9,9 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Collection\MatrixRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 

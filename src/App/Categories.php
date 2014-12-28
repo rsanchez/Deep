@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\App;
 
-use rsanchez\Deep\App\AbstractProxy;
 
 /**
  * Static proxy to the Category model

@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Model\MemberField;
-use rsanchez\Deep\Repository\AbstractFieldRepository;
 
 /**
  * Repository of all MemberFields

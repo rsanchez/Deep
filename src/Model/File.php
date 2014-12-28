@@ -9,11 +9,9 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FileCollection;
-use rsanchez\Deep\Model\UploadPref;
 use rsanchez\Deep\Collection\GridColCollection;
 use rsanchez\Deep\Collection\GridRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;

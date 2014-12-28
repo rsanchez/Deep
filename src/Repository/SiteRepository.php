@@ -11,7 +11,6 @@ namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\SiteCollection;
 use rsanchez\Deep\Model\Site;
-use rsanchez\Deep\Repository\AbstractDeferredRepository;
 
 /**
  * Repository of all Sites
@@ -54,7 +53,7 @@ class SiteRepository extends AbstractDeferredRepository
             }
         }
 
-        return null;
+        return;
     }
 
     /**

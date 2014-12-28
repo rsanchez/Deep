@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
-use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 

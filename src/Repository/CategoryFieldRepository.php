@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Model\CategoryField;
-use rsanchez\Deep\Repository\AbstractFieldRepository;
 
 /**
  * Repository of all CategoryFields

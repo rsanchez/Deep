@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\App\EE;
 
-use rsanchez\Deep\App\EE\AbstractProxy;
 
 /**
  * Static proxy to the Entry model

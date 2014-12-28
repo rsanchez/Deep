@@ -9,10 +9,8 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Repository\MemberFieldRepository;
-use rsanchez\Deep\Model\JoinableTrait;
 
 /**
  * Model for the members table

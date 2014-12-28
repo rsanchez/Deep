@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Model\UploadPref;
-use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
 /**
  * Repository of all UploadPrefs
@@ -51,11 +50,11 @@ class ConfigUploadPrefRepository implements UploadPrefRepositoryInterface
         return $this->getUploadPrefById($id);
     }
 
-    /**
-     * Get single UploadPref by ID
-     * @var int $id
-     * @return \rsanchez\Deep\Model\UploadPref|null
-     */
+     /**
+      * Get single UploadPref by ID
+      * @var int $id
+      * @return \rsanchez\Deep\Model\UploadPref|null
+      */
      public function getUploadPrefById($id)
      {
          return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;

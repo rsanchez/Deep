@@ -9,9 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Collection\GridColCollection;
 
 /**

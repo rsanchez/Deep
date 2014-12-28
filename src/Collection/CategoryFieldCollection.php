@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\CategoryField;
-use rsanchez\Deep\Collection\AbstractFieldCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\CategoryField

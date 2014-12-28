@@ -11,7 +11,6 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
-use rsanchez\Deep\Hydrator\DefaultHydrator;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 use rsanchez\Deep\Model\Asset;
@@ -212,9 +211,9 @@ class HydratorFactory
     /**
      * Create a new RelationshipHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
-     * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     * @param  string                                     $fieldtype
+     * @param  \rsanchez\Deep\Collection\EntryCollection    $collection
+     * @param  \rsanchez\Deep\Hydrator\HydratorCollection   $hydrators
+     * @param  string                                       $fieldtype
      * @return \rsanchez\Deep\Hydrator\RelationshipHydrator
      */
     public function newRelationshipHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)

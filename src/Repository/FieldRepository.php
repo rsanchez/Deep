@@ -11,7 +11,6 @@ namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Model\Field;
-use rsanchez\Deep\Repository\AbstractFieldRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
 
 /**
@@ -39,7 +38,6 @@ class FieldRepository extends AbstractFieldRepository
     protected function boot()
     {
         if (is_null($this->collection)) {
-
             $this->collection = $this->model
                 ->orderByRaw("field_type IN ('matrix', 'grid') DESC")
                 ->orderByRaw("field_type IN ('playa', 'relationship') DESC")

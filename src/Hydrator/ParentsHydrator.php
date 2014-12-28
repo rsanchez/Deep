@@ -14,7 +14,6 @@ use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
-use rsanchez\Deep\Hydrator\AbstractHydrator;
 use rsanchez\Deep\Model\RelationshipEntry;
 
 /**

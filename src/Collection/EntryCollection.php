@@ -11,11 +11,7 @@ namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Entry;
 use Illuminate\Database\Eloquent\Collection;
-use rsanchez\Deep\Collection\MatrixColCollection;
-use rsanchez\Deep\Collection\GridColCollection;
-use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Model\Field;
-use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\FieldRepository;
 

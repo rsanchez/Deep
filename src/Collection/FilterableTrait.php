@@ -257,7 +257,7 @@ trait FilterableTrait
             $args[] = $sort[$i] === 'asc' ? SORT_ASC : SORT_DESC;
         }
 
-        $args[] =& $this->items;
+        $args[] = & $this->items;
 
         call_user_func_array('array_multisort', $args);
 

@@ -421,7 +421,6 @@ abstract class BasePlugin
                         $tag->vars['var_single']
                     );
                 } elseif ($categoriesEnabled && $tag->name === 'categories') {
-
                     $categories = array();
 
                     foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
@@ -456,9 +455,7 @@ abstract class BasePlugin
 
                     // @TODO parse the file path at the model attribute level using upload pref repository
                     $row[$tag->key] = $categories ? ee()->typography->parse_file_paths(ee()->TMPL->parse_variables($tag->tagdata, $categories)) : '';
-
                 } elseif ($customFieldsEnabled && $entry->channel->fields->hasField($tag->name)) {
-
                     $row[$tag->key] = '';
 
                     $value = $entry->{$tag->name};
@@ -627,7 +624,6 @@ abstract class BasePlugin
         }
 
         return $output;
-
     }
 
     /**

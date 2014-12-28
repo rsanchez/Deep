@@ -11,7 +11,6 @@ namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Title;
 use Illuminate\Database\Eloquent\Collection;
-use rsanchez\Deep\Collection\AbstractTitleCollection;
 
 /**
  * Collection of \rsanchez\Deep\Model\Title

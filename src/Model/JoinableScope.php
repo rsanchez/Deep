@@ -26,7 +26,7 @@ class JoinableScope implements ScopeInterface
     /**
      * Join the default join tables
      *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param  \Illuminate\Database\Eloquent\Builder $builder
      * @return void
      */
     public function apply(Builder $builder)
@@ -42,7 +42,7 @@ class JoinableScope implements ScopeInterface
     /**
      * Unjoin the tables
      *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param  \Illuminate\Database\Eloquent\Builder $builder
      * @return void
      */
     public function remove(Builder $builder)

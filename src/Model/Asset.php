@@ -9,12 +9,8 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\Model;
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Model\JoinableTrait;
-use rsanchez\Deep\Model\FileInterface;
 use rsanchez\Deep\Collection\AssetCollection;
-use rsanchez\Deep\Model\UploadPref;
 use Carbon\Carbon;
 
 /**
@@ -41,7 +37,7 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref', 'source_type', 'folder_name', 'full_path', 'parent_id', 'name', 'settings', );
+    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref', 'source_type', 'folder_name', 'full_path', 'parent_id', 'name', 'settings');
 
     /**
      * {@inheritdoc}
@@ -99,7 +95,7 @@ class Asset extends Model implements FileInterface
     public function getServerPathAttribute()
     {
         if (is_null($this->uploadPref) && $this->source_settings) {
-            return null;
+            return;
         }
 
         return $this->uploadPref->server_path.$this->full_path.$this->file_name;

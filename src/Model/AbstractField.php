@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Model\AbstractProperty;
 
 /**
  * Interface for field models

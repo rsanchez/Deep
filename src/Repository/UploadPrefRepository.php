@@ -11,8 +11,6 @@ namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Collection\UploadPrefCollection;
 use rsanchez\Deep\Model\UploadPref;
-use rsanchez\Deep\Repository\AbstractDeferredRepository;
-use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
 /**
  * Repository of all UploadPrefs
@@ -57,11 +55,11 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
         return $this->getUploadPrefById($id);
     }
 
-    /**
-     * Get single UploadPref by ID
-     * @var int $id
-     * @return \rsanchez\Deep\Model\UploadPref|null
-     */
+     /**
+      * Get single UploadPref by ID
+      * @var int $id
+      * @return \rsanchez\Deep\Model\UploadPref|null
+      */
      public function getUploadPrefById($id)
      {
          $this->boot();
