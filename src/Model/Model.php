@@ -16,11 +16,29 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  */
 abstract class Model extends Eloquent
 {
+    /**
+     * Name of the connection to use for all Deep models
+     * @var string
+     */
     protected static $globalConnection;
 
+    /**
+     * Set the global connection name for all Deep models
+     * @param  string $connection
+     * @return void
+     */
     public static function setGlobalConnection($connection)
     {
         static::$globalConnection = $connection;
+    }
+
+    /**
+     * Get the global connection name for all Deep models
+     * @return string|null
+     */
+    public static function getGlobalConnection()
+    {
+        return static::$globalConnection;
     }
 
     /**

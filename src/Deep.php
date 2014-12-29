@@ -11,7 +11,7 @@ namespace rsanchez\Deep;
 
 use Illuminate\Container\Container;
 use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
-use Illuminate\Database\Eloquent\Model;
+use rsanchez\Deep\Model\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
@@ -60,6 +60,10 @@ class Deep extends Container
 
         $this->singleton('config', function ($app) use ($config) {
             return $config;
+        });
+
+        $this->bind('db', function ($app) {
+            return Model::resolveConnection(Model::getGlobalConnection());
         });
 
         $this->singleton('Field', function ($app) {
