@@ -127,4 +127,12 @@ class GridRow extends AbstractEntity
 
         return $array;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrefix()
+    {
+        return 'row';
+    }
 }

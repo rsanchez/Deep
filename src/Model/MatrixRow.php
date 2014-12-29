@@ -127,4 +127,12 @@ class MatrixRow extends AbstractEntity
 
         return $array;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrefix()
+    {
+        return 'row';
+    }
 }

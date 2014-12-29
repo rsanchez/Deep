@@ -42,4 +42,10 @@ abstract class AbstractProperty extends Model
      * @return string
      */
     abstract public function getType();
+
+    /**
+     * Get the property prefix (eg. field or col)
+     * @return string
+     */
+    abstract public function getPrefix();
 }

@@ -34,4 +34,12 @@ abstract class AbstractField extends AbstractProperty
     {
         return $value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrefix()
+    {
+        return 'field';
+    }
 }

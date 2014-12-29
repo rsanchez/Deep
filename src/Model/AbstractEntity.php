@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-
 /**
  * Model for the channel entries, matrix rows and grid rows
  */
@@ -26,4 +25,10 @@ abstract class AbstractEntity extends Model
      * @return string|null
      */
     abstract public function getType();
+
+    /**
+     * Get the entity prefix (eg. 'entry' or 'row')
+     * @return string|null
+     */
+    abstract public function getPrefix();
 }

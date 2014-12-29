@@ -87,4 +87,12 @@ class GridCol extends AbstractProperty
     {
         return $this->col_type;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrefix()
+    {
+        return 'col';
+    }
 }

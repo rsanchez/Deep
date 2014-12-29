@@ -1520,4 +1520,12 @@ class Title extends AbstractEntity
 
         return $query;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrefix()
+    {
+        return 'entry';
+    }
 }
