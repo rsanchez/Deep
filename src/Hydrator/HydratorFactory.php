@@ -21,6 +21,7 @@ use rsanchez\Deep\Model\MatrixCol;
 use rsanchez\Deep\Model\MatrixRow;
 use rsanchez\Deep\Model\PlayaEntry;
 use rsanchez\Deep\Model\RelationshipEntry;
+use Illuminate\Database\ConnectionInterface;
 
 /**
  * Factory for building new Hydrators
@@ -62,12 +63,18 @@ class HydratorFactory
     protected $uploadPrefRepository;
 
     /**
+     * @var \Illuminate\Database\ConnectionInterface
+     */
+    protected $db;
+
+    /**
      * Constructor
      *
      * @var \rsanchez\Deep\Repository\SiteRepository                $siteRepository
      * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
     public function __construct(
+        ConnectionInterface $db,
         SiteRepository $siteRepository,
         UploadPrefRepositoryInterface $uploadPrefRepository,
         Asset $asset,
@@ -79,6 +86,7 @@ class HydratorFactory
         PlayaEntry $playaEntry,
         RelationshipEntry $relationshipEntry
     ) {
+        $this->db = $db;
         $this->siteRepository = $siteRepository;
         $this->uploadPrefRepository = $uploadPrefRepository;
         $this->asset = $asset;
@@ -140,7 +148,7 @@ class HydratorFactory
             return $this->$method($collection, $hydrators, $fieldtype);
         }
 
-        return new $class($collection, $hydrators, $fieldtype);
+        return new $class($this->db, $collection, $hydrators, $fieldtype);
     }
 
     /**
@@ -153,7 +161,7 @@ class HydratorFactory
      */
     public function newAssetsHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new AssetsHydrator($collection, $hydrators, $fieldtype, $this->asset, $this->uploadPrefRepository);
+        return new AssetsHydrator($this->db, $collection, $hydrators, $fieldtype, $this->asset, $this->uploadPrefRepository);
     }
 
     /**
@@ -166,7 +174,7 @@ class HydratorFactory
      */
     public function newFileHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new FileHydrator($collection, $hydrators, $fieldtype, $this->file, $this->uploadPrefRepository);
+        return new FileHydrator($this->db, $collection, $hydrators, $fieldtype, $this->file, $this->uploadPrefRepository);
     }
 
     /**
@@ -179,7 +187,7 @@ class HydratorFactory
      */
     public function newGridHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new GridHydrator($collection, $hydrators, $fieldtype, $this->gridCol, $this->gridRow);
+        return new GridHydrator($this->db, $collection, $hydrators, $fieldtype, $this->gridCol, $this->gridRow);
     }
 
     /**
@@ -192,7 +200,7 @@ class HydratorFactory
      */
     public function newMatrixHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new MatrixHydrator($collection, $hydrators, $fieldtype, $this->matrixCol, $this->matrixRow);
+        return new MatrixHydrator($this->db, $collection, $hydrators, $fieldtype, $this->matrixCol, $this->matrixRow);
     }
 
     /**
@@ -205,7 +213,7 @@ class HydratorFactory
      */
     public function newPlayaHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new PlayaHydrator($collection, $hydrators, $fieldtype, $this->playaEntry);
+        return new PlayaHydrator($this->db, $collection, $hydrators, $fieldtype, $this->playaEntry);
     }
 
     /**
@@ -218,7 +226,7 @@ class HydratorFactory
      */
     public function newRelationshipHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new RelationshipHydrator($collection, $hydrators, $fieldtype, $this->relationshipEntry);
+        return new RelationshipHydrator($this->db, $collection, $hydrators, $fieldtype, $this->relationshipEntry);
     }
 
     /**
@@ -231,7 +239,7 @@ class HydratorFactory
      */
     public function newParentsHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new ParentsHydrator($collection, $hydrators, $fieldtype, $this->relationshipEntry);
+        return new ParentsHydrator($this->db, $collection, $hydrators, $fieldtype, $this->relationshipEntry);
     }
 
     /**
@@ -244,7 +252,7 @@ class HydratorFactory
      */
     public function newSiblingsHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new SiblingsHydrator($collection, $hydrators, $fieldtype, $this->relationshipEntry);
+        return new SiblingsHydrator($this->db, $collection, $hydrators, $fieldtype, $this->relationshipEntry);
     }
 
     /**
@@ -257,6 +265,6 @@ class HydratorFactory
      */
     public function newWysiwygHydrator(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
-        return new WysiwygHydrator($collection, $hydrators, $fieldtype, $this->siteRepository, $this->uploadPrefRepository);
+        return new WysiwygHydrator($this->db, $collection, $hydrators, $fieldtype, $this->siteRepository, $this->uploadPrefRepository);
     }
 }

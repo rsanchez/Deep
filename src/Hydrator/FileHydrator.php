@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\File;
@@ -42,14 +43,15 @@ class FileHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
+     * @param \Illuminate\Database\ConnectionInterface                $db
      * @param \rsanchez\Deep\Collection\EntryCollection               $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
      * @param string                                                  $fieldtype
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($db, $collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 
@@ -102,5 +104,12 @@ class FileHydrator extends AbstractHydrator
         $entity->setAttribute($property->getName(), $value);
 
         return $value;
+    }
+
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property)
+    {
+        $file = $entity->getAttribute($property->getName());
+
+        return $file ? '{filedir_'.$file->upload_location_id.'}'.$file->file_name : null;
     }
 }

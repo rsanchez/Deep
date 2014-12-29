@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Model\AbstractProperty;
@@ -43,14 +44,15 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
+     * @param \Illuminate\Database\ConnectionInterface                $db
      * @param \rsanchez\Deep\Collection\EntryCollection               $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
      * @param string                                                  $fieldtype
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($db, $collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 
@@ -105,5 +107,34 @@ class AssetsHydrator extends AbstractHydrator
         $entity->setAttribute($property->getName(), $value);
 
         return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property)
+    {
+        $assets = $entity->getAttribute($property->getName());
+
+        // drop old relations
+        $this->db->table('assets_selections')
+            ->where($property->getPrefix().'_id', $property->getId())
+            ->where($entity->getPrefix().'_id', $entity->getId())
+            ->delete();
+
+        if ($assets) {
+            foreach ($assets as $asset) {
+                /*
+                $this->db->table('assets_selections')
+                    ->insert([
+                        $property->getPrefix().'_id' => $property->getId(),
+                        $entity->getPrefix().'_id' => $entity->getId(),
+                        $asset->file_id,
+                    ]
+                */
+            }
+
+            return '1';
+        }
     }
 }

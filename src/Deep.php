@@ -156,6 +156,7 @@ class Deep extends Container
 
         $this->singleton('HydratorFactory', function ($app) {
             return new HydratorFactory(
+                $app->make('db'),
                 $app->make('SiteRepository'),
                 $app->make('UploadPrefRepository'),
                 $app->make('Asset'),

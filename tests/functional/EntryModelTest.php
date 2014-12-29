@@ -1,5 +1,6 @@
 <?php
 
+use rsanchez\Deep\Model\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Title;
@@ -45,6 +46,7 @@ class EntryModelTest extends PHPUnit_Framework_TestCase
         $uploadPrefRepository = new UploadPrefRepository(new UploadPref());
 
         $hydratorFactory = new HydratorFactory(
+            Model::resolveConnection(Model::getGlobalConnection()),
             $siteRepository,
             $uploadPrefRepository,
             new Asset(),

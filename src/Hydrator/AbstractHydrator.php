@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Hydrator;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\AbstractProperty;
+use Illuminate\Database\ConnectionInterface;
 
 /**
  * Abstract Hydrator class
@@ -20,6 +21,11 @@ use rsanchez\Deep\Model\AbstractProperty;
  */
 abstract class AbstractHydrator implements HydratorInterface
 {
+    /**
+     * @var \Illuminate\Database\ConnectionInterface
+     */
+    protected $db;
+
     /**
      * The Entry Collection being hydrated
      * @var \rsanchez\Deep\Collection\EntryCollection
@@ -42,12 +48,15 @@ abstract class AbstractHydrator implements HydratorInterface
      * Constructor
      *
      * Set the EntryCollection and load any global elements the hydrator might need
+     *
+     * @param \Illuminate\Database\ConnectionInterface   $db
      * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
+    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
     {
+        $this->db = $db;
         $this->collection = $collection;
         $this->hydrators = $hydrators;
         $this->fieldtype = $fieldtype;

@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
+use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\GridCol;
@@ -60,15 +61,16 @@ class GridHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
+     * @param \Illuminate\Database\ConnectionInterface   $db
      * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      * @param \rsanchez\Deep\Model\GridCol               $colModel
      * @param \rsanchez\Deep\Model\GridRow               $rowModel
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
+    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($db, $collection, $hydrators, $fieldtype);
 
         $this->colModel = $colModel;
         $this->rowModel = $rowModel;

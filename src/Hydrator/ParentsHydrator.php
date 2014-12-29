@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
 use rsanchez\Deep\Model\AbstractProperty;
@@ -29,14 +30,15 @@ class ParentsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
+     * @param \Illuminate\Database\ConnectionInterface   $db
      * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      * @param \rsanchez\Deep\Model\RelationshipEntry     $model
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, RelationshipEntry $model)
+    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, RelationshipEntry $model)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($db, $collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 
