@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\App;
 
-
 /**
  * Static proxy to the Title model
  */

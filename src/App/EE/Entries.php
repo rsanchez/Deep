@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\App\EE;
 
-
 /**
  * Static proxy to the Entry model
  */

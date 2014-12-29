@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-
 /**
  * Interface for field models
  */

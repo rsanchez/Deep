@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Model;
 
-
 /**
  * Model for the category_posts table
  */
