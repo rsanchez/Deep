@@ -50,13 +50,13 @@ class ConfigUploadPrefRepository implements UploadPrefRepositoryInterface
         return $this->getUploadPrefById($id);
     }
 
-     /**
-      * Get single UploadPref by ID
-      * @var int $id
-      * @return \rsanchez\Deep\Model\UploadPref|null
-      */
-     public function getUploadPrefById($id)
-     {
-         return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
-     }
+    /**
+     * Get single UploadPref by ID
+     * @var int $id
+     * @return \rsanchez\Deep\Model\UploadPref|null
+     */
+    public function getUploadPrefById($id)
+    {
+        return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
+    }
 }

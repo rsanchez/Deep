@@ -55,17 +55,17 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
         return $this->getUploadPrefById($id);
     }
 
-     /**
-      * Get single UploadPref by ID
-      * @var int $id
-      * @return \rsanchez\Deep\Model\UploadPref|null
-      */
-     public function getUploadPrefById($id)
-     {
-         $this->boot();
+    /**
+     * Get single UploadPref by ID
+     * @var int $id
+     * @return \rsanchez\Deep\Model\UploadPref|null
+     */
+    public function getUploadPrefById($id)
+    {
+        $this->boot();
 
-         return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
-     }
+        return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
+    }
 
     /**
      * Get Collection of all UploadPrefs
