@@ -106,7 +106,10 @@ class FileHydrator extends AbstractHydrator
         return $value;
     }
 
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property)
+    /**
+     * {@inheritdoc}
+     */
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
         $file = $entity->getAttribute($property->getName());
 

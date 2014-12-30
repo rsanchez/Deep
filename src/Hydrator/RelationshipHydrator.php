@@ -74,4 +74,53 @@ class RelationshipHydrator extends AbstractHydrator
 
         return $value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
+    {
+        $entries = $entity->getAttribute($property->getName());
+
+        // drop old relations
+        $query = $this->db->table('relationships');
+
+        if ($parentEntity && $parentProperty) {
+            $query->where('parent_id', $parentEntity->getId())
+                ->where($entity->getPrefix().'_'.$parentProperty->getPrefix().'_id', $parentProperty->getId())//grid_field_id
+                ->where($entity->getPrefix().'_'.$property->getPrefix().'_id', $property->getId())//grid_col_id
+                ->where($entity->getPrefix().'_'.$entity->getPrefix().'_id', $entity->getId());//grid_row_id
+        } else {
+            $query->where('parent_id', $entity->getId())
+                ->where($property->getPrefix().'_id', $property->getId());//field_id
+        }
+
+        $query->delete();
+
+        if ($entries) {
+            foreach ($entries as $i => $entry) {
+                $entry->save();
+
+                $data = [
+                    'child_id' => $entry->entry_id,
+                    'order' => $i,
+                ];
+
+                if ($parentEntity && $parentProperty) {
+                    $data['parent_id'] = $parentEntity->getId();
+                    $data[$entity->getPrefix().'_'.$parentProperty->getPrefix().'_id'] = $parentProperty->getId();//grid_field_id
+                    $data[$entity->getPrefix().'_'.$property->getPrefix().'_id'] = $property->getId();//grid_col_id
+                    $data[$entity->getPrefix().'_'.$entity->getPrefix().'_id'] = $entity->getId();//grid_row_id
+                } else {
+                    $data['parent_id'] = $entity->getId();
+                    $data[$property->getPrefix().'_id'] = $property->getId();
+                }
+
+                $this->db->table('playa_relationships')
+                    ->insert($data);
+            }
+
+            return '1';
+        }
+    }
 }

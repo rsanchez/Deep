@@ -123,6 +123,24 @@ class MatrixHydrator extends AbstractHydrator
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
+    {
+        $rows = $entity->getAttribute($property->getName());
+
+        if ($rows) {
+            foreach ($rows as $i => $row) {
+                $row->row_order = $i;
+
+                $row->save();
+            }
+
+            return '1';
+        }
+    }
+
+    /**
      * Get rows preloaded by this hydrator
      *
      * @return \rsanchez\Deep\Collection\MatrixRowCollection

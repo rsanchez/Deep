@@ -93,6 +93,11 @@ class Title extends AbstractEntity
     protected $extraHydrators = array();
 
     /**
+     * @var \rsanchez\Deep\Hydrator\HydratorCollection
+     */
+    protected $hydrators;
+
+    /**
      * When extending this class, set this property to automatically
      * load from the specified channel
      * @var string|null
@@ -417,14 +422,59 @@ class Title extends AbstractEntity
     }
 
     /**
-     * Save the entry (not yet supported)
+     * Save the entry
      *
      * @param  array $options
-     * @return void
+     * @return bool
      */
     public function save(array $options = array())
     {
-        throw new \Exception('Saving is not supported');
+        $isNew = ! $this->entry_id;
+
+        $saved = parent::save();
+
+        if ($saved) {
+            $data = [
+                'entry_id' => $this->entry_id,
+                'channel_id' => $this->channel_id,
+                'site_id' => $this->site_id,
+            ];
+
+            $hasHydrators = $this->hydrators && ! $this->hydrators->isEmpty();
+
+            foreach ($this->channel->fields as $field) {
+                if (isset($this->hydrators[$field->getType()])) {
+                    $data['field_id_'.$field->field_id] = $this->hydrators[$field->getType()]->dehydrate($entry, $field);
+                } else {
+                    $data['field_id_'.$field->field_id] = $entry->getAttribute($field->field_name);
+                }
+
+                if ($hasHydrators && $field->hasRows()) {
+                    $data['field_id_'.$field->field_id] = null;
+
+                    foreach ($entry->getAttribute($field->field_name) as $row) {
+                        $data['field_id_'.$field->field_id] = '1';
+
+                        foreach ($row->getCols() as $col) {
+                            if (isset($this->hydrators[$col->getType()])) {
+                                $this->hydrators[$col->getType()]->dehydrate($entry, $field, $row, $col);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $query = $this->getConnection()->table('channel_data');
+
+            if ($isNew) {
+                $query->insert($data);
+            } else {
+                $query->where('entry_id', $this->entry_id)
+                    ->update($data);
+            }
+        }
+
+        return $saved;
     }
 
     /**
@@ -1527,5 +1577,14 @@ class Title extends AbstractEntity
     public function getPrefix()
     {
         return 'entry';
+    }
+
+    /**
+     * Set the hydrator collection for this model
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     */
+    public function setHydrators(HydratorCollection $hydrators)
+    {
+        $this->hydrators = $hydrators;
     }
 }

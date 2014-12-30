@@ -112,7 +112,7 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
         $assets = $entity->getAttribute($property->getName());
 
@@ -123,15 +123,24 @@ class AssetsHydrator extends AbstractHydrator
             ->delete();
 
         if ($assets) {
-            foreach ($assets as $asset) {
-                /*
+            foreach ($assets as $i => $asset) {
+                $asset->save();
+
+                $data = [
+                    $property->getPrefix().'_id' => $property->getId(),
+                    $entity->getPrefix().'_id' => $entity->getId(),
+                    'file_id' => $asset->file_id,
+                    'content_type' => $entity->getType() === 'entry' ? null : $entity->getType(),
+                    'sort_order' => $i,
+                ];
+
+                if ($parentEntity && $parentProperty) {
+                    $data[$parentProperty->getPrefix().'_id'] = $parentProperty->getId();
+                    $data[$parentEntity->getPrefix().'_id'] = $parentEntity->getId();
+                }
+
                 $this->db->table('assets_selections')
-                    ->insert([
-                        $property->getPrefix().'_id' => $property->getId(),
-                        $entity->getPrefix().'_id' => $entity->getId(),
-                        $asset->file_id,
-                    ]
-                */
+                    ->insert($data);
             }
 
             return '1';

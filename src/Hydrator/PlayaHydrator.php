@@ -87,4 +87,50 @@ class PlayaHydrator extends AbstractHydrator
 
         return $value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
+    {
+        $entries = $entity->getAttribute($property->getName());
+
+        // drop old relations
+        $query = $this->db->table('relationships');
+
+        if ($parentEntity && $parentProperty) {
+            $query->where('parent_'.$parentEntity->getPrefix().'_id', $parentEntity->getId())//parent_entry_id
+                ->where('parent_'.$parentProperty->getPrefix().'_id', $parentProperty->getId())//parent_field_id
+                ->where('parent_'.$property->getPrefix().'_id', $property->getId())//parent_col_id
+                ->where('parent_'.$entity->getPrefix().'_id', $entity->getId());//parent_row_id
+        } else {
+            $query->where('parent_'.$property->getPrefix().'_id', $property->getId())//parent_entry_id
+                ->where('parent_'.$entity->getPrefix().'_id', $entity->getId());//parent_field_id
+        }
+
+        $query->delete();
+
+        if ($entries) {
+            foreach ($entries as $i => $entry) {
+                $entry->save();
+
+                $data = [
+                    'parent_'.$property->getPrefix().'_id' => $property->getId(),
+                    'parent_'.$entity->getPrefix().'_id' => $entity->getId(),
+                    'child_entry_id' => $entry->entry_id,
+                    'rel_order' => $i,
+                ];
+
+                if ($parentEntity && $parentProperty) {
+                    $data['parent_'.$parentProperty->getPrefix().'_id'] = $parentProperty->getId();
+                    $data['parent_'.$parentEntity->getPrefix().'_id'] = $parentEntity->getId();
+                }
+
+                $this->db->table('playa_relationships')
+                    ->insert($data);
+            }
+
+            return '1';
+        }
+    }
 }
