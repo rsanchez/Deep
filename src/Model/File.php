@@ -130,7 +130,7 @@ class File extends Model implements FileInterface
     {
         foreach ($collection as $entry) {
             foreach ($entry->channel->fieldsByType('file') as $field) {
-                $value = $entry->getAttribute('field_id_'.$field->field_id);
+                $value = $entry->{$field->getIdentifier()};
 
                 $this->scopeFileTag($query, $value);
             }
@@ -163,7 +163,7 @@ class File extends Model implements FileInterface
 
         foreach ($rows as $row) {
             foreach ($fileCols as $col) {
-                $value = $row->getAttribute('col_id_'.$col->col_id);
+                $value = $row->{$col->getIdentifier()};
 
                 $this->scopeFileTag($query, $value);
             }
@@ -196,7 +196,7 @@ class File extends Model implements FileInterface
 
         foreach ($rows as $row) {
             foreach ($fileCols as $col) {
-                $value = $row->getAttribute('col_id_'.$col->col_id);
+                $value = $row->{$col->getIdentifier()};
 
                 $this->scopeFileTag($query, $value);
             }

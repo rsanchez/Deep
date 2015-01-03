@@ -74,12 +74,4 @@ abstract class AbstractHydrator implements HydratorInterface
      * {@inheritdoc}
      */
     abstract public function hydrate(AbstractEntity $entity, AbstractProperty $property);
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
-    {
-        return (string) $entity->getAttribute($property->getName());
-    }
 }

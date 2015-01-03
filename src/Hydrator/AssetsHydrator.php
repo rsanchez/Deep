@@ -22,7 +22,7 @@ use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 /**
  * Hydrator for the Assets fieldtype
  */
-class AssetsHydrator extends AbstractHydrator
+class AssetsHydrator extends AbstractHydrator implements DehydratorInterface
 {
     /**
      * @var \rsanchez\Deep\Model\Asset
@@ -99,14 +99,10 @@ class AssetsHydrator extends AbstractHydrator
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
         if (isset($this->selections[$entity->getType()][$entity->getId()][$property->getId()])) {
-            $value = $this->selections[$entity->getType()][$entity->getId()][$property->getId()];
-        } else {
-            $value = new AssetCollection();
+            return $this->selections[$entity->getType()][$entity->getId()][$property->getId()];
         }
 
-        $entity->setAttribute($property->getName(), $value);
-
-        return $value;
+        return new AssetCollection();
     }
 
     /**
@@ -114,13 +110,21 @@ class AssetsHydrator extends AbstractHydrator
      */
     public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
-        $assets = $entity->getAttribute($property->getName());
+        $assets = $entity->{$property->getName()};
 
         // drop old relations
-        $this->db->table('assets_selections')
+        $query = $this->db->table('assets_selections')
             ->where($property->getPrefix().'_id', $property->getId())
-            ->where($entity->getPrefix().'_id', $entity->getId())
-            ->delete();
+            ->where($entity->getPrefix().'_id', $entity->getId());
+
+        if ($parentEntity && $parentProperty) {
+            $query->where($parentProperty->getPrefix().'_id', $parentProperty->getId())
+                ->where($parentEntity->getPrefix().'_id', $parentEntity->getId());
+        }
+
+        $query->delete();
+
+        $output = [];
 
         if ($assets) {
             foreach ($assets as $i => $asset) {
@@ -143,7 +147,14 @@ class AssetsHydrator extends AbstractHydrator
                     ->insert($data);
             }
 
-            return '1';
+            // order by file_id
+            $assets->slice(0)->sort(function ($a, $b) {
+                return $a->file_id > $b->file_id ? 1 : -1;
+            })->each(function ($asset) use (&$output) {
+                $output[] = $asset->file_name;
+            });
         }
+
+        return implode("\n", $output);
     }
 }

@@ -22,7 +22,7 @@ use rsanchez\Deep\Collection\MatrixRowCollection;
 /**
  * Hydrator for the Matrix fieldtype
  */
-class MatrixHydrator extends AbstractHydrator
+class MatrixHydrator extends AbstractHydrator implements DehydratorInterface
 {
     /**
      * @var \rsanchez\Deep\Model\MatrixCol
@@ -115,11 +115,27 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = isset($this->sortedRows[$entity->getId()][$property->getId()]) ? $this->sortedRows[$entity->getId()][$property->getId()] : new MatrixRowCollection();
+        if (isset($this->sortedRows[$entity->getId()][$property->getId()])) {
+            $rows = $this->sortedRows[$entity->getId()][$property->getId()];
+        } else {
+            $rows = new MatrixRowCollection();
+        }
 
-        $entity->setAttribute($property->getName(), $value);
+        foreach ($rows as $row) {
+            foreach ($row->getCols() as $col) {
+                $hydrator = $this->hydrators->get($col->getType());
 
-        return $value;
+                if ($hydrator) {
+                    $value = $hydrator->hydrate($row, $col);
+                } else {
+                    $value = $row->{$col->getIdentifier()};
+                }
+
+                $row->setCustomField($col->getName(), $value);
+            }
+        }
+
+        return $rows;
     }
 
     /**
@@ -127,11 +143,26 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
-        $rows = $entity->getAttribute($property->getName());
+        $rows = $entity->{$property->getName()};
 
         if ($rows) {
             foreach ($rows as $i => $row) {
-                $row->row_order = $i;
+                $row->row_order = $i + 1;
+
+                // save once to make sure we have an id
+                if (! $row->exists) {
+                    $row->save();
+                }
+
+                foreach ($row->getCols() as $col) {
+                    $hydrator = $this->hydrators->get($col->getType());
+
+                    if ($hydrator instanceof DehydratorInterface) {
+                        $row->{$col->getIdentifier()} = $hydrator->dehydrate($row, $col, $entity, $property);
+                    } else {
+                        $row->{$col->getIdentifier()} = $row->{$col->getName()};
+                    }
+                }
 
                 $row->save();
             }

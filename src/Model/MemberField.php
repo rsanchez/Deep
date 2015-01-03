@@ -42,7 +42,7 @@ class MemberField extends AbstractField
      */
     public function getFieldNameAttribute($value)
     {
-        return $this->getAttribute('m_field_name');
+        return $this->m_field_name;
     }
 
     /**
@@ -50,7 +50,7 @@ class MemberField extends AbstractField
      */
     public function getFieldIdAttribute($value)
     {
-        return $this->getAttribute('m_field_id');
+        return $this->m_field_id;
     }
 
     /**

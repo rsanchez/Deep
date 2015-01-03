@@ -14,7 +14,9 @@ use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
+use rsanchez\Deep\Collection\PropertyCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
+use rsanchez\Deep\Hydrator\DehydratorInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use Carbon\Carbon;
 use Closure;
@@ -279,8 +281,6 @@ class Title extends AbstractEntity
     {
         $hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators);
 
-        $hasHydrators = ! $hydrators->isEmpty();
-
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
             $hydrator->preload($collection->getEntryIds());
@@ -288,24 +288,22 @@ class Title extends AbstractEntity
 
         // loop again to actually hydrate
         foreach ($collection as $entry) {
+            $entry->hydrators = $hydrators;
+
             foreach ($entry->channel->fields as $field) {
-                if (isset($hydrators[$field->getType()])) {
-                    $hydrators[$field->getType()]->hydrate($entry, $field);
+                $hydrator = $hydrators->get($field->getType());
+
+                if ($hydrator) {
+                    $value = $hydrator->hydrate($entry, $field);
                 } else {
-                    $entry->setAttribute($field->field_name, $entry->getAttribute('field_id_'.$field->field_id));
+                    $value = $entry->{$field->getIdentifier()};
                 }
 
-                if ($hasHydrators && $field->hasRows()) {
-                    foreach ($entry->getAttribute($field->field_name) as $row) {
-                        foreach ($row->getCols() as $col) {
-                            if (isset($hydrators[$col->getType()])) {
-                                $hydrators[$col->getType()]->hydrate($row, $col);
-                            } else {
-                                $row->setAttribute($col->getName(), $row->getAttribute($col->getIdentifier()));
-                            }
-                        }
-                    }
-                }
+                $entry->setCustomField($field->getName(), $value);
+            }
+
+            foreach ($this->extraHydrators as $name) {
+                $entry->setCustomField($name, $hydrators[$name]->hydrate($entry, new NullProperty()));
             }
         }
     }
@@ -429,49 +427,12 @@ class Title extends AbstractEntity
      */
     public function save(array $options = array())
     {
-        $isNew = ! $this->entry_id;
+        $isNew = ! $this->exists;
 
         $saved = parent::save();
 
         if ($saved) {
-            $data = [
-                'entry_id' => $this->entry_id,
-                'channel_id' => $this->channel_id,
-                'site_id' => $this->site_id,
-            ];
-
-            $hasHydrators = $this->hydrators && ! $this->hydrators->isEmpty();
-
-            foreach ($this->channel->fields as $field) {
-                if (isset($this->hydrators[$field->getType()])) {
-                    $data['field_id_'.$field->field_id] = $this->hydrators[$field->getType()]->dehydrate($entry, $field);
-                } else {
-                    $data['field_id_'.$field->field_id] = $entry->getAttribute($field->field_name);
-                }
-
-                if ($hasHydrators && $field->hasRows()) {
-                    $data['field_id_'.$field->field_id] = null;
-
-                    foreach ($entry->getAttribute($field->field_name) as $row) {
-                        $data['field_id_'.$field->field_id] = '1';
-
-                        foreach ($row->getCols() as $col) {
-                            if (isset($this->hydrators[$col->getType()])) {
-                                $this->hydrators[$col->getType()]->dehydrate($entry, $field, $row, $col);
-                            }
-                        }
-                    }
-                }
-            }
-
-            $query = $this->getConnection()->table('channel_data');
-
-            if ($isNew) {
-                $query->insert($data);
-            } else {
-                $query->where('entry_id', $this->entry_id)
-                    ->update($data);
-            }
+            $this->saveCustomFields($isNew);
         }
 
         return $saved;
@@ -1580,11 +1541,75 @@ class Title extends AbstractEntity
     }
 
     /**
-     * Set the hydrator collection for this model
-     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     * {@inheritdoc}
      */
-    public function setHydrators(HydratorCollection $hydrators)
+    public function setRawAttributes(array $attributes, $sync = false)
     {
-        $this->hydrators = $hydrators;
+        foreach ($attributes as $key => $value) {
+            if (preg_match('/^field_(id|dt|ft)_\d+$/', $key)) {
+                $this->customFieldAttributes[$key] = $value;
+
+                unset($attributes[$key]);
+            }
+        }
+
+        parent::setRawAttributes($attributes, $sync);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttribute($name, $value)
+    {
+        if (array_key_exists($name, $this->customFieldAttributes)) {
+            $this->customFieldAttributes[$name] = $value;
+        } else {
+            parent::setAttribute($name, $value);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttribute($name)
+    {
+        if (array_key_exists($name, $this->customFieldAttributes)) {
+            return $this->customFieldAttributes[$name];
+        }
+
+        return parent::getAttribute($name);
+    }
+
+    /**
+     * Dehydrate all custom fields and save to the channel_data table
+     *
+     * @param  bool $isNew
+     * @return void
+     */
+    protected function saveCustomFields($isNew)
+    {
+        $channelData = $this->customFieldAttributes;
+
+        $channelData['channel_id'] = $this->channel_id;
+        $channelData['site_id'] = $this->site_id;
+
+        foreach ($this->channel->fields as $field) {
+            $hydrator = $this->hydrators->get($field->getType());
+
+            if ($hydrator instanceof DehydratorInterface) {
+                $channelData[$field->getIdentifier()] = $hydrator->dehydrate($this, $field);
+            }
+        }
+
+        $query = $this->getConnection()->table('channel_data');
+
+        if ($isNew) {
+            $channelData['entry_id'] = $this->entry_id;
+
+            $query->insert($channelData);
+        } else {
+            $query->where('entry_id', $this->entry_id)
+                ->update($channelData);
+        }
     }
 }

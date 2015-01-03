@@ -20,7 +20,7 @@ use rsanchez\Deep\Collection\PlayaCollection;
 /**
  * Hydrator for the Playa fieldtype
  */
-class PlayaHydrator extends AbstractHydrator
+class PlayaHydrator extends AbstractHydrator implements DehydratorInterface
 {
     /**
      * @var \rsanchez\Deep\Model\PlayaEntry
@@ -81,11 +81,7 @@ class PlayaHydrator extends AbstractHydrator
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 
-        $value = $this->playaCollection->createChildCollection($entries);
-
-        $entity->setAttribute($property->getName(), $value);
-
-        return $value;
+        return $this->playaCollection->createChildCollection($entries);
     }
 
     /**
@@ -93,22 +89,9 @@ class PlayaHydrator extends AbstractHydrator
      */
     public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
-        $entries = $entity->getAttribute($property->getName());
+        $entries = $entity->{$property->getName()};
 
-        // drop old relations
-        $query = $this->db->table('relationships');
-
-        if ($parentEntity && $parentProperty) {
-            $query->where('parent_'.$parentEntity->getPrefix().'_id', $parentEntity->getId())//parent_entry_id
-                ->where('parent_'.$parentProperty->getPrefix().'_id', $parentProperty->getId())//parent_field_id
-                ->where('parent_'.$property->getPrefix().'_id', $property->getId())//parent_col_id
-                ->where('parent_'.$entity->getPrefix().'_id', $entity->getId());//parent_row_id
-        } else {
-            $query->where('parent_'.$property->getPrefix().'_id', $property->getId())//parent_entry_id
-                ->where('parent_'.$entity->getPrefix().'_id', $entity->getId());//parent_field_id
-        }
-
-        $query->delete();
+        $output = [];
 
         if ($entries) {
             foreach ($entries as $i => $entry) {
@@ -126,11 +109,19 @@ class PlayaHydrator extends AbstractHydrator
                     $data['parent_'.$parentEntity->getPrefix().'_id'] = $parentEntity->getId();
                 }
 
-                $this->db->table('playa_relationships')
-                    ->insert($data);
-            }
+                $query = $this->db->table('playa_relationships');
 
-            return '1';
+                if ($entry->rel_id) {
+                    $query->where('rel_id', $entry->rel_id)
+                        ->update($data);
+                } else {
+                    $query->insert($data);
+                }
+
+                $output[] = sprintf('[%s] [%s] %s', $entry->entry_id, $entry->url_title, $entry->title);
+            }
         }
+
+        return implode("\n", $output);
     }
 }

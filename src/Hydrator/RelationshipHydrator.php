@@ -20,7 +20,7 @@ use rsanchez\Deep\Model\RelationshipEntry;
 /**
  * Hydrator for the Relationship fieldtype
  */
-class RelationshipHydrator extends AbstractHydrator
+class RelationshipHydrator extends AbstractHydrator implements DehydratorInterface
 {
     /**
      * @var \rsanchez\Deep\Model\RelationshipEntry
@@ -68,11 +68,7 @@ class RelationshipHydrator extends AbstractHydrator
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 
-        $value = $this->relationshipCollection->createChildCollection($entries);
-
-        $entity->setAttribute($property->getName(), $value);
-
-        return $value;
+        return $this->relationshipCollection->createChildCollection($entries);
     }
 
     /**
@@ -80,22 +76,7 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
-        $entries = $entity->getAttribute($property->getName());
-
-        // drop old relations
-        $query = $this->db->table('relationships');
-
-        if ($parentEntity && $parentProperty) {
-            $query->where('parent_id', $parentEntity->getId())
-                ->where($entity->getPrefix().'_'.$parentProperty->getPrefix().'_id', $parentProperty->getId())//grid_field_id
-                ->where($entity->getPrefix().'_'.$property->getPrefix().'_id', $property->getId())//grid_col_id
-                ->where($entity->getPrefix().'_'.$entity->getPrefix().'_id', $entity->getId());//grid_row_id
-        } else {
-            $query->where('parent_id', $entity->getId())
-                ->where($property->getPrefix().'_id', $property->getId());//field_id
-        }
-
-        $query->delete();
+        $entries = $entity->{$property->getName()};
 
         if ($entries) {
             foreach ($entries as $i => $entry) {
@@ -116,11 +97,17 @@ class RelationshipHydrator extends AbstractHydrator
                     $data[$property->getPrefix().'_id'] = $property->getId();
                 }
 
-                $this->db->table('playa_relationships')
-                    ->insert($data);
+                $query = $this->db->table('playa_relationships');
+
+                if ($entry->relationship_id) {
+                    $query->where('relationship_id', $entry->relationship_id)
+                        ->update($data);
+                } else {
+                    $query->insert($data);
+                }
             }
 
-            return '1';
+            return '';
         }
     }
 }

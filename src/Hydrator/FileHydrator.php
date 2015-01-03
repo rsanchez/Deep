@@ -21,7 +21,7 @@ use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 /**
  * Hydrator for the File fieldtype
  */
-class FileHydrator extends AbstractHydrator
+class FileHydrator extends AbstractHydrator implements DehydratorInterface
 {
     /**
      * @var \rsanchez\Deep\Model\File
@@ -97,13 +97,9 @@ class FileHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = $entity->getAttribute($property->getIdentifier());
+        $value = $entity->{$property->getIdentifier()};
 
-        $value = $value && isset($this->files[$value]) ? $this->files[$value] : null;
-
-        $entity->setAttribute($property->getName(), $value);
-
-        return $value;
+        return $value && isset($this->files[$value]) ? $this->files[$value] : null;
     }
 
     /**
@@ -111,7 +107,7 @@ class FileHydrator extends AbstractHydrator
      */
     public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
     {
-        $file = $entity->getAttribute($property->getName());
+        $file = $entity->{$property->getName()};
 
         return $file ? '{filedir_'.$file->upload_location_id.'}'.$file->file_name : null;
     }

@@ -45,6 +45,21 @@ trait JoinableTrait
     }
 
     /**
+     * Get a new query builder that doesn't have any global scopes.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function newQueryWithoutScopes()
+    {
+        $query = parent::newQueryWithoutScopes();
+
+        // no joins for saving
+        $query->getQuery()->joins = [];
+
+        return $query;
+    }
+
+    /**
      * Set the global eloquent scope
      * @return void
      */

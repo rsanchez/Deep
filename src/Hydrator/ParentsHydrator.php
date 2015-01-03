@@ -65,8 +65,6 @@ class ParentsHydrator extends AbstractHydrator
 
         $value = $this->relationshipCollection->createChildCollection($entries);
 
-        $entity->setAttribute($property->getName(), $value);
-
         return $value;
     }
 }

@@ -35,14 +35,4 @@ interface HydratorInterface
      * @return mixed            the entity property value
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property);
-
-    /**
-     * Convert an entity's property back to saveable format and do any outside DB operations
-     * @param  AbstractEntity        $entity
-     * @param  AbstractProperty      $property
-     * @param  AbstractEntity|null   $parentEntity
-     * @param  AbstractProperty|null $parentProperty
-     * @return mixed            the entity property value
-     */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null);
 }

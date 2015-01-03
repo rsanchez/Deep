@@ -15,19 +15,25 @@ use rsanchez\Deep\Model\AbstractEntity;
 /**
  * Hydrator for the carriage return delimited fields
  */
-class ExplodeHydrator extends AbstractHydrator
+class ExplodeHydrator extends AbstractHydrator implements DehydratorInterface
 {
     /**
      * {@inheritdoc}
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
-        $value = $entity->getAttribute($property->getIdentifier());
+        $value = $entity->{$property->getIdentifier()};
 
-        $value = $value ? explode("\n", $value) : null;
+        return $value ? explode("\n", $value) : null;
+    }
 
-        $entity->setAttribute($property->getName(), $value);
+    /**
+     * {@inheritdoc}
+     */
+    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
+    {
+        $value = $entity->{$property->getName()};
 
-        return $value;
+        return $value ? implode("\n", $value) : null;
     }
 }
