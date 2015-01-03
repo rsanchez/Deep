@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Field;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\Field
@@ -54,9 +55,9 @@ class FieldCollection extends AbstractFieldCollection
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addCustomField($item);
     }
 
     /**
@@ -64,7 +65,7 @@ class FieldCollection extends AbstractFieldCollection
      * @param  \rsanchez\Deep\Model\Field $field
      * @return void
      */
-    public function add(Field $field)
+    public function addCustomField(Field $field)
     {
         $this->addFieldtype($field->field_type);
 
@@ -76,7 +77,7 @@ class FieldCollection extends AbstractFieldCollection
 
         $this->fieldsByFieldtype[$field->field_type]->items[] = $field;
 
-        $this->items[] = $field;
+        $this->addField($field);
     }
 
     /**

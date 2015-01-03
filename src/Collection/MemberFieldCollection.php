@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\MemberField;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\MemberField
@@ -17,12 +18,20 @@ use rsanchez\Deep\Model\MemberField;
 class MemberFieldCollection extends AbstractFieldCollection
 {
     /**
+     * {@inheritdoc}
+     */
+    public function addModel(Model $item)
+    {
+        $this->addMemberField($item);
+    }
+
+    /**
      * Add a MemberField to this collection
      * @param  \rsanchez\Deep\Model\MemberField $item
      * @return void
      */
-    public function add(MemberField $item)
+    public function addMemberField(MemberField $item)
     {
-        parent::add($item);
+        $this->addField($item);
     }
 }

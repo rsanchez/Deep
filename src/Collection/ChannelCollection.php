@@ -10,19 +10,19 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Channel;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\Channel
  */
-class ChannelCollection extends Collection
+class ChannelCollection extends AbstractModelCollection
 {
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addChannel($item);
     }
 
     /**
@@ -30,7 +30,7 @@ class ChannelCollection extends Collection
      * @param  \rsanchez\Deep\Model\Channel $item
      * @return void
      */
-    public function add(Channel $item)
+    public function addChannel(Channel $item)
     {
         $this->items[] = $item;
     }

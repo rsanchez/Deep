@@ -10,21 +10,21 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\MatrixRow;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\MatrixRow
  */
-class MatrixRowCollection extends Collection implements FilterableInterface
+class MatrixRowCollection extends AbstractModelCollection implements FilterableInterface
 {
     use FilterableTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addMatrixRow($item);
     }
 
     /**
@@ -32,7 +32,7 @@ class MatrixRowCollection extends Collection implements FilterableInterface
      * @param  \rsanchez\Deep\Model\MatrixRow $item
      * @return void
      */
-    public function add(MatrixRow $item)
+    public function addMatrixRow(MatrixRow $item)
     {
         $this->items[] = $item;
     }

@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\GridCol;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\GridCol
@@ -18,12 +18,20 @@ use Illuminate\Database\Eloquent\Collection;
 class GridColCollection extends PropertyCollection
 {
     /**
+     * {@inheritdoc}
+     */
+    public function addModel(Model $item)
+    {
+        $this->addGridCol($item);
+    }
+
+    /**
      * Add a GridCol to this collection
      * @param  \rsanchez\Deep\Model\GridCol $item
      * @return void
      */
-    public function add(GridCol $item)
+    public function addGridCol(GridCol $item)
     {
-        parent::add($item);
+        $this->addProperty($item);
     }
 }

@@ -10,19 +10,19 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Site;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\Site
  */
-class SiteCollection extends Collection
+class SiteCollection extends AbstractModelCollection
 {
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addSite($item);
     }
 
     /**
@@ -30,7 +30,7 @@ class SiteCollection extends Collection
      * @param  \rsanchez\Deep\Model\Site $item
      * @return void
      */
-    public function add(Site $item)
+    public function addSite(Site $item)
     {
         $this->items[] = $item;
     }

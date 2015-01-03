@@ -10,27 +10,28 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\AbstractProperty;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\AbstractProperty
  */
-class PropertyCollection extends Collection
+class PropertyCollection extends AbstractModelCollection
 {
     /**
      * {@inheritdoc}
+     * @param \rsanchez\Deep\Model\AbstractProperty $item
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addProperty($item);
     }
 
     /**
-     * Add a GridCol to this collection
+     * Add an AbstractProperty to this collection
      * @param  \rsanchez\Deep\Model\AbstractProperty $item
      * @return void
      */
-    public function add(AbstractProperty $item)
+    public function addProperty(AbstractProperty $item)
     {
         $this->items[] = $item;
     }

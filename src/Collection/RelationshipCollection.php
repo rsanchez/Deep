@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\RelationshipEntry;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\RelationshipEntry
@@ -17,13 +18,21 @@ use rsanchez\Deep\Model\RelationshipEntry;
 class RelationshipCollection extends EntryCollection
 {
     /**
+     * {@inheritdoc}
+     */
+    public function addModel(Model $item)
+    {
+        $this->addRelationshipEntry($item);
+    }
+
+    /**
      * Add a RelationshipEntry to this collection
      * @param  \rsanchez\Deep\Model\RelationshipEntry $item
      * @return void
      */
-    public function add(RelationshipEntry $item)
+    public function addRelationshipEntry(RelationshipEntry $item)
     {
-        parent::add($item);
+        $this->addEntry($item);
     }
 
     /**

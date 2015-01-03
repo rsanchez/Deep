@@ -10,21 +10,21 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Asset;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\Asset
  */
-class AssetCollection extends Collection implements FilterableInterface
+class AssetCollection extends AbstractModelCollection implements FilterableInterface
 {
     use FilterableTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addAsset($item);
     }
 
     /**
@@ -32,7 +32,7 @@ class AssetCollection extends Collection implements FilterableInterface
      * @param  \rsanchez\Deep\Model\Asset $item
      * @return void
      */
-    public function add(Asset $item)
+    public function addAsset(Asset $item)
     {
         $this->items[] = $item;
     }

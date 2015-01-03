@@ -10,21 +10,21 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\GridRow;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\GridRow
  */
-class GridRowCollection extends Collection implements FilterableInterface
+class GridRowCollection extends AbstractModelCollection implements FilterableInterface
 {
     use FilterableTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addGridRow($item);
     }
 
     /**
@@ -32,7 +32,7 @@ class GridRowCollection extends Collection implements FilterableInterface
      * @param  \rsanchez\Deep\Model\GridRow $item
      * @return void
      */
-    public function add(GridRow $item)
+    public function addGridRow(GridRow $item)
     {
         $this->items[] = $item;
     }

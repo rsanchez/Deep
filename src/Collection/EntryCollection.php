@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Entry;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\FieldRepository;
@@ -191,12 +191,20 @@ class EntryCollection extends TitleCollection
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function addModel(Model $item)
+    {
+        $this->addEntry($item);
+    }
+
+    /**
      * Add a Entry to this collection
      * @param  \rsanchez\Deep\Model\Entry $item
      * @return void
      */
-    public function add(Entry $item)
+    public function addEntry(Entry $item)
     {
-        parent::add($item);
+        $this->addTitle($item);
     }
 }

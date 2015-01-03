@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\AbstractField;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\AbstractField
@@ -47,15 +47,23 @@ abstract class AbstractFieldCollection extends PropertyCollection
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function addModel(Model $item)
+    {
+        $this->addField($item);
+    }
+
+    /**
      * Add an AbstractField to this collection
      * @param  \rsanchez\Deep\Model\AbstractField $item
      * @return void
      */
-    public function add(AbstractField $field)
+    public function addField(AbstractField $field)
     {
         $this->fieldsByName[$field->field_name] = $field;
 
-        return parent::add($field);
+        $this->items[] =$field;
     }
 
     /**

@@ -11,12 +11,12 @@ namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Repository\ChannelRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\Title
  */
-abstract class AbstractTitleCollection extends Collection implements FilterableInterface
+abstract class AbstractTitleCollection extends AbstractModelCollection implements FilterableInterface
 {
     use FilterableTrait;
 
@@ -164,9 +164,9 @@ abstract class AbstractTitleCollection extends Collection implements FilterableI
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function addModel(Model $item)
     {
-        $this->add($item);
+        $this->addTitle($item);
     }
 
     /**
@@ -174,7 +174,7 @@ abstract class AbstractTitleCollection extends Collection implements FilterableI
      * @param  \rsanchez\Deep\Model\Title $item
      * @return void
      */
-    public function add(Title $item)
+    public function addTitle(Title $item)
     {
         $this->items[] = $item;
     }
