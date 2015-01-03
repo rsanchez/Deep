@@ -64,6 +64,16 @@ class GridRow extends AbstractEntity
     }
 
     /**
+     * Get the Grid columns associated with this row
+     *
+     * @return \rsanchez\Deep\Collection\GridColCollection
+     */
+    public function getCols()
+    {
+        return $this->cols;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getProperties()
