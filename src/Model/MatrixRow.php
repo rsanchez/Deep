@@ -94,7 +94,7 @@ class MatrixRow extends AbstractEntity
      */
     public function getProperties()
     {
-        return $this->getCols();
+        return $this->getCols() ?: new MatrixColCollection();
     }
 
     /**
@@ -111,7 +111,7 @@ class MatrixRow extends AbstractEntity
     /**
      * Get the Matrix columns associated with this row
      *
-     * @return \rsanchez\Deep\Collection\MatrixColCollection
+     * @return \rsanchez\Deep\Collection\MatrixColCollection|null
      */
     public function getCols()
     {

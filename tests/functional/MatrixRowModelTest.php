@@ -20,7 +20,7 @@ class MatrixRowModelTest extends PHPUnit_Framework_TestCase
 
         $row->setCols($cols);
 
-        $this->assertEquals('Text', $row->text);
+        $this->assertInstanceOf('\\rsanchez\\Deep\\Collection\\MatrixColCollection', $row->getCols());
     }
 
     public function testSetColsHidden()

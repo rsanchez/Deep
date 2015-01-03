@@ -71,7 +71,7 @@ class GridRow extends AbstractEntity
     /**
      * Get the Grid columns associated with this row
      *
-     * @return \rsanchez\Deep\Collection\GridColCollection
+     * @return \rsanchez\Deep\Collection\GridColCollection|null
      */
     public function getCols()
     {
@@ -83,7 +83,7 @@ class GridRow extends AbstractEntity
      */
     public function getProperties()
     {
-        return $this->getCols();
+        return $this->getCols() ?: new GridColCollection();
     }
 
     /**
