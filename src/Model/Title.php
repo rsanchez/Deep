@@ -105,6 +105,12 @@ class Title extends AbstractEntity
     protected $defaultChannelName;
 
     /**
+     * List of attributes from channel_data
+     * @var array
+     */
+    protected $customFieldAttributes = [];
+
+    /**
      * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
