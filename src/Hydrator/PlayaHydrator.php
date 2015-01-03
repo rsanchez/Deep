@@ -55,7 +55,7 @@ class PlayaHydrator extends AbstractHydrator
 
         $this->model = $model;
 
-        $this->playaCollection = $this->model->parentEntryId($collection->modelKeys())->get();
+        $this->playaCollection = $this->model->parentEntryId($collection->modelKeys())->orderBy('rel_order')->get();
 
         foreach ($this->playaCollection as $entry) {
             $type = $entry->parent_row_id ? 'matrix' : 'entry';

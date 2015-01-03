@@ -42,7 +42,7 @@ class RelationshipHydrator extends AbstractHydrator
 
         $this->model = $model;
 
-        $this->relationshipCollection = $this->model->parentEntryId($collection->modelKeys())->get();
+        $this->relationshipCollection = $this->model->parentEntryId($collection->modelKeys())->orderBy('order')->get();
 
         foreach ($this->relationshipCollection as $entry) {
             $type = $entry->grid_field_id ? 'grid' : 'entry';
