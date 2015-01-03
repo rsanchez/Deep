@@ -77,7 +77,7 @@ class GridHydrator extends AbstractHydrator
 
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $this->cols = $this->colModel->fieldId($fieldIds)->get();
+        $this->cols = $this->colModel->fieldId($fieldIds)->orderBy('col_order')->get();
 
         foreach ($this->cols as $col) {
             if (! isset($this->sortedCols[$col->field_id])) {
@@ -100,7 +100,7 @@ class GridHydrator extends AbstractHydrator
         $this->rows = new GridRowCollection();
 
         foreach ($fieldIds as $fieldId) {
-            $rows = $this->rowModel->fieldId($fieldId)->entryId($entryIds)->orderBy('row_order', 'asc')->get();
+            $rows = $this->rowModel->fieldId($fieldId)->entryId($entryIds)->orderBy('row_order')->get();
 
             foreach ($rows as $row) {
                 if (! isset($this->sortedRows[$row->entry_id][$row->field_id])) {

@@ -77,7 +77,7 @@ class MatrixHydrator extends AbstractHydrator
 
         $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
 
-        $this->cols = $this->colModel->fieldId($fieldIds)->get();
+        $this->cols = $this->colModel->fieldId($fieldIds)->orderBy('col_order')->get();
 
         foreach ($this->cols as $col) {
             if (! isset($this->sortedCols[$col->field_id])) {
@@ -95,7 +95,7 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function preload(array $entryIds)
     {
-        $this->rows = $this->rowModel->entryId($entryIds)->orderBy('row_order', 'asc')->get();
+        $this->rows = $this->rowModel->entryId($entryIds)->orderBy('row_order')->get();
 
         foreach ($this->rows as $row) {
             if (! isset($this->sortedRows[$row->entry_id][$row->field_id])) {
