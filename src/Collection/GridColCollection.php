@@ -15,16 +15,8 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Collection of \rsanchez\Deep\Model\GridCol
  */
-class GridColCollection extends Collection
+class GridColCollection extends PropertyCollection
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
     /**
      * Add a GridCol to this collection
      * @param  \rsanchez\Deep\Model\GridCol $item
@@ -32,6 +24,6 @@ class GridColCollection extends Collection
      */
     public function add(GridCol $item)
     {
-        $this->items[] = $item;
+        parent::add($item);
     }
 }

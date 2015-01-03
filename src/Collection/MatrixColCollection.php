@@ -15,16 +15,8 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Collection of \rsanchez\Deep\Model\MatrixCol
  */
-class MatrixColCollection extends Collection
+class MatrixColCollection extends PropertyCollection
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
     /**
      * Add a MatrixCol to this collection
      * @param  \rsanchez\Deep\Model\MatrixCol $item
@@ -32,6 +24,6 @@ class MatrixColCollection extends Collection
      */
     public function add(MatrixCol $item)
     {
-        $this->items[] = $item;
+        parent::add($item);
     }
 }

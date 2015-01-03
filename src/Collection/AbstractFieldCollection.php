@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Collection of \rsanchez\Deep\Model\AbstractField
  */
-abstract class AbstractFieldCollection extends Collection
+abstract class AbstractFieldCollection extends PropertyCollection
 {
     /**
      * array of field_name => \rsanchez\Deep\Model\AbstractField
@@ -47,14 +47,6 @@ abstract class AbstractFieldCollection extends Collection
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
-    /**
      * Add an AbstractField to this collection
      * @param  \rsanchez\Deep\Model\AbstractField $item
      * @return void
@@ -63,7 +55,7 @@ abstract class AbstractFieldCollection extends Collection
     {
         $this->fieldsByName[$field->field_name] = $field;
 
-        return parent::push($field);
+        return parent::add($field);
     }
 
     /**
