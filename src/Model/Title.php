@@ -148,20 +148,6 @@ class Title extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * Invoke any invokeable attributes
-     */
-    public function __call($name, $args)
-    {
-        if (isset($this->attributes[$name]) && is_callable($this->attributes[$name])) {
-            return call_user_func_array($this->attributes[$name], $args);
-        }
-
-        return parent::__call($name, $args);
-    }
-
-    /**
-     * {@inheritdoc}
      */
     public function getId()
     {

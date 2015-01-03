@@ -32,6 +32,11 @@ class Entry extends Title
     public static $fieldRepository;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $hiddenPatterns = ['/^field_(id|ft|dt)_\d+$/'];
+
+    /**
      * Set the global FieldRepository
      * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
      * @return void
@@ -98,29 +103,6 @@ class Entry extends Title
         }
 
         return $this->getArrayableItems($attributes);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray()
-    {
-        $array = parent::toArray();
-
-        // remove field_id_X fields from the array
-        foreach ($this->attributes as $key => $value) {
-            if (preg_match('#^field_(id|dt|ft)_#', $key)) {
-                unset($array[$key]);
-            }
-        }
-
-        $this->channel->fields->each(function ($field) use (&$array) {
-            if (isset($array[$field->field_name]) && method_exists($array[$field->field_name], 'toArray')) {
-                $array[$field->field_name] = $array[$field->field_name]->toArray();
-            }
-        });
-
-        return $array;
     }
 
     /**

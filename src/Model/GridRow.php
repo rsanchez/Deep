@@ -31,6 +31,11 @@ class GridRow extends AbstractEntity
     protected $hidden = array('site_id', 'entry_id', 'field_id', 'row_order');
 
     /**
+     * {@inheritdoc}
+     */
+    protected $hiddenPatterns = ['/^col_id_\d+$/'];
+
+    /**
      * Cols associated with this row
      * @var \rsanchez\Deep\Collection\GridColCollection
      */
@@ -115,35 +120,7 @@ class GridRow extends AbstractEntity
      */
     public function setCols(GridColCollection $cols)
     {
-        $row = $this;
-
         $this->cols = $cols;
-
-        $cols->each(function ($col) use ($row) {
-            $hidden = $row->getHidden();
-
-            $hidden[] = 'col_id_'.$col->col_id;
-
-            $row->setHidden($hidden);
-
-            $row->setAttribute($col->col_name, $row->getAttribute('col_id_'.$col->col_id));
-        });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray()
-    {
-        $array = parent::toArray();
-
-        foreach ($array as &$row) {
-            if (method_exists($row, 'toArray')) {
-                $row = $row->toArray();
-            }
-        }
-
-        return $array;
     }
 
     /**
