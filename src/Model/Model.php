@@ -17,6 +17,11 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 abstract class Model extends Eloquent
 {
     /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
      * Name of the connection to use for all Deep models
      * @var string
      */
