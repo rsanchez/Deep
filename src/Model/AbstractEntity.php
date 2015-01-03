@@ -31,4 +31,10 @@ abstract class AbstractEntity extends Model
      * @return string|null
      */
     abstract public function getPrefix();
+
+    /**
+     * Get collection of AbstractProperties
+     * @return \rsanchez\Deep\Collection\PropertyCollection
+     */
+    abstract public function getProperties();
 }

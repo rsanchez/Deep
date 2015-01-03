@@ -64,6 +64,14 @@ class GridRow extends AbstractEntity
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getProperties()
+    {
+        return $this->getCols();
+    }
+
+    /**
      * Filter by Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query

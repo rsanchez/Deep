@@ -186,6 +186,14 @@ class Title extends AbstractEntity
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getProperties()
+    {
+        return new PropertyCollection();
+    }
+
+    /**
      * Set the global ChannelRepository
      * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
      * @return void

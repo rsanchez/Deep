@@ -85,6 +85,14 @@ class MatrixRow extends AbstractEntity
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getProperties()
+    {
+        return $this->getCols();
+    }
+
+    /**
      * Set the Matrix columns for this row
      *
      * @param  \rsanchez\Deep\Collection\MatrixColCollection $cols

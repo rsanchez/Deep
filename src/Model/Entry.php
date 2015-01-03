@@ -75,6 +75,14 @@ class Entry extends Title
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getProperties()
+    {
+        return $this->channel->fields;
+    }
+
+    /**
      * Get an attribute array of all arrayable attributes.
      *
      * @return array
