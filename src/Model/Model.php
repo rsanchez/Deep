@@ -10,6 +10,8 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Validation\Factory as Validator;
+use rsanchez\Deep\Exception\ValidationException;
 
 /**
  * Abstract base model
@@ -28,6 +30,17 @@ abstract class Model extends Eloquent
     protected static $globalConnection;
 
     /**
+     * @var \Illuminate\Validation\Factory
+     */
+    protected static $validator;
+
+    /**
+     * List of Illuminate\Validation rules
+     * @var array
+     */
+    protected $rules = [];
+
+    /**
      * Set the global connection name for all Deep models
      * @param  string $connection
      * @return void
@@ -44,6 +57,35 @@ abstract class Model extends Eloquent
     public static function getGlobalConnection()
     {
         return static::$globalConnection;
+    }
+
+    /**
+     * Set the Validator factory instance for models
+     * @param \Illuminate\Validation\Factory $validator
+     */
+    public static function setValidator(Validator $validator)
+    {
+        static::$validator = $validator;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Override to validate if validator and rules are present
+     *
+     * @throws \rsanchez\Deep\Exception\ValidationException
+     */
+    public function save(array $options = [])
+    {
+        if (self::$validator && $this->rules) {
+            $validator = self::$validator->make($this->attributes, $this->rules);
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator->messages());
+            }
+        }
+
+        return parent::save($options);
     }
 
     /**

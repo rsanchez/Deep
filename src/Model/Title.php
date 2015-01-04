@@ -113,6 +113,13 @@ class Title extends AbstractEntity
     protected $customFieldAttributes = [];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $rules = [
+        'title' => 'required',
+    ];
+
+    /**
      * Define the Author Eloquent relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

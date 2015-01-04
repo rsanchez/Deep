@@ -18,8 +18,15 @@ class ServiceProvider extends LaravelServiceProvider
             Model::setGlobalConnection($connection);
         }
 
-        $this->app->singleton('deep', function () {
-            return new Deep();
+        $this->app->singleton('deep', function ($app) {
+            $deep = new Deep();
+
+            // use Laravel's Validator
+            $deep->extend('validator', function($deep) use ($app) {
+                return $app->make('validator');
+            });
+
+            return $deep;
         });
 
         $this->app->singleton('deep.entry', function ($app) {
