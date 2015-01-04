@@ -39,7 +39,7 @@ use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use Symfony\Component\Translation\Translator;
-use rsanchez\Deep\Validation\Factory as Validator;
+use Illuminate\Validation\Factory as ValidatorFactory;
 use Symfony\Component\Translation\Loader\ArrayLoader as TranslationArrayLoader;
 use Carbon\Carbon;
 use CI_Controller;
@@ -69,22 +69,22 @@ class Deep extends Container
             return Model::resolveConnection(Model::getGlobalConnection());
         });
 
-        $this->singleton('validator', function ($app) {
+        $this->singleton('ValidatorFactory', function ($app) {
             $translator = new Translator('en');
 
-            $validator = new Validator($translator);
+            $validatorFactory = new ValidatorFactory($translator);
 
             $translator->addLoader('array', new TranslationArrayLoader());
 
-            $translator->addResource('array', ['validation' => $validator->getDefaultMessages()], 'en');
+            $translator->addResource('array', ['validation' => Model::getValidationMessages()], 'en');
 
-            return $validator;
+            return $validatorFactory;
         });
 
         $this->singleton('Field', function ($app) {
             $model = new Field();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -97,7 +97,7 @@ class Deep extends Container
             $channel = new Channel();
 
             $channel->setFieldRepository($app->make('FieldRepository'));
-            $channel->setValidator($app->make('validator'));
+            $channel->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $channel;
         });
@@ -105,7 +105,7 @@ class Deep extends Container
         $this->singleton('Site', function ($app) {
             $model = new Site();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -113,7 +113,7 @@ class Deep extends Container
         $this->singleton('UploadPref', function ($app) {
             $model = new UploadPref();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -121,7 +121,7 @@ class Deep extends Container
         $this->singleton('CategoryField', function ($app) {
             $model = new CategoryField();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -129,7 +129,7 @@ class Deep extends Container
         $this->singleton('MemberField', function ($app) {
             $model = new MemberField();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -161,7 +161,7 @@ class Deep extends Container
         $this->singleton('Asset', function ($app) {
             $model = new Asset();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -169,7 +169,7 @@ class Deep extends Container
         $this->singleton('File', function ($app) {
             $model = new File();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -177,7 +177,7 @@ class Deep extends Container
         $this->singleton('GridCol', function ($app) {
             $model = new GridCol();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -185,7 +185,7 @@ class Deep extends Container
         $this->singleton('GridRow', function ($app) {
             $model = new GridRow();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -193,7 +193,7 @@ class Deep extends Container
         $this->singleton('MatrixCol', function ($app) {
             $model = new MatrixCol();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -201,7 +201,7 @@ class Deep extends Container
         $this->singleton('MatrixRow', function ($app) {
             $model = new MatrixRow();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -209,7 +209,7 @@ class Deep extends Container
         $this->singleton('PlayaEntry', function ($app) {
             $model = new PlayaEntry();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -217,7 +217,7 @@ class Deep extends Container
         $this->singleton('RelationshipEntry', function ($app) {
             $model = new RelationshipEntry();
 
-            $model->setValidator($app->make('validator'));
+            $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
@@ -243,7 +243,7 @@ class Deep extends Container
 
             $category->setCategoryFieldRepository($app->make('CategoryFieldRepository'));
             $category->setChannelRepository($app->make('ChannelRepository'));
-            $category->setValidator($app->make('validator'));
+            $category->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $category;
         });
@@ -252,7 +252,7 @@ class Deep extends Container
             $member = new Member();
 
             $member->setMemberFieldRepository($app->make('MemberFieldRepository'));
-            $member->setValidator($app->make('validator'));
+            $member->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $member;
         });
@@ -266,7 +266,7 @@ class Deep extends Container
             $title->setChannelRepository($app->make('ChannelRepository'));
             $title->setSiteRepository($app->make('SiteRepository'));
             $title->setHydratorFactory($app->make('HydratorFactory'));
-            $title->setValidator($app->make('validator'));
+            $title->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $title;
         });

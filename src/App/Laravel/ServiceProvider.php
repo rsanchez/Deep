@@ -22,7 +22,7 @@ class ServiceProvider extends LaravelServiceProvider
             $deep = new Deep();
 
             // use Laravel's Validator
-            $deep->extend('validator', function($deep) use ($app) {
+            $deep->extend('ValidatorFactory', function($deep) use ($app) {
                 return $app->make('validator');
             });
 
