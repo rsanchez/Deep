@@ -80,8 +80,24 @@ class MemberField extends AbstractField
     /**
      * {@inheritdoc}
      */
+    public function getLabel()
+    {
+        return $this->m_field_label;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return $this->m_field_type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRequired()
+    {
+        return $this->m_field_required === 'y';
     }
 }

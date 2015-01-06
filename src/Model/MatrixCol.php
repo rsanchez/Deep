@@ -95,4 +95,28 @@ class MatrixCol extends AbstractProperty
     {
         return 'col';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->col_label;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettings()
+    {
+        return @unserialize(base64_decode($this->col_settings)) ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRequired()
+    {
+        return $this->col_required === 'y';
+    }
 }

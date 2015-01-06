@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Model;
+use rsanchez\Deep\Validation\Validator;
 
 class ServiceProvider extends LaravelServiceProvider
 {
@@ -23,7 +24,15 @@ class ServiceProvider extends LaravelServiceProvider
 
             // use Laravel's Validator
             $deep->extend('ValidatorFactory', function($deep) use ($app) {
-                return $app->make('validator');
+                $validatorFactory = new ValidatorFactory($app['validator']->getTranslator(), $app);
+
+                $validatorFactory->setPresenceVerifier($deep->make('ValidationPresenceVerifier'));
+
+                $validatorFactory->resolver(function ($translator, $data, $rules, $messages) {
+                    return new Validator($translator, $data, $rules, $messages);
+                });
+
+                return $validatorFactory;
             });
 
             return $deep;

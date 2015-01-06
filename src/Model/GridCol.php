@@ -95,4 +95,28 @@ class GridCol extends AbstractProperty
     {
         return 'col';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->col_label;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettings()
+    {
+        return @json_decode($this->col_settings, true) ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRequired()
+    {
+        return $this->col_required === 'y';
+    }
 }

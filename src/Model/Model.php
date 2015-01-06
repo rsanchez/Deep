@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Exception\ValidationException;
+use rsanchez\Deep\Validation\ValidatableInterface;
 
 /**
  * Abstract base model
@@ -20,12 +21,18 @@ use rsanchez\Deep\Exception\ValidationException;
  * 2) Ability to set global DB connection
  * 3) Self-validating if a validation factory is set
  */
-abstract class Model extends Eloquent
+abstract class Model extends Eloquent implements ValidatableInterface
 {
     /**
      * {@inheritdoc}
      */
     public $timestamps = false;
+
+    /**
+     * Whether this should validate on save
+     * @var boolean
+     */
+    protected $shouldValidate = true;
 
     /**
      * Name of the connection to use for all Deep models
@@ -39,87 +46,16 @@ abstract class Model extends Eloquent
     protected static $validatorFactory;
 
     /**
-     * List of validation messages
-     * @var array
-     */
-    protected static $validationMessages = [
-        'accepted' => 'The :attribute must be accepted.',
-        'active_url' => 'The :attribute is not a valid URL.',
-        'after' => 'The :attribute must be a date after :date.',
-        'alpha' => 'The :attribute may only contain letters.',
-        'alpha_dash' => 'The :attribute may only contain letters, numbers, and dashes.',
-        'alpha_num' => 'The :attribute may only contain letters and numbers.',
-        'array' => 'The :attribute must be an array.',
-        'before' => 'The :attribute must be a date before :date.',
-        'between' => [
-            'numeric' => 'The :attribute must be between :min and :max.',
-            'file' => 'The :attribute must be between :min and :max kilobytes.',
-            'string' => 'The :attribute must be between :min and :max characters.',
-            'array' => 'The :attribute must have between :min and :max items.',
-        ],
-        'boolean' => 'The :attribute field must be true or false.',
-        'confirmed' => 'The :attribute confirmation does not match.',
-        'date' => 'The :attribute is not a valid date.',
-        'date_format' => 'The :attribute does not match the format :format.',
-        'different' => 'The :attribute and :other must be different.',
-        'digits' => 'The :attribute must be :digits digits.',
-        'digits_between' => 'The :attribute must be between :min and :max digits.',
-        'email' => 'The :attribute must be a valid email address.',
-        'exists' => 'The selected :attribute is invalid.',
-        'image' => 'The :attribute must be an image.',
-        'in' => 'The selected :attribute is invalid.',
-        'integer' => 'The :attribute must be an integer.',
-        'ip' => 'The :attribute must be a valid IP address.',
-        'max' => [
-            'numeric' => 'The :attribute may not be greater than :max.',
-            'file' => 'The :attribute may not be greater than :max kilobytes.',
-            'string' => 'The :attribute may not be greater than :max characters.',
-            'array' => 'The :attribute may not have more than :max items.',
-        ],
-        'mimes' => 'The :attribute must be a file of type: :values.',
-        'min' => [
-            'numeric' => 'The :attribute must be at least :min.',
-            'file' => 'The :attribute must be at least :min kilobytes.',
-            'string' => 'The :attribute must be at least :min characters.',
-            'array' => 'The :attribute must have at least :min items.',
-        ],
-        'not_in' => 'The selected :attribute is invalid.',
-        'numeric' => 'The :attribute must be a number.',
-        'regex' => 'The :attribute format is invalid.',
-        'required' => 'The :attribute field is required.',
-        'required_if' => 'The :attribute field is required when :other is :value.',
-        'required_with' => 'The :attribute field is required when :values is present.',
-        'required_with_all' => 'The :attribute field is required when :values is present.',
-        'required_without' => 'The :attribute field is required when :values is not present.',
-        'required_without_all' => 'The :attribute field is required when none of :values are present.',
-        'same' => 'The :attribute and :other must match.',
-        'size' => [
-            'numeric' => 'The :attribute must be :size.',
-            'file' => 'The :attribute must be :size kilobytes.',
-            'string' => 'The :attribute must be :size characters.',
-            'array' => 'The :attribute must contain :size items.',
-        ],
-        'unique' => 'The :attribute has already been taken.',
-        'url' => 'The :attribute format is invalid.',
-        'timezone' => 'The :attribute must be a valid zone.',
-        /**/
-        'url_title' => 'The :attribute must contain only letters, numbers, dashes and underscores.',
-        /**/
-        'custom' => [
-            /*
-            'attribute-name' => array(
-                'rule-name' => 'custom-message',
-            ),
-            */
-        ],
-        'attributes' => [],
-    ];
-
-    /**
      * List of Illuminate\Validation rules
      * @var array
      */
     protected $rules = [];
+
+    /**
+     * List of attribute names/labels
+     * @var array
+     */
+    protected $attributeNames = [];
 
     /**
      * Set the global connection name for all Deep models
@@ -156,6 +92,24 @@ abstract class Model extends Eloquent
     }
 
     /**
+     * Turn on validation on save
+     * @return void
+     */
+    public function enableValidation()
+    {
+        $this->shouldValidate = true;
+    }
+
+    /**
+     * Turn off validation on save
+     * @return void
+     */
+    public function disableValidation()
+    {
+        $this->shouldValidate = false;
+    }
+
+    /**
      * Get the global connection name for all Deep models
      * @return string|null
      */
@@ -184,23 +138,112 @@ abstract class Model extends Eloquent
     }
 
     /**
-     * Add a default validation message
-     * @param  string $name
-     * @param  string $message
-     * @return void
+     * Get validation rules for this model when updating existing
+     * @return array
      */
-    public static function addValidationMessage($name, $message)
+    public function getUpdateValidationRules()
     {
-        static::$validationMessages[$name] = $message;
+        return $this->rules;
     }
 
     /**
-     * Get the default validation messages
+     * Get validation rules for this model when creating new
      * @return array
      */
-    public static function getValidationMessages()
+    public function getInsertValidationRules()
     {
-        return static::$validationMessages;
+        return $this->rules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationRules($prefix = '', $required = false)
+    {
+        $rules = $this->exists ? $this->getUpdateValidationRules() :  $this->getInsertValidationRules();
+
+        if ($prefix) {
+
+            $prefix = rtrim($prefix, '.');
+
+            if ($required) {
+                $rules[$prefix] = 'required';
+            }
+
+            foreach (array_keys($rules) as $key) {
+                $rules[$prefix.'.'.$key] = $rules[$key];
+
+                unset($rules[$key]);
+            }
+        }
+
+        return $rules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidatableAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateOrFail()
+    {
+        return $this->validate(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($exceptionOnFailure = false)
+    {
+        if (! self::$validatorFactory) {
+            return true;
+        }
+
+        $rules = $this->getValidationRules();
+
+        if (! $rules) {
+            return true;
+        }
+
+        $this->extendValidation(self::$validatorFactory);
+
+        $data = $this->getValidatableAttributes();
+
+        $validator = self::$validatorFactory->make($data, $rules);
+
+        $validator->setAttributeNames($this->getAttributeNames());
+
+        if ($exceptionOnFailure && $validator->fails()) {
+            throw new ValidationException($validator->messages());
+        }
+
+        return $validator->passes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeNames($prefix = '')
+    {
+        $names = $this->attributeNames;
+
+        if ($prefix) {
+            $prefix = rtrim($prefix, '.').'.';
+
+            foreach (array_keys($names) as $key) {
+                $names[$prefix.$key] = $names[$key];
+
+                unset($names[$key]);
+            }
+        }
+
+        return $names;
     }
 
     /**
@@ -212,13 +255,13 @@ abstract class Model extends Eloquent
      */
     public function save(array $options = [])
     {
-        if (self::$validatorFactory && $this->rules) {
-            $this->extendValidation(self::$validatorFactory);
+        $disableValidation = isset($options['validate']) && $options['validate'] === false;
 
-            $validator = self::$validatorFactory->make($this->attributes, $this->rules);
+        if ($this->shouldValidate && ! $disableValidation) {
+            $valid = $this->validateOrFail();
 
-            if ($validator->fails()) {
-                throw new ValidationException($validator->messages());
+            if (! $valid) {
+                return false;
             }
         }
 

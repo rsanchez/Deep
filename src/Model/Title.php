@@ -14,10 +14,12 @@ use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
+use rsanchez\Deep\Collection\AbstractModelCollection;
 use rsanchez\Deep\Collection\PropertyCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Hydrator\DehydratorInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
+use rsanchez\Deep\Validation\ValidatableInterface;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -116,7 +118,60 @@ class Title extends AbstractEntity
      * {@inheritdoc}
      */
     protected $rules = [
+        'site_id' => 'required|exists:sites,site_id',
+        'channel_id' => 'required|exists:channels,channel_id',
+        'author_id' => 'required|exists:members,member_id',
+        'forum_topic_id' => 'sometimes|exists:forum_topics,forum_topic_id',
+        'ip_address' => 'sometimes|ip',
         'title' => 'required',
+        'url_title' => 'required|alpha_dash|unique:channel_titles,url_title',
+        'status' => 'required',
+        'versioning_enabled' => 'required|yes_or_no',
+        'view_count_one' => 'required|integer',
+        'view_count_two' => 'required|integer',
+        'view_count_three' => 'required|integer',
+        'view_count_four' => 'required|integer',
+        'allow_comments' => 'required|yes_or_no',
+        'sticky' => 'required|yes_or_no',
+        'entry_date' => 'required|date_format:U',
+        'year' => 'required|integer',
+        'month' => 'required|digits:2',
+        'day' => 'required|digits:2',
+        'expiration_date' => 'sometimes|date_format:U',
+        'comment_expiration_date' => 'sometimes|date_format:U',
+        'edit_date' => 'required|date_format:YmdHis',
+        'recent_comment_date' => 'sometimes|date_format:U',
+        'comment_total' => 'required|integer',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $attributeNames = [
+        'site_id' => 'Site ID',
+        'channel_id' => 'Channel ID',
+        'author_id' => 'Author ID',
+        'forum_topic_id' => 'Forum Topic ID',
+        'ip_address' => 'IP Address',
+        'title' => 'Title',
+        'url_title' => 'URL Title',
+        'status' => 'Status',
+        'versioning_enabled' => 'Versioning Enabled',
+        'view_count_one' => 'View Count One',
+        'view_count_two' => 'View Count Two',
+        'view_count_three' => 'View Count Three',
+        'view_count_four' => 'View Count Four',
+        'allow_comments' => 'Allow Comments',
+        'sticky' => 'Sticky',
+        'entry_date' => 'Entry Date',
+        'year' => 'Year',
+        'month' => 'Month',
+        'day' => 'Day',
+        'expiration_date' => 'Expiration Date',
+        'comment_expiration_date' => 'Comment Expiration Date',
+        'edit_date' => 'Edit Date',
+        'recent_comment_date' => 'Recent Comment Date',
+        'comment_total' => 'Comment Total',
     ];
 
     /**
@@ -343,6 +398,16 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Set the entry_date column
+     * @param  DateTime|string|int $date
+     * @return void
+     */
+    public function setEntryDateAttribute($date)
+    {
+        $this->attributes['entry_date'] = $date instanceof DateTime ? $date->format('U') : $date;
+    }
+
+    /**
      * Get the expiration_date column as a Carbon object, or null if there is no expiration date
      *
      * @param  int                 $value unix time
@@ -351,6 +416,16 @@ class Title extends AbstractEntity
     public function getExpirationDateAttribute($value)
     {
         return $value ? Carbon::createFromFormat('U', $value) : null;
+    }
+
+    /**
+     * Set the expiration_date column
+     * @param  DateTime|string|int|null $date
+     * @return void
+     */
+    public function setExpirationDateAttribute($date)
+    {
+        $this->attributes['expiration_date'] = $date instanceof DateTime ? $date->format('U') : $date;
     }
 
     /**
@@ -365,6 +440,16 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Set the comment_expiration_date column
+     * @param  DateTime|string|int|null $date
+     * @return void
+     */
+    public function setCommentExpirationDateAttribute($date)
+    {
+        $this->attributes['comment_expiration_date'] = $date instanceof DateTime ? $date->format('U') : $date;
+    }
+
+    /**
      * Get the recent_comment_date column as a Carbon object, or null if there is no expiration date
      *
      * @param  int                 $value unix time
@@ -376,6 +461,16 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Set the recent_comment_date column
+     * @param  DateTime|string|int|null $date
+     * @return void
+     */
+    public function setRecentCommentDateAttribute($date)
+    {
+        $this->attributes['recent_comment_date'] = $date instanceof DateTime ? $date->format('U') : $date;
+    }
+
+    /**
      * Get the edit_date column as a Carbon object
      *
      * @param  int            $value unix time
@@ -384,6 +479,16 @@ class Title extends AbstractEntity
     public function getEditDateAttribute($value)
     {
         return Carbon::createFromFormat('YmdHis', $value);
+    }
+
+    /**
+     * Set the edit_date column
+     * @param  DateTime|string|int $date
+     * @return void
+     */
+    public function setEditDateAttribute($date)
+    {
+        $this->attributes['edit_date'] = $date instanceof DateTime ? $date->format('YmdHis') : $date;
     }
 
     /**
@@ -443,6 +548,71 @@ class Title extends AbstractEntity
         }
 
         return $saved;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdateValidationRules()
+    {
+        $rules = $this->rules;
+
+        $rules['url_title'] .= sprintf(',%s,entry_id', $this->entry_id);
+
+        if ($this->channel_id && $this->channel->status_group) {
+            $rules['status'] .= sprintf('|exists:statuses,status,group_id,%s', $this->channel->status_group);
+        } else {
+            $rules['status'] .= '|in:open,closed';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInsertValidationRules()
+    {
+        $rules = $this->rules;
+
+        // these have default
+        $rules['view_count_one'] = 'sometimes|integer';
+        $rules['view_count_two'] = 'sometimes|integer';
+        $rules['view_count_three'] = 'sometimes|integer';
+        $rules['view_count_four'] = 'sometimes|integer';
+        $rules['site_id'] = 'sometimes|exists:sites,site_id';
+        $rules['versioning_enabled'] = 'sometimes|yes_or_no';
+        $rules['allow_comments'] = 'sometimes|yes_or_no';
+        $rules['sticky'] = 'sometimes|yes_or_no';
+        $rules['comment_total'] = 'sometimes|integer';
+
+        if ($this->channel_id && $this->channel->status_group) {
+            $rules['status'] .= sprintf('|exists:statuses,status,group_id,%s', $this->channel->status_group);
+        } else {
+            $rules['status'] .= '|in:open,closed';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidatableAttributes()
+    {
+        $attributes = $this->attributes;
+
+        foreach ($this->getProperties() as $property) {
+            $value = $this->{$property->getName()};
+
+            if ($value instanceof ValidatableInterface) {
+                $attributes[$property->getIdentifier()] = $value->getValidatableAttributes();
+            } else {
+                $attributes[$property->getIdentifier()] = $value;
+            }
+        }
+
+        return $attributes;
     }
 
     /**

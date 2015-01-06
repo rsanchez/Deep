@@ -77,4 +77,28 @@ class Field extends AbstractField
     {
         return $this->field_type;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->field_label;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettings()
+    {
+        return @unserialize(base64_decode($this->field_settings)) ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRequired()
+    {
+        return $this->field_required === 'y';
+    }
 }

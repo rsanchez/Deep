@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\MatrixRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;
+use rsanchez\Deep\Validation\ValidatableInterface;
 
 /**
  * Model for the matrix_data table
@@ -124,5 +125,25 @@ class MatrixRow extends AbstractEntity
     public function getPrefix()
     {
         return 'row';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidatableAttributes()
+    {
+        $attributes = $this->attributes;
+
+        foreach ($this->getProperties() as $property) {
+            $value = $this->{$property->getName()};
+
+            if ($value instanceof ValidatableInterface) {
+                $attributes[$property->getIdentifier()] = $value->getValidatableAttributes();
+            } else {
+                $attributes[$property->getIdentifier()] = $value;
+            }
+        }
+
+        return $attributes;
     }
 }

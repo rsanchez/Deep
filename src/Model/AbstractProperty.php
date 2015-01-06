@@ -47,4 +47,25 @@ abstract class AbstractProperty extends Model
      * @return string
      */
     abstract public function getPrefix();
+
+    /**
+     * Get the property label
+     * @return string
+     */
+    abstract public function getLabel();
+
+    /**
+     * Whether the field is required
+     * @return boolean
+     */
+    abstract public function isRequired();
+
+    /**
+     * Get the property's settings
+     * @return array
+     */
+    public function getSettings()
+    {
+        return [];
+    }
 }

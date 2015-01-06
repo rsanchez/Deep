@@ -40,7 +40,8 @@ use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use Symfony\Component\Translation\Translator;
 use Illuminate\Validation\Factory as ValidatorFactory;
-use Symfony\Component\Translation\Loader\ArrayLoader as TranslationArrayLoader;
+use Illuminate\Validation\DatabasePresenceVerifier;
+use rsanchez\Deep\Validation\Validator;
 use Carbon\Carbon;
 use CI_Controller;
 use Closure;
@@ -69,14 +70,22 @@ class Deep extends Container
             return Model::resolveConnection(Model::getGlobalConnection());
         });
 
+        $this->singleton('ValidationPresenceVerifier', function ($app) {
+            return new DatabasePresenceVerifier(Model::getConnectionResolver());
+        });
+
+        $this->singleton('ValidationTranslator', function ($app) {
+            return new Translator('en');
+        });
+
         $this->singleton('ValidatorFactory', function ($app) {
-            $translator = new Translator('en');
+            $validatorFactory = new ValidatorFactory($app->make('ValidationTranslator'));
 
-            $validatorFactory = new ValidatorFactory($translator);
+            $validatorFactory->setPresenceVerifier($app->make('ValidationPresenceVerifier'));
 
-            $translator->addLoader('array', new TranslationArrayLoader());
-
-            $translator->addResource('array', ['validation' => Model::getValidationMessages()], 'en');
+            $validatorFactory->resolver(function ($translator, $data, $rules, $messages) {
+                return new Validator($translator, $data, $rules, $messages);
+            });
 
             return $validatorFactory;
         });

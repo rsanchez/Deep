@@ -9,6 +9,8 @@
 
 namespace rsanchez\Deep\Model;
 
+use rsanchez\Deep\Validation\ValidatableInterface;
+
 /**
  * Model for the channel entries, matrix rows and grid rows
  */
@@ -106,6 +108,50 @@ abstract class AbstractEntity extends Model
         });
 
         return $array;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeNames($prefix = '')
+    {
+        $names = parent::getAttributeNames($prefix);
+
+        $prefix = $prefix ? rtrim($prefix, '.').'.' : '';
+
+        foreach ($this->getProperties() as $property) {
+            $names[$prefix.$property->getIdentifier()] = $property->getLabel();
+
+            $value = $this->{$property->getName()};
+
+            if ($value instanceof ValidatableInterface) {
+                $names = array_merge($names, $value->getAttributeNames($prefix.$property->getIdentifier().'.'));
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationRules($prefix = '', $required = false)
+    {
+        $rules = parent::getValidationRules($prefix, $required);
+
+        foreach ($this->getProperties() as $property) {
+            $value = $this->{$property->getName()};
+
+            $prefix = $prefix ? rtrim($prefix, '.').'.' : '';
+
+            if ($value instanceof ValidatableInterface) {
+                $rules = array_merge($rules, $value->getValidationRules($prefix.$property->getIdentifier(), $property->isRequired()));
+            } elseif ($property->isRequired()) {
+                $rules[$prefix.$property->getIdentifier()] = 'required';
+            }
+        }
+
+        return $rules;
     }
 
     /**

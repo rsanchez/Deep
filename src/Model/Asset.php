@@ -51,6 +51,13 @@ class Asset extends Model implements FileInterface
     protected $uploadPref;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $rules = [
+        'file_name' => 'required'
+    ];
+
+    /**
      * Set the UploadPref
      * @var \rsanchez\Deep\Model\UploadPref $uploadPref|null
      * @return void
