@@ -70,6 +70,47 @@ class FileModelTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\Carbon\\Carbon', $this->file->modified_date);
     }
 
+    public function testGetHumanFileSizeAttribute()
+    {
+        $file = new File();
+
+        $file->file_size = null;
+        $this->assertEquals('0 B', $file->human_file_size);
+
+        $file->file_size = 0;
+        $this->assertEquals('0 B', $file->human_file_size);
+
+        $file->file_size = 1023;
+        $this->assertEquals('1023 B', $file->human_file_size);
+
+        $file->file_size = 1024;
+        $this->assertEquals('1 KB', $file->human_file_size);
+
+        $file->file_size = 1234;
+        $this->assertEquals('1.21 KB', $file->human_file_size);
+
+        $file->file_size = 1048576;
+        $this->assertEquals('1 MB', $file->human_file_size);
+
+        $file->file_size = 1073741824;
+        $this->assertEquals('1 GB', $file->human_file_size);
+
+        $file->file_size = 1099511627776;
+        $this->assertEquals('1 TB', $file->human_file_size);
+
+        $file->file_size = 1125899906842624;
+        $this->assertEquals('1 PB', $file->human_file_size);
+
+        $file->file_size = 1152921504606846976;
+        $this->assertEquals('1 EB', $file->human_file_size);
+
+        $file->file_size = 1.1805916207175e21;
+        $this->assertEquals('1 ZB', $file->human_file_size);
+
+        $file->file_size = 1.2089258196147e24;
+        $this->assertEquals('1 YB', $file->human_file_size);
+    }
+
     public function testToString()
     {
         $this->assertEquals('/uploads/1eecbed0063a0253.jpg', $this->file->url);

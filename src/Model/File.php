@@ -100,6 +100,26 @@ class File extends Model implements FileInterface
     }
 
     /**
+     * Get the file size in a human readable format
+     *
+     * @return string
+     */
+    public function getHumanFileSizeAttribute()
+    {
+        $decimals = 2;
+        $size = ['B','kB','MB','GB','TB','PB','EB','ZB','YB'];
+        $bytes = (int) $this->attributes['file_size'];
+
+        if (!$bytes) {
+            return "0 ".$size[0];
+        }
+
+        $factor = floor((strlen($bytes) - 1) / 3);
+        $size = isset($size[$factor]) ? $size[$factor] : 'unknown';
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $size;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString()
