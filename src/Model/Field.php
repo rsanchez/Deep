@@ -49,56 +49,14 @@ class Field extends AbstractField
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return $this->field_name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
-    {
-        return 'field_id_'.$this->field_id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->field_id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return $this->field_type;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        return $this->field_label;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSettings()
     {
-        return @unserialize(base64_decode($this->field_settings)) ?: [];
-    }
+        $settings = parent::getSettings();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isRequired()
-    {
-        return $this->field_required === 'y';
+        if ($fieldSettings = @unserialize(base64_decode($this->field_settings))) {
+            $settings = array_merge($settings, $fieldSettings);
+        }
+
+        return $settings;
     }
 }

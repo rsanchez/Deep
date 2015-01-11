@@ -137,7 +137,7 @@ class GridRow extends AbstractEntity
      */
     public function getValidatableAttributes()
     {
-        $attributes = $this->attributes;
+        $attributes = parent::getValidatableAttributes();
 
         foreach ($this->getProperties() as $property) {
             $value = $this->{$property->getName()};
@@ -150,5 +150,13 @@ class GridRow extends AbstractEntity
         }
 
         return $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function shouldValidateIfChild()
+    {
+        return true;
     }
 }

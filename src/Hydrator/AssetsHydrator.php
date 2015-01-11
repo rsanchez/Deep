@@ -128,7 +128,9 @@ class AssetsHydrator extends AbstractHydrator implements DehydratorInterface
 
         if ($assets) {
             foreach ($assets as $i => $asset) {
-                $asset->save();
+                if (! $asset->exists) {
+                    $asset->save();
+                }
 
                 $data = [
                     $property->getPrefix().'_id' => $property->getId(),

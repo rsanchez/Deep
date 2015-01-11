@@ -80,7 +80,9 @@ class RelationshipHydrator extends AbstractHydrator implements DehydratorInterfa
 
         if ($entries) {
             foreach ($entries as $i => $entry) {
-                $entry->save();
+                if (! $entry->existing) {
+                    $entry->save();
+                }
 
                 $data = [
                     'child_id' => $entry->entry_id,

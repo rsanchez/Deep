@@ -119,4 +119,12 @@ class MatrixCol extends AbstractProperty
     {
         return $this->col_required === 'y';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRequired($required = true)
+    {
+        return $this->col_required = $required ? 'y' : 'n';
+    }
 }

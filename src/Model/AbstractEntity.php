@@ -9,7 +9,10 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Validation\Validator;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
+use rsanchez\Deep\Model\AbstractProperty;
 
 /**
  * Model for the channel entries, matrix rows and grid rows
@@ -124,7 +127,7 @@ abstract class AbstractEntity extends Model
 
             $value = $this->{$property->getName()};
 
-            if ($value instanceof ValidatableInterface) {
+            if ($value instanceof ProvidesValidationRulesInterface) {
                 $names = array_merge($names, $value->getAttributeNames($prefix.$property->getIdentifier().'.'));
             }
         }
@@ -135,19 +138,31 @@ abstract class AbstractEntity extends Model
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules($prefix = '', $required = false)
+    public function getValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $parentProperty = null)
     {
-        $rules = parent::getValidationRules($prefix, $required);
+        $rules = parent::getValidationRules($validatorFactory, $parentProperty);
 
         foreach ($this->getProperties() as $property) {
             $value = $this->{$property->getName()};
 
-            $prefix = $prefix ? rtrim($prefix, '.').'.' : '';
+            $propertyRules = [];
 
-            if ($value instanceof ValidatableInterface) {
-                $rules = array_merge($rules, $value->getValidationRules($prefix.$property->getIdentifier(), $property->isRequired()));
-            } elseif ($property->isRequired()) {
-                $rules[$prefix.$property->getIdentifier()] = 'required';
+            if ($validatorFactory->hasPropertyValidator($property)) {
+                $propertyRules = $validatorFactory->makePropertyValidator($property)->getRules($property);
+            }
+
+            if ($property->isRequired()) {
+                array_unshift($propertyRules, 'required');
+            }
+
+            if ($propertyRules) {
+                $rules[$property->getIdentifier()] = $propertyRules;
+            }
+
+            if ($value instanceof ProvidesValidationRulesInterface) {
+                foreach ($value->getValidationRules($validatorFactory, $property) as $key => $val) {
+                    $rules[$property->getIdentifier().'.'.$key] = $val;
+                }
             }
         }
 

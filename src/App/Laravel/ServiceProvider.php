@@ -20,22 +20,7 @@ class ServiceProvider extends LaravelServiceProvider
         }
 
         $this->app->singleton('deep', function ($app) {
-            $deep = new Deep();
-
-            // use Laravel's Validator
-            $deep->extend('ValidatorFactory', function($deep) use ($app) {
-                $validatorFactory = new ValidatorFactory($app['validator']->getTranslator(), $app);
-
-                $validatorFactory->setPresenceVerifier($deep->make('ValidationPresenceVerifier'));
-
-                $validatorFactory->resolver(function ($translator, $data, $rules, $messages) {
-                    return new Validator($translator, $data, $rules, $messages);
-                });
-
-                return $validatorFactory;
-            });
-
-            return $deep;
+            return new Deep();
         });
 
         $this->app->singleton('deep.entry', function ($app) {

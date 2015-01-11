@@ -39,7 +39,7 @@ use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use Symfony\Component\Translation\Translator;
-use Illuminate\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\DatabasePresenceVerifier;
 use rsanchez\Deep\Validation\Validator;
 use Carbon\Carbon;
@@ -82,10 +82,6 @@ class Deep extends Container
             $validatorFactory = new ValidatorFactory($app->make('ValidationTranslator'));
 
             $validatorFactory->setPresenceVerifier($app->make('ValidationPresenceVerifier'));
-
-            $validatorFactory->resolver(function ($translator, $data, $rules, $messages) {
-                return new Validator($translator, $data, $rules, $messages);
-            });
 
             return $validatorFactory;
         });

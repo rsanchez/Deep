@@ -54,7 +54,7 @@ class Asset extends Model implements FileInterface
      * {@inheritdoc}
      */
     protected $rules = [
-        'file_name' => 'required'
+        'file_name' => 'required',
     ];
 
     /**

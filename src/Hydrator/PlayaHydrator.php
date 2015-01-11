@@ -95,7 +95,9 @@ class PlayaHydrator extends AbstractHydrator implements DehydratorInterface
 
         if ($entries) {
             foreach ($entries as $i => $entry) {
-                $entry->save();
+                if (! $entry->existing) {
+                    $entry->save();
+                }
 
                 $data = [
                     'parent_'.$property->getPrefix().'_id' => $property->getId(),

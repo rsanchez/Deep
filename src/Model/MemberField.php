@@ -100,4 +100,12 @@ class MemberField extends AbstractField
     {
         return $this->m_field_required === 'y';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRequired($required = true)
+    {
+        return $this->m_field_required = $required ? 'y' : 'n';
+    }
 }

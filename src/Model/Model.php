@@ -10,9 +10,12 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Validation\Validator;
 use rsanchez\Deep\Exception\ValidationException;
 use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
+use rsanchez\Deep\Model\AbstractProperty;
 
 /**
  * Abstract base model
@@ -21,7 +24,7 @@ use rsanchez\Deep\Validation\ValidatableInterface;
  * 2) Ability to set global DB connection
  * 3) Self-validating if a validation factory is set
  */
-abstract class Model extends Eloquent implements ValidatableInterface
+abstract class Model extends Eloquent implements ValidatableInterface, ProvidesValidationRulesInterface
 {
     /**
      * {@inheritdoc}
@@ -138,19 +141,31 @@ abstract class Model extends Eloquent implements ValidatableInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function shouldValidateIfChild()
+    {
+        return false;
+    }
+
+    /**
      * Get validation rules for this model when updating existing
+     * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
+     * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
      * @return array
      */
-    public function getUpdateValidationRules()
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
         return $this->rules;
     }
 
     /**
      * Get validation rules for this model when creating new
+     * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
+     * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
      * @return array
      */
-    public function getInsertValidationRules()
+    public function getInsertValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
         return $this->rules;
     }
@@ -158,26 +173,9 @@ abstract class Model extends Eloquent implements ValidatableInterface
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules($prefix = '', $required = false)
+    public function getValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
-        $rules = $this->exists ? $this->getUpdateValidationRules() :  $this->getInsertValidationRules();
-
-        if ($prefix) {
-
-            $prefix = rtrim($prefix, '.');
-
-            if ($required) {
-                $rules[$prefix] = 'required';
-            }
-
-            foreach (array_keys($rules) as $key) {
-                $rules[$prefix.'.'.$key] = $rules[$key];
-
-                unset($rules[$key]);
-            }
-        }
-
-        return $rules;
+        return $this->exists ? $this->getUpdateValidationRules($validatorFactory, $property) :  $this->getInsertValidationRules($validatorFactory, $property);
     }
 
     /**
@@ -205,19 +203,25 @@ abstract class Model extends Eloquent implements ValidatableInterface
             return true;
         }
 
-        $rules = $this->getValidationRules();
+        $this->extendValidation(self::$validatorFactory);
+
+        $validator = self::$validatorFactory->make([], []);
+
+        $rules = $this->getValidationRules(self::$validatorFactory);
 
         if (! $rules) {
             return true;
         }
 
-        $this->extendValidation(self::$validatorFactory);
+        $validator->setRules($rules);
 
         $data = $this->getValidatableAttributes();
 
-        $validator = self::$validatorFactory->make($data, $rules);
+        $validator->setData($data);
 
-        $validator->setAttributeNames($this->getAttributeNames());
+        $attributeNames = $this->getAttributeNames();
+
+        $validator->setAttributeNames($attributeNames);
 
         if ($exceptionOnFailure && $validator->fails()) {
             throw new ValidationException($validator->messages());

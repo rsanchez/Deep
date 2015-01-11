@@ -53,4 +53,12 @@ class NullProperty extends AbstractProperty
     {
         return '';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return '';
+    }
 }

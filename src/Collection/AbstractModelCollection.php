@@ -12,11 +12,15 @@ namespace rsanchez\Deep\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
+use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Validation\Validator;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 
 /**
  * Collection of \Illuminate\Database\Eloquent\Model
  */
-abstract class AbstractModelCollection extends Collection implements ValidatableInterface
+abstract class AbstractModelCollection extends Collection implements ValidatableInterface, ProvidesValidationRulesInterface
 {
     /**
      * {@inheritdoc}
@@ -62,6 +66,14 @@ abstract class AbstractModelCollection extends Collection implements Validatable
     /**
      * {@inheritdoc}
      */
+    public function shouldValidateIfChild()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getValidatableAttributes()
     {
         $attributes = [];
@@ -76,18 +88,16 @@ abstract class AbstractModelCollection extends Collection implements Validatable
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules($prefix = '', $required = false)
+    public function getValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
         $rules = [];
 
-        if ($prefix && $required) {
-            $rules[$prefix] = 'required';
-        }
-
         foreach ($this->items as $i => $model) {
-            $childPrefix = $prefix ? $prefix.'.'.$i : $i;
-
-            $rules = array_merge($rules, $model->getValidationRules($childPrefix));
+            if ($model->shouldValidateIfChild()) {
+                foreach ($model->getValidationRules($validatorFactory, $property) as $key => $value) {
+                    $rules[$i . '.' . $key] = $value;
+                }
+            }
         }
 
         return $rules;

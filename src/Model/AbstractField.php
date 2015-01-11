@@ -37,6 +37,70 @@ abstract class AbstractField extends AbstractProperty
     /**
      * {@inheritdoc}
      */
+    public function getName()
+    {
+        return $this->field_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'field_id_'.$this->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettings()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->field_id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->field_type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->field_label;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRequired()
+    {
+        return $this->field_required === 'y';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRequired($required = true)
+    {
+        return $this->field_required = $required ? 'y' : 'n';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPrefix()
     {
         return 'field';

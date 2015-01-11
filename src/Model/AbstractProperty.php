@@ -58,7 +58,19 @@ abstract class AbstractProperty extends Model
      * Whether the field is required
      * @return boolean
      */
-    abstract public function isRequired();
+    public function isRequired()
+    {
+        return false;
+    }
+
+    /**
+     * Set whether the field is required
+     * @param boolean
+     * @return void
+     */
+    public function setRequired($required = true)
+    {
+    }
 
     /**
      * Get the property's settings
