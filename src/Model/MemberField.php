@@ -72,6 +72,14 @@ class MemberField extends AbstractField
     /**
      * {@inheritdoc}
      */
+    public function getMaxLength()
+    {
+        return $this->m_field_maxl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getId()
     {
         return $this->m_field_id;

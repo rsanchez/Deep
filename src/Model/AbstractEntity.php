@@ -9,10 +9,11 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Validation\Validator;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
 use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Validation\ValidatableInterface;
+use DateTime;
 
 /**
  * Model for the channel entries, matrix rows and grid rows
@@ -111,6 +112,28 @@ abstract class AbstractEntity extends Model
         });
 
         return $array;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidatableAttributes()
+    {
+        $attributes = parent::getValidatableAttributes();
+
+        foreach ($this->getProperties() as $property) {
+            $value = $this->{$property->getName()};
+
+            if ($value instanceof ValidatableInterface) {
+                $attributes[$property->getIdentifier()] = $value->getValidatableAttributes();
+            } elseif ($value instanceof DateTime) {
+                $attributes[$property->getIdentifier()] = $value->format('U');
+            } else {
+                $attributes[$property->getIdentifier()] = $value;
+            }
+        }
+
+        return $attributes;
     }
 
     /**

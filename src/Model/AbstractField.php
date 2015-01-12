@@ -61,6 +61,14 @@ abstract class AbstractField extends AbstractProperty
     /**
      * {@inheritdoc}
      */
+    public function getMaxLength()
+    {
+        return $this->field_maxl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getId()
     {
         return $this->field_id;

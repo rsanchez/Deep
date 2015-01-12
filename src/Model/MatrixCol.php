@@ -107,6 +107,16 @@ class MatrixCol extends AbstractProperty
     /**
      * {@inheritdoc}
      */
+    public function getMaxLength()
+    {
+        $settings = $this->getSettings();
+
+        return isset($settings['maxl']) ? $settings['maxl'] : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSettings()
     {
         return @unserialize(base64_decode($this->col_settings)) ?: [];

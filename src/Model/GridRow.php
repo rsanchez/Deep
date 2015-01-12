@@ -135,26 +135,6 @@ class GridRow extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function getValidatableAttributes()
-    {
-        $attributes = parent::getValidatableAttributes();
-
-        foreach ($this->getProperties() as $property) {
-            $value = $this->{$property->getName()};
-
-            if ($value instanceof ValidatableInterface) {
-                $attributes[$property->getIdentifier()] = $value->getValidatableAttributes();
-            } else {
-                $attributes[$property->getIdentifier()] = $value;
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function shouldValidateIfChild()
     {
         return true;

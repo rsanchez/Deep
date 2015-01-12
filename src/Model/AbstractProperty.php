@@ -55,6 +55,12 @@ abstract class AbstractProperty extends Model
     abstract public function getLabel();
 
     /**
+     * Get the property max length
+     * @return int
+     */
+    abstract public function getMaxLength();
+
+    /**
      * Whether the field is required
      * @return boolean
      */

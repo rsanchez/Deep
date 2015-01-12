@@ -80,6 +80,13 @@ class Factory extends IlluminateFactory
         'timezone' => 'The :attribute must be a valid zone.',
         /**/
         'yes_or_no' => 'The :attribute field must be y or n.',
+        'in_array' => 'The selected :attribute(s) are invalid.',
+        'min_count' => 'The :attribute must have at least :min items.',
+        'max_count' => 'The :attribute may not have more than :max items.',
+        'image_attribute' => 'The :attribute must be an image.',
+        'attribute_in' => 'The :attribute contains invalid data.',
+        'nested_attribute_in' => 'The :attribute contains invalid data.',
+        'nested_concatenated_attribute_in' => 'The :attribute contains invalid data.',
         /**/
         'custom' => [
             /*
@@ -92,7 +99,24 @@ class Factory extends IlluminateFactory
     ];
 
     protected $propertyValidators = [
-        'select' => 'ListItemsValidator',
+        'fieldpack_checkboxes' => '\\rsanchez\\Deep\\Validation\\FieldpackMultiOptionsValidator',
+        'fieldpack_dropdown' => '\\rsanchez\\Deep\\Validation\\FieldpackOptionsValidator',
+        'fieldpack_multiselect' => '\\rsanchez\\Deep\\Validation\\FieldpackMultiOptionsValidator',
+        'fieldpack_radio_buttons' => '\\rsanchez\\Deep\\Validation\\FieldpackOptionsValidator',
+        'fieldpack_pill' => '\\rsanchez\\Deep\\Validation\\FieldpackOptionsValidator',
+        'fieldpack_switch' => '\\rsanchez\\Deep\\Validation\\FieldpackSwitchValidator',
+        'select' => '\\rsanchez\\Deep\\Validation\\ListItemsValidator',
+        'checkboxes' => '\\rsanchez\\Deep\\Validation\\MultiListItemsValidator',
+        'multi_select' => '\\rsanchez\\Deep\\Validation\\MultiListItemsValidator',
+        'radio' => '\\rsanchez\\Deep\\Validation\\ListItemsValidator',
+        'text' => '\\rsanchez\\Deep\\Validation\\MaxLengthValidator',
+        'file' => '\\rsanchez\\Deep\\Validation\\FileValidator',
+        'date' => '\\rsanchez\\Deep\\Validation\\DateValidator',
+        'matrix' => '\\rsanchez\\Deep\\Validation\\MatrixValidator',
+        'grid' => '\\rsanchez\\Deep\\Validation\\GridValidator',
+        'playa' => '\\rsanchez\\Deep\\Validation\\PlayaValidator',
+        'relationship' => '\\rsanchez\\Deep\\Validation\\RelationshipValidator',
+        'assets' => '\\rsanchez\\Deep\\Validation\\AssetsValidator',
     ];
 
     /**
@@ -143,8 +167,6 @@ class Factory extends IlluminateFactory
             return null;
         }
 
-        $validatorClass = '\\rsanchez\\Deep\\Validation\\'.$this->propertyValidators[$type];
-
-        return new $validatorClass();
+        return new $this->propertyValidators[$type]();
     }
 }

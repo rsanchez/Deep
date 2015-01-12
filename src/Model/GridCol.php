@@ -107,6 +107,16 @@ class GridCol extends AbstractProperty
     /**
      * {@inheritdoc}
      */
+    public function getMaxLength()
+    {
+        $settings = $this->getSettings();
+
+        return isset($settings['field_maxl']) ? $settings['field_maxl'] : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSettings()
     {
         return @json_decode($this->col_settings, true) ?: [];
