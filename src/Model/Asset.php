@@ -183,7 +183,7 @@ class Asset extends Model implements FileInterface
      */
     public static function defaultJoinTables()
     {
-        return ['assets_folders', 'assets_sources', ];
+        return ['assets_sources', 'assets_folders'];
     }
 
     /**
