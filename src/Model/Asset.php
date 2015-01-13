@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\AssetCollection;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use Carbon\Carbon;
 
 /**
@@ -19,6 +20,21 @@ use Carbon\Carbon;
 class Asset extends Model implements FileInterface
 {
     use JoinableTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    const CREATED_AT = 'date';
+
+    /**
+     * {@inheritdoc}
+     */
+    const UPDATED_AT = 'date_modified';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = true;
 
     /**
      * {@inheritdoc}
@@ -54,8 +70,28 @@ class Asset extends Model implements FileInterface
      * {@inheritdoc}
      */
     protected $rules = [
+        'folder_id' => 'required|exists:assets_folders,folder_id',
+        'source_type' => 'required',
+        'source_id' => 'required_if:source_type,rs,s3,gc|exists:assets_sources,source_id',
+        'filedir_id' => 'required_if:source_type,ee|exists:upload_prefs,id',
         'file_name' => 'required',
+        'kind' => 'required|in:access,audio,excel,flash,html,illustrator,image,pdf,photoshop,php,text,video,word',
+        'width' => 'integer',
+        'height' => 'integer',
+        'size' => 'required|integer',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    {
+        $rules = parent::getInsertValidationRules($validatorFactory, $property);
+
+        $rules['date'] = 'required|date_format:U';
+
+        return $rules;
+    }
 
     /**
      * Set the UploadPref
@@ -109,28 +145,6 @@ class Asset extends Model implements FileInterface
     }
 
     /**
-     * Get the date column as a Carbon object
-     *
-     * @param  int            $value unix time
-     * @return \Carbon\Carbon
-     */
-    public function getDateAttribute($value)
-    {
-        return Carbon::createFromFormat('U', $value);
-    }
-
-    /**
-     * Get the date_modified column as a Carbon object
-     *
-     * @param  int            $value unix time
-     * @return \Carbon\Carbon
-     */
-    public function getDateModifiedAttribute($value)
-    {
-        return Carbon::createFromFormat('U', $value);
-    }
-
-    /**
      * Filter by Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -152,6 +166,14 @@ class Asset extends Model implements FileInterface
     public function getSourceSettingsAttribute($value)
     {
         return json_decode($this->settings);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDateFormat()
+    {
+        return 'U';
     }
 
     /**
