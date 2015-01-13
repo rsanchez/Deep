@@ -50,6 +50,44 @@ class File extends Model implements FileInterface
     protected $uploadPref;
 
     /**
+     * {@inheritdoc}
+     */
+    const CREATED_AT = 'upload_date';
+
+    /**
+     * {@inheritdoc}
+     */
+    const UPDATED_AT = 'modified_date';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $rules = [
+        'site_id' => 'required|exists:sites,site_id',
+        'title' => 'required',
+        'upload_location_id' => 'required|exists:upload_prefs,id',
+        'rel_path' => 'required',
+        'mime_type' => 'required',
+        'file_name' => 'required',
+        'file_size' => 'required|integer',
+        'uploaded_by_member_id' => 'required|exists:members,member_id',
+        'modified_by_member_id' => 'required|exists:members,member_id',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDateFormat()
+    {
+        return 'U';
+    }
+
+    /**
      * Set the UploadPref
      * @var \rsanchez\Deep\Model\UploadPref $uploadPref
      * @return void
@@ -73,28 +111,6 @@ class File extends Model implements FileInterface
     public function getServerPathAttribute()
     {
         return $this->uploadPref->server_path.$this->file_name;
-    }
-
-    /**
-     * Get the upload_date column as a Carbon object
-     *
-     * @param  int            $value unix time
-     * @return \Carbon\Carbon
-     */
-    public function getUploadDateAttribute($value)
-    {
-        return Carbon::createFromFormat('U', $value);
-    }
-
-    /**
-     * Get the modified_date column as a Carbon object
-     *
-     * @param  int            $value unix time
-     * @return \Carbon\Carbon
-     */
-    public function getModifiedDateAttribute($value)
-    {
-        return Carbon::createFromFormat('U', $value);
     }
 
     /**
