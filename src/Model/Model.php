@@ -273,6 +273,19 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     }
 
     /**
+     * Save the model to the database without validating
+     *
+     * @param  array  $options
+     * @return bool
+     */
+    public function forceSave(array $options = [])
+    {
+        $options['validate'] = false;
+
+        return $this->save($options);
+    }
+
+    /**
      * Get the database connection for the model.
      *
      * @return \Illuminate\Database\Connection
