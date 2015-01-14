@@ -89,6 +89,18 @@ class Validator extends IlluminateValidator
     }
 
     /**
+     * Validate a directory path
+     * @param $attribute
+     * @param $value
+     * @param array $parameters
+     * @return bool
+     */
+    public function validateIsDir($attribute, $value, $parameters = [])
+    {
+        return is_dir($value);
+    }
+
+    /**
      * Validate an associative array values is found in the specified array
      *
      * 'your_field' => 'attribute_in:your_key,1,2,3'
