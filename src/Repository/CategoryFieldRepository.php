@@ -23,4 +23,16 @@ class CategoryFieldRepository extends AbstractFieldRepository
     {
         parent::__construct($model);
     }
+
+    /**
+     * Get fields by the cat group ID
+     * @param $groupId
+     * @return \rsanchez\Deep\Collection\CategoryFieldCollection
+     */
+    public function getFieldsByGroup($groupId)
+    {
+        return $this->getFields()->filter(function ($field) use ($groupId) {
+            return $field->group_id === $groupId;
+        });
+    }
 }

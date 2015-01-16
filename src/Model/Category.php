@@ -11,13 +11,14 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
+use rsanchez\Deep\Collection\CategoryFieldCollection;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 
 /**
  * Model for the categories table
  */
-class Category extends Model
+class Category extends AbstractEntity
 {
     use JoinableTrait;
 
@@ -58,6 +59,25 @@ class Category extends Model
      * @var \rsanchez\Deep\Repository\ChannelRepository
      */
     protected static $channelRepository;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $customFieldAttributesRegex = '/^field_(id|ft)_\d+$/';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $hiddenAttributesRegex = '/^field_(id|ft)_\d+$/';
+
+    protected $rules = [
+        'site_id' => 'required|exists:sites,site_id',
+        'group_id' => 'required|exists:category_groups,group_id',
+        'parent_id' => 'exists_or_zero:categories,cat_id',
+        'cat_name' => 'required',
+        'cat_url_title' => 'required',
+        'cat_order' => 'required|integer',
+    ];
 
     /**
      * Get child categories
@@ -151,20 +171,26 @@ class Category extends Model
     /**
      * {@inheritdoc}
      */
+    public function setAttribute($name, $value)
+    {
+        if (! isset($this->attributes[$name]) && self::$categoryFieldRepository->hasField($name)) {
+            $name = 'field_id_'.self::$categoryFieldRepository->getFieldId($name);
+        }
+
+        return parent::setAttribute($name, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function attributesToArray()
     {
         $array = parent::attributesToArray();
 
-        foreach ($array as $key => $value) {
-            if (strncmp($key, 'field_id_', 9) === 0) {
-                $id = substr($key, 9);
+        foreach ($this->getFields() as $field) {
+            $array[$field->getName()] = $array['field_id_'.$field->getId()];
 
-                if (self::$categoryFieldRepository->hasFieldId($id)) {
-                    $array[self::$categoryFieldRepository->getFieldName($id)] = $value;
-                }
-
-                unset($array[$key]);
-            }
+            unset($array['field_id_'.$field->getId()], $array['field_ft_'.$field->getId()]);
         }
 
         return $array;
@@ -741,6 +767,31 @@ class Category extends Model
         return $query;
     }
 
+    protected function saveCustomFields($isNew)
+    {
+        $categoryData = $this->customFieldAttributes;
+
+        $categoryData['site_id'] = $this->site_id;
+        $categoryData['group_id'] = $this->group_id;
+
+        foreach ($this->getFields() as $field) {
+            if (array_key_exists($field->getName(), $this->customFields)) {
+                $categoryData['field_id_'.$field->getId()] = $this->customFields[$field->getName()];
+            }
+        }
+
+        $query = $this->getConnection()->table('category_field_data');
+
+        if ($isNew) {
+            $categoryData['cat_id'] = $this->cat_id;
+
+            $query->insert($categoryData);
+        } else {
+            $query->where('cat_id', $this->cat_id)
+                ->update($categoryData);
+        }
+    }
+
     /**
      * Call the specified scope, exploding a pipe-delimited string into an array
      * Calls the not version of the scope if the string begins with not
@@ -772,10 +823,50 @@ class Category extends Model
     /**
      * Get all the category custom fields
      *
-     * @return \rsanchez\Deep\Collection\FieldCollection
+     * @return \rsanchez\Deep\Collection\CategoryFieldCollection
      */
     public function getFields()
     {
-        return self::$categoryFieldRepository->getFields();
+        if (! self::$categoryFieldRepository) {
+            return new CategoryFieldCollection();
+        }
+
+        return self::$categoryFieldRepository->getFieldsByGroup($this->group_id);
+    }
+
+    /**
+     * Get the entity ID (eg. entry_id or row_id)
+     * @return string|int
+     */
+    public function getId()
+    {
+        return $this->cat_id;
+    }
+
+    /**
+     * Get the entity type (eg. 'matrix' or 'grid' or 'entry')
+     * @return string|null
+     */
+    public function getType()
+    {
+        return 'category';
+    }
+
+    /**
+     * Get the entity prefix (eg. 'entry' or 'row')
+     * @return string|null
+     */
+    public function getPrefix()
+    {
+        return 'cat';
+    }
+
+    /**
+     * Get collection of AbstractProperties
+     * @return \rsanchez\Deep\Collection\PropertyCollection
+     */
+    public function getProperties()
+    {
+        return $this->getFields();
     }
 }

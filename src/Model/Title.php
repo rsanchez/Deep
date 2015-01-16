@@ -109,10 +109,14 @@ class Title extends AbstractEntity
     protected $defaultChannelName;
 
     /**
-     * List of attributes from channel_data
-     * @var array
+     * {@inheritdoc}
      */
-    protected $customFieldAttributes = [];
+    protected $customFieldAttributesRegex = '/^field_(id|dt|ft)_\d+$/';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $hiddenAttributesRegex = '/^field_(id|dt|ft)_\d+$/';
 
     /**
      * {@inheritdoc}
@@ -529,25 +533,6 @@ class Title extends AbstractEntity
     public function getUsernameAttribute()
     {
         return $this->author->username;
-    }
-
-    /**
-     * Save the entry
-     *
-     * @param  array $options
-     * @return bool
-     */
-    public function save(array $options = array())
-    {
-        $isNew = ! $this->exists;
-
-        $saved = parent::save();
-
-        if ($saved) {
-            $this->saveCustomFields($isNew);
-        }
-
-        return $saved;
     }
 
     /**
@@ -1695,46 +1680,6 @@ class Title extends AbstractEntity
     public function getPrefix()
     {
         return 'entry';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRawAttributes(array $attributes, $sync = false)
-    {
-        foreach ($attributes as $key => $value) {
-            if (preg_match('/^field_(id|dt|ft)_\d+$/', $key)) {
-                $this->customFieldAttributes[$key] = $value;
-
-                unset($attributes[$key]);
-            }
-        }
-
-        parent::setRawAttributes($attributes, $sync);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttribute($name, $value)
-    {
-        if (array_key_exists($name, $this->customFieldAttributes)) {
-            $this->customFieldAttributes[$name] = $value;
-        } else {
-            parent::setAttribute($name, $value);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttribute($name)
-    {
-        if (array_key_exists($name, $this->customFieldAttributes)) {
-            return $this->customFieldAttributes[$name];
-        }
-
-        return parent::getAttribute($name);
     }
 
     /**

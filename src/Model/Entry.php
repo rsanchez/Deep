@@ -32,11 +32,6 @@ class Entry extends Title
     public static $fieldRepository;
 
     /**
-     * {@inheritdoc}
-     */
-    protected $hiddenPatterns = ['/^field_(id|ft|dt)_\d+$/'];
-
-    /**
      * Set the global FieldRepository
      * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
      * @return void

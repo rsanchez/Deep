@@ -29,10 +29,22 @@ abstract class AbstractEntity extends Model
     protected $customFields = [];
 
     /**
-     * List of regex patterns of attributes to hide from toArray
+     * Regex patterns of attributes to hide from toArray
+     * @var string
+     */
+    protected $hiddenAttributesRegex;
+
+    /**
+     * Regex patterns of attributes to hide from toArray
+     * @var string
+     */
+    protected $customFieldAttributesRegex;
+
+    /**
+     * List of attributes from additional table
      * @var array
      */
-    protected $hiddenPatterns = [];
+    protected $customFieldAttributes = [];
 
     /**
      * Set a custom field attribute
@@ -46,13 +58,33 @@ abstract class AbstractEntity extends Model
 
     /**
      * {@inheritdoc}
+     */
+    public function setRawAttributes(array $attributes, $sync = false)
+    {
+        if ($this->customFieldAttributesRegex) {
+            foreach ($attributes as $key => $value) {
+                if (preg_match($this->customFieldAttributesRegex, $key)) {
+                    $this->customFieldAttributes[$key] = $value;
+
+                    unset($attributes[$key]);
+                }
+            }
+        }
+
+        parent::setRawAttributes($attributes, $sync);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * override to set custom field if $name matches a
      * current custom field
      */
     public function setAttribute($name, $value)
     {
-        if (array_key_exists($name, $this->customFields)) {
+        if (array_key_exists($name, $this->customFieldAttributes)) {
+            $this->customFieldAttributes[$name] = $value;
+        } elseif (array_key_exists($name, $this->customFields)) {
             $this->customFields[$name] = $value;
         } else {
             parent::setAttribute($name, $value);
@@ -67,6 +99,10 @@ abstract class AbstractEntity extends Model
      */
     public function getAttribute($name)
     {
+        if (array_key_exists($name, $this->customFieldAttributes)) {
+            return $this->customFieldAttributes[$name];
+        }
+
         if (array_key_exists($name, $this->customFields)) {
             return $this->customFields[$name];
         }
@@ -87,9 +123,9 @@ abstract class AbstractEntity extends Model
 
         $self = $this;
 
-        foreach ($array as $key => $value) {
-            foreach ($this->hiddenPatterns as $pattern) {
-                if (preg_match($pattern, $key)) {
+        if ($this->hiddenAttributesRegex) {
+            foreach ($array as $key => $value) {
+                if (preg_match($this->hiddenAttributesRegex, $key)) {
                     unset($array[$key]);
                 }
             }
@@ -204,6 +240,29 @@ abstract class AbstractEntity extends Model
         }
 
         return parent::__call($name, $args);
+    }
+
+    /**
+     * Save the entry
+     *
+     * @param  array $options
+     * @return bool
+     */
+    public function save(array $options = [])
+    {
+        $isNew = ! $this->exists;
+
+        $saved = parent::save($options);
+
+        if ($saved) {
+            $this->saveCustomFields($isNew);
+        }
+
+        return $saved;
+    }
+
+    protected function saveCustomField($isNew)
+    {
     }
 
     /**

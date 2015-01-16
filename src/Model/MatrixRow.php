@@ -41,7 +41,7 @@ class MatrixRow extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    protected $hiddenPatterns = ['/^col_id_\d+$/'];
+    protected $hiddenAttributesRegex = '/^col_id_\d+$/';
 
     /**
      * Cols associated with this row

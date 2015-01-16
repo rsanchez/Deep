@@ -101,6 +101,23 @@ class Validator extends IlluminateValidator
     }
 
     /**
+     * Validate whether the specified value exists in the DB
+     * OR if the value is 0 or '0'
+     * @param $attribute
+     * @param $value
+     * @param array $parameters
+     * @return bool
+     */
+    public function validateExistsOrZero($attribute, $value, $parameters = [])
+    {
+        if ($value === '0' || $value === 0) {
+            return true;
+        }
+
+        return $this->validateExists($attribute, $value, $parameters);
+    }
+
+    /**
      * Validate an associative array values is found in the specified array
      *
      * 'your_field' => 'attribute_in:your_key,1,2,3'
