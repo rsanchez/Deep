@@ -116,4 +116,12 @@ class MemberField extends AbstractField
     {
         return $this->m_field_required = $required ? 'y' : 'n';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListItems()
+    {
+        return $this->m_field_list_items ? explode("\n", $this->m_field_list_items) : [];
+    }
 }

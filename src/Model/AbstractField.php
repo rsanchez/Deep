@@ -113,4 +113,12 @@ abstract class AbstractField extends AbstractProperty
     {
         return 'field';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListItems()
+    {
+        return $this->field_list_items ? explode("\n", $this->field_list_items) : [];
+    }
 }

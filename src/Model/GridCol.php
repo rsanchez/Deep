@@ -137,4 +137,14 @@ class GridCol extends AbstractProperty
     {
         return $this->col_required = $required ? 'y' : 'n';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListItems()
+    {
+        $settings = $this->getSettings();
+
+        return empty($settings['field_list_items']) ? [] : explode("\n", $settings['field_list_items']);
+    }
 }

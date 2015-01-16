@@ -20,14 +20,14 @@ class ListItemsValidator implements PropertyValidatorInterface
      */
     public function getRules(AbstractProperty $property)
     {
-        $settings = $property->getSettings();
+        $listItems = $property->getListItems();
 
-        if (empty($settings['field_list_items'])) {
-            return [];
+        $rules = [];
+
+        if ($listItems) {
+            $rules[] = 'in:'.implode(',', $listItems);
         }
 
-        return [
-            'in:'.str_replace("\n", ',', $settings['field_list_items']),
-        ];
+        return $rules;
     }
 }

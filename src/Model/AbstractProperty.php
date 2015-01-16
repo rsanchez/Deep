@@ -61,6 +61,15 @@ abstract class AbstractProperty extends Model
     abstract public function getMaxLength();
 
     /**
+     * List of items for native select/checkboxes/radio buttons fields.
+     * @return array
+     */
+    public function getListItems()
+    {
+        return [];
+    }
+
+    /**
      * Whether the field is required
      * @return boolean
      */
