@@ -187,10 +187,12 @@ class Category extends AbstractEntity
     {
         $array = parent::attributesToArray();
 
-        foreach ($this->getFields() as $field) {
-            $array[$field->getName()] = $array['field_id_'.$field->getId()];
-
-            unset($array['field_id_'.$field->getId()], $array['field_ft_'.$field->getId()]);
+        foreach ($this->getProperties() as $property) {
+            if (isset($this->customFieldAttributes[$property->getIdentifier()])) {
+                $array[$property->getName()] = $this->customFieldAttributes[$property->getIdentifier()];
+            } else {
+                $array[$property->getName()] = null;
+            }
         }
 
         return $array;
