@@ -40,7 +40,7 @@ use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use Symfony\Component\Translation\Translator;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
-use Illuminate\Validation\DatabasePresenceVerifier;
+use rsanchez\Deep\Validation\DatabasePresenceVerifier;
 use rsanchez\Deep\Validation\Validator;
 use Carbon\Carbon;
 use CI_Controller;

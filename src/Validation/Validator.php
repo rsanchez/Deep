@@ -118,6 +118,28 @@ class Validator extends IlluminateValidator
     }
 
     /**
+     * Validate whether the specified values (in pipe delimited form) exist in the DB
+     * @param $attribute
+     * @param $value
+     * @param array $parameters
+     * @return bool
+     */
+    public function validatePipeExists($attribute, $value, $parameters = [])
+    {
+        if ($value) {
+            $value = explode('|', $value);
+
+            foreach ($value as $v) {
+                if (! $this->validateExists($attribute, $v, $parameters)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Validate an associative array values is found in the specified array
      *
      * 'your_field' => 'attribute_in:your_key,1,2,3'

@@ -15,7 +15,6 @@ use rsanchez\Deep\Validation\Validator;
 use rsanchez\Deep\Exception\ValidationException;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
-use rsanchez\Deep\Model\AbstractProperty;
 
 /**
  * Abstract base model
@@ -149,6 +148,17 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     }
 
     /**
+     * Get validation rules for this model when saving an model
+     * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
+     * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
+     * @return array
+     */
+    protected function getDefaultValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    {
+        return $this->rules;
+    }
+
+    /**
      * Get validation rules for this model when updating existing
      * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
      * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
@@ -156,7 +166,7 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
      */
     public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
-        return $this->rules;
+        return $this->getDefaultValidationRules($validatorFactory, $property);
     }
 
     /**
@@ -167,7 +177,7 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
      */
     public function getInsertValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
-        return $this->rules;
+        return $this->getDefaultValidationRules($validatorFactory, $property);
     }
 
     /**

@@ -20,6 +20,8 @@ use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Hydrator\DehydratorInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Model\AbstractProperty;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -538,17 +540,11 @@ class Title extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function getUpdateValidationRules()
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
-        $rules = $this->rules;
+        $rules = $this->getDefaultValidationRules($validatorFactory, $property);
 
         $rules['url_title'] .= sprintf(',%s,entry_id', $this->entry_id);
-
-        if ($this->channel_id && $this->channel->status_group) {
-            $rules['status'] .= sprintf('|exists:statuses,status,group_id,%s', $this->channel->status_group);
-        } else {
-            $rules['status'] .= '|in:open,closed';
-        }
 
         return $rules;
     }
@@ -556,20 +552,30 @@ class Title extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function getInsertValidationRules()
+    public function getInsertValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    {
+        $rules = $this->getDefaultValidationRules($validatorFactory, $property);
+
+        // these have default in sql
+        $rules['view_count_one'] = 'integer';
+        $rules['view_count_two'] = 'integer';
+        $rules['view_count_three'] = 'integer';
+        $rules['view_count_four'] = 'integer';
+        $rules['site_id'] = 'exists:sites,site_id';
+        $rules['versioning_enabled'] = 'yes_or_no';
+        $rules['allow_comments'] = 'yes_or_no';
+        $rules['sticky'] = 'yes_or_no';
+        $rules['comment_total'] = 'integer';
+
+        return $rules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
     {
         $rules = $this->rules;
-
-        // these have default
-        $rules['view_count_one'] = 'sometimes|integer';
-        $rules['view_count_two'] = 'sometimes|integer';
-        $rules['view_count_three'] = 'sometimes|integer';
-        $rules['view_count_four'] = 'sometimes|integer';
-        $rules['site_id'] = 'sometimes|exists:sites,site_id';
-        $rules['versioning_enabled'] = 'sometimes|yes_or_no';
-        $rules['allow_comments'] = 'sometimes|yes_or_no';
-        $rules['sticky'] = 'sometimes|yes_or_no';
-        $rules['comment_total'] = 'sometimes|integer';
 
         if ($this->channel_id && $this->channel->status_group) {
             $rules['status'] .= sprintf('|exists:statuses,status,group_id,%s', $this->channel->status_group);
