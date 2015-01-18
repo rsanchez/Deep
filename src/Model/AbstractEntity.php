@@ -261,7 +261,7 @@ abstract class AbstractEntity extends Model
         return $saved;
     }
 
-    protected function saveCustomField($isNew)
+    protected function saveCustomFields($isNew)
     {
     }
 
