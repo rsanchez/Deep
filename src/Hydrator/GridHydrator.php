@@ -9,9 +9,7 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Collection\EntryCollection;
-use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\GridCol;
@@ -22,7 +20,7 @@ use rsanchez\Deep\Collection\GridRowCollection;
 /**
  * Hydrator for the Grid fieldtype
  */
-class GridHydrator extends AbstractHydrator implements DehydratorInterface
+class GridHydrator extends AbstractHydrator
 {
     /**
      * @var \rsanchez\Deep\Model\GridCol
@@ -61,16 +59,15 @@ class GridHydrator extends AbstractHydrator implements DehydratorInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Illuminate\Database\ConnectionInterface   $db
      * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      * @param \rsanchez\Deep\Model\GridCol               $colModel
      * @param \rsanchez\Deep\Model\GridRow               $rowModel
      */
-    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
     {
-        parent::__construct($db, $collection, $hydrators, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->colModel = $colModel;
         $this->rowModel = $rowModel;
@@ -144,39 +141,6 @@ class GridHydrator extends AbstractHydrator implements DehydratorInterface
         }
 
         return $rows;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
-    {
-        $rows = $entity->{$property->getName()};
-
-        if ($rows) {
-            foreach ($rows as $i => $row) {
-                $row->row_order = $i;
-
-                // save once to make sure we have an id
-                if (! $row->exists) {
-                    $row->save();
-                }
-
-                foreach ($row->getCols() as $col) {
-                    $hydrator = $this->hydrators->get($col->getType());
-
-                    if ($hydrator instanceof DehydratorInterface) {
-                        $row->{$col->getIdentifier()} = $hydrator->dehydrate($row, $col, $entity, $property);
-                    } else {
-                        $row->{$col->getIdentifier()} = $row->{$col->getName()};
-                    }
-                }
-
-                $row->save();
-            }
-        }
-
-        return ' ';
     }
 
     /**

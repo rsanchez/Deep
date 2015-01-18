@@ -9,8 +9,6 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
@@ -20,7 +18,7 @@ use rsanchez\Deep\Collection\PlayaCollection;
 /**
  * Hydrator for the Playa fieldtype
  */
-class PlayaHydrator extends AbstractHydrator implements DehydratorInterface
+class PlayaHydrator extends AbstractHydrator
 {
     /**
      * @var \rsanchez\Deep\Model\PlayaEntry
@@ -43,15 +41,14 @@ class PlayaHydrator extends AbstractHydrator implements DehydratorInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Illuminate\Database\ConnectionInterface   $db
      * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      * @param \rsanchez\Deep\Model\PlayaEntry            $model
      */
-    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, PlayaEntry $model)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, PlayaEntry $model)
     {
-        parent::__construct($db, $collection, $hydrators, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 
@@ -82,48 +79,5 @@ class PlayaHydrator extends AbstractHydrator implements DehydratorInterface
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 
         return $this->playaCollection->createChildCollection($entries);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
-    {
-        $entries = $entity->{$property->getName()};
-
-        $output = [];
-
-        if ($entries) {
-            foreach ($entries as $i => $entry) {
-                if (! $entry->existing) {
-                    $entry->save();
-                }
-
-                $data = [
-                    'parent_'.$property->getPrefix().'_id' => $property->getId(),
-                    'parent_'.$entity->getPrefix().'_id' => $entity->getId(),
-                    'child_entry_id' => $entry->entry_id,
-                    'rel_order' => $i,
-                ];
-
-                if ($parentEntity && $parentProperty) {
-                    $data['parent_'.$parentProperty->getPrefix().'_id'] = $parentProperty->getId();
-                    $data['parent_'.$parentEntity->getPrefix().'_id'] = $parentEntity->getId();
-                }
-
-                $query = $this->db->table('playa_relationships');
-
-                if ($entry->rel_id) {
-                    $query->where('rel_id', $entry->rel_id)
-                        ->update($data);
-                } else {
-                    $query->insert($data);
-                }
-
-                $output[] = sprintf('[%s] [%s] %s', $entry->entry_id, $entry->url_title, $entry->title);
-            }
-        }
-
-        return implode("\n", $output);
     }
 }

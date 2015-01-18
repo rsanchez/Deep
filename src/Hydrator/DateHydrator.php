@@ -16,7 +16,7 @@ use Carbon\Carbon;
 /**
  * Hydrator for the Date fieldtype
  */
-class DateHydrator extends AbstractHydrator implements DehydratorInterface
+class DateHydrator extends AbstractHydrator
 {
     /**
      * {@inheritdoc}
@@ -26,15 +26,5 @@ class DateHydrator extends AbstractHydrator implements DehydratorInterface
         $value = $entity->{$property->getIdentifier()};
 
         return $value ? Carbon::createFromFormat('U', $value) : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
-    {
-        $date = $entity->{$property->getName()};
-
-        return $date ? $date->format('U') : null;
     }
 }

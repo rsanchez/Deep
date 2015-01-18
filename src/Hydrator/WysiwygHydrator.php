@@ -9,9 +9,6 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
@@ -38,16 +35,15 @@ class WysiwygHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \Illuminate\Database\ConnectionInterface                $db
      * @param \rsanchez\Deep\Collection\EntryCollection               $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
      * @param string                                                  $fieldtype
      * @param \rsanchez\Deep\Repository\SiteRepository                $siteRepository
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($db, $collection, $hydrators, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->siteRepository = $siteRepository;
 

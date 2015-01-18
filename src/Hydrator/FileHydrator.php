@@ -9,9 +9,6 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Model\AbstractProperty;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\File;
@@ -21,7 +18,7 @@ use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 /**
  * Hydrator for the File fieldtype
  */
-class FileHydrator extends AbstractHydrator implements DehydratorInterface
+class FileHydrator extends AbstractHydrator
 {
     /**
      * @var \rsanchez\Deep\Model\File
@@ -43,15 +40,14 @@ class FileHydrator extends AbstractHydrator implements DehydratorInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Illuminate\Database\ConnectionInterface                $db
      * @param \rsanchez\Deep\Collection\EntryCollection               $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
      * @param string                                                  $fieldtype
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, File $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($db, $collection, $hydrators, $fieldtype);
+        parent::__construct($collection, $hydrators, $fieldtype);
 
         $this->model = $model;
 
@@ -100,15 +96,5 @@ class FileHydrator extends AbstractHydrator implements DehydratorInterface
         $value = $entity->{$property->getIdentifier()};
 
         return $value && isset($this->files[$value]) ? $this->files[$value] : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
-    {
-        $file = $entity->{$property->getName()};
-
-        return $file ? '{filedir_'.$file->upload_location_id.'}'.$file->file_name : null;
     }
 }

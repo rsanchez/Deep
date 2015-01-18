@@ -10,6 +10,8 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Hydrator\HydratorCollection;
+use rsanchez\Deep\Hydrator\DehydratorCollection;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Collection\TitleCollection;
@@ -102,6 +104,11 @@ class Title extends AbstractEntity
      * @var \rsanchez\Deep\Hydrator\HydratorCollection
      */
     protected $hydrators;
+
+    /**
+     * @var \rsanchez\Deep\Hydrator\DehydratorCollection
+     */
+    protected $dehydrators;
 
     /**
      * When extending this class, set this property to automatically
@@ -286,6 +293,15 @@ class Title extends AbstractEntity
     }
 
     /**
+     * get the global HydratorFactory
+     * @return void
+     */
+    public static function getHydratorFactory()
+    {
+        return self::$hydratorFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected static function joinTables()
@@ -348,6 +364,7 @@ class Title extends AbstractEntity
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
         $hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators);
+        $dehydrators = self::$hydratorFactory->getDehydratorsForCollection($collection);
 
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
@@ -356,7 +373,9 @@ class Title extends AbstractEntity
 
         // loop again to actually hydrate
         foreach ($collection as $entry) {
-            $entry->hydrators = $hydrators;
+            $entry->setHydrators($hydrators);
+
+            $entry->setDehydrators($dehydrators);
 
             foreach ($entry->channel->fields as $field) {
                 $hydrator = $hydrators->get($field->getType());
@@ -374,6 +393,24 @@ class Title extends AbstractEntity
                 $entry->setCustomField($name, $hydrators[$name]->hydrate($entry, new NullProperty()));
             }
         }
+    }
+
+    /**
+     * Set the dehydrators for this entry
+     * @param \rsanchez\Deep\Hydrator\DehydratorCollection $dehydrators
+     */
+    public function setDehydrators(DehydratorCollection $dehydrators)
+    {
+        $this->dehydrators = $dehydrators;
+    }
+
+    /**
+     * Set the hydrators for this entry
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     */
+    public function setHydrators(HydratorCollection $hydrators)
+    {
+        $this->hydrators = $hydrators;
     }
 
     /**
@@ -1701,11 +1738,17 @@ class Title extends AbstractEntity
         $channelData['channel_id'] = $this->channel_id;
         $channelData['site_id'] = $this->site_id;
 
-        foreach ($this->channel->fields as $field) {
-            $hydrator = $this->hydrators->get($field->getType());
+        foreach ($this->getProperties() as $field) {
+            $dehydrator = $this->dehydrators->get($field->getType());
 
-            if ($hydrator instanceof DehydratorInterface) {
-                $channelData[$field->getIdentifier()] = $hydrator->dehydrate($this, $field);
+            if ($dehydrator) {
+                $channelData[$field->getIdentifier()] = $dehydrator->dehydrate($this, $field);
+            } elseif (! array_key_exists($field->getIdentifier(), $channelData)) {
+                $channelData[$field->getIdentifier()] = $this->{$field->getName()};
+            }
+
+            if ($field->getType() !== 'date' && ! array_key_exists('field_ft_'.$field->getId(), $channelData)) {
+                 $channelData['field_ft_'.$field->getId()] = 'none';
             }
         }
 
