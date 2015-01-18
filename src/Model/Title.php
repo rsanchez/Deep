@@ -263,6 +263,28 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Set the channel_id attribute for this entry
+     * @param $channelId
+     */
+    public function setChannelIdAttribute($channelId)
+    {
+        $this->attributes['channel_id'] = $channelId;
+
+        $this->relations['chan'] = self::$channelRepository->find($channelId);
+    }
+
+    /**
+     * Set the Channel model for this entry
+     * @param Channel $channel
+     */
+    public function setChannel(Channel $channel)
+    {
+        $this->relations['chan'] = $channel;
+
+        $this->attributes['channel_id'] = $channel->channel_id;
+    }
+
+    /**
      * Set the global ChannelRepository
      * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
      * @return void
