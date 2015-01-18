@@ -130,6 +130,21 @@ class Title extends AbstractEntity
     /**
      * {@inheritdoc}
      */
+    protected $attributes = [
+        'view_count_one' => 0,
+        'view_count_two' => 0,
+        'view_count_three' => 0,
+        'view_count_four' => 0,
+        'site_id' => 1,
+        'versioning_enabled' => 'n',
+        'allow_comments' => 'y',
+        'sticky' => 'n',
+        'comment_total' => 0,
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $rules = [
         'site_id' => 'required|exists:sites,site_id',
         'channel_id' => 'required|exists:channels,channel_id',
@@ -604,27 +619,6 @@ class Title extends AbstractEntity
         $rules = $this->getDefaultValidationRules($validatorFactory, $property);
 
         $rules['url_title'] .= sprintf(',%s,entry_id', $this->entry_id);
-
-        return $rules;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getInsertValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
-    {
-        $rules = $this->getDefaultValidationRules($validatorFactory, $property);
-
-        // these have default in sql
-        $rules['view_count_one'] = 'integer';
-        $rules['view_count_two'] = 'integer';
-        $rules['view_count_three'] = 'integer';
-        $rules['view_count_four'] = 'integer';
-        $rules['site_id'] = 'exists:sites,site_id';
-        $rules['versioning_enabled'] = 'yes_or_no';
-        $rules['allow_comments'] = 'yes_or_no';
-        $rules['sticky'] = 'yes_or_no';
-        $rules['comment_total'] = 'integer';
 
         return $rules;
     }
