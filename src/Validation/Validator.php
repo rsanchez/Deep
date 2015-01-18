@@ -206,7 +206,7 @@ class Validator extends IlluminateValidator
         $attributes = explode(':', array_shift($parameters));
 
         if (! is_array($value)) {
-            return false;
+            return true;
         }
 
         foreach ($value as $row) {

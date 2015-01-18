@@ -48,6 +48,8 @@ class MatrixDehydrator extends AbstractDehydrator
 
                     if ($dehydrator) {
                         $row->{$col->getIdentifier()} = $dehydrator->dehydrate($row, $col, $entity, $property);
+                    } else {
+                        $row->{$col->getIdentifier()} = $row->propertyToArray($col);
                     }
                 }
 

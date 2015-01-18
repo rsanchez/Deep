@@ -144,7 +144,7 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
      */
     public function shouldValidateIfChild()
     {
-        return false;
+        return ! $this->exists;
     }
 
     /**

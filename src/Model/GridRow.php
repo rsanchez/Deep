@@ -43,12 +43,6 @@ class GridRow extends AbstractEntity
     protected $cols;
 
     /**
-     * List of col_name => col_id_X
-     * @var array
-     */
-    protected $colNames = [];
-
-    /**
      * {@inheritdoc}
      *
      * @param  array                                       $models
@@ -57,30 +51,6 @@ class GridRow extends AbstractEntity
     public function newCollection(array $models = array())
     {
         return new GridRowCollection($models);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttribute($key, $value)
-    {
-        if (isset($this->colNames[$key])) {
-            $key = $this->colNames[$key];
-        }
-
-        return parent::setAttribute($key, $value);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttribute($key)
-    {
-        if (isset($this->colNames[$key])) {
-            $key = $this->colNames[$key];
-        }
-
-        return parent::getAttribute($key);
     }
 
     /**
@@ -154,7 +124,9 @@ class GridRow extends AbstractEntity
         $this->cols = $cols;
 
         foreach ($cols as $col) {
-            $this->colNames[$col->getName()] = $col->getIdentifier();
+            if (! isset($this->customFields[$col->getName()])) {
+                $this->setCustomField($col->getName(), $this->{$col->getIdentifier()});
+            }
         }
     }
 

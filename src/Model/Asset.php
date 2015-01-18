@@ -225,4 +225,12 @@ class Asset extends Model implements FileInterface
             },
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function shouldValidateIfChild()
+    {
+        return ! $this->entry_id || ! $this->exists;
+    }
 }

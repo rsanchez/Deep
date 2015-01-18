@@ -111,6 +111,43 @@ abstract class AbstractEntity extends Model
     }
 
     /**
+     * Convert a custom field property to an array/scalar
+     * @param \rsanchez\Deep\Model\PropertyInterface $property
+     * @return array|mixed|string
+     */
+    public function propertyToArray(PropertyInterface $property)
+    {
+        $value = $this->{$property->getName()};
+
+        if (method_exists($value, 'toArray')) {
+            return $value->toArray();
+        } elseif (method_exists($value, '__toString')) {
+            return (string) $value;
+        } elseif (is_object($value)) {
+            return (array) $value;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get custom fields as an array
+     * @return array
+     */
+    public function propertiesToArray()
+    {
+        $array = [];
+
+        $self = $this;
+
+        $this->getProperties()->each(function ($property) use (&$array, $self) {
+            $array[$property->getName()] = $self->propertyToArray($property);
+        });
+
+        return $array;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * override to 
@@ -121,8 +158,6 @@ abstract class AbstractEntity extends Model
     {
         $array = parent::toArray();
 
-        $self = $this;
-
         if ($this->hiddenAttributesRegex) {
             foreach ($array as $key => $value) {
                 if (preg_match($this->hiddenAttributesRegex, $key)) {
@@ -131,21 +166,7 @@ abstract class AbstractEntity extends Model
             }
         }
 
-        $this->getProperties()->each(function ($property) use (&$array, $self) {
-            $name = $property->getName();
-
-            $value = $self->{$name};
-
-            if (method_exists($value, 'toArray')) {
-                $array[$name] = $value->toArray();
-            } elseif (method_exists($value, '__toString')) {
-                $array[$name] = (string) $value;
-            } elseif (is_object($value)) {
-                $array[$name] = (array) $value;
-            } else {
-                $array[$name] = $value;
-            }
-        });
+        $array = array_merge($array, $this->propertiesToArray());
 
         return $array;
     }
