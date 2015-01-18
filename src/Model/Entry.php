@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Repository\FieldRepository;
 use Carbon\Carbon;
 
@@ -79,7 +80,7 @@ class Entry extends Title
      */
     public function getProperties()
     {
-        return $this->channel->fields;
+        return $this->channel_id ? $this->channel->fields : new FieldCollection();
     }
 
     /**

@@ -573,7 +573,7 @@ class Title extends AbstractEntity
      */
     public function getChannelNameAttribute()
     {
-        return $this->channel->channel_name;
+        return $this->channel_id ? $this->channel->channel_name : '';
     }
 
     /**
@@ -583,7 +583,7 @@ class Title extends AbstractEntity
      */
     public function getChannelShortNameAttribute()
     {
-        return $this->channel->channel_name;
+        return $this->channel_id ? $this->channel->channel_name : '';
     }
 
     /**
@@ -593,7 +593,7 @@ class Title extends AbstractEntity
      */
     public function getUsernameAttribute()
     {
-        return $this->author->username;
+        return $this->author_id ? $this->author->username : '';
     }
 
     /**
