@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\RelationshipEntry;
 
@@ -59,7 +59,7 @@ class SiblingsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
         $value = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
 

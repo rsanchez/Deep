@@ -9,16 +9,16 @@
 
 namespace rsanchez\Deep\Validation;
 
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 
 class MaxLengthValidator implements PropertyValidatorInterface
 {
     /**
      * Get a list of validation rules
-     * @param  \rsanchez\Deep\Model\AbstractProperty $property
+     * @param  \rsanchez\Deep\Model\PropertyInterface $property
      * @return array
      */
-    public function getRules(AbstractProperty $property)
+    public function getRules(PropertyInterface $property)
     {
         $maxLength = $property->getMaxLength();
 

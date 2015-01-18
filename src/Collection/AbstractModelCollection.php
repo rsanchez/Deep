@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Validation\Validator;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 
@@ -88,7 +88,7 @@ abstract class AbstractModelCollection extends Collection implements Validatable
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = [];
 

@@ -13,7 +13,7 @@ use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
 use rsanchez\Deep\Relations\HasManyFromRepository;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 
 /**
  * Model for the channels table
@@ -100,7 +100,7 @@ class Channel extends Model
     /**
      * {@inheritdoc}
      */
-    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = $this->getDefaultValidationRules($validatorFactory, $property);
 
@@ -112,7 +112,7 @@ class Channel extends Model
     /**
      * {@inheritdoc}
      */
-    public function getDefaultValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getDefaultValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = $this->rules;
 

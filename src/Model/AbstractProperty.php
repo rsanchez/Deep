@@ -9,60 +9,31 @@
 
 namespace rsanchez\Deep\Model;
 
+use rsanchez\Deep\Collection\PropertyCollection;
+
 /**
  * Interface for field/col models
  */
-abstract class AbstractProperty extends Model
+abstract class AbstractProperty extends Model implements PropertyInterface
 {
     /**
-     * Get the property short name (eg. the field_name or col_name)
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    abstract public function getName();
+    public function hasChildProperties()
+    {
+        return false;
+    }
 
     /**
-     * Get the property ID with column suffix (eg. field_id_13 or col_id_13)
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    abstract public function getIdentifier();
+    public function getChildProperties()
+    {
+        return new PropertyCollection();
+    }
 
     /**
-     * Get the property ID (eg. the field_id or col_id)
-     *
-     * @return string
-     */
-    abstract public function getId();
-
-    /**
-     * Get the property type (eg. the field_type or col_type)
-     *
-     * @return string
-     */
-    abstract public function getType();
-
-    /**
-     * Get the property prefix (eg. field or col)
-     * @return string
-     */
-    abstract public function getPrefix();
-
-    /**
-     * Get the property label
-     * @return string
-     */
-    abstract public function getLabel();
-
-    /**
-     * Get the property max length
-     * @return int
-     */
-    abstract public function getMaxLength();
-
-    /**
-     * List of items for native select/checkboxes/radio buttons fields.
-     * @return array
+     * {@inheritdoc}
      */
     public function getListItems()
     {
@@ -70,8 +41,7 @@ abstract class AbstractProperty extends Model
     }
 
     /**
-     * Whether the field is required
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isRequired()
     {
@@ -79,20 +49,25 @@ abstract class AbstractProperty extends Model
     }
 
     /**
-     * Set whether the field is required
-     * @param boolean
-     * @return void
+     * {@inheritdoc}
      */
     public function setRequired($required = true)
     {
     }
 
     /**
-     * Get the property's settings
-     * @return array
+     * {@inheritdoc}
      */
     public function getSettings()
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMaxLength()
+    {
+        return 255;
     }
 }

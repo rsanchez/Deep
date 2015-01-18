@@ -23,7 +23,7 @@ use rsanchez\Deep\Hydrator\DehydratorInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use Carbon\Carbon;
 use Closure;
 use DateTime;
@@ -577,7 +577,7 @@ class Title extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = $this->getDefaultValidationRules($validatorFactory, $property);
 
@@ -610,7 +610,7 @@ class Title extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function getDefaultValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getDefaultValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = $this->rules;
 

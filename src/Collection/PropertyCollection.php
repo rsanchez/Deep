@@ -9,17 +9,17 @@
 
 namespace rsanchez\Deep\Collection;
 
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Collection of \rsanchez\Deep\Model\AbstractProperty
+ * Collection of \rsanchez\Deep\Model\PropertyInterface
  */
 class PropertyCollection extends AbstractModelCollection
 {
     /**
      * {@inheritdoc}
-     * @param \rsanchez\Deep\Model\AbstractProperty $item
+     * @param \rsanchez\Deep\Model\PropertyInterface $item
      */
     public function addModel(Model $item)
     {
@@ -27,11 +27,11 @@ class PropertyCollection extends AbstractModelCollection
     }
 
     /**
-     * Add an AbstractProperty to this collection
-     * @param  \rsanchez\Deep\Model\AbstractProperty $item
+     * Add an PropertyInterface to this collection
+     * @param  \rsanchez\Deep\Model\PropertyInterface $item
      * @return void
      */
-    public function addProperty(AbstractProperty $item)
+    public function addProperty(PropertyInterface $item)
     {
         $this->items[] = $item;
     }

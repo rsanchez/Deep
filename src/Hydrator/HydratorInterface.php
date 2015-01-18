@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Model\AbstractEntity;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 
 /**
  * Hydrator interface
@@ -31,8 +31,8 @@ interface HydratorInterface
      * on the specified entity (channel entry or Matrix/Grid row)
      *
      * @param  AbstractEntity   $entity
-     * @param  AbstractProperty $property
+     * @param  PropertyInterface $property
      * @return mixed            the entity property value
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property);
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property);
 }

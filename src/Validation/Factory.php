@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Validation;
 
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use Illuminate\Validation\Factory as IlluminateFactory;
 
 class Factory extends IlluminateFactory
@@ -155,12 +155,12 @@ class Factory extends IlluminateFactory
         return call_user_func($this->resolver, $this->translator, $data, $rules, $messages, $customAttributes);
     }
 
-    public function hasPropertyValidator(AbstractProperty $property)
+    public function hasPropertyValidator(PropertyInterface $property)
     {
         return isset($this->propertyValidators[$property->getType()]);
     }
 
-    public function makePropertyValidator(AbstractProperty $property)
+    public function makePropertyValidator(PropertyInterface $property)
     {
         $type = $property->getType();
 

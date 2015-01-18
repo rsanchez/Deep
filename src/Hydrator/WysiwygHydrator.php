@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
@@ -53,7 +53,7 @@ class WysiwygHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
         return $this->parse($entity->{$property->getIdentifier()});
     }

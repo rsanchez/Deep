@@ -11,7 +11,7 @@ namespace rsanchez\Deep\Model;
 
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use DateTime;
 
@@ -197,7 +197,7 @@ abstract class AbstractEntity extends Model
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $parentProperty = null)
+    public function getValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $parentProperty = null)
     {
         $rules = parent::getValidationRules($validatorFactory, $parentProperty);
 

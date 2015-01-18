@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use Carbon\Carbon;
 
@@ -21,7 +21,7 @@ class DateDehydrator extends AbstractDehydrator
     /**
      * {@inheritdoc}
      */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
+    public function dehydrate(AbstractEntity $entity, PropertyInterface $property, AbstractEntity $parentEntity = null, PropertyInterface $parentProperty = null)
     {
         $date = $entity->{$property->getName()};
 

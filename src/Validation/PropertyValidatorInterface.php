@@ -9,9 +9,9 @@
 
 namespace rsanchez\Deep\Validation;
 
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 
 interface PropertyValidatorInterface
 {
-    public function getRules(AbstractProperty $property);
+    public function getRules(PropertyInterface $property);
 }

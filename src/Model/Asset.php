@@ -84,7 +84,7 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
-    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = parent::getInsertValidationRules($validatorFactory, $property);
 

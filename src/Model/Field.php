@@ -41,9 +41,45 @@ class Field extends AbstractField
         return new FieldCollection($fields);
     }
 
-    public function hasRows()
+    /**
+     * {@inheritdoc}
+     */
+    public function hasChildProperties()
     {
         return $this->field_type === 'matrix' || $this->field_type === 'grid';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChildProperties()
+    {
+        switch ($this->field_type) {
+            case 'matrix':
+                return $this->matrix_cols;
+            case 'grid':
+                return $this->grid_cols;
+        }
+
+        return parent::getChildProperties();
+    }
+
+    /**
+     * Define the matrix_cols Eloquent relationship
+     * @return \rsanchez\Deep\Relations\HasOneFromRepository
+     */
+    public function matrixCols()
+    {
+        return $this->hasMany('\\rsanchez\\Deep\\Model\\MatrixCol', 'field_id', 'field_id');
+    }
+
+    /**
+     * Define the grid_columns Eloquent relationship
+     * @return \rsanchez\Deep\Relations\HasOneFromRepository
+     */
+    public function gridCols()
+    {
+        return $this->hasMany('\\rsanchez\\Deep\\Model\\GridCol', 'field_id', 'field_id');
     }
 
     /**

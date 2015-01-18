@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 
 /**
@@ -20,7 +20,7 @@ class PipeHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
         $value = $entity->{$property->getIdentifier()};
 

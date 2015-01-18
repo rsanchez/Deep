@@ -11,7 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\AssetCollection;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\Asset;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
@@ -24,7 +24,7 @@ class AssetsDehydrator extends AbstractDehydrator
     /**
      * {@inheritdoc}
      */
-    public function dehydrate(AbstractEntity $entity, AbstractProperty $property, AbstractEntity $parentEntity = null, AbstractProperty $parentProperty = null)
+    public function dehydrate(AbstractEntity $entity, PropertyInterface $property, AbstractEntity $parentEntity = null, PropertyInterface $parentProperty = null)
     {
         $assets = $entity->{$property->getName()};
 

@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\GridCol;
 use rsanchez\Deep\Model\GridRow;
@@ -118,7 +118,7 @@ class GridHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
         if (isset($this->sortedRows[$entity->getId()][$property->getId()])) {
             $rows = $this->sortedRows[$entity->getId()][$property->getId()];

@@ -11,7 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\RelationshipEntry;
 
@@ -60,7 +60,7 @@ class RelationshipHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();

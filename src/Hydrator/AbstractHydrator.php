@@ -11,7 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractEntity;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 
 /**
  * Abstract Hydrator class
@@ -70,5 +70,5 @@ abstract class AbstractHydrator implements HydratorInterface
     /**
      * {@inheritdoc}
      */
-    abstract public function hydrate(AbstractEntity $entity, AbstractProperty $property);
+    abstract public function hydrate(AbstractEntity $entity, PropertyInterface $property);
 }

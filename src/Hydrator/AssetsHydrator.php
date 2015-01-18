@@ -11,7 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\AssetCollection;
-use rsanchez\Deep\Model\AbstractProperty;
+use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\Asset;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
@@ -92,7 +92,7 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function hydrate(AbstractEntity $entity, AbstractProperty $property)
+    public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
         if (isset($this->selections[$entity->getType()][$entity->getId()][$property->getId()])) {
             return $this->selections[$entity->getType()][$entity->getId()][$property->getId()];

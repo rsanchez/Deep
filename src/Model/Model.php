@@ -150,10 +150,10 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     /**
      * Get validation rules for this model when saving an model
      * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
-     * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
+     * @param  \rsanchez\Deep\Model\PropertyInterface|null $property
      * @return array
      */
-    protected function getDefaultValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    protected function getDefaultValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         return $this->rules;
     }
@@ -161,10 +161,10 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     /**
      * Get validation rules for this model when updating existing
      * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
-     * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
+     * @param  \rsanchez\Deep\Model\PropertyInterface|null $property
      * @return array
      */
-    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         return $this->getDefaultValidationRules($validatorFactory, $property);
     }
@@ -172,10 +172,10 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     /**
      * Get validation rules for this model when creating new
      * @param  \rsanchez\Deep\Validation\Factory          $validatorFactory
-     * @param  \rsanchez\Deep\Model\AbstractProperty|null $property
+     * @param  \rsanchez\Deep\Model\PropertyInterface|null $property
      * @return array
      */
-    public function getInsertValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getInsertValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         return $this->getDefaultValidationRules($validatorFactory, $property);
     }
@@ -183,7 +183,7 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules(ValidatorFactory $validatorFactory, AbstractProperty $property = null)
+    public function getValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         return $this->exists ? $this->getUpdateValidationRules($validatorFactory, $property) :  $this->getInsertValidationRules($validatorFactory, $property);
     }
