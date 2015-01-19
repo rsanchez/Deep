@@ -59,20 +59,25 @@ class MatrixHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      * @param \rsanchez\Deep\Model\MatrixCol             $colModel
      * @param \rsanchez\Deep\Model\MatrixRow             $rowModel
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, MatrixCol $colModel, MatrixRow $rowModel)
+    public function __construct(HydratorCollection $hydrators, $fieldtype, MatrixCol $colModel, MatrixRow $rowModel)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($hydrators, $fieldtype);
 
         $this->colModel = $colModel;
         $this->rowModel = $rowModel;
+    }
 
-        $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
+    /**
+     * {@inheritdoc}
+     */
+    public function bootFromCollection(EntryCollection $collection)
+    {
+        $fieldIds = $collection->getFieldIdsByFieldtype($this->fieldtype);
 
         $this->cols = $this->colModel->fieldId($fieldIds)->orderBy('col_order')->get();
 
@@ -90,9 +95,9 @@ class MatrixHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function preload(array $entryIds)
+    public function preload(EntryCollection $collection)
     {
-        $this->rows = $this->rowModel->entryId($entryIds)->orderBy('row_order')->get();
+        $this->rows = $this->rowModel->entryId($collection->getEntryIds())->orderBy('row_order')->get();
 
         foreach ($this->rows as $row) {
             if (! isset($this->sortedRows[$row->entry_id][$row->field_id])) {

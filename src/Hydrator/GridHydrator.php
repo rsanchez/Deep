@@ -59,20 +59,25 @@ class GridHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      * @param \rsanchez\Deep\Model\GridCol               $colModel
      * @param \rsanchez\Deep\Model\GridRow               $rowModel
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
+    public function __construct(HydratorCollection $hydrators, $fieldtype, GridCol $colModel, GridRow $rowModel)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($hydrators, $fieldtype);
 
         $this->colModel = $colModel;
         $this->rowModel = $rowModel;
+    }
 
-        $fieldIds = $collection->getFieldIdsByFieldtype($fieldtype);
+    /**
+     * {@inheritdoc}
+     */
+    public function bootFromCollection(EntryCollection $collection)
+    {
+        $fieldIds = $collection->getFieldIdsByFieldtype($this->fieldtype);
 
         $this->cols = $this->colModel->fieldId($fieldIds)->orderBy('col_order')->get();
 
@@ -90,14 +95,14 @@ class GridHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function preload(array $entryIds)
+    public function preload(EntryCollection $collection)
     {
-        $fieldIds = $this->collection->getFieldIdsByFieldtype($this->fieldtype);
+        $fieldIds = $collection->getFieldIdsByFieldtype($this->fieldtype);
 
         $this->rows = new GridRowCollection();
 
         foreach ($fieldIds as $fieldId) {
-            $rows = $this->rowModel->fieldId($fieldId)->entryId($entryIds)->orderBy('row_order')->get();
+            $rows = $this->rowModel->fieldId($fieldId)->entryId($collection->getEntryIds())->orderBy('row_order')->get();
 
             foreach ($rows as $row) {
                 if (! isset($this->sortedRows[$row->entry_id][$fieldId])) {

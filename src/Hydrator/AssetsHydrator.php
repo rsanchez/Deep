@@ -41,14 +41,13 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection               $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection              $hydrators
      * @param string                                                  $fieldtype
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
+    public function __construct(HydratorCollection $hydrators, $fieldtype, Asset $model, UploadPrefRepositoryInterface $uploadPrefRepository)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($hydrators, $fieldtype);
 
         $this->model = $model;
 
@@ -58,9 +57,9 @@ class AssetsHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    public function preload(array $entryIds)
+    public function preload(EntryCollection $collection)
     {
-        $assets = $this->model->entryId($entryIds)->orderBy('sort_order')->get();
+        $assets = $this->model->entryId($collection->getEntryIds())->orderBy('sort_order')->get();
 
         foreach ($assets as $asset) {
             if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {

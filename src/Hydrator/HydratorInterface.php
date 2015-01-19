@@ -11,6 +11,7 @@ namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\PropertyInterface;
+use rsanchez\Deep\Collection\EntryCollection;
 
 /**
  * Hydrator interface
@@ -21,10 +22,10 @@ interface HydratorInterface
 {
     /**
      * Preload any custom field data that resides in another DB table
-     * @param  array $entryIds all the entry IDs in the collection (including related entries)
+     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @return void
      */
-    public function preload(array $entryIds);
+    public function preload(EntryCollection $collection);
 
     /**
      * Hydrate the specified property (channel field or Matrix/Grid col)

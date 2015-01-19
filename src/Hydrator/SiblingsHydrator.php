@@ -28,20 +28,33 @@ class SiblingsHydrator extends AbstractHydrator
     protected $model;
 
     /**
+     * Collection of entries being loaded by the parent collection
+     * @var \rsanchez\Deep\Collection\RelationshipCollection
+     */
+    protected $relationshipCollection;
+
+    /**
      * {@inheritdoc}
      *
-     * @param \Illuminate\Database\ConnectionInterface   $db
-     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
-     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     * @param string                                     $fieldtype
-     * @param \rsanchez\Deep\Model\RelationshipEntry     $model
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection       $hydrators
+     * @param string                                           $fieldtype
+     * @param \rsanchez\Deep\Model\RelationshipEntry           $model
+     * @param \rsanchez\Deep\Model\RelationshipCollection|null $relationshipCollection
      */
-    public function __construct(ConnectionInterface $db, EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, RelationshipEntry $model)
+    public function __construct(HydratorCollection $hydrators, $fieldtype, RelationshipEntry $model, RelationshipCollection $relationshipCollection = null)
     {
-        parent::__construct($db, $collection, $hydrators, $fieldtype);
+        parent::__construct($hydrators, $fieldtype);
 
         $this->model = $model;
 
+        $this->relationshipCollection = $relationshipCollection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bootFromCollection(EntryCollection $collection)
+    {
         $this->relationshipCollection = $this->model->siblings($collection->modelKeys())->get();
 
         foreach ($this->relationshipCollection as $entry) {
@@ -61,7 +74,7 @@ class SiblingsHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
-        $value = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
+        $entries = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
 
         return $this->relationshipCollection->createChildCollection($entries);
     }

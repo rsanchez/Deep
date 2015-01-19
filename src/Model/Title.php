@@ -400,12 +400,12 @@ class Title extends AbstractEntity
      */
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
-        $hydrators = self::$hydratorFactory->getHydrators($collection, $this->extraHydrators);
+        $hydrators = self::$hydratorFactory->getHydratorsForCollection($collection, $this->extraHydrators);
         $dehydrators = self::$hydratorFactory->getDehydratorsForCollection($collection);
 
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
-            $hydrator->preload($collection->getEntryIds());
+            $hydrator->preload($collection);
         }
 
         // loop again to actually hydrate

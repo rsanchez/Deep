@@ -41,17 +41,25 @@ class PlayaHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
-     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     * @param string                                     $fieldtype
-     * @param \rsanchez\Deep\Model\PlayaEntry            $model
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection     $hydrators
+     * @param string                                         $fieldtype
+     * @param \rsanchez\Deep\Model\PlayaEntry                $model
+     * @param \rsanchez\Deep\Collection\PlayaCollection|null $playaCollection
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, PlayaEntry $model)
+    public function __construct(HydratorCollection $hydrators, $fieldtype, PlayaEntry $model, PlayaCollection $playaCollection = null)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($hydrators, $fieldtype);
 
         $this->model = $model;
 
+        $this->playaCollection = $playaCollection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bootFromCollection(EntryCollection $collection)
+    {
         $this->playaCollection = $this->model->parentEntryId($collection->modelKeys())->orderBy('rel_order')->get();
 
         foreach ($this->playaCollection as $entry) {

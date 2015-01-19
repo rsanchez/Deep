@@ -125,7 +125,7 @@ class HydratorFactory
      * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $collection
      * @return array                                             AbstractHydrator[]
      */
-    public function getHydrators(AbstractTitleCollection $collection, array $extraHydrators = array())
+    public function getHydratorsForCollection(AbstractTitleCollection $collection, array $extraHydrators = array())
     {
         $hydrators = new HydratorCollection();
 
@@ -133,14 +133,22 @@ class HydratorFactory
             // add the built-in ones
             foreach ($this->hydrators as $type => $class) {
                 if ($collection->hasFieldtype($type)) {
-                    $hydrators->put($type, $this->newHydrator($collection, $hydrators, $type));
+                    $hydrator = $this->newHydrator($hydrators, $type);
+
+                    $hydrator->bootFromCollection($collection);
+
+                    $hydrators->put($type, $hydrator);
                 }
             }
         }
 
         foreach ($extraHydrators as $type) {
             if (isset($this->hydrators[$type])) {
-                $hydrators->put($type, $this->newHydrator($collection, $hydrators, $type));
+                $hydrator = $this->newHydrator($hydrators, $type);
+
+                $hydrator->bootFromCollection($collection);
+
+                $hydrators->put($type, $hydrator);
             }
         }
 
@@ -207,12 +215,11 @@ class HydratorFactory
     /**
      * Create a new Hydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\AbstractHydrator
      */
-    public function newHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newHydrator(HydratorCollection $hydrators, $type)
     {
         $class = $this->hydrators[$type];
 
@@ -222,10 +229,10 @@ class HydratorFactory
 
         // some hydrators may have dependencies to be injected
         if (method_exists($this, $method)) {
-            return $this->$method($collection, $hydrators, $type);
+            return $this->$method($hydrators, $type);
         }
 
-        return new $class($collection, $hydrators, $type);
+        return new $class($hydrators, $type);
     }
 
     /**
@@ -245,66 +252,61 @@ class HydratorFactory
     /**
      * Create a new AssetsHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\AssetsHydrator
      */
-    public function newAssetsHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newAssetsHydrator(HydratorCollection $hydrators, $type)
     {
-        return new AssetsHydrator($collection, $hydrators, $type, $this->asset, $this->uploadPrefRepository);
+        return new AssetsHydrator($hydrators, $type, $this->asset, $this->uploadPrefRepository);
     }
 
     /**
      * Create a new FileHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\FileHydrator
      */
-    public function newFileHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newFileHydrator(HydratorCollection $hydrators, $type)
     {
-        return new FileHydrator($collection, $hydrators, $type, $this->file, $this->uploadPrefRepository);
+        return new FileHydrator($hydrators, $type, $this->file, $this->uploadPrefRepository);
     }
 
     /**
      * Create a new GridHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\GridHydrator
      */
-    public function newGridHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newGridHydrator(HydratorCollection $hydrators, $type)
     {
-        return new GridHydrator($collection, $hydrators, $type, $this->gridCol, $this->gridRow);
+        return new GridHydrator($hydrators, $type, $this->gridCol, $this->gridRow);
     }
 
     /**
      * Create a new MatrixHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\MatrixHydrator
      */
-    public function newMatrixHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newMatrixHydrator(HydratorCollection $hydrators, $type)
     {
-        return new MatrixHydrator($collection, $hydrators, $type, $this->matrixCol, $this->matrixRow);
+        return new MatrixHydrator($hydrators, $type, $this->matrixCol, $this->matrixRow);
     }
 
     /**
      * Create a new PlayaHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\PlayaHydrator
      */
-    public function newPlayaHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newPlayaHydrator(HydratorCollection $hydrators, $type)
     {
-        return new PlayaHydrator($collection, $hydrators, $type, $this->playaEntry);
+        return new PlayaHydrator($hydrators, $type, $this->playaEntry);
     }
 
     /**
@@ -315,47 +317,44 @@ class HydratorFactory
      * @param  string                                       $type
      * @return \rsanchez\Deep\Hydrator\RelationshipHydrator
      */
-    public function newRelationshipHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newRelationshipHydrator(HydratorCollection $hydrators, $type)
     {
-        return new RelationshipHydrator($collection, $hydrators, $type, $this->relationshipEntry);
+        return new RelationshipHydrator($hydrators, $type, $this->relationshipEntry);
     }
 
     /**
      * Create a new ParentsHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\ParentsHydrator
      */
-    public function newParentsHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newParentsHydrator(HydratorCollection $hydrators, $type)
     {
-        return new ParentsHydrator($collection, $hydrators, $type, $this->relationshipEntry);
+        return new ParentsHydrator($hydrators, $type, $this->relationshipEntry);
     }
 
     /**
      * Create a new SiblingsHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\SiblingsHydrator
      */
-    public function newSiblingsHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newSiblingsHydrator(HydratorCollection $hydrators, $type)
     {
-        return new SiblingsHydrator($collection, $hydrators, $type, $this->relationshipEntry);
+        return new SiblingsHydrator($hydrators, $type, $this->relationshipEntry);
     }
 
     /**
      * Create a new WysiwygHydrator object
      *
-     * @param  \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\WysiwygHydrator
      */
-    public function newWysiwygHydrator(EntryCollection $collection, HydratorCollection $hydrators, $type)
+    public function newWysiwygHydrator(HydratorCollection $hydrators, $type)
     {
-        return new WysiwygHydrator($collection, $hydrators, $type, $this->siteRepository, $this->uploadPrefRepository);
+        return new WysiwygHydrator($hydrators, $type, $this->siteRepository, $this->uploadPrefRepository);
     }
 }

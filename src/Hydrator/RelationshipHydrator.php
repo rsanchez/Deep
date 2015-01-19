@@ -26,19 +26,33 @@ class RelationshipHydrator extends AbstractHydrator
     protected $model;
 
     /**
+     * Collection of entries being loaded by the parent collection
+     * @var \rsanchez\Deep\Collection\RelationshipCollection
+     */
+    protected $relationshipCollection;
+
+    /**
      * {@inheritdoc}
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
-     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     * @param string                                     $fieldtype
-     * @param \rsanchez\Deep\Model\RelationshipEntry     $model
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection       $hydrators
+     * @param string                                           $fieldtype
+     * @param \rsanchez\Deep\Model\RelationshipEntry           $model
+     * @param \rsanchez\Deep\Model\RelationshipCollection|null $relationshipCollection
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype, RelationshipEntry $model)
+    public function __construct(HydratorCollection $hydrators, $fieldtype, RelationshipEntry $model, RelationshipCollection $relationshipCollection = null)
     {
-        parent::__construct($collection, $hydrators, $fieldtype);
+        parent::__construct($hydrators, $fieldtype);
 
         $this->model = $model;
 
+        $this->relationshipCollection = $relationshipCollection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bootFromCollection(EntryCollection $collection)
+    {
         $this->relationshipCollection = $this->model->parentEntryId($collection->modelKeys())->orderBy('order')->get();
 
         foreach ($this->relationshipCollection as $entry) {

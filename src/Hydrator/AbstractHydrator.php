@@ -48,13 +48,11 @@ abstract class AbstractHydrator implements HydratorInterface
      *
      * Set the EntryCollection and load any global elements the hydrator might need
      *
-     * @param \rsanchez\Deep\Collection\EntryCollection  $collection
      * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
      * @param string                                     $fieldtype
      */
-    public function __construct(EntryCollection $collection, HydratorCollection $hydrators, $fieldtype)
+    public function __construct(HydratorCollection $hydrators, $fieldtype)
     {
-        $this->collection = $collection;
         $this->hydrators = $hydrators;
         $this->fieldtype = $fieldtype;
     }
@@ -62,7 +60,15 @@ abstract class AbstractHydrator implements HydratorInterface
     /**
      * {@inheritdoc}
      */
-    public function preload(array $entryIds)
+    public function bootFromCollection(EntryCollection $collection)
+    {
+        // load from external DBs here
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function preload(EntryCollection $collection)
     {
         // load from external DBs here
     }
