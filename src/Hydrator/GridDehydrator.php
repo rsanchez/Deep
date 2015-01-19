@@ -24,6 +24,8 @@ class GridDehydrator extends AbstractDehydrator
     {
         $rows = $entity->{$property->getName()};
 
+        $rowIds = [];
+
         if ($rows) {
             foreach ($rows as $i => $row) {
                 $row->row_order = $i;
@@ -34,6 +36,8 @@ class GridDehydrator extends AbstractDehydrator
                 if (! $row->exists) {
                     $row->save();
                 }
+
+                $rowIds[] = $row->row_id;
 
                 $cols = $row->getCols();
 
@@ -56,6 +60,17 @@ class GridDehydrator extends AbstractDehydrator
                 $row->save();
             }
         }
+
+        // delete unused
+        $query = $this->db->table('channel_grid_field_'.$property->getId());
+
+        if ($rowIds) {
+            $query->whereNotIn('row_id', $rowIds);
+        }
+
+        $query->where('entry_id', $entity->getId());
+
+        $query->delete();
 
         return ' ';
     }

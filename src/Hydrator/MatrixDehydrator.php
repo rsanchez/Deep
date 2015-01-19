@@ -24,6 +24,8 @@ class MatrixDehydrator extends AbstractDehydrator
     {
         $rows = $entity->{$property->getName()};
 
+        $rowIds = [];
+
         if ($rows) {
             foreach ($rows as $i => $row) {
                 $row->row_order = $i + 1;
@@ -34,6 +36,8 @@ class MatrixDehydrator extends AbstractDehydrator
                 if (! $row->exists) {
                     $row->save();
                 }
+
+                $rowIds[] = $row->row_id;
 
                 $cols = $row->getCols();
 
@@ -55,8 +59,21 @@ class MatrixDehydrator extends AbstractDehydrator
 
                 $row->save();
             }
-
-            return '1';
         }
+
+        // delete unused
+        $query = $this->db->table('matrix_data');
+
+        if ($rowIds) {
+            $query->whereNotIn('row_id', $rowIds);
+        }
+
+        $query->where('entry_id', $entity->getId());
+
+        $query->where('field_id', $property->getId());
+
+        $query->delete();
+
+        return $rowIds ? '1' : null;
     }
 }
