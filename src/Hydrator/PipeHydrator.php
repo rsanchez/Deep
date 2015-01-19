@@ -24,6 +24,6 @@ class PipeHydrator extends AbstractHydrator
     {
         $value = $entity->{$property->getIdentifier()};
 
-        return $value ? explode('|', $value) : null;
+        return $value ? explode('|', $value) : [];
     }
 }

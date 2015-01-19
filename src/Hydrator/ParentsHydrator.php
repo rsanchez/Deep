@@ -9,8 +9,6 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\ConnectionInterface;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
 use rsanchez\Deep\Model\PropertyInterface;
@@ -74,7 +72,11 @@ class ParentsHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
-        $entries = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
+        if (! isset($this->relationshipCollection)) {
+            return new RelationshipCollection();
+        }
+
+        $entries = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : [];
 
         return $this->relationshipCollection->createChildCollection($entries);
     }

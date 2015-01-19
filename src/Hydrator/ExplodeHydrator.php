@@ -24,6 +24,6 @@ class ExplodeHydrator extends AbstractHydrator
     {
         $value = $entity->{$property->getIdentifier()};
 
-        return $value ? explode("\n", $value) : null;
+        return $value ? explode("\n", $value) : [];
     }
 }

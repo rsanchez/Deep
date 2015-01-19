@@ -76,8 +76,12 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        if (! isset($this->relationshipCollection)) {
+            return new RelationshipCollection();
+        }
+
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
-            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
+            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : [];
 
         return $this->relationshipCollection->createChildCollection($entries);
     }

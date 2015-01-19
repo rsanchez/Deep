@@ -83,6 +83,10 @@ class PlayaHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        if (! isset($this->playaCollection)) {
+            return new PlayaCollection();
+        }
+
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 
