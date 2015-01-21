@@ -130,6 +130,21 @@ class Title extends AbstractEntity
     /**
      * {@inheritdoc}
      */
+    const CREATED_AT = 'entry_date';
+
+    /**
+     * {@inheritdoc}
+     */
+    const UPDATED_AT = 'edit_date';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = true;
+
+    /**
+     * {@inheritdoc}
+     */
     protected $attributes = [
         'view_count_one' => 0,
         'view_count_two' => 0,
@@ -149,8 +164,8 @@ class Title extends AbstractEntity
         'site_id' => 'required|exists:sites,site_id',
         'channel_id' => 'required|exists:channels,channel_id',
         'author_id' => 'required|exists:members,member_id',
-        'forum_topic_id' => 'sometimes|exists:forum_topics,forum_topic_id',
-        'ip_address' => 'sometimes|ip',
+        'forum_topic_id' => 'exists:forum_topics,forum_topic_id',
+        'ip_address' => 'ip',
         'title' => 'required',
         'url_title' => 'required|alpha_dash|unique:channel_titles,url_title',
         'status' => 'required',
@@ -161,14 +176,14 @@ class Title extends AbstractEntity
         'view_count_four' => 'required|integer',
         'allow_comments' => 'required|yes_or_no',
         'sticky' => 'required|yes_or_no',
-        'entry_date' => 'required|date_format:U',
-        'year' => 'required|integer',
-        'month' => 'required|digits:2',
-        'day' => 'required|digits:2',
-        'expiration_date' => 'sometimes|date_format:U',
-        'comment_expiration_date' => 'sometimes|date_format:U',
-        'edit_date' => 'required|date_format:YmdHis',
-        'recent_comment_date' => 'sometimes|date_format:U',
+        'entry_date' => 'date_format:U',
+        'year' => 'integer',
+        'month' => 'digits:2',
+        'day' => 'digits:2',
+        'expiration_date' => 'date_format:U',
+        'comment_expiration_date' => 'date_format:U',
+        'edit_date' => 'date_format:YmdHis',
+        'recent_comment_date' => 'date_format:U',
         'comment_total' => 'required|integer',
     ];
 
@@ -286,6 +301,14 @@ class Title extends AbstractEntity
         $this->attributes['channel_id'] = $channelId;
 
         $this->relations['chan'] = self::$channelRepository->find($channelId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDateFormat()
+    {
+        return 'U';
     }
 
     /**
@@ -457,24 +480,15 @@ class Title extends AbstractEntity
     {
         $attributes = parent::attributesToArray();
 
-        foreach (array('entry_date', 'edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date') as $key) {
+        $dateAttributes = ['edit_date', 'expiration_date', 'comment_expiration_date', 'recent_comment_date'];
+
+        foreach ($dateAttributes as $key) {
             if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }
         }
 
         return $attributes;
-    }
-
-    /**
-     * Get the entry_date column as a Carbon object
-     *
-     * @param  int            $value unix time
-     * @return \Carbon\Carbon
-     */
-    public function getEntryDateAttribute($value)
-    {
-        return Carbon::createFromFormat('U', $value);
     }
 
     /**
@@ -485,6 +499,14 @@ class Title extends AbstractEntity
     public function setEntryDateAttribute($date)
     {
         $this->attributes['entry_date'] = $date instanceof DateTime ? $date->format('U') : $date;
+
+        if (! $date instanceof DateTime) {
+            $date = Carbon::createFromFormat('U', $date);
+        }
+
+        $this->attributes['year'] = $date->format('Y');
+        $this->attributes['month'] = $date->format('m');
+        $this->attributes['day'] = $date->format('d');
     }
 
     /**
@@ -558,7 +580,15 @@ class Title extends AbstractEntity
      */
     public function getEditDateAttribute($value)
     {
-        return Carbon::createFromFormat('YmdHis', $value);
+        return Carbon::createFromFormat('YmdHis', $this->attributes['edit_date']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function freshTimestampString()
+    {
+        return $this->freshTimestamp()->format('YmdHis');
     }
 
     /**
@@ -617,6 +647,11 @@ class Title extends AbstractEntity
     public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = $this->getDefaultValidationRules($validatorFactory, $property);
+
+        $rules['entry_date'] = 'required|'.$rules['entry_date'];
+        $rules['year'] = 'required|'.$rules['year'];
+        $rules['month'] = 'required|'.$rules['month'];
+        $rules['day'] = 'required|'.$rules['day'];
 
         $rules['url_title'] .= sprintf(',%s,entry_id', $this->entry_id);
 
