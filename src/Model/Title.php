@@ -1742,6 +1742,34 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Check if the specified data is scalar or castable to scalar
+     * @param $data
+     * @return bool
+     */
+    protected function isDataScalar($data)
+    {
+        return is_scalar($data) || method_exists($data, '__toString');
+    }
+
+    /**
+     * Convert the specified data to scalar, if castable, null otherwise
+     * @param $data
+     * @return null|string
+     */
+    protected function dataToScalar($data)
+    {
+        if (is_scalar($data)) {
+            return $data;
+        }
+
+        if (method_exists($data, '__toString')) {
+            return (string) $data;
+        }
+
+        return null;
+    }
+
+    /**
      * Dehydrate all custom fields and save to the channel_data table
      *
      * @param  bool $isNew
@@ -1755,12 +1783,17 @@ class Title extends AbstractEntity
         $channelData['site_id'] = $this->site_id;
 
         foreach ($this->getProperties() as $field) {
+            $name = $field->getName();
+            $identifier = $field->getIdentifier();
+
             $dehydrator = $this->dehydrators->get($field->getType());
 
             if ($dehydrator) {
-                $channelData[$field->getIdentifier()] = $dehydrator->dehydrate($this, $field);
-            } elseif (! array_key_exists($field->getIdentifier(), $channelData)) {
-                $channelData[$field->getIdentifier()] = $this->{$field->getName()};
+                $channelData[$identifier] = $dehydrator->dehydrate($this, $field);
+            } elseif (array_key_exists($name, $this->customFields) && $this->isDataSaveable($this->customFields[$name])) {
+                $channelData[$identifier] = $this->dataToScalar($this->customFields[$name]);
+            } elseif (! isset($channelData[$identifier])) {
+                $channelData[$identifier] = null;
             }
 
             if ($field->getType() !== 'date' && ! array_key_exists('field_ft_'.$field->getId(), $channelData)) {
