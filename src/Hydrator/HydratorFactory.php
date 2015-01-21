@@ -169,7 +169,7 @@ class HydratorFactory
             // add the built-in ones
             foreach ($this->dehydrators as $type => $class) {
                 if ($collection->hasFieldtype($type)) {
-                    $dehydrators->put($type, $this->newDehydrator($type, $dehydrators));
+                    $dehydrators->put($type, $this->newDehydrator($dehydrators, $type));
                 }
             }
         }
@@ -195,7 +195,7 @@ class HydratorFactory
             $type = $property->getType();
 
             if (! isset($dehydrators[$type]) && isset($this->dehydrators[$type])) {
-                $dehydrators->put($type, $this->newDehydrator($type, $dehydrators));
+                $dehydrators->put($type, $this->newDehydrator($dehydrators, $type));
             }
 
             if ($property->hasChildProperties()) {
@@ -203,7 +203,7 @@ class HydratorFactory
                     $childType = $childProperty->getType();
 
                     if (! isset($dehydrators[$childType]) && isset($this->dehydrators[$childType])) {
-                        $dehydrators->put($childType, $this->newDehydrator($childType, $dehydrators));
+                        $dehydrators->put($childType, $this->newDehydrator($dehydrators, $childType));
                     }
                 }
             }
@@ -238,11 +238,11 @@ class HydratorFactory
     /**
      * Create a new Hydrator object
      *
-     * @param  string                                       $type
      * @param  \rsanchez\Deep\Hydrator\DehydratorCollection $dehydrators
+     * @param  string                                       $type
      * @return \rsanchez\Deep\Hydrator\AbstractDehydrator
      */
-    public function newDehydrator($type, DehydratorCollection $dehydrators)
+    public function newDehydrator(DehydratorCollection $dehydrators, $type)
     {
         $class = $this->dehydrators[$type];
 
