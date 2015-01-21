@@ -34,7 +34,7 @@ class RelationshipDehydrator extends AbstractDehydrator
 
                 $data = [
                     'child_id' => $entry->entry_id,
-                    'order' => $i,
+                    'order' => $i + 1,
                 ];
 
                 if ($parentEntity && $parentProperty) {
