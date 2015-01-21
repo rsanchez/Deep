@@ -156,6 +156,41 @@ class HydratorFactory
     }
 
     /**
+     * Get an array of Hydrators needed by the specified collection
+     *    'field_name' => AbstractHydrator
+     * @param  \rsanchez\Deep\Collection\FieldCollection|null $fields
+     * @return \rsanchez\Deep\Hydrator\DehydratorCollection
+     */
+    public function getHydrators(FieldCollection $properties = null)
+    {
+        $hydrators = new HydratorCollection();
+
+        if ($properties === null) {
+            return $hydrators;
+        }
+
+        foreach ($properties as $property) {
+            $type = $property->getType();
+
+            if (! isset($hydrators[$type]) && isset($this->hydrators[$type])) {
+                $hydrators->put($type, $this->newHydrator($hydrators, $type));
+            }
+
+            if ($property->hasChildProperties()) {
+                foreach ($property->getChildProperties() as $childProperty) {
+                    $childType = $childProperty->getType();
+
+                    if (! isset($hydrators[$childType]) && isset($this->hydrators[$childType])) {
+                        $hydrators->put($childType, $this->newHydrator($hydrators, $childType));
+                    }
+                }
+            }
+        }
+
+        return $hydrators;
+    }
+
+    /**
      * Get an array of Dehydrators needed by the specified collection
      *    'field_name' => AbstractDehydrator
      * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $collection

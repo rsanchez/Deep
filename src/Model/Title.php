@@ -456,6 +456,32 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Loop through all the custom fields and hydrate with empty data
+     *
+     * @return void
+     */
+    public function hydrateDefaultCustomFields()
+    {
+        if ($this->channel_id && self::$hydratorFactory) {
+            $hydrators = self::$hydratorFactory->getHydrators($this->channel->fields);
+
+            $this->setHydrators($hydrators);
+
+            foreach ($this->channel->fields as $field) {
+                $name = $field->getName();
+
+                $hydrator = $hydrators->get($field->getType());
+
+                if ($hydrator) {
+                    $this->setCustomField($name, $hydrator->hydrate($this, $field));
+                } else {
+                    $this->setCustomField($name, $this->{$field->getIdentifier()});
+                }
+            }
+        }
+    }
+
+    /**
      * Set the dehydrators for this entry
      * @param \rsanchez\Deep\Hydrator\DehydratorCollection $dehydrators
      */
