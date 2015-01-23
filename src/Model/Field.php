@@ -10,6 +10,8 @@
 namespace rsanchez\Deep\Model;
 
 use rsanchez\Deep\Collection\FieldCollection;
+use rsanchez\Deep\Model\Field\Matrix;
+use rsanchez\Deep\Model\Field\Grid;
 
 /**
  * Model for the channel_fields table
@@ -42,44 +44,33 @@ class Field extends AbstractField
     }
 
     /**
-     * {@inheritdoc}
+     * Create a new model instance that is existing.
+     *
+     * @param  array  $attributes
+     * @return static
      */
-    public function hasChildProperties()
+    public function newFromBuilder($attributes = [])
     {
-        return $this->field_type === 'matrix' || $this->field_type === 'grid';
-    }
+        if (isset($attributes['field_type'])) {
+            switch ($attributes['field_type']) {
+                case 'matrix':
+                    $instance = new Matrix();
+                    break;
+                case 'grid':
+                    $instance = new Grid();
+                    break;
+            }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getChildProperties()
-    {
-        switch ($this->field_type) {
-            case 'matrix':
-                return $this->matrix_cols;
-            case 'grid':
-                return $this->grid_cols;
+            if (isset($instance)) {
+                $instance->exists = true;
+
+                $instance->setRawAttributes((array) $attributes, true);
+
+                return $instance;
+            }
         }
 
-        return parent::getChildProperties();
-    }
-
-    /**
-     * Define the matrix_cols Eloquent relationship
-     * @return \rsanchez\Deep\Relations\HasOneFromRepository
-     */
-    public function matrixCols()
-    {
-        return $this->hasMany('\\rsanchez\\Deep\\Model\\MatrixCol', 'field_id', 'field_id');
-    }
-
-    /**
-     * Define the grid_columns Eloquent relationship
-     * @return \rsanchez\Deep\Relations\HasOneFromRepository
-     */
-    public function gridCols()
-    {
-        return $this->hasMany('\\rsanchez\\Deep\\Model\\GridCol', 'field_id', 'field_id');
+        return parent::newFromBuilder($attributes);
     }
 
     /**
