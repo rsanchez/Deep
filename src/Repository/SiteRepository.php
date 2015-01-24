@@ -73,4 +73,22 @@ class SiteRepository extends AbstractDeferredRepository
 
         return $entryIds;
     }
+
+    /**
+     * Get all the page uris of entries that have Page URIs
+     *
+     * @return array
+     */
+    public function getPageUris()
+    {
+        $pageUris = array();
+
+        foreach ($this->getSites() as $site) {
+            if (isset($site->site_pages[$site->site_id]['uris'])) {
+                $pageUris += $site->site_pages[$site->site_id]['uris'];
+            }
+        }
+
+        return $pageUris;
+    }
 }
