@@ -157,7 +157,7 @@ class Deep extends Container
 
         $this->singleton('UploadPrefRepository', function ($app) {
             if (isset($app['config']['upload_prefs'])) {
-                return new ConfigUploadPrefRepository($app['config']['upload_prefs']);
+                return new ConfigUploadPrefRepository($app->make('UploadPref'), $app['config']['upload_prefs']);
             }
 
             return new UploadPrefRepository($app->make('UploadPref'));
@@ -329,7 +329,7 @@ class Deep extends Container
 
         if ($uploadPrefs) {
             self::extendInstance('UploadPrefRepository', function ($app) use ($uploadPrefs) {
-                return new ConfigUploadPrefRepository($uploadPrefs);
+                return new ConfigUploadPrefRepository($app->make('UploadPref'), $uploadPrefs);
             });
         }
 
