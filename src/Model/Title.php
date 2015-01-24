@@ -23,6 +23,7 @@ use rsanchez\Deep\Hydrator\DehydratorInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Model\StringableInterface;
 use rsanchez\Deep\Model\PropertyInterface;
 use Carbon\Carbon;
 use Closure;
@@ -1809,7 +1810,7 @@ class Title extends AbstractEntity
      */
     protected function isDataScalar($data)
     {
-        return is_scalar($data) || method_exists($data, '__toString');
+        return is_scalar($data) || $data instanceof StringableInterface || method_exists($data, '__toString');
     }
 
     /**
@@ -1821,6 +1822,10 @@ class Title extends AbstractEntity
     {
         if (is_scalar($data)) {
             return $data;
+        }
+
+        if ($data instanceof StringableInterface) {
+            return $data->getValue();
         }
 
         if (method_exists($data, '__toString')) {
@@ -1851,7 +1856,7 @@ class Title extends AbstractEntity
 
             if ($dehydrator) {
                 $channelData[$identifier] = $dehydrator->dehydrate($this, $field);
-            } elseif (array_key_exists($name, $this->customFields) && $this->isDataSaveable($this->customFields[$name])) {
+            } elseif (array_key_exists($name, $this->customFields) && $this->isDataScalar($this->customFields[$name])) {
                 $channelData[$identifier] = $this->dataToScalar($this->customFields[$name]);
             } elseif (! isset($channelData[$identifier])) {
                 $channelData[$identifier] = null;
