@@ -10,53 +10,35 @@
 namespace rsanchez\Deep\Repository;
 
 use rsanchez\Deep\Model\UploadPref;
+use rsanchez\Deep\Collection\UploadPrefCollection;
 
 /**
  * Repository of all UploadPrefs
  */
-class ConfigUploadPrefRepository implements UploadPrefRepositoryInterface
+class ConfigUploadPrefRepository extends UploadPrefRepository
 {
-    /**
-     * Array of UploadPrefs keyed by id
-     * @var array
-     */
-    protected $uploadPrefsById = array();
-
     /**
      * Constructor
      *
      * @param \rsanchez\Deep\Model\UploadPref $model
      */
-    public function __construct(array $uploadPrefs)
+    public function __construct(UploadPref $model, array $config)
     {
-        foreach ($uploadPrefs as $id => $config) {
-            $uploadPref = new UploadPref();
+        parent::__construct($model);
 
-            $uploadPref->name = $config['name'];
-            $uploadPref->server_path = $config['server_path'];
-            $uploadPref->url = $config['url'];
+        $this->config = $config;
+    }
 
-            $this->uploadPrefsById[$id] = $uploadPref;
+    public function boot()
+    {
+        parent::boot();
+
+        foreach ($this->collection as $uploadPref) {
+            if (isset($this->config[$uploadPref->id])) {
+                foreach ($this->config[$uploadPref->id] as $key => $value) {
+                    $uploadPref->$key = $value;
+                }
+            }
         }
-    }
-
-    /**
-     * Alias to getUploadPrefById
-     * @var int $id
-     * @return \rsanchez\Deep\Model\UploadPref|null
-     */
-    public function find($id)
-    {
-        return $this->getUploadPrefById($id);
-    }
-
-    /**
-     * Get single UploadPref by ID
-     * @var int $id
-     * @return \rsanchez\Deep\Model\UploadPref|null
-     */
-    public function getUploadPrefById($id)
-    {
-        return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
     }
 }

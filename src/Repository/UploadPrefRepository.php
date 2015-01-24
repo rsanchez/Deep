@@ -56,9 +56,7 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
     }
 
     /**
-     * Get single UploadPref by ID
-     * @var int $id
-     * @return \rsanchez\Deep\Model\UploadPref|null
+     * {@inheritdoc}
      */
     public function getUploadPrefById($id)
     {
@@ -68,9 +66,7 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
     }
 
     /**
-     * Get Collection of all UploadPrefs
-     *
-     * @return \rsanchez\Deep\Collection\UploadPrefCollection
+     * {@inheritdoc}
      */
     public function getUploadPrefs()
     {

@@ -7,7 +7,7 @@ class ConfigUploadPrefRepositoryTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->repository = new ConfigUploadPrefRepository([
+        $this->repository = new ConfigUploadPrefRepository(new UploadPref, [
             1 => [
                 'name' => 'Uploads',
                 'server_path' => './uploads/',
