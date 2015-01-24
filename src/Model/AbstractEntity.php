@@ -57,6 +57,24 @@ abstract class AbstractEntity extends Model
     }
 
     /**
+     * Get the raw custom field attributes
+     * @return array
+     */
+    public function getCustomFieldAttributes()
+    {
+        return $this->customFieldAttributes;
+    }
+
+    /**
+     * Set a raw custom field attribute
+     * @return array
+     */
+    public function setCustomFieldAttribute($key, $value)
+    {
+        $this->customFieldAttributes[$key] = $value;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setRawAttributes(array $attributes, $sync = false)
@@ -64,7 +82,7 @@ abstract class AbstractEntity extends Model
         if ($this->customFieldAttributesRegex) {
             foreach ($attributes as $key => $value) {
                 if (preg_match($this->customFieldAttributesRegex, $key)) {
-                    $this->customFieldAttributes[$key] = $value;
+                    $this->setCustomFieldAttribute($key, $value);
 
                     unset($attributes[$key]);
                 }
@@ -83,9 +101,13 @@ abstract class AbstractEntity extends Model
     public function setAttribute($name, $value)
     {
         if (array_key_exists($name, $this->customFieldAttributes)) {
-            $this->customFieldAttributes[$name] = $value;
+            $this->setCustomFieldAttribute($name, $value);
         } elseif (array_key_exists($name, $this->customFields)) {
-            $this->customFields[$name] = $value;
+            if ($this->customFields[$name] instanceof StringableInterface) {
+                $this->customFields[$name]->setValue($value);
+            } else {
+                $this->customFields[$name] = $value;
+            }
         } else {
             parent::setAttribute($name, $value);
         }
@@ -99,8 +121,10 @@ abstract class AbstractEntity extends Model
      */
     public function getAttribute($name)
     {
-        if (array_key_exists($name, $this->customFieldAttributes)) {
-            return $this->customFieldAttributes[$name];
+        $customFieldAttributes = $this->getCustomFieldAttributes();
+
+        if (array_key_exists($name, $customFieldAttributes)) {
+            return $customFieldAttributes[$name];
         }
 
         if (array_key_exists($name, $this->customFields)) {
