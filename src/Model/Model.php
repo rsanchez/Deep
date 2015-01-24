@@ -197,6 +197,16 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     }
 
     /**
+     * Whether the specified attribute exists
+     * @param  string $key
+     * @return bool
+     */
+    public function hasAttribute($key)
+    {
+        return array_key_exists($key, $this->attributes);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validateOrFail()
