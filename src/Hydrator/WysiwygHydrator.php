@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Hydrator;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
+use rsanchez\Deep\Model\Wysiwyg;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
@@ -54,46 +55,6 @@ class WysiwygHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
-        return $this->parse($entity->{$property->getIdentifier()});
-    }
-
-    /**
-     * Parse a string for these values:
-     *
-     * {filedir_X}, {assets_X:file_name}, {page_X}
-     *
-     * @param  string $value WYSIWYG content
-     * @return string
-     */
-    public function parse($value)
-    {
-        if ($value === null || $value === false || $value === '') {
-            return '';
-        }
-
-        preg_match_all('#{page_(\d+)}#', $value, $pageMatches);
-
-        foreach ($pageMatches[1] as $i => $entryId) {
-            if ($pageUri = $this->siteRepository->getPageUri($entryId)) {
-                $value = str_replace($pageMatches[0][$i], $pageUri, $value);
-            }
-        }
-
-        preg_match_all('#{filedir_(\d+)}#', $value, $filedirMatches);
-
-        foreach ($filedirMatches[1] as $i => $id) {
-            if ($uploadPref = $this->uploadPrefRepository->find($id)) {
-                $value = str_replace($filedirMatches[0][$i], $uploadPref->url, $value);
-            }
-        }
-
-        // this is all we need to do for now, since we are only supporting Assets locally, not S3 etc.
-        preg_match_all('#{assets_\d+:(.*?)}#', $value, $assetsMatches);
-
-        foreach ($assetsMatches[1] as $i => $url) {
-            $value = str_replace($assetsMatches[0][$i], $url, $value);
-        }
-
-        return $value;
+        return new Wysiwyg($this->siteRepository, $this->uploadPrefRepository, $entity->{$property->getIdentifier()});
     }
 }
