@@ -248,11 +248,11 @@ class Title extends AbstractEntity
     public function chan()
     {
         return new HasOneFromRepository(
-            self::$channelRepository->getModel()->newQuery(),
+            self::getChannelRepository()->getModel()->newQuery(),
             $this,
             'channels.channel_id',
             'channel_id',
-            self::$channelRepository
+            self::getChannelRepository()
         );
     }
 
@@ -304,9 +304,7 @@ class Title extends AbstractEntity
      */
     public function setChannelIdAttribute($channelId)
     {
-        $this->attributes['channel_id'] = $channelId;
-
-        $this->relations['chan'] = self::$channelRepository->find($channelId);
+        $this->setChannel(self::getChannelRepository()->find($channelId));
     }
 
     /**
@@ -356,6 +354,10 @@ class Title extends AbstractEntity
         $this->relations['chan'] = $channel;
 
         $this->attributes['channel_id'] = $channel->channel_id;
+
+        $this->setDehydrators($this->getHydratorFactory()->getDehydrators($channel->fields));
+
+        $this->hydrateDefaultCustomFields();
     }
 
     /**
@@ -369,6 +371,20 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Get the global ChannelRepository
+     * @return \rsanchez\Deep\Repository\ChannelRepository
+     * @throws \Exception
+     */
+    public static function getChannelRepository()
+    {
+        if (! isset(self::$channelRepository)) {
+            throw new \Exception('The channel repository is not set.');
+        }
+
+        return self::$channelRepository;
+    }
+
+    /**
      * Set the global SiteRepository
      * @param  \rsanchez\Deep\Repository\SiteRepository $siteRepository
      * @return void
@@ -376,6 +392,20 @@ class Title extends AbstractEntity
     public static function setSiteRepository(SiteRepository $siteRepository)
     {
         self::$siteRepository = $siteRepository;
+    }
+
+    /**
+     * Get the global SiteRepository
+     * @return \rsanchez\Deep\Repository\SiteRepository
+     * @throws \Exception
+     */
+    public static function getSiteRepository()
+    {
+        if (! isset(self::$siteRepository)) {
+            throw new \Exception('The site repository is not set.');
+        }
+
+        return self::$siteRepository;
     }
 
     /**
@@ -394,6 +424,10 @@ class Title extends AbstractEntity
      */
     public static function getHydratorFactory()
     {
+        if (! isset(self::$hydratorFactory)) {
+            throw new \Exception('The hydrator factory is not set.');
+        }
+
         return self::$hydratorFactory;
     }
 
@@ -443,7 +477,7 @@ class Title extends AbstractEntity
     {
         $method = "{$this->collectionClass}::create";
 
-        $collection = call_user_func($method, $models, self::$channelRepository);
+        $collection = call_user_func($method, $models, self::getChannelRepository());
 
         if ($models) {
             $this->hydrateCollection($collection);
@@ -459,8 +493,8 @@ class Title extends AbstractEntity
      */
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
-        $hydrators = self::$hydratorFactory->getHydratorsForCollection($collection, $this->extraHydrators);
-        $dehydrators = self::$hydratorFactory->getDehydratorsForCollection($collection);
+        $hydrators = self::getHydratorFactory()->getHydratorsForCollection($collection, $this->extraHydrators);
+        $dehydrators = self::getHydratorFactory()->getDehydratorsForCollection($collection);
 
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
@@ -498,8 +532,8 @@ class Title extends AbstractEntity
      */
     public function hydrateDefaultCustomFields()
     {
-        if ($this->channel_id && self::$hydratorFactory) {
-            $hydrators = self::$hydratorFactory->getHydrators($this->channel->fields);
+        if ($this->channel_id) {
+            $hydrators = self::getHydratorFactory()->getHydrators($this->channel->fields);
 
             $this->setHydrators($hydrators);
 
@@ -670,7 +704,7 @@ class Title extends AbstractEntity
      */
     public function getPageUriAttribute()
     {
-        return self::$siteRepository->getPageUri($this->entry_id);
+        return self::getSiteRepository()->getPageUri($this->entry_id);
     }
 
     /**
@@ -926,7 +960,7 @@ class Title extends AbstractEntity
     {
         $channelNames = is_array($channelName) ? $channelName : array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelNames);
+        $channels = self::getChannelRepository()->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -954,7 +988,7 @@ class Title extends AbstractEntity
     {
         $channelNames = is_array($channelName) ? $channelName : array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelNames);
+        $channels = self::getChannelRepository()->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -1233,7 +1267,7 @@ class Title extends AbstractEntity
     public function scopeShowPages(Builder $query, $showPages = true)
     {
         if (! $showPages) {
-            $args = self::$siteRepository->getPageEntryIds();
+            $args = self::getSiteRepository()->getPageEntryIds();
 
             array_unshift($args, $query);
 
@@ -1253,7 +1287,7 @@ class Title extends AbstractEntity
     public function scopeShowPagesOnly(Builder $query, $showPagesOnly = true)
     {
         if ($showPagesOnly) {
-            $args = self::$siteRepository->getPageEntryIds();
+            $args = self::getSiteRepository()->getPageEntryIds();
 
             array_unshift($args, $query);
 
