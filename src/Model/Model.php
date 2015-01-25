@@ -22,9 +22,15 @@ use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
  * 1) Turns off Eloquent timestamps
  * 2) Ability to set global DB connection
  * 3) Self-validating if a validation factory is set
+ * 4) unguarded
  */
 abstract class Model extends Eloquent implements ValidatableInterface, ProvidesValidationRulesInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected static $unguarded = true;
+
     /**
      * {@inheritdoc}
      */
