@@ -75,6 +75,15 @@ abstract class AbstractEntity extends Model
     }
 
     /**
+     * Whether the specified raw custom field attribute is set
+     * @return bool
+     */
+    public function hasCustomFieldAttribute($key)
+    {
+        return array_key_exists($key, $this->customFieldAttributes);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setRawAttributes(array $attributes, $sync = false)
@@ -100,7 +109,7 @@ abstract class AbstractEntity extends Model
      */
     public function setAttribute($name, $value)
     {
-        if (array_key_exists($name, $this->customFieldAttributes)) {
+        if ($this->hasCustomFieldAttribute($name)) {
             $this->setCustomFieldAttribute($name, $value);
         } elseif (array_key_exists($name, $this->customFields)) {
             if ($this->customFields[$name] instanceof StringableInterface) {
