@@ -65,6 +65,11 @@ class Title extends AbstractEntity
     ];
 
     /**
+     * @var \rsanchez\Deep\Model\ChannelData
+     */
+    protected $channelData;
+
+    /**
      * The attributes that should be visible in arrays.
      *
      * @var array
@@ -302,6 +307,36 @@ class Title extends AbstractEntity
         $this->attributes['channel_id'] = $channelId;
 
         $this->relations['chan'] = self::$channelRepository->find($channelId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRawAttributes(array $attributes, $sync = false)
+    {
+        $this->channelData = $this->newChannelData();
+
+        $channelDataAttributes = [];
+
+        if ($this->customFieldAttributesRegex) {
+            foreach ($attributes as $key => $value) {
+                if (preg_match($this->customFieldAttributesRegex, $key)) {
+                    $channelDataAttributes[$key] = $value;
+
+                    unset($attributes[$key]);
+                } elseif ($key === 'entry_id' || $key === 'site_id' || $key === 'channel_id') {
+                    $channelDataAttributes[$key] = $value;
+                }
+            }
+        }
+
+        $this->attributes = $attributes;
+
+        if ($sync) {
+            $this->syncOriginal();
+        }
+
+        $this->channelData->setRawAttributes($channelDataAttributes, $sync);
     }
 
     /**
@@ -1836,6 +1871,52 @@ class Title extends AbstractEntity
     }
 
     /**
+     * Create a new instance of a ChannelData model
+     * @return \rsanchez\Deep\Model\ChannelData
+     */
+    protected function newChannelData()
+    {
+        $channelData = new ChannelData();
+
+        if ($this->exists) {
+            $channelData->exists = true;
+            $channelData->entry_id = $this->entry_id;
+            $channelData->channel_id = $this->channel_id;
+            $channelData->site_id = $this->site_id;
+        }
+
+        return $channelData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomFieldAttributes()
+    {
+        return $this->channelData ? $this->channelData->getAttributes() : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomFieldAttribute($key, $value)
+    {
+        if (is_null($this->channelData)) {
+            $this->channelData = $this->newChannelData();
+        }
+
+        return $this->channelData->$key = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasCustomFieldAttribute($key)
+    {
+        return $this->channelData && array_key_exists($key, $this->channelData->getAttributes());
+    }
+
+    /**
      * Dehydrate all custom fields and save to the channel_data table
      *
      * @param  bool $isNew
@@ -1843,10 +1924,14 @@ class Title extends AbstractEntity
      */
     protected function saveCustomFields($isNew)
     {
-        $channelData = $this->customFieldAttributes;
+        // it wasn't fetched from DB
+        if (is_null($this->channelData)) {
+            $this->channelData = $this->newChannelData();
+        }
 
-        $channelData['channel_id'] = $this->channel_id;
-        $channelData['site_id'] = $this->site_id;
+        $this->channelData->entry_id = $this->entry_id;
+        $this->channelData->channel_id = $this->channel_id;
+        $this->channelData->site_id = $this->site_id;
 
         foreach ($this->getProperties() as $field) {
             $name = $field->getName();
@@ -1855,27 +1940,18 @@ class Title extends AbstractEntity
             $dehydrator = $this->dehydrators->get($field->getType());
 
             if ($dehydrator) {
-                $channelData[$identifier] = $dehydrator->dehydrate($this, $field);
+                $this->channelData->$identifier = $dehydrator->dehydrate($this, $field);
             } elseif (array_key_exists($name, $this->customFields) && $this->isDataScalar($this->customFields[$name])) {
-                $channelData[$identifier] = $this->dataToScalar($this->customFields[$name]);
-            } elseif (! isset($channelData[$identifier])) {
-                $channelData[$identifier] = null;
+                $this->channelData->$identifier = $this->dataToScalar($this->customFields[$name]);
+            } elseif (! $this->channelData->hasAttribute($identifier)) {
+                $this->channelData->$identifier = null;
             }
 
-            if ($field->getType() !== 'date' && ! array_key_exists('field_ft_'.$field->getId(), $channelData)) {
-                 $channelData['field_ft_'.$field->getId()] = 'none';
+            if ($field->getType() !== 'date' && ! $this->channelData->hasAttribute('field_ft_'.$field->getId())) {
+                 $this->channelData->{'field_ft_'.$field->getId()} = 'none';
             }
         }
 
-        $query = $this->getConnection()->table('channel_data');
-
-        if ($isNew) {
-            $channelData['entry_id'] = $this->entry_id;
-
-            $query->insert($channelData);
-        } else {
-            $query->where('entry_id', $this->entry_id)
-                ->update($channelData);
-        }
+        $this->channelData->save();
     }
 }
