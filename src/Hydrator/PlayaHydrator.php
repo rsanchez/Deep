@@ -83,6 +83,8 @@ class PlayaHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         if (! isset($this->playaCollection)) {
             return new PlayaCollection();
         }
@@ -91,5 +93,15 @@ class PlayaHydrator extends AbstractHydrator
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 
         return $this->playaCollection->createChildCollection($entries);
+    }
+
+    /**
+     * Setter callback
+     * @param  \rsanchez\Deep\Collection\PlayaCollection|null $value
+     * @return \rsanchez\Deep\Collection\PlayaCollection|null
+     */
+    public function setter(PlayaCollection $value = null)
+    {
+        return $value;
     }
 }

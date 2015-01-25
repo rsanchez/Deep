@@ -92,8 +92,20 @@ class FileHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         $value = $entity->{$property->getIdentifier()};
 
         return $value && isset($this->files[$value]) ? $this->files[$value] : null;
+    }
+
+    /**
+     * Setter callback
+     * @param  \rsanchez\Deep\Model\File|null $value
+     * @return \rsanchez\Deep\Model\File|null
+     */
+    public function setter(File $value = null)
+    {
+        return $value;
     }
 }

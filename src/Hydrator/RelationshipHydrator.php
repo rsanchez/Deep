@@ -76,6 +76,8 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         if (! isset($this->relationshipCollection)) {
             return new RelationshipCollection();
         }
@@ -84,5 +86,15 @@ class RelationshipHydrator extends AbstractHydrator
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : [];
 
         return $this->relationshipCollection->createChildCollection($entries);
+    }
+
+    /**
+     * Setter callback
+     * @param  \rsanchez\Deep\Collection\RelationshipCollection|null $value
+     * @return \rsanchez\Deep\Collection\RelationshipCollection|null
+     */
+    public function setter(RelationshipCollection $value = null)
+    {
+        return $value;
     }
 }

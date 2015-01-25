@@ -29,6 +29,14 @@ abstract class AbstractEntity extends Model
     protected $customFields = [];
 
     /**
+     * List of custom field setter closures
+     *   field_name =>  closure
+     *
+     * @var array
+     */
+    protected $customFieldSetters = [];
+
+    /**
      * Regex patterns of attributes to hide from toArray
      * @var string
      */
@@ -102,6 +110,17 @@ abstract class AbstractEntity extends Model
     }
 
     /**
+     * Register a custom field setter callback
+     * @param  string   $name
+     * @param  callable $setter
+     * @return void
+     */
+    public function addCustomFieldSetter($name, callable $setter)
+    {
+        $this->customFieldSetters[$name] = $setter;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * override to set custom field if $name matches a
@@ -109,7 +128,9 @@ abstract class AbstractEntity extends Model
      */
     public function setAttribute($name, $value)
     {
-        if ($this->hasCustomFieldAttribute($name)) {
+        if (isset($this->customFieldSetters[$name])) {
+            $this->customFields[$name] = call_user_func($this->customFieldSetters[$name], $value);
+        } elseif ($this->hasCustomFieldAttribute($name)) {
             $this->setCustomFieldAttribute($name, $value);
         } elseif (array_key_exists($name, $this->customFields)) {
             if ($this->customFields[$name] instanceof StringableInterface) {

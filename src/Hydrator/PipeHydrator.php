@@ -22,8 +22,20 @@ class PipeHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         $value = $entity->{$property->getIdentifier()};
 
         return $value ? explode('|', $value) : [];
+    }
+
+    /**
+     * Setter callback
+     * @param  array|null $value
+     * @return array|null
+     */
+    public function setter(array $value = null)
+    {
+        return $value;
     }
 }

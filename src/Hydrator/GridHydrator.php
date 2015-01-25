@@ -125,6 +125,8 @@ class GridHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         if (isset($this->sortedRows[$entity->getId()][$property->getId()])) {
             $rows = $this->sortedRows[$entity->getId()][$property->getId()];
         } else {
@@ -146,6 +148,16 @@ class GridHydrator extends AbstractHydrator
         }
 
         return $rows;
+    }
+
+    /**
+     * Setter callback
+     * @param  \rsanchez\Deep\Collection\GridRowCollection|null $value
+     * @return \rsanchez\Deep\Collection\GridRowCollection|null
+     */
+    public function setter(GridRowCollection $value = null)
+    {
+        return $value;
     }
 
     /**

@@ -117,6 +117,8 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         if (isset($this->sortedRows[$entity->getId()][$property->getId()])) {
             $rows = $this->sortedRows[$entity->getId()][$property->getId()];
         } else {
@@ -138,6 +140,16 @@ class MatrixHydrator extends AbstractHydrator
         }
 
         return $rows;
+    }
+
+    /**
+     * Setter callback
+     * @param  \rsanchez\Deep\Collection\MatrixRowCollection|null $value
+     * @return \rsanchez\Deep\Collection\MatrixRowCollection|null
+     */
+    public function setter(MatrixRowCollection $value = null)
+    {
+        return $value;
     }
 
     /**

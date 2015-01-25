@@ -93,10 +93,22 @@ class AssetsHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, PropertyInterface $property)
     {
+        $entity->addCustomFieldSetter($property->getName(), [$this, 'setter']);
+
         if (isset($this->selections[$entity->getType()][$entity->getId()][$property->getId()])) {
             return $this->selections[$entity->getType()][$entity->getId()][$property->getId()];
         }
 
         return new AssetCollection();
+    }
+
+    /**
+     * Setter callback
+     * @param  \rsanchez\Deep\Collection\AssetCollection|null $value
+     * @return \rsanchez\Deep\Collection\AssetCollection|null
+     */
+    public function setter(AssetCollection $value = null)
+    {
+        return $value;
     }
 }
