@@ -10,14 +10,13 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Builder;
-use rsanchez\Deep\Repository\MemberFieldRepository;
 
 /**
  * Model for the members table
  */
 class Member extends Model
 {
-    use JoinableTrait;
+    use JoinableTrait, HasMemberFieldRepositoryTrait;
 
     /**
      * {@inheritdoc}
@@ -32,22 +31,6 @@ class Member extends Model
      * @var string
      */
     protected $primaryKey = 'member_id';
-
-    /**
-     * Global Member Field Repository
-     * @var \rsanchez\Deep\Repository\MemberFieldRepository
-     */
-    protected static $memberFieldRepository;
-
-    /**
-     * Set the global MemberFieldRepository
-     * @param  \rsanchez\Deep\Repository\MemberFieldRepository $memberFieldRepository
-     * @return void
-     */
-    public static function setMemberFieldRepository(MemberFieldRepository $memberFieldRepository)
-    {
-        self::$memberFieldRepository = $memberFieldRepository;
-    }
 
     /**
      * Join with member_data
