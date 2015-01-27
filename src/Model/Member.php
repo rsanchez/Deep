@@ -79,8 +79,8 @@ class Member extends Model
      */
     public function getAttribute($name)
     {
-        if (! isset($this->attributes[$name]) && self::$memberFieldRepository->hasField($name)) {
-            $name = 'm_field_id_'.self::$memberFieldRepository->getFieldId($name);
+        if (! isset($this->attributes[$name]) && static::getMemberFieldRepository()->hasField($name)) {
+            $name = 'm_field_id_'.static::getMemberFieldRepository()->getFieldId($name);
         }
 
         return parent::getAttribute($name);
@@ -97,8 +97,8 @@ class Member extends Model
             if (strncmp($key, 'm_field_id_', 11) === 0) {
                 $id = substr($key, 11);
 
-                if (self::$memberFieldRepository->hasFieldId($id)) {
-                    $array[self::$memberFieldRepository->getFieldName($id)] = $value;
+                if (static::getMemberFieldRepository()->hasFieldId($id)) {
+                    $array[static::getMemberFieldRepository()->getFieldName($id)] = $value;
                 }
 
                 unset($array[$key]);

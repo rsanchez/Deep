@@ -66,7 +66,7 @@ class Entry extends Title
     {
         $method = "{$this->collectionClass}::createWithFields";
 
-        $collection = call_user_func($method, $models, self::$channelRepository, self::$fieldRepository);
+        $collection = call_user_func($method, $models, static::getChannelRepository(), static::getFieldRepository());
 
         if ($models) {
             $this->hydrateCollection($collection);
@@ -138,7 +138,7 @@ class Entry extends Title
             return $query;
         }
 
-        if (! self::$fieldRepository->hasField($fieldName)) {
+        if (! static::getFieldRepository()->hasField($fieldName)) {
             return $query;
         }
 
@@ -214,8 +214,8 @@ class Entry extends Title
             foreach (explode('|', $parameters['orderby']) as $i => $column) {
                 $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
 
-                if (self::$fieldRepository->hasField($column)) {
-                    $column = 'channel_data.field_id_'.self::$fieldRepository->getFieldId($column);
+                if (static::getFieldRepository()->hasField($column)) {
+                    $column = 'channel_data.field_id_'.static::getFieldRepository()->getFieldId($column);
 
                     $query->orderBy($column, $direction);
                 } else {
@@ -253,8 +253,8 @@ class Entry extends Title
     {
         $fieldName = array_shift($args);
 
-        if (self::$fieldRepository->hasField($fieldName)) {
-            $column = 'channel_data.field_id_'.self::$fieldRepository->getFieldId($fieldName);
+        if (static::getFieldRepository()->hasField($fieldName)) {
+            $column = 'channel_data.field_id_'.static::getFieldRepository()->getFieldId($fieldName);
 
             array_unshift($args, $column);
 
@@ -274,8 +274,8 @@ class Entry extends Title
      */
     public function scopeOrderByField(Builder $query, $fieldName, $direction = 'asc')
     {
-        if (self::$fieldRepository->hasField($fieldName)) {
-            $column = 'channel_data.field_id_'.self::$fieldRepository->getFieldId($fieldName);
+        if (static::getFieldRepository()->hasField($fieldName)) {
+            $column = 'channel_data.field_id_'.static::getFieldRepository()->getFieldId($fieldName);
 
             $query->orderBy($column, $direction);
         }
@@ -501,8 +501,8 @@ class Entry extends Title
 
                 $value = '([[:<:]]|^)'.preg_quote($value).'([[:>:]]|$)';
 
-                if (self::$fieldRepository->hasField($fieldName)) {
-                    $column = 'field_id_'.self::$fieldRepository->getFieldId($fieldName);
+                if (static::getFieldRepository()->hasField($fieldName)) {
+                    $column = 'field_id_'.static::getFieldRepository()->getFieldId($fieldName);
 
                     $method = $boolean === 'and' ? 'whereRaw' : 'orWhereRaw';
 

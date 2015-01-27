@@ -152,11 +152,11 @@ class Channel extends Model
     public function fields()
     {
         return new HasManyFromRepository(
-            self::$fieldRepository->getModel()->newQuery(),
+            static::getFieldRepository()->getModel()->newQuery(),
             $this,
             'channel_fields.group_id',
             'field_group',
-            self::$fieldRepository,
+            static::getFieldRepository(),
             'getFieldsByGroup'
         );
     }

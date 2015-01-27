@@ -161,8 +161,8 @@ class Category extends AbstractEntity
      */
     public function getAttribute($name)
     {
-        if (! isset($this->attributes[$name]) && self::$categoryFieldRepository->hasField($name)) {
-            $name = 'field_id_'.self::$categoryFieldRepository->getFieldId($name);
+        if (! isset($this->attributes[$name]) && static::getCategoryFieldRepository()->hasField($name)) {
+            $name = 'field_id_'.static::getCategoryFieldRepository()->getFieldId($name);
         }
 
         return parent::getAttribute($name);
@@ -173,8 +173,8 @@ class Category extends AbstractEntity
      */
     public function setAttribute($name, $value)
     {
-        if (! isset($this->attributes[$name]) && self::$categoryFieldRepository->hasField($name)) {
-            $name = 'field_id_'.self::$categoryFieldRepository->getFieldId($name);
+        if (! isset($this->attributes[$name]) && static::getCategoryFieldRepository()->hasField($name)) {
+            $name = 'field_id_'.static::getCategoryFieldRepository()->getFieldId($name);
         }
 
         return parent::setAttribute($name, $value);
@@ -421,7 +421,7 @@ class Category extends AbstractEntity
     {
         $channelNames = array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelNames);
+        $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
         $groupIds = array();
 
@@ -449,7 +449,7 @@ class Category extends AbstractEntity
     {
         $channelNames = array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelNames);
+        $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
         $groupIds = array();
 
@@ -489,7 +489,7 @@ class Category extends AbstractEntity
     {
         $channelNames = array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelNames);
+        $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -517,7 +517,7 @@ class Category extends AbstractEntity
     {
         $channelNames = array_slice(func_get_args(), 1);
 
-        $channels = self::$channelRepository->getChannelsByName($channelNames);
+        $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -829,11 +829,11 @@ class Category extends AbstractEntity
      */
     public function getFields()
     {
-        if (! self::$categoryFieldRepository) {
+        if (! static::getCategoryFieldRepository()) {
             return new CategoryFieldCollection();
         }
 
-        return self::$categoryFieldRepository->getFieldsByGroup($this->group_id);
+        return static::getCategoryFieldRepository()->getFieldsByGroup($this->group_id);
     }
 
     /**

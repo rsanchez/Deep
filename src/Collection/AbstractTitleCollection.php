@@ -69,7 +69,7 @@ abstract class AbstractTitleCollection extends AbstractModelCollection implement
      */
     public function createChildCollection(array $models)
     {
-        return self::create($models, $this->channelRepository);
+        return static::create($models, $this->channelRepository);
     }
 
     /**

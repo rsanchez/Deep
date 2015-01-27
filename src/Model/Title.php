@@ -232,11 +232,11 @@ class Title extends AbstractEntity
     public function chan()
     {
         return new HasOneFromRepository(
-            self::getChannelRepository()->getModel()->newQuery(),
+            static::getChannelRepository()->getModel()->newQuery(),
             $this,
             'channels.channel_id',
             'channel_id',
-            self::getChannelRepository()
+            static::getChannelRepository()
         );
     }
 
@@ -288,7 +288,7 @@ class Title extends AbstractEntity
      */
     public function setChannelIdAttribute($channelId)
     {
-        $this->setChannel(self::getChannelRepository()->find($channelId));
+        $this->setChannel(static::getChannelRepository()->find($channelId));
     }
 
     /**
@@ -439,7 +439,7 @@ class Title extends AbstractEntity
     {
         $method = "{$this->collectionClass}::create";
 
-        $collection = call_user_func($method, $models, self::getChannelRepository());
+        $collection = call_user_func($method, $models, static::getChannelRepository());
 
         if ($models) {
             $this->hydrateCollection($collection);
@@ -648,7 +648,7 @@ class Title extends AbstractEntity
      */
     public function getPageUriAttribute()
     {
-        return self::getSiteRepository()->getPageUri($this->entry_id);
+        return static::getSiteRepository()->getPageUri($this->entry_id);
     }
 
     /**
@@ -904,7 +904,7 @@ class Title extends AbstractEntity
     {
         $channelNames = is_array($channelName) ? $channelName : array_slice(func_get_args(), 1);
 
-        $channels = self::getChannelRepository()->getChannelsByName($channelNames);
+        $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -932,7 +932,7 @@ class Title extends AbstractEntity
     {
         $channelNames = is_array($channelName) ? $channelName : array_slice(func_get_args(), 1);
 
-        $channels = self::getChannelRepository()->getChannelsByName($channelNames);
+        $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
         $channelIds = array();
 
@@ -1211,7 +1211,7 @@ class Title extends AbstractEntity
     public function scopeShowPages(Builder $query, $showPages = true)
     {
         if (! $showPages) {
-            $args = self::getSiteRepository()->getPageEntryIds();
+            $args = static::getSiteRepository()->getPageEntryIds();
 
             array_unshift($args, $query);
 
@@ -1231,7 +1231,7 @@ class Title extends AbstractEntity
     public function scopeShowPagesOnly(Builder $query, $showPagesOnly = true)
     {
         if ($showPagesOnly) {
-            $args = self::getSiteRepository()->getPageEntryIds();
+            $args = static::getSiteRepository()->getPageEntryIds();
 
             array_unshift($args, $query);
 

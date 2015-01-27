@@ -42,7 +42,7 @@ trait GlobalAttributeVisibilityTrait
      */
     public static function getGlobalHidden()
     {
-        return isset(self::$globalHidden) ? self::$globalHidden : [];
+        return isset(static::$globalHidden) ? static::$globalHidden : [];
     }
 
     /**
@@ -53,7 +53,7 @@ trait GlobalAttributeVisibilityTrait
      */
     public static function setGlobalHidden(array $hidden)
     {
-        self::$globalHidden = $hidden;
+        static::$globalHidden = $hidden;
     }
 
     /**
@@ -63,7 +63,7 @@ trait GlobalAttributeVisibilityTrait
      */
     public static function getGlobalVisible()
     {
-        return isset(self::$globalVisible) ? self::$globalVisible : [];
+        return isset(static::$globalVisible) ? static::$globalVisible : [];
     }
 
     /**
@@ -74,6 +74,6 @@ trait GlobalAttributeVisibilityTrait
      */
     public static function setGlobalVisible(array $visible)
     {
-        self::$globalVisible = $visible;
+        static::$globalVisible = $visible;
     }
 }

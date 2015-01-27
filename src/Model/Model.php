@@ -225,15 +225,15 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
      */
     public function validate($exceptionOnFailure = false)
     {
-        if (! self::$validatorFactory) {
+        if (! static::$validatorFactory) {
             return true;
         }
 
-        $this->extendValidation(self::$validatorFactory);
+        $this->extendValidation(static::$validatorFactory);
 
-        $validator = self::$validatorFactory->make([], []);
+        $validator = static::$validatorFactory->make([], []);
 
-        $rules = $this->getValidationRules(self::$validatorFactory);
+        $rules = $this->getValidationRules(static::$validatorFactory);
 
         if (! $rules) {
             return true;

@@ -65,7 +65,7 @@ class EntryCollection extends TitleCollection
      */
     public function createChildCollection(array $models)
     {
-        return self::createWithFields($models, $this->channelRepository, $this->fieldRepository);
+        return static::createWithFields($models, $this->channelRepository, $this->fieldRepository);
     }
 
     /**
