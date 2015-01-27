@@ -34,7 +34,7 @@ use DateTime;
  */
 class Title extends AbstractEntity
 {
-    use JoinableTrait, GlobalAttributeVisibilityTrait, HasChannelRepositoryTrait;
+    use JoinableTrait, GlobalAttributeVisibilityTrait, HasChannelRepositoryTrait, HasSiteRepositoryTrait;
 
     /**
      * {@inheritdoc}
@@ -81,12 +81,6 @@ class Title extends AbstractEntity
      * @var string
      */
     protected $collectionClass = '\\rsanchez\\Deep\\Collection\\TitleCollection';
-
-    /**
-     * Global Site Repository
-     * @var \rsanchez\Deep\Repository\SiteRepository
-     */
-    protected static $siteRepository;
 
     /**
      * List of extra hydrators to load (e.g. parents or siblings)
@@ -335,32 +329,7 @@ class Title extends AbstractEntity
 
         $this->setDehydrators($this->getHydratorFactory()->getDehydrators($channel->fields));
 
-        $this->hydrateDefaultCustomFields();
-    }
-
-    /**
-     * Set the global SiteRepository
-     * @param  \rsanchez\Deep\Repository\SiteRepository $siteRepository
-     * @return void
-     */
-    public static function setSiteRepository(SiteRepository $siteRepository)
-    {
-        self::$siteRepository = $siteRepository;
-    }
-
-    /**
-     * Get the global SiteRepository
-     * @return \rsanchez\Deep\Repository\SiteRepository
-     * @throws \Exception
-     */
-    public static function getSiteRepository()
-    {
-        if (! isset(self::$siteRepository)) {
-            throw new \Exception('The site repository is not set.');
-        }
-
-        return self::$siteRepository;
-    }
+        $this->hydrateDefaultProperties();
     }
 
     /**
@@ -425,8 +394,8 @@ class Title extends AbstractEntity
      */
     public function hydrateCollection(AbstractTitleCollection $collection)
     {
-        $hydrators = self::getHydratorFactory()->getHydratorsForCollection($collection, $this->extraHydrators);
-        $dehydrators = self::getHydratorFactory()->getDehydratorsForCollection($collection);
+        $hydrators = static::getHydratorFactory()->getHydratorsForCollection($collection, $this->extraHydrators);
+        $dehydrators = static::getHydratorFactory()->getDehydratorsForCollection($collection);
 
         // loop through the hydrators for preloading
         foreach ($hydrators as $hydrator) {
@@ -453,32 +422,6 @@ class Title extends AbstractEntity
 
             foreach ($this->extraHydrators as $name) {
                 $entry->setCustomField($name, $hydrators[$name]->hydrate($entry, new NullProperty()));
-            }
-        }
-    }
-
-    /**
-     * Loop through all the custom fields and hydrate with empty data
-     *
-     * @return void
-     */
-    public function hydrateDefaultCustomFields()
-    {
-        if ($this->channel_id) {
-            $hydrators = self::getHydratorFactory()->getHydrators($this->channel->fields);
-
-            $this->setHydrators($hydrators);
-
-            foreach ($this->channel->fields as $field) {
-                $name = $field->getName();
-
-                $hydrator = $hydrators->get($field->getType());
-
-                if ($hydrator) {
-                    $this->setCustomField($name, $hydrator->hydrate($this, $field));
-                } else {
-                    $this->setCustomField($name, $this->{$field->getIdentifier()});
-                }
             }
         }
     }
@@ -1845,6 +1788,7 @@ class Title extends AbstractEntity
             $this->channelData = $this->newChannelData();
         }
 
+        $this->channelData->exists = ! $isNew;
         $this->channelData->entry_id = $this->entry_id;
         $this->channelData->channel_id = $this->channel_id;
         $this->channelData->site_id = $this->site_id;
