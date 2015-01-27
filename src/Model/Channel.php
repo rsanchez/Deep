@@ -20,6 +20,8 @@ use rsanchez\Deep\Model\PropertyInterface;
  */
 class Channel extends Model
 {
+    use HasFieldRepositoryTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -80,22 +82,6 @@ class Channel extends Model
         'url_title_prefix' => 'alpha_dash',
         'live_look_template' => 'exists_or_zero:templates,template_id',
     ];
-
-    /**
-     * Global Field Repository
-     * @var \rsanchez\Deep\Repository\FieldRepository
-     */
-    public static $fieldRepository;
-
-    /**
-     * Set the global FieldRepository
-     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
-     * @return void
-     */
-    public static function setFieldRepository(FieldRepository $fieldRepository)
-    {
-        self::$fieldRepository = $fieldRepository;
-    }
 
     /**
      * {@inheritdoc}

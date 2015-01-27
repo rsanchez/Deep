@@ -12,7 +12,6 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FieldCollection;
-use rsanchez\Deep\Repository\FieldRepository;
 use Carbon\Carbon;
 
 /**
@@ -20,27 +19,13 @@ use Carbon\Carbon;
  */
 class Entry extends Title
 {
+    use HasFieldRepositoryTrait;
+
     /**
      * The class used when creating a new Collection
      * @var string
      */
     protected $collectionClass = '\\rsanchez\\Deep\\Collection\\EntryCollection';
-
-    /**
-     * Global Field Repository
-     * @var \rsanchez\Deep\Repository\FieldRepository
-     */
-    public static $fieldRepository;
-
-    /**
-     * Set the global FieldRepository
-     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
-     * @return void
-     */
-    public static function setFieldRepository(FieldRepository $fieldRepository)
-    {
-        self::$fieldRepository = $fieldRepository;
-    }
 
     /**
      * {@inheritdoc}
