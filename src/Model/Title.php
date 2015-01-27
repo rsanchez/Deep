@@ -1817,38 +1817,6 @@ class Title extends AbstractEntity
     }
 
     /**
-     * Check if the specified data is scalar or castable to scalar
-     * @param $data
-     * @return bool
-     */
-    protected function isDataScalar($data)
-    {
-        return is_scalar($data) || $data instanceof StringableInterface || method_exists($data, '__toString');
-    }
-
-    /**
-     * Convert the specified data to scalar, if castable, null otherwise
-     * @param $data
-     * @return null|string
-     */
-    protected function dataToScalar($data)
-    {
-        if (is_scalar($data)) {
-            return $data;
-        }
-
-        if ($data instanceof StringableInterface) {
-            return $data->getValue();
-        }
-
-        if (method_exists($data, '__toString')) {
-            return (string) $data;
-        }
-
-        return null;
-    }
-
-    /**
      * Create a new instance of a ChannelData model
      * @return \rsanchez\Deep\Model\ChannelData
      */
