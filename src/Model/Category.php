@@ -12,7 +12,6 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Collection\CategoryFieldCollection;
-use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\ChannelRepository;
 
 /**
@@ -20,7 +19,7 @@ use rsanchez\Deep\Repository\ChannelRepository;
  */
 class Category extends AbstractEntity
 {
-    use JoinableTrait;
+    use JoinableTrait, HasCategoryFieldRepositoryTrait;
 
     /**
      * {@inheritdoc}
@@ -47,12 +46,6 @@ class Category extends AbstractEntity
      * @var \rsanchez\Deep\Collection\NestedCategoryCollection
      */
     protected $childCategoryCollection;
-
-    /**
-     * Global Category Field Repository
-     * @var \rsanchez\Deep\Repository\CategoryFieldRepository
-     */
-    protected static $categoryFieldRepository;
 
     /**
      * Global Channel Repository
@@ -100,16 +93,6 @@ class Category extends AbstractEntity
     public function hasChildren()
     {
         return ! $this->children->isEmpty();
-    }
-
-    /**
-     * Set the global CategoryFieldRepository
-     * @param  \rsanchez\Deep\Repository\CategoryFieldRepository $categoryFieldRepository
-     * @return void
-     */
-    public static function setCategoryFieldRepository(CategoryFieldRepository $categoryFieldRepository)
-    {
-        self::$categoryFieldRepository = $categoryFieldRepository;
     }
 
     /**
