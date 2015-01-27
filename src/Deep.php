@@ -37,7 +37,8 @@ use rsanchez\Deep\Repository\UploadPrefRepository;
 use rsanchez\Deep\Repository\ConfigUploadPrefRepository;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
-use rsanchez\Deep\Hydrator\HydratorFactory;
+use rsanchez\Deep\Hydrator\EntryHydratorFactory;
+use rsanchez\Deep\Hydrator\RowHydratorFactory;
 use Symfony\Component\Translation\Translator;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Validation\DatabasePresenceVerifier;
@@ -206,6 +207,7 @@ class Deep extends Container
         $this->singleton('MatrixRow', function ($app) {
             $model = new MatrixRow();
 
+            $model->setHydratorFactory($app->make('RowHydratorFactory'));
             $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
@@ -227,19 +229,31 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('HydratorFactory', function ($app) {
-            return new HydratorFactory(
+        $this->singleton('RowHydratorFactory', function ($app) {
+            return new RowHydratorFactory(
                 $app->make('db'),
                 $app->make('SiteRepository'),
                 $app->make('UploadPrefRepository'),
                 $app->make('Asset'),
                 $app->make('File'),
+                $app->make('PlayaEntry'),
+                $app->make('RelationshipEntry')
+            );
+        });
+
+        $this->singleton('EntryHydratorFactory', function ($app) {
+            return new EntryHydratorFactory(
+                $app->make('db'),
+                $app->make('SiteRepository'),
+                $app->make('UploadPrefRepository'),
+                $app->make('Asset'),
+                $app->make('File'),
+                $app->make('PlayaEntry'),
+                $app->make('RelationshipEntry'),
                 $app->make('GridCol'),
                 $app->make('GridRow'),
                 $app->make('MatrixCol'),
-                $app->make('MatrixRow'),
-                $app->make('PlayaEntry'),
-                $app->make('RelationshipEntry')
+                $app->make('MatrixRow')
             );
         });
 
@@ -270,7 +284,7 @@ class Deep extends Container
 
             $title->setChannelRepository($app->make('ChannelRepository'));
             $title->setSiteRepository($app->make('SiteRepository'));
-            $title->setHydratorFactory($app->make('HydratorFactory'));
+            $title->setHydratorFactory($app->make('EntryHydratorFactory'));
             $title->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $title;

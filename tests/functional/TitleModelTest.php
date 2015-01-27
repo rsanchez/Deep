@@ -24,7 +24,7 @@ use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepository;
 use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
-use rsanchez\Deep\Hydrator\HydratorFactory;
+use rsanchez\Deep\Hydrator\EntryHydratorFactory;
 
 class TitleModelTest extends PHPUnit_Framework_TestCase
 {
@@ -44,18 +44,18 @@ class TitleModelTest extends PHPUnit_Framework_TestCase
 
         $uploadPrefRepository = new UploadPrefRepository(new UploadPref());
 
-        $hydratorFactory = new HydratorFactory(
+        $hydratorFactory = new EntryHydratorFactory(
             Model::resolveConnection(Model::getGlobalConnection()),
             $siteRepository,
             $uploadPrefRepository,
             new Asset(),
             new File(),
+            new PlayaEntry(),
+            new RelationshipEntry(),
             new GridCol(),
             new GridRow(),
             new MatrixCol(),
-            new MatrixRow(),
-            new PlayaEntry(),
-            new RelationshipEntry()
+            new MatrixRow()
         );
 
         Category::setCategoryFieldRepository($categoryFieldRepository);

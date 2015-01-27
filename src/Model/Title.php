@@ -95,26 +95,10 @@ class Title extends AbstractEntity
     protected static $siteRepository;
 
     /**
-     * Hydrator Factory
-     * @var \rsanchez\Deep\Hydrator\Factory
-     */
-    public static $hydratorFactory;
-
-    /**
      * List of extra hydrators to load (e.g. parents or siblings)
      * @var array
      */
     protected $extraHydrators = array();
-
-    /**
-     * @var \rsanchez\Deep\Hydrator\HydratorCollection
-     */
-    protected $hydrators;
-
-    /**
-     * @var \rsanchez\Deep\Hydrator\DehydratorCollection
-     */
-    protected $dehydrators;
 
     /**
      * When extending this class, set this property to automatically
@@ -407,28 +391,6 @@ class Title extends AbstractEntity
 
         return self::$siteRepository;
     }
-
-    /**
-     * Set the global HydratorFactory
-     * @param  \rsanchez\Deep\Repository\HydratorFactory $hydratorFactory
-     * @return void
-     */
-    public static function setHydratorFactory(HydratorFactory $hydratorFactory)
-    {
-        self::$hydratorFactory = $hydratorFactory;
-    }
-
-    /**
-     * get the global HydratorFactory
-     * @return void
-     */
-    public static function getHydratorFactory()
-    {
-        if (! isset(self::$hydratorFactory)) {
-            throw new \Exception('The hydrator factory is not set.');
-        }
-
-        return self::$hydratorFactory;
     }
 
     /**
@@ -549,24 +511,6 @@ class Title extends AbstractEntity
                 }
             }
         }
-    }
-
-    /**
-     * Set the dehydrators for this entry
-     * @param \rsanchez\Deep\Hydrator\DehydratorCollection $dehydrators
-     */
-    public function setDehydrators(DehydratorCollection $dehydrators)
-    {
-        $this->dehydrators = $dehydrators;
-    }
-
-    /**
-     * Set the hydrators for this entry
-     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     */
-    public function setHydrators(HydratorCollection $hydrators)
-    {
-        $this->hydrators = $hydrators;
     }
 
     /**

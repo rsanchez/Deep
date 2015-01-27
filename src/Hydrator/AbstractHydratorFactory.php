@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Hydrator;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\FieldCollection;
+use rsanchez\Deep\Collection\PropertyCollection;
 use rsanchez\Deep\Repository\SiteRepository;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 use rsanchez\Deep\Model\Asset;
@@ -27,7 +28,7 @@ use Illuminate\Database\ConnectionInterface;
 /**
  * Factory for building new Hydrators
  */
-class HydratorFactory
+abstract class AbstractHydratorFactory
 {
     /**
      * Array of fieldtype => hydrator class name
@@ -88,10 +89,34 @@ class HydratorFactory
     protected $db;
 
     /**
+     * @var \rsanchez\Deep\Model\Asset
+     */
+    protected $asset;
+
+    /**
+     * @var \rsanchez\Deep\Model\File
+     */
+    protected $file;
+
+    /**
+     * @var \rsanchez\Deep\Model\PlayaEntry
+     */
+    protected $playaEntry;
+
+    /**
+     * @var \rsanchez\Deep\Model\RelationshipEntry
+     */
+    protected $relationshipEntry;
+
+    /**
      * Constructor
-     *
-     * @var \rsanchez\Deep\Repository\SiteRepository                $siteRepository
-     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
+     * @param \Illuminate\Database\ConnectionInterface                $db
+     * @param \rsanchez\Deep\Repository\SiteRepository                $siteRepository
+     * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
+     * @param \rsanchez\Deep\Model\Asset                              $asset
+     * @param \rsanchez\Deep\Model\File                               $file
+     * @param \rsanchez\Deep\Model\PlayaEntry                         $playaEntry
+     * @param \rsanchez\Deep\Model\RelationshipEntry                  $relationshipEntry
      */
     public function __construct(
         ConnectionInterface $db,
@@ -99,10 +124,6 @@ class HydratorFactory
         UploadPrefRepositoryInterface $uploadPrefRepository,
         Asset $asset,
         File $file,
-        GridCol $gridCol,
-        GridRow $gridRow,
-        MatrixCol $matrixCol,
-        MatrixRow $matrixRow,
         PlayaEntry $playaEntry,
         RelationshipEntry $relationshipEntry
     ) {
@@ -111,10 +132,6 @@ class HydratorFactory
         $this->uploadPrefRepository = $uploadPrefRepository;
         $this->asset = $asset;
         $this->file =  $file;
-        $this->gridCol = $gridCol;
-        $this->gridRow = $gridRow;
-        $this->matrixCol = $matrixCol;
-        $this->matrixRow = $matrixRow;
         $this->playaEntry = $playaEntry;
         $this->relationshipEntry = $relationshipEntry;
     }
@@ -158,10 +175,10 @@ class HydratorFactory
     /**
      * Get an array of Hydrators needed by the specified collection
      *    'field_name' => AbstractHydrator
-     * @param  \rsanchez\Deep\Collection\FieldCollection|null $fields
+     * @param  \rsanchez\Deep\Collection\PropertyCollection|null $fields
      * @return \rsanchez\Deep\Hydrator\DehydratorCollection
      */
-    public function getHydrators(FieldCollection $properties = null)
+    public function getHydrators(PropertyCollection $properties = null)
     {
         $hydrators = new HydratorCollection();
 
@@ -215,10 +232,10 @@ class HydratorFactory
     /**
      * Get an array of Hydrators needed by the specified collection
      *    'field_name' => AbstractHydrator
-     * @param  \rsanchez\Deep\Collection\FieldCollection|null $fields
+     * @param  \rsanchez\Deep\Collection\PropertyCollection|null $properties
      * @return \rsanchez\Deep\Hydrator\DehydratorCollection
      */
-    public function getDehydrators(FieldCollection $properties = null)
+    public function getDehydrators(PropertyCollection $properties = null)
     {
         $dehydrators = new DehydratorCollection();
 
@@ -306,30 +323,6 @@ class HydratorFactory
     public function newFileHydrator(HydratorCollection $hydrators, $type)
     {
         return new FileHydrator($hydrators, $type, $this->file, $this->uploadPrefRepository);
-    }
-
-    /**
-     * Create a new GridHydrator object
-     *
-     * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     * @param  string                                     $type
-     * @return \rsanchez\Deep\Hydrator\GridHydrator
-     */
-    public function newGridHydrator(HydratorCollection $hydrators, $type)
-    {
-        return new GridHydrator($hydrators, $type, $this->gridCol, $this->gridRow);
-    }
-
-    /**
-     * Create a new MatrixHydrator object
-     *
-     * @param  \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
-     * @param  string                                     $type
-     * @return \rsanchez\Deep\Hydrator\MatrixHydrator
-     */
-    public function newMatrixHydrator(HydratorCollection $hydrators, $type)
-    {
-        return new MatrixHydrator($hydrators, $type, $this->matrixCol, $this->matrixRow);
     }
 
     /**

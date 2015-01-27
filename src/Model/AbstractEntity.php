@@ -13,6 +13,9 @@ use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Validation\ProvidesValidationRulesInterface;
 use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Hydrator\AbstractHydratorFactory;
+use rsanchez\Deep\Hydrator\HydratorCollection;
+use rsanchez\Deep\Hydrator\DehydratorCollection;
 use DateTime;
 
 /**
@@ -53,6 +56,45 @@ abstract class AbstractEntity extends Model
      * @var array
      */
     protected $customFieldAttributes = [];
+
+    /**
+     * Global HydratorFactory
+     * @var \rsanchez\Deep\Hydrator\AbstractHydratorFactory
+     */
+    protected static $hydratorFactory;
+
+    /**
+     * @var \rsanchez\Deep\Hydrator\DehydratorCollection
+     */
+    protected $dehydrators;
+
+    /**
+     * @var \rsanchez\Deep\Hydrator\HydratorCollection
+     */
+    protected $hydrators;
+
+    /**
+     * Set the global HydratorFactory
+     * @param  \rsanchez\Deep\Hydrator\AbstractHydratorFactory $hydratorFactory
+     * @return void
+     */
+    public static function setHydratorFactory(AbstractHydratorFactory $hydratorFactory)
+    {
+        static::$hydratorFactory = $hydratorFactory;
+    }
+
+    /**
+     * get the global HydratorFactory
+     * @return void
+     */
+    public static function getHydratorFactory()
+    {
+        if (! isset(static::$hydratorFactory)) {
+            throw new \Exception('The HydratorFactory is not set.');
+        }
+
+        return static::$hydratorFactory;
+    }
 
     /**
      * Set a custom field attribute
@@ -165,6 +207,52 @@ abstract class AbstractEntity extends Model
     }
 
     /**
+     * Set the hydrators for this entry
+     * @param \rsanchez\Deep\Hydrator\HydratorCollection $hydrators
+     */
+    public function setHydrators(HydratorCollection $hydrators)
+    {
+        $this->hydrators = $hydrators;
+    }
+
+    /**
+     * Set the dehydrators for this entry
+     * @param \rsanchez\Deep\Hydrator\DehydratorCollection $dehydrators
+     */
+    public function setDehydrators(DehydratorCollection $dehydrators)
+    {
+        $this->dehydrators = $dehydrators;
+    }
+
+    /**
+     * Loop through all the custom fields and hydrate with empty data
+     *
+     * @return void
+     */
+    public function hydrateDefaultProperties()
+    {
+        $properties = $this->getProperties();
+
+        if ($properties && ! $properties->isEmpty()) {
+            $hydrators = static::getHydratorFactory()->getHydrators($properties);
+
+            $this->setHydrators($hydrators);
+
+            foreach ($properties as $property) {
+                $name = $property->getName();
+
+                $hydrator = $hydrators->get($property->getType());
+
+                if ($hydrator) {
+                    $this->setCustomField($name, $hydrator->hydrate($this, $property));
+                } else {
+                    $this->setCustomField($name, $this->{$property->getIdentifier()});
+                }
+            }
+        }
+    }
+
+    /**
      * Convert a custom field property to an array/scalar
      * @param \rsanchez\Deep\Model\PropertyInterface $property
      * @return array|mixed|string
@@ -179,6 +267,8 @@ abstract class AbstractEntity extends Model
             return (string) $value;
         } elseif (is_object($value)) {
             return (array) $value;
+        } elseif ($this->isDataScalar($value)) {
+            return $this->dataToScalar($value);
         }
 
         return $value;
