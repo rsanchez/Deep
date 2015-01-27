@@ -12,14 +12,13 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Collection\CategoryFieldCollection;
-use rsanchez\Deep\Repository\ChannelRepository;
 
 /**
  * Model for the categories table
  */
 class Category extends AbstractEntity
 {
-    use JoinableTrait, HasCategoryFieldRepositoryTrait;
+    use JoinableTrait, HasCategoryFieldRepositoryTrait, HasChannelRepositoryTrait;
 
     /**
      * {@inheritdoc}
@@ -46,12 +45,6 @@ class Category extends AbstractEntity
      * @var \rsanchez\Deep\Collection\NestedCategoryCollection
      */
     protected $childCategoryCollection;
-
-    /**
-     * Global Channel Repository
-     * @var \rsanchez\Deep\Repository\ChannelRepository
-     */
-    protected static $channelRepository;
 
     /**
      * {@inheritdoc}
@@ -93,16 +86,6 @@ class Category extends AbstractEntity
     public function hasChildren()
     {
         return ! $this->children->isEmpty();
-    }
-
-    /**
-     * Set the global ChannelRepository
-     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
-     * @return void
-     */
-    public static function setChannelRepository(ChannelRepository $channelRepository)
-    {
-        self::$channelRepository = $channelRepository;
     }
 
     /**

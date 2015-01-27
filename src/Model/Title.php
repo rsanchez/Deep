@@ -34,7 +34,7 @@ use DateTime;
  */
 class Title extends AbstractEntity
 {
-    use JoinableTrait, GlobalAttributeVisibilityTrait;
+    use JoinableTrait, GlobalAttributeVisibilityTrait, HasChannelRepositoryTrait;
 
     /**
      * {@inheritdoc}
@@ -81,12 +81,6 @@ class Title extends AbstractEntity
      * @var string
      */
     protected $collectionClass = '\\rsanchez\\Deep\\Collection\\TitleCollection';
-
-    /**
-     * Global Channel Repository
-     * @var \rsanchez\Deep\Repository\ChannelRepository
-     */
-    protected static $channelRepository;
 
     /**
      * Global Site Repository
@@ -342,30 +336,6 @@ class Title extends AbstractEntity
         $this->setDehydrators($this->getHydratorFactory()->getDehydrators($channel->fields));
 
         $this->hydrateDefaultCustomFields();
-    }
-
-    /**
-     * Set the global ChannelRepository
-     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
-     * @return void
-     */
-    public static function setChannelRepository(ChannelRepository $channelRepository)
-    {
-        self::$channelRepository = $channelRepository;
-    }
-
-    /**
-     * Get the global ChannelRepository
-     * @return \rsanchez\Deep\Repository\ChannelRepository
-     * @throws \Exception
-     */
-    public static function getChannelRepository()
-    {
-        if (! isset(self::$channelRepository)) {
-            throw new \Exception('The channel repository is not set.');
-        }
-
-        return self::$channelRepository;
     }
 
     /**
