@@ -19,7 +19,7 @@ use Carbon\Carbon;
  */
 class Asset extends Model implements FileInterface
 {
-    use JoinableTrait;
+    use JoinableTrait, HasUploadPrefRepositoryTrait;
 
     /**
      * {@inheritdoc}
@@ -61,12 +61,6 @@ class Asset extends Model implements FileInterface
     protected $appends = array('url');
 
     /**
-     * UploadPref model
-     * @var \rsanchez\Deep\Model\UploadPref
-     */
-    protected $uploadPref;
-
-    /**
      * {@inheritdoc}
      */
     protected $rules = [
@@ -94,13 +88,41 @@ class Asset extends Model implements FileInterface
     }
 
     /**
+     * Define the UploadPref Eloquent relationship
+     * @return \rsanchez\Deep\Relations\HasOneFromRepository
+     */
+    public function uploadPref()
+    {
+        return new HasOneFromRepository(
+            static::getUploadPrefRepository()->getModel()->newQuery(),
+            $this,
+            'upload_prefs.id',
+            'filedir_id',
+            static::getUploadPrefRepository()
+        );
+    }
+
+    /**
      * Set the UploadPref
-     * @var \rsanchez\Deep\Model\UploadPref $uploadPref|null
+     * @var \rsanchez\Deep\Model\UploadPref $uploadPref
      * @return void
      */
-    public function setUploadPref(UploadPref $uploadPref = null)
+    public function setUploadPref(UploadPref $uploadPref)
     {
-        $this->uploadPref = $uploadPref;
+        $this->relations['uploadPref'] = $uploadPref;
+
+        $this->attributes['filedir_id'] = $uploadPref->id;
+        $this->attributes['source_type'] = 'ee';
+        $this->attributes['source_id'] = null;
+    }
+
+    /**
+     * Set the filedir_id attribute for this entry
+     * @param $filedirId
+     */
+    public function setUploadLocationIdAttribute($filedirId)
+    {
+        $this->setUploadPref(static::getUploadPrefRepository()->find($filedirId));
     }
 
     /**

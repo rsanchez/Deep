@@ -23,6 +23,8 @@ use Carbon\Carbon;
  */
 class File extends Model implements FileInterface
 {
+    use HasUploadPrefRepositoryTrait;
+    
     /**
      * {@inheritdoc}
      */
@@ -42,12 +44,6 @@ class File extends Model implements FileInterface
      * {@inheritdoc}
      */
     protected $appends = array('url');
-
-    /**
-     * UploadPref model
-     * @var \rsanchez\Deep\Model\UploadPref
-     */
-    protected $uploadPref;
 
     /**
      * {@inheritdoc}
@@ -88,13 +84,39 @@ class File extends Model implements FileInterface
     }
 
     /**
+     * Define the UploadPref Eloquent relationship
+     * @return \rsanchez\Deep\Relations\HasOneFromRepository
+     */
+    public function uploadPref()
+    {
+        return new HasOneFromRepository(
+            static::getUploadPrefRepository()->getModel()->newQuery(),
+            $this,
+            'upload_prefs.id',
+            'upload_location_id',
+            static::getUploadPrefRepository()
+        );
+    }
+
+    /**
      * Set the UploadPref
      * @var \rsanchez\Deep\Model\UploadPref $uploadPref
      * @return void
      */
     public function setUploadPref(UploadPref $uploadPref)
     {
-        $this->uploadPref = $uploadPref;
+        $this->relations['uploadPref'] = $uploadPref;
+
+        $this->attributes['upload_location_id'] = $uploadPref->id;
+    }
+
+    /**
+     * Set the upload_location_id attribute for this entry
+     * @param $uploadLocationId
+     */
+    public function setUploadLocationIdAttribute($uploadLocationId)
+    {
+        $this->setUploadPref(static::getUploadPrefRepository()->find($uploadLocationId));
     }
 
     /**

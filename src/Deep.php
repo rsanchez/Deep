@@ -167,6 +167,7 @@ class Deep extends Container
         $this->singleton('Asset', function ($app) {
             $model = new Asset();
 
+            $model->setUploadPrefRepository($app->make('UploadPrefRepository'));
             $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
@@ -175,6 +176,7 @@ class Deep extends Container
         $this->singleton('File', function ($app) {
             $model = new File();
 
+            $model->setUploadPrefRepository($app->make('UploadPrefRepository'));
             $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
