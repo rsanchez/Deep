@@ -125,6 +125,8 @@ class MatrixHydrator extends AbstractHydrator
             $rows = new MatrixRowCollection();
         }
 
+        $rows->setProperty($property);
+
         foreach ($rows as $row) {
             foreach ($row->getCols() as $col) {
                 $hydrator = $this->hydrators->get($col->getType());
