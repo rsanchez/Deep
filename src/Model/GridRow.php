@@ -13,12 +13,17 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\GridRowCollection;
 use rsanchez\Deep\Collection\GridColCollection;
 use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Relations\HasOneFromRepository;
+use rsanchez\Deep\Relations\GridRowHasMany;
+use rsanchez\Deep\Repository\FieldRepository;
 
 /**
  * Model for the channel_grid_field_X table(s)
  */
 class GridRow extends AbstractEntity
 {
+    use HasFieldRepositoryTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -37,12 +42,6 @@ class GridRow extends AbstractEntity
     protected $hiddenAttributesRegex = '/^col_id_\d+$/';
 
     /**
-     * Cols associated with this row
-     * @var \rsanchez\Deep\Collection\GridColCollection
-     */
-    protected $cols;
-
-    /**
      * {@inheritdoc}
      *
      * @param  array                                       $models
@@ -51,6 +50,35 @@ class GridRow extends AbstractEntity
     public function newCollection(array $models = array())
     {
         return new GridRowCollection($models);
+    }
+
+    /**
+     * Define the GridCol Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cols()
+    {
+        return new GridRowHasMany(
+            (new GridCol())->newQuery(),
+            $this,
+            'grid_columns.field_id',
+            'field_id'
+        );
+    }
+
+    /**
+     * Define the Field Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function field()
+    {
+        return new HasOneFromRepository(
+            static::getFieldRepository()->getModel()->newQuery(),
+            $this,
+            'channel_fields.field_id',
+            'field_id',
+            static::getFieldRepository()
+        );
     }
 
     /**
@@ -88,6 +116,36 @@ class GridRow extends AbstractEntity
     }
 
     /**
+     * Set the field_id attribute for this entry
+     * @param $fieldId
+     */
+    public function setFieldIdAttribute($fieldId)
+    {
+        $this->setField(static::getFieldRepository()->find($fieldId));
+    }
+
+    /**
+     * Set the field_id attribute for this entry
+     * @param $fieldId
+     */
+    public function setField(Field $field)
+    {
+        $this->setTable('channel_grid_field_'.$field->getId());
+
+        $this->setCols($field->getChildProperties());
+    }
+
+    /**
+     * Get the field_id attribute for this entry,
+     * derived from the table name
+     * @return string
+     */
+    public function getFieldIdAttribute()
+    {
+        return substr($this->table, 19);//strlen('channel_grid_field_')
+    }
+
+    /**
      * Filter by Entry ID
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
@@ -121,13 +179,11 @@ class GridRow extends AbstractEntity
      */
     public function setCols(GridColCollection $cols)
     {
-        $this->cols = $cols;
+        $this->setRelation('cols',  $cols);
 
-        foreach ($cols as $col) {
-            if (! isset($this->customFields[$col->getName()])) {
-                $this->setCustomField($col->getName(), $this->{$col->getIdentifier()});
-            }
-        }
+        $this->setDehydrators($this->getHydratorFactory()->getDehydrators($cols));
+
+        $this->hydrateDefaultProperties();
     }
 
     /**

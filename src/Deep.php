@@ -193,6 +193,8 @@ class Deep extends Container
         $this->singleton('GridRow', function ($app) {
             $model = new GridRow();
 
+            $model->setFieldRepository($app->make('FieldRepository'));
+            $model->setHydratorFactory($app->make('RowHydratorFactory'));
             $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
@@ -209,6 +211,7 @@ class Deep extends Container
         $this->singleton('MatrixRow', function ($app) {
             $model = new MatrixRow();
 
+            $model->setFieldRepository($app->make('FieldRepository'));
             $model->setHydratorFactory($app->make('RowHydratorFactory'));
             $model->setValidatorFactory($app->make('ValidatorFactory'));
 

@@ -43,4 +43,22 @@ class RelationshipCollection extends EntryCollection
         // flatten the array keys
         return array_values(parent::toArray());
     }
+
+    /**
+     * Add an entry based on ID
+     * @param $entryId
+     */
+    public function addEntryId($entryId)
+    {
+        $this->push(RelationshipEntry::find($entryId));
+    }
+
+    /**
+     * Add several entries based on ID
+     * @param $entryIds
+     */
+    public function addEntryIds($entryIds)
+    {
+        $this->items += RelationshipEntry::entryId($entryIds)->get()->all();
+    }
 }

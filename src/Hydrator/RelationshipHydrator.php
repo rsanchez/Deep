@@ -90,11 +90,28 @@ class RelationshipHydrator extends AbstractHydrator
 
     /**
      * Setter callback
-     * @param  \rsanchez\Deep\Collection\RelationshipCollection|null $value
+     * @param  \rsanchez\Deep\Collection\RelationshipCollection|array|null $value
      * @return \rsanchez\Deep\Collection\RelationshipCollection|null
      */
-    public function setter(RelationshipCollection $value = null)
+    public function setter($value = null, PropertyInterface $property = null)
     {
-        return $value;
+        if (is_null($value)) {
+            return null;
+        }
+
+        if ($value instanceof RelationshipCollection) {
+            return $value;
+        }
+
+        // array of entry ids
+        if (is_array($value)) {
+            $collection = new RelationshipCollection();
+
+            $collection->addEntryIds($value);
+
+            return $collection;
+        }
+
+        throw new \InvalidArgumentException('$value must be of type array, null, or \rsanchez\Deep\Collection\RelationshipCollection.');
     }
 }

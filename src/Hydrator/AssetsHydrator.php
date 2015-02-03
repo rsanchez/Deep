@@ -104,11 +104,27 @@ class AssetsHydrator extends AbstractHydrator
 
     /**
      * Setter callback
-     * @param  \rsanchez\Deep\Collection\AssetCollection|null $value
+     * @param  \rsanchez\Deep\Collection\AssetCollection|array|null $value
      * @return \rsanchez\Deep\Collection\AssetCollection|null
      */
-    public function setter(AssetCollection $value = null)
+    public function setter($value = null, PropertyInterface $property = null)
     {
-        return $value;
+        if (is_null($value)) {
+            return null;
+        }
+
+        if ($value instanceof AssetCollection) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            $assets = new AssetCollection();
+
+            $assets->addAssetIds($value);
+
+            return $assets;
+        }
+
+        throw new \InvalidArgumentException('$value must be of type array, null, or \rsanchez\Deep\Collection\AssetCollection.');
     }
 }

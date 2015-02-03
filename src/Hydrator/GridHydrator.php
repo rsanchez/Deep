@@ -133,6 +133,8 @@ class GridHydrator extends AbstractHydrator
             $rows = new GridRowCollection();
         }
 
+        $rows->setProperty($property);
+
         foreach ($rows as $row) {
             foreach ($row->getCols() as $col) {
                 $hydrator = $this->hydrators->get($col->getType());
@@ -152,12 +154,34 @@ class GridHydrator extends AbstractHydrator
 
     /**
      * Setter callback
-     * @param  \rsanchez\Deep\Collection\GridRowCollection|null $value
+     * @param  \rsanchez\Deep\Collection\GridRowCollection|array|null $value
      * @return \rsanchez\Deep\Collection\GridRowCollection|null
      */
-    public function setter(GridRowCollection $value = null)
+    public function setter($value = null, PropertyInterface $property = null)
     {
-        return $value;
+        if (is_null($value)) {
+            return null;
+        }
+
+        if ($value instanceof GridRowCollection) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            $rows = new GridRowCollection();
+
+            if ($property) {
+                $rows->setProperty($property);
+            }
+
+            foreach ($value as $array) {
+                $rows->addRow($array);
+            }
+
+            return $rows;
+        }
+
+        throw new \InvalidArgumentException('$value must be of type array, null, or \rsanchez\Deep\Collection\GridRowCollection.');
     }
 
     /**

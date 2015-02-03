@@ -39,6 +39,7 @@ class RelationshipDehydrator extends AbstractDehydrator
 
                 if ($parentEntity && $parentProperty) {
                     $data['parent_id'] = $parentEntity->getId();
+                    $data[$parentProperty->getPrefix().'_id'] = $property->getId();//field_id
                     $data[$entity->getType().'_'.$parentProperty->getPrefix().'_id'] = $parentProperty->getId();//grid_field_id
                     $data[$entity->getType().'_'.$property->getPrefix().'_id'] = $property->getId();//grid_col_id
                     $data[$entity->getType().'_'.$entity->getPrefix().'_id'] = $entity->getId();//grid_row_id

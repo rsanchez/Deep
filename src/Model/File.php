@@ -105,7 +105,7 @@ class File extends Model implements FileInterface
      */
     public function setUploadPref(UploadPref $uploadPref)
     {
-        $this->relations['uploadPref'] = $uploadPref;
+        $this->setRelation('uploadPref', $uploadPref);
 
         $this->attributes['upload_location_id'] = $uploadPref->id;
     }

@@ -171,7 +171,7 @@ abstract class AbstractEntity extends Model
     public function setAttribute($name, $value)
     {
         if (isset($this->customFieldSetters[$name])) {
-            $this->customFields[$name] = call_user_func($this->customFieldSetters[$name], $value);
+            $this->customFields[$name] = call_user_func($this->customFieldSetters[$name], $value, $this->getProperties()->getPropertyByName($name));
         } elseif ($this->hasCustomFieldAttribute($name)) {
             $this->setCustomFieldAttribute($name, $value);
         } elseif (array_key_exists($name, $this->customFields)) {

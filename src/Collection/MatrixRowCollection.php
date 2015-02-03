@@ -60,4 +60,26 @@ class MatrixRowCollection extends AbstractModelCollection implements FilterableI
     {
         $this->items[] = $item;
     }
+
+    /**
+     * Add a new MatrixRow to this collection
+     * @param array $attributes
+     * @return \rsanchez\Deep\Model\MatrixRow
+     */
+    public function addRow(array $attributes = [])
+    {
+        $property = $this->getProperty();
+
+        if ($property) {
+            $key = $property->getPrefix().'_id';//field_id
+
+            $attributes = [$key => $property->getId()] + $attributes;
+        }
+
+        $row = new MatrixRow($attributes);
+
+        $this->push($row);
+
+        return $row;
+    }
 }

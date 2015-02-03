@@ -32,6 +32,8 @@ class MatrixDehydrator extends AbstractDehydrator
 
                 $row->{$entity->getKeyName()} = $entity->getId();
 
+                $row->site_id = $entity->site_id;
+
                 // save once to make sure we have an id
                 if (! $row->exists) {
                     $row->save();

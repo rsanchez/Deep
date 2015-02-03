@@ -15,6 +15,10 @@ class GridColModelTest extends PHPUnit_Framework_TestCase
     {
         $query = GridCol::fieldId(12)->get();
 
-        $this->assertThat($query->fetch('col_id')->all(), new ArrayHasOnlyValuesConstraint([1, 2, 3]));
+        $ids = array_map(function ($model) {
+            return $model->col_id;
+        }, $query->all());
+
+        $this->assertThat($ids, new ArrayHasOnlyValuesConstraint([1, 2, 3]));
     }
 }

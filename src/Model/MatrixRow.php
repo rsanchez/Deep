@@ -13,12 +13,17 @@ use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\MatrixRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Validation\ValidatableInterface;
+use rsanchez\Deep\Relations\HasOneFromRepository;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use rsanchez\Deep\Repository\FieldRepository;
 
 /**
  * Model for the matrix_data table
  */
 class MatrixRow extends AbstractEntity
 {
+    use HasFieldRepositoryTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -44,12 +49,6 @@ class MatrixRow extends AbstractEntity
     protected $hiddenAttributesRegex = '/^col_id_\d+$/';
 
     /**
-     * Cols associated with this row
-     * @var \rsanchez\Deep\Collection\MatrixColCollection
-     */
-    protected $cols;
-
-    /**
      * {@inheritdoc}
      *
      * @param  array                                         $models
@@ -58,6 +57,35 @@ class MatrixRow extends AbstractEntity
     public function newCollection(array $models = array())
     {
         return new MatrixRowCollection($models);
+    }
+
+    /**
+     * Define the MatrixCol Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cols()
+    {
+        return new HasMany(
+            (new MatrixCol())->newQuery(),
+            $this,
+            'matrix_cols.field_id',
+            'field_id'
+        );
+    }
+
+    /**
+     * Define the Field Eloquent relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function field()
+    {
+        return new HasOneFromRepository(
+            static::getFieldRepository()->getModel()->newQuery(),
+            $this,
+            'channel_fields.field_id',
+            'field_id',
+            static::getFieldRepository()
+        );
     }
 
     /**
@@ -99,6 +127,28 @@ class MatrixRow extends AbstractEntity
     }
 
     /**
+     * Set the field_id attribute for this entry
+     * @param $fieldId
+     */
+    public function setFieldIdAttribute($fieldId)
+    {
+        $this->setField(static::getFieldRepository()->find($fieldId));
+    }
+
+    /**
+     * Set the field_id attribute for this entry
+     * @param $fieldId
+     */
+    public function setField(Field $field)
+    {
+        $this->setRelation('field', $field);
+
+        $this->attributes['field_id'] = $field->field_id;
+
+        $this->setCols($field->getChildProperties());
+    }
+
+    /**
      * Set the Matrix columns for this row
      *
      * @param  \rsanchez\Deep\Collection\MatrixColCollection $cols
@@ -106,13 +156,11 @@ class MatrixRow extends AbstractEntity
      */
     public function setCols(MatrixColCollection $cols)
     {
-        $this->cols = $cols;
+        $this->setRelation('cols', $cols);
 
-        foreach ($cols as $col) {
-            if (! isset($this->customFields[$col->getName()])) {
-                $this->setCustomField($col->getName(), $this->{$col->getIdentifier()});
-            }
-        }
+        $this->setDehydrators($this->getHydratorFactory()->getDehydrators($cols));
+
+        $this->hydrateDefaultProperties();
     }
 
     /**

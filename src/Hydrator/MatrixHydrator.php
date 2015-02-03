@@ -146,12 +146,34 @@ class MatrixHydrator extends AbstractHydrator
 
     /**
      * Setter callback
-     * @param  \rsanchez\Deep\Collection\MatrixRowCollection|null $value
+     * @param  \rsanchez\Deep\Collection\MatrixRowCollection|array|null $value
      * @return \rsanchez\Deep\Collection\MatrixRowCollection|null
      */
-    public function setter(MatrixRowCollection $value = null)
+    public function setter($value = null, PropertyInterface $property = null)
     {
-        return $value;
+        if (is_null($value)) {
+            return null;
+        }
+
+        if ($value instanceof MatrixRowCollection) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            $rows = new MatrixRowCollection();
+
+            if ($property) {
+                $rows->setProperty($property);
+            }
+
+            foreach ($value as $array) {
+                $rows->addRow($array);
+            }
+
+            return $rows;
+        }
+
+        throw new \InvalidArgumentException('$value must be of type array, null, or \rsanchez\Deep\Collection\MatrixRowCollection.');
     }
 
     /**

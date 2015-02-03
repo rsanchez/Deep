@@ -36,7 +36,7 @@ class Validator extends IlluminateValidator
      */
     public function validateInArray($attribute, $value, $parameters = [])
     {
-        return is_array($value) && !! array_diff($value, explode(',', $parameters[0]));
+        return is_array($value) && ! array_diff($value, explode(',', $parameters[0]));
     }
 
     /**

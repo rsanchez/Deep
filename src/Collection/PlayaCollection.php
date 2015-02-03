@@ -43,4 +43,22 @@ class PlayaCollection extends EntryCollection
         // flatten the array keys
         return array_values(parent::toArray());
     }
+
+    /**
+     * Add an entry based on ID
+     * @param $entryId
+     */
+    public function addEntryId($entryId)
+    {
+        $this->push(PlayaEntry::find($entryId));
+    }
+
+    /**
+     * Add several entries based on ID
+     * @param $entryIds
+     */
+    public function addEntryIds($entryIds)
+    {
+        $this->items += PlayaEntry::entryId($entryIds)->get()->all();
+    }
 }

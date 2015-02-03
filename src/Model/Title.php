@@ -323,7 +323,7 @@ class Title extends AbstractEntity
      */
     public function setChannel(Channel $channel)
     {
-        $this->relations['chan'] = $channel;
+        $this->setRelation('chan', $channel);
 
         $this->attributes['channel_id'] = $channel->channel_id;
 

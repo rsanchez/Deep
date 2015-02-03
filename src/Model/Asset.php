@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
+use rsanchez\Deep\Relations\HasOneFromRepository;
 use Carbon\Carbon;
 
 /**
@@ -109,7 +110,7 @@ class Asset extends Model implements FileInterface
      */
     public function setUploadPref(UploadPref $uploadPref)
     {
-        $this->relations['uploadPref'] = $uploadPref;
+        $this->setRelation('uploadPref', $uploadPref);
 
         $this->attributes['filedir_id'] = $uploadPref->id;
         $this->attributes['source_type'] = 'ee';
@@ -178,6 +179,20 @@ class Asset extends Model implements FileInterface
         $entryId = is_array($entryId) ? $entryId : array($entryId);
 
         return $this->requireTable($query, 'assets_selections')->whereIn('assets_selections.entry_id', $entryId);
+    }
+
+    /**
+     * Filter by File ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                          $fileId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFileId(Builder $query, $fileId)
+    {
+        $fileId = is_array($fileId) ? $fileId : array($fileId);
+
+        return $this->whereIn('assets_files.file_id', $fileId);
     }
 
     /**
