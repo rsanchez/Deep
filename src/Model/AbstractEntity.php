@@ -326,11 +326,11 @@ abstract class AbstractEntity extends Model
             $value = $this->{$property->getName()};
 
             if ($value instanceof ValidatableInterface) {
-                $attributes[$property->getIdentifier()] = $value->getValidatableAttributes();
+                $attributes[$property->getName()] = $value->getValidatableAttributes();
             } elseif ($value instanceof DateTime) {
-                $attributes[$property->getIdentifier()] = $value->format('U');
+                $attributes[$property->getName()] = $value->format('U');
             } else {
-                $attributes[$property->getIdentifier()] = $value;
+                $attributes[$property->getName()] = $value;
             }
         }
 
@@ -380,12 +380,12 @@ abstract class AbstractEntity extends Model
             }
 
             if ($propertyRules) {
-                $rules[$property->getIdentifier()] = $propertyRules;
+                $rules[$property->getName()] = $propertyRules;
             }
 
             if ($value instanceof ProvidesValidationRulesInterface) {
                 foreach ($value->getValidationRules($validatorFactory, $property) as $key => $val) {
-                    $rules[$property->getIdentifier().'.'.$key] = $val;
+                    $rules[$property->getName().'.'.$key] = $val;
                 }
             }
         }
