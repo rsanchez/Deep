@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Collection\PropertyCollection;
 use rsanchez\Deep\Repository\SiteRepository;

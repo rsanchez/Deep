@@ -10,7 +10,6 @@
 namespace rsanchez\Deep\Hydrator;
 
 use rsanchez\Deep\Collection\EntryCollection;
-use rsanchez\Deep\Collection\AbstractTitleCollection;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Collection\PropertyCollection;
 use rsanchez\Deep\Repository\SiteRepository;
@@ -139,10 +138,10 @@ abstract class AbstractHydratorFactory
     /**
      * Get an array of Hydrators needed by the specified collection
      *    'field_name' => AbstractHydrator
-     * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $collection
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @return array                                             AbstractHydrator[]
      */
-    public function getHydratorsForCollection(AbstractTitleCollection $collection, array $extraHydrators = array())
+    public function getHydratorsForCollection(EntryCollection $collection, array $extraHydrators = array())
     {
         $hydrators = new HydratorCollection();
 
@@ -210,10 +209,10 @@ abstract class AbstractHydratorFactory
     /**
      * Get an array of Dehydrators needed by the specified collection
      *    'field_name' => AbstractDehydrator
-     * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $collection
+     * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @return \rsanchez\Deep\Hydrator\DehydratorCollection
      */
-    public function getDehydratorsForCollection(AbstractTitleCollection $collection)
+    public function getDehydratorsForCollection(EntryCollection $collection)
     {
         $dehydrators = new DehydratorCollection();
 

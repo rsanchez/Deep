@@ -18,8 +18,26 @@ use rsanchez\Deep\Repository\FieldRepository;
 /**
  * Collection of \rsanchez\Deep\Model\Entry
  */
-class EntryCollection extends TitleCollection
+class EntryCollection extends AbstractModelCollection implements FilterableInterface
 {
+    use FilterableTrait;
+
+    protected $channelRepository;
+
+    protected $fieldRepository;
+
+    /**
+     * All of the entry IDs in this collection (including related entries)
+     * @var array
+     */
+    protected $entryIds = [];
+
+    /**
+     * Channels used by this collection
+     * @var \rsanchez\Deep\Collection\ChannelCollection
+     */
+    protected $channels;
+
     /**
      * Matrix columns used by this collection
      * @var \rsanchez\Deep\Collection\MatrixColCollection
@@ -39,33 +57,151 @@ class EntryCollection extends TitleCollection
     protected $fields;
 
     /**
-     * Instantiate a collection of models
-     * @param  array                                       $models
-     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
-     * @param  \rsanchez\Deep\Repository\FieldRepository   $fieldRepository
+     * Create a new collection using the current instance's properties
+     * as injected dependencies.
+     *
+     * Useful when making a collection of a subset of this collection
+     * @param  array                                             $models
      * @return \rsanchez\Deep\Collection\EntryCollection
      */
-    public static function createWithFields(array $models, ChannelRepository $channelRepository, FieldRepository $fieldRepository)
+    public function createChildCollection(array $models)
     {
-        $collection = self::create($models, $channelRepository);
+        return static::create($models, $this->channelRepository, $this->fieldRepository);
+    }
 
-        $collection->setFieldRepository($fieldRepository);
+    /**
+     * Instantiate a collection of models
+     * @param  array                                          $models
+     * @param  \rsanchez\Deep\Repository\ChannelRepository    $channelRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepository|null $fieldRepository
+     * @return \rsanchez\Deep\Collection\EntryCollection
+     */
+    public static function create(array $models, ChannelRepository $channelRepository, FieldRepository $fieldRepository = null)
+    {
+        $collection = new static($models);
 
-        $channels = $collection->getChannels();
+        $collection->setChannelRepository($channelRepository);
 
-        $fields = $fieldRepository->getFieldsByChannelCollection($channels);
+        $channelIds = array();
 
-        $collection->setFields($fields);
+        foreach ($models as $model) {
+            $collection->entryIds[] = $model->entry_id;
+
+            if (! in_array($model->channel_id, $channelIds)) {
+                $channelIds[] = $model->channel_id;
+            }
+        }
+
+        $collection->setChannels($channelRepository->getChannelsById($channelIds));
+
+        if ($fieldRepository) {
+            $collection->setFieldRepository($fieldRepository);
+
+            $channels = $collection->getChannels();
+
+            $fields = $fieldRepository->getFieldsByChannelCollection($channels);
+
+            $collection->setFields($fields);
+        }
 
         return $collection;
     }
 
     /**
+     * Set the Channel Repository
+     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @return void
+     */
+    public function setChannelRepository(ChannelRepository $channelRepository)
+    {
+        $this->channelRepository = $channelRepository;
+    }
+
+    /**
+     * Set the channels used by this collection
+     * @param  \rsanchez\Deep\Collection\ChannelCollection $channels
+     * @return void
+     */
+    public function setChannels(ChannelCollection $channels)
+    {
+        $this->channels = $channels;
+    }
+
+    /**
+     * Get the channels used by this collection
+     * @return \rsanchez\Deep\Collection\ChannelCollection
+     */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
+
+    /**
+     * Get all the entry Ids from this collection.
+     * This includes both the entries directly in this collection,
+     * and entries found in Playa/Relationship fields
+     *
+     * @return array
+     */
+    public function getEntryIds()
+    {
+        return $this->entryIds;
+    }
+
+    /**
+     * Add an additional entry id to this collection
+     *
+     * @param  string|int $entryId
+     * @return void
+     */
+    public function addEntryId($entryId)
+    {
+        if (! in_array($entryId, $this->entryIds)) {
+            $this->entryIds[$entryId] = $entryId;
+        }
+    }
+
+    /**
+     * Add additional entry ids to this collection
+     *
+     * @param  array $entryIds
+     * @return void
+     */
+    public function addEntryIds(array $entryIds)
+    {
+        foreach ($entryIds as $entryId) {
+            $this->addEntryId($entryId);
+        }
+    }
+
+    /**
+     * Whether or not this collection supports custom fields
+     *
+     * @return bool
+     */
+    public function hasCustomFields()
+    {
+        return !! $this->fields;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function createChildCollection(array $models)
+    public function toJson($options = 0)
     {
-        return static::createWithFields($models, $this->channelRepository, $this->fieldRepository);
+        if (func_num_args() === 0) {
+            $options = JSON_NUMERIC_CHECK;
+        }
+
+        return parent::toJson($options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addModel(Model $item)
+    {
+        $this->addEntry($item);
     }
 
     /**
@@ -115,14 +251,6 @@ class EntryCollection extends TitleCollection
     public function hasFieldtype($fieldtype)
     {
         return $this->fields->hasFieldtype($fieldtype);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasCustomFields()
-    {
-        return true;
     }
 
     /**
@@ -191,20 +319,12 @@ class EntryCollection extends TitleCollection
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function addModel(Model $item)
-    {
-        $this->addEntry($item);
-    }
-
-    /**
      * Add a Entry to this collection
      * @param  \rsanchez\Deep\Model\Entry $item
      * @return void
      */
     public function addEntry(Entry $item)
     {
-        $this->addTitle($item);
+        $this->items[] = $item;
     }
 }

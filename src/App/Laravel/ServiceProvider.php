@@ -27,10 +27,6 @@ class ServiceProvider extends LaravelServiceProvider
             return $app->make('deep')->make('Entry');
         });
 
-        $this->app->singleton('deep.title', function ($app) {
-            return $app->make('deep')->make('Title');
-        });
-
         $this->app->singleton('deep.category', function ($app) {
             return $app->make('deep')->make('Category');
         });
@@ -44,7 +40,6 @@ class ServiceProvider extends LaravelServiceProvider
         // register our Facade aliases
         $loader = AliasLoader::getInstance();
         $loader->alias('Entries', 'rsanchez\Deep\App\Laravel\Facade\Entries');
-        $loader->alias('Titles', 'rsanchez\Deep\App\Laravel\Facade\Titles');
         $loader->alias('Categories', 'rsanchez\Deep\App\Laravel\Facade\Categories');
     }
 }

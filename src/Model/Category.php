@@ -117,7 +117,7 @@ class Category extends AbstractEntity
      */
     public function entries()
     {
-        return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Title', 'category_posts', 'entry_id', 'cat_id');
+        return $this->belongsToMany('\\rsanchez\\Deep\\Model\\Entry', 'category_posts', 'entry_id', 'cat_id');
     }
 
     /**

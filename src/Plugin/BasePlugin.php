@@ -12,7 +12,7 @@ namespace rsanchez\Deep\Plugin;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Entry;
 use rsanchez\Deep\Model\Category;
-use rsanchez\Deep\Collection\AbstractTitleCollection;
+use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\RelationshipCollection;
 use rsanchez\Deep\Collection\FilterableInterface;
 use rsanchez\Deep\Collection\CategoryCollection;
@@ -137,7 +137,11 @@ abstract class BasePlugin
 
         $dynamic = ee()->TMPL->fetch_param('dynamic', 'yes') === 'yes';
 
-        $query = $this->app->make($customFieldsEnabled ? 'Entry' : 'Title')->newQuery();
+        $query = $this->app->make('Entry')->newQuery();
+
+        if (! $customFieldsEnabled) {
+            $query->withoutFields();
+        }
 
         if ($uri && ($dynamic || $relatedCategoriesMode)) {
             $segments = explode('/', $uri);
@@ -278,15 +282,15 @@ abstract class BasePlugin
     /**
      * Parse a plugin tag pair equivalent to channel:entries
      *
-     * @param  AbstractTitleCollection $entries   a collection of entries
-     * @param  string                  $tagdata   the raw template to parse
-     * @param  array                   $params    channel:entries parameters
-     * @param  array                   $varPair   array of pair tags from ee()->functions->assign_variables
-     * @param  array                   $varSingle array single tags from ee()->functions->assign_variables
+     * @param  EntryCollection $entries   a collection of entries
+     * @param  string          $tagdata   the raw template to parse
+     * @param  array           $params    channel:entries parameters
+     * @param  array           $varPair   array of pair tags from ee()->functions->assign_variables
+     * @param  array           $varSingle array single tags from ee()->functions->assign_variables
      * @return string
      */
     protected function parseEntryCollection(
-        AbstractTitleCollection $entries,
+        EntryCollection $entries,
         $tagdata,
         array $params = array(),
         array $varPair = array(),
@@ -460,7 +464,7 @@ abstract class BasePlugin
 
                     $value = $entry->{$tag->name};
 
-                    if ($value instanceof AbstractTitleCollection) {
+                    if ($value instanceof EntryCollection) {
                         // native relationships are prefixed by default
                         if ($value instanceof RelationshipCollection) {
                             $tag->params['var_prefix'] = $tag->name;

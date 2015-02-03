@@ -15,7 +15,6 @@ use rsanchez\Deep\Model\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
-use rsanchez\Deep\Model\Title;
 use rsanchez\Deep\Model\Site;
 use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Model\Member;
@@ -281,26 +280,17 @@ class Deep extends Container
             return $member;
         });
 
-        $this->singleton('Title', function ($app) {
+        $this->singleton('Entry', function ($app) {
             $app->make('Category');
             $app->make('Member');
 
-            $title = new Title();
-
-            $title->setChannelRepository($app->make('ChannelRepository'));
-            $title->setSiteRepository($app->make('SiteRepository'));
-            $title->setHydratorFactory($app->make('EntryHydratorFactory'));
-            $title->setValidatorFactory($app->make('ValidatorFactory'));
-
-            return $title;
-        });
-
-        $this->singleton('Entry', function ($app) {
-            $app->make('Title');
-
             $entry = new Entry();
 
+            $entry->setChannelRepository($app->make('ChannelRepository'));
             $entry->setFieldRepository($app->make('FieldRepository'));
+            $entry->setSiteRepository($app->make('SiteRepository'));
+            $entry->setHydratorFactory($app->make('EntryHydratorFactory'));
+            $entry->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $entry;
         });
