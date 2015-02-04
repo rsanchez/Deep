@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Repository\UploadPrefRepository;
+use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
 /**
  * Trait for possessing an UploadPrefRepository
@@ -17,23 +17,23 @@ use rsanchez\Deep\Repository\UploadPrefRepository;
 trait HasUploadPrefRepositoryTrait
 {
     /**
-     * @var \rsanchez\Deep\Repository\UploadPrefRepository
+     * @var \rsanchez\Deep\Repository\UploadPrefRepositoryInterface
      */
     protected static $uploadPrefRepository;
 
     /**
      * Set the global UploadPrefRepository
-     * @param  \rsanchez\Deep\Repository\UploadPrefRepository $uploadPrefRepository
+     * @param  \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      * @return void
      */
-    public static function setUploadPrefRepository(UploadPrefRepository $uploadPrefRepository)
+    public static function setUploadPrefRepository(UploadPrefRepositoryInterface $uploadPrefRepository)
     {
         static::$uploadPrefRepository = $uploadPrefRepository;
     }
 
     /**
      * Get the global UploadPrefRepository
-     * @return \rsanchez\Deep\Repository\UploadPrefRepository
+     * @return \rsanchez\Deep\Repository\UploadPrefRepositoryInterface
      * @throws \Exception
      */
     public static function getUploadPrefRepository()
