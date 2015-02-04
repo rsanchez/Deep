@@ -161,29 +161,39 @@ class Deep extends Container
 
         $this->alias('rsanchez\Deep\Model\MemberField', 'MemberField');
 
-        $this->singleton('CategoryFieldRepository', function ($app) {
+        $this->singleton('rsanchez\Deep\Repository\CategoryFieldRepository', function ($app) {
             return new CategoryFieldRepository($app->make('CategoryField'));
         });
 
-        $this->singleton('MemberFieldRepository', function ($app) {
+        $this->alias('rsanchez\Deep\Repository\CategoryFieldRepository', 'CategoryFieldRepository');
+
+        $this->singleton('rsanchez\Deep\Repository\MemberFieldRepository', function ($app) {
             return new MemberFieldRepository($app->make('MemberField'));
         });
 
-        $this->singleton('ChannelRepository', function ($app) {
+        $this->alias('rsanchez\Deep\Repository\MemberFieldRepository', 'MemberFieldRepository');
+
+        $this->singleton('rsanchez\Deep\Repository\ChannelRepositoryInterface', function ($app) {
             return new ChannelRepository($app->make('Channel'));
         });
 
-        $this->singleton('SiteRepository', function ($app) {
+        $this->alias('rsanchez\Deep\Repository\ChannelRepositoryInterface', 'ChannelRepository');
+
+        $this->singleton('rsanchez\Deep\Repository\SiteRepository', function ($app) {
             return new SiteRepository($app->make('Site'));
         });
 
-        $this->singleton('UploadPrefRepository', function ($app) {
+        $this->alias('rsanchez\Deep\Repository\SiteRepository', 'SiteRepository');
+
+        $this->singleton('rsanchez\Deep\Repository\UploadPrefRepository', function ($app) {
             if (isset($app['config']['upload_prefs'])) {
                 return new ConfigUploadPrefRepository($app->make('UploadPref'), $app['config']['upload_prefs']);
             }
 
             return new UploadPrefRepository($app->make('UploadPref'));
         });
+
+        $this->alias('rsanchez\Deep\Repository\UploadPrefRepository', 'UploadPrefRepository');
 
         $this->singleton('rsanchez\Deep\Model\Asset', function ($app) {
             $model = new Asset();

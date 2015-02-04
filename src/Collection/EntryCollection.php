@@ -12,7 +12,7 @@ namespace rsanchez\Deep\Collection;
 use rsanchez\Deep\Model\Entry;
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Field;
-use rsanchez\Deep\Repository\ChannelRepository;
+use rsanchez\Deep\Repository\ChannelRepositoryInterface;
 use rsanchez\Deep\Repository\FieldRepository;
 
 /**
@@ -71,12 +71,12 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 
     /**
      * Instantiate a collection of models
-     * @param  array                                          $models
-     * @param  \rsanchez\Deep\Repository\ChannelRepository    $channelRepository
-     * @param  \rsanchez\Deep\Repository\FieldRepository|null $fieldRepository
+     * @param  array                                                $models
+     * @param  \rsanchez\Deep\Repository\ChannelRepositoryInterface $channelRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepository|null       $fieldRepository
      * @return \rsanchez\Deep\Collection\EntryCollection
      */
-    public static function create(array $models, ChannelRepository $channelRepository, FieldRepository $fieldRepository = null)
+    public static function create(array $models, ChannelRepositoryInterface $channelRepository, FieldRepository $fieldRepository = null)
     {
         $collection = new static($models);
 
@@ -109,10 +109,10 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 
     /**
      * Set the Channel Repository
-     * @param  \rsanchez\Deep\Repository\ChannelRepository $channelRepository
+     * @param  \rsanchez\Deep\Repository\ChannelRepositoryInterface $channelRepository
      * @return void
      */
-    public function setChannelRepository(ChannelRepository $channelRepository)
+    public function setChannelRepository(ChannelRepositoryInterface $channelRepository)
     {
         $this->channelRepository = $channelRepository;
     }

@@ -15,7 +15,7 @@ use rsanchez\Deep\Model\Channel;
 /**
  * Repository of all Channels
  */
-class ChannelRepository implements RepositoryInterface
+class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterface
 {
     /**
      * Repository Channel Model
@@ -33,13 +33,13 @@ class ChannelRepository implements RepositoryInterface
      * Array of Channels keyed by channel_id
      * @var array
      */
-    protected $channelsById = array();
+    protected $channelsById = [];
 
     /**
      * Array of Channels keyed by channel_name
      * @var array
      */
-    protected $channelsByName = array();
+    protected $channelsByName = [];
 
     /**
      * Constructor
@@ -59,10 +59,7 @@ class ChannelRepository implements RepositoryInterface
     }
 
     /**
-     * Get Collection of Channels by channel ID
-     *
-     * @var array $channelIds
-     * @return \rsanchez\Deep\Collection\ChannelCollection
+     * {@inheritdoc}
      */
     public function getChannelsById(array $channelIds)
     {
@@ -76,10 +73,7 @@ class ChannelRepository implements RepositoryInterface
     }
 
     /**
-     * Get Collection of Channels by channel name
-     *
-     * @var array $channelNames
-     * @return \rsanchez\Deep\Collection\ChannelCollection
+     * {@inheritdoc}
      */
     public function getChannelsByName(array $channelNames)
     {
@@ -93,9 +87,7 @@ class ChannelRepository implements RepositoryInterface
     }
 
     /**
-     * Alias to getChannelById
-     * @var int $id
-     * @return \rsanchez\Deep\Model\Channel|null
+     * {@inheritdoc}
      */
     public function find($id)
     {
@@ -103,10 +95,7 @@ class ChannelRepository implements RepositoryInterface
     }
 
     /**
-     * Get single Channel by channel ID
-     *
-     * @var int $channelId
-     * @return \rsanchez\Deep\Model\Channel|null
+     * {@inheritdoc}
      */
     public function getChannelById($channelId)
     {
@@ -114,10 +103,7 @@ class ChannelRepository implements RepositoryInterface
     }
 
     /**
-     * Get single Channel by channel name
-     *
-     * @var string $channelName
-     * @return \rsanchez\Deep\Model\Channel|null
+     * {@inheritdoc}
      */
     public function getChannelByName($channelName)
     {
@@ -125,8 +111,7 @@ class ChannelRepository implements RepositoryInterface
     }
 
     /**
-     * Get the Channel model
-     * @return \rsanchez\Deep\Model\Channel
+     * {@inheritdoc}
      */
     public function getModel()
     {
