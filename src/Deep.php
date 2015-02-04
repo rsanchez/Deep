@@ -66,19 +66,25 @@ class Deep extends Container
             return $config;
         });
 
-        $this->bind('db', function ($app) {
+        $this->bind('Illuminate\Database\ConnectionInterface', function ($app) {
             return Model::resolveConnection(Model::getGlobalConnection());
         });
 
-        $this->singleton('ValidationPresenceVerifier', function ($app) {
+        $this->alias('Illuminate\Database\ConnectionInterface', 'db');
+
+        $this->singleton('Illuminate\Validation\PresenceVerifierInterface', function ($app) {
             return new DatabasePresenceVerifier(Model::getConnectionResolver());
         });
 
-        $this->singleton('ValidationTranslator', function ($app) {
+        $this->alias('Illuminate\Validation\PresenceVerifierInterface', 'ValidationPresenceVerifier');
+
+        $this->singleton('Symfony\Component\Translation\TranslatorInterface', function ($app) {
             return new Translator('en');
         });
 
-        $this->singleton('ValidatorFactory', function ($app) {
+        $this->alias('Symfony\Component\Translation\TranslatorInterface', 'ValidationTranslator');
+
+        $this->singleton('Illuminate\Validation\Factory', function ($app) {
             $validatorFactory = new ValidatorFactory($app->make('ValidationTranslator'));
 
             $validatorFactory->setPresenceVerifier($app->make('ValidationPresenceVerifier'));
@@ -86,7 +92,9 @@ class Deep extends Container
             return $validatorFactory;
         });
 
-        $this->singleton('Field', function ($app) {
+        $this->alias('Illuminate\Validation\Factory', 'ValidatorFactory');
+
+        $this->singleton('rsanchez\Deep\Model\Field', function ($app) {
             $model = new Field();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -94,11 +102,15 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('FieldRepository', function ($app) {
+        $this->alias('rsanchez\Deep\Model\Field', 'Field');
+
+        $this->singleton('rsanchez\Deep\Repository\FieldRepository', function ($app) {
             return new FieldRepository($app->make('Field'));
         });
 
-        $this->singleton('Channel', function ($app) {
+        $this->alias('rsanchez\Deep\Repository\FieldRepository', 'FieldRepository');
+
+        $this->singleton('rsanchez\Deep\Model\Channel', function ($app) {
             $channel = new Channel();
 
             $channel->setFieldRepository($app->make('FieldRepository'));
@@ -107,7 +119,9 @@ class Deep extends Container
             return $channel;
         });
 
-        $this->singleton('Site', function ($app) {
+        $this->alias('rsanchez\Deep\Model\Channel', 'Channel');
+
+        $this->singleton('rsanchez\Deep\Model\Site', function ($app) {
             $model = new Site();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -115,7 +129,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('UploadPref', function ($app) {
+        $this->alias('rsanchez\Deep\Model\Site', 'Site');
+
+        $this->singleton('rsanchez\Deep\Model\UploadPref', function ($app) {
             $model = new UploadPref();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -123,7 +139,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('CategoryField', function ($app) {
+        $this->alias('rsanchez\Deep\Model\UploadPref', 'UploadPref');
+
+        $this->singleton('rsanchez\Deep\Model\CategoryField', function ($app) {
             $model = new CategoryField();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -131,13 +149,17 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('MemberField', function ($app) {
+        $this->alias('rsanchez\Deep\Model\CategoryField', 'CategoryField');
+
+        $this->singleton('rsanchez\Deep\Model\MemberField', function ($app) {
             $model = new MemberField();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
 
             return $model;
         });
+
+        $this->alias('rsanchez\Deep\Model\MemberField', 'MemberField');
 
         $this->singleton('CategoryFieldRepository', function ($app) {
             return new CategoryFieldRepository($app->make('CategoryField'));
@@ -163,7 +185,7 @@ class Deep extends Container
             return new UploadPrefRepository($app->make('UploadPref'));
         });
 
-        $this->singleton('Asset', function ($app) {
+        $this->singleton('rsanchez\Deep\Model\Asset', function ($app) {
             $model = new Asset();
 
             $model->setUploadPrefRepository($app->make('UploadPrefRepository'));
@@ -172,7 +194,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('File', function ($app) {
+        $this->alias('rsanchez\Deep\Model\Asset', 'Asset');
+
+        $this->singleton('rsanchez\Deep\Model\File', function ($app) {
             $model = new File();
 
             $model->setUploadPrefRepository($app->make('UploadPrefRepository'));
@@ -181,7 +205,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('GridCol', function ($app) {
+        $this->alias('rsanchez\Deep\Model\File', 'File');
+
+        $this->singleton('rsanchez\Deep\Model\GridCol', function ($app) {
             $model = new GridCol();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -189,7 +215,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('GridRow', function ($app) {
+        $this->alias('rsanchez\Deep\Model\GridCol', 'GridCol');
+
+        $this->singleton('rsanchez\Deep\Model\GridRow', function ($app) {
             $model = new GridRow();
 
             $model->setFieldRepository($app->make('FieldRepository'));
@@ -199,7 +227,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('MatrixCol', function ($app) {
+        $this->alias('rsanchez\Deep\Model\GridRow', 'GridRow');
+
+        $this->singleton('rsanchez\Deep\Model\MatrixCol', function ($app) {
             $model = new MatrixCol();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -207,7 +237,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('MatrixRow', function ($app) {
+        $this->alias('rsanchez\Deep\Model\MatrixCol', 'MatrixCol');
+
+        $this->singleton('rsanchez\Deep\Model\MatrixRow', function ($app) {
             $model = new MatrixRow();
 
             $model->setFieldRepository($app->make('FieldRepository'));
@@ -217,7 +249,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('PlayaEntry', function ($app) {
+        $this->alias('rsanchez\Deep\Model\MatrixRow', 'MatrixRow');
+
+        $this->singleton('rsanchez\Deep\Model\PlayaEntry', function ($app) {
             $model = new PlayaEntry();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -225,7 +259,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('RelationshipEntry', function ($app) {
+        $this->alias('rsanchez\Deep\Model\PlayaEntry', 'PlayaEntry');
+
+        $this->singleton('rsanchez\Deep\Model\RelationshipEntry', function ($app) {
             $model = new RelationshipEntry();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -233,7 +269,9 @@ class Deep extends Container
             return $model;
         });
 
-        $this->singleton('RowHydratorFactory', function ($app) {
+        $this->alias('rsanchez\Deep\Model\RelationshipEntry', 'RelationshipEntry');
+
+        $this->singleton('rsanchez\Deep\Hydrator\RowHydratorFactory', function ($app) {
             return new RowHydratorFactory(
                 $app->make('db'),
                 $app->make('SiteRepository'),
@@ -245,7 +283,9 @@ class Deep extends Container
             );
         });
 
-        $this->singleton('EntryHydratorFactory', function ($app) {
+        $this->alias('rsanchez\Deep\Hydrator\RowHydratorFactory', 'RowHydratorFactory');
+
+        $this->singleton('rsanchez\Deep\Hydrator\EntryHydratorFactory', function ($app) {
             return new EntryHydratorFactory(
                 $app->make('db'),
                 $app->make('SiteRepository'),
@@ -261,7 +301,9 @@ class Deep extends Container
             );
         });
 
-        $this->singleton('Category', function ($app) {
+        $this->alias('rsanchez\Deep\Hydrator\EntryHydratorFactory', 'EntryHydratorFactory');
+
+        $this->singleton('rsanchez\Deep\Model\Category', function ($app) {
             $category = new Category();
 
             $category->setCategoryFieldRepository($app->make('CategoryFieldRepository'));
@@ -271,7 +313,9 @@ class Deep extends Container
             return $category;
         });
 
-        $this->singleton('Member', function ($app) {
+        $this->alias('rsanchez\Deep\Model\Category', 'Category');
+
+        $this->singleton('rsanchez\Deep\Model\Member', function ($app) {
             $member = new Member();
 
             $member->setMemberFieldRepository($app->make('MemberFieldRepository'));
@@ -280,7 +324,9 @@ class Deep extends Container
             return $member;
         });
 
-        $this->singleton('Entry', function ($app) {
+        $this->alias('rsanchez\Deep\Model\Member', 'Member');
+
+        $this->singleton('rsanchez\Deep\Model\Entry', function ($app) {
             $app->make('Category');
             $app->make('Member');
 
@@ -294,20 +340,24 @@ class Deep extends Container
 
             return $entry;
         });
+
+        $this->alias('rsanchez\Deep\Model\Entry', 'Entry');
     }
 
     /**
-     * Bootstrap the EE db connection with Eloquent, once
-     * @param  \CI_Controller $ee
-     * @return void
+     * Bootstrap the main models
      */
-    public static function bootEloquent(CI_Controller $ee)
+    public function boot()
     {
-        if (Model::getConnectionResolver() instanceof CodeIgniterConnectionResolver) {
-            return;
-        }
+        $this->make('Entry');
+    }
 
-        Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
+    /**
+     * Bootstrap the main models on the global instance
+     */
+    public static function bootInstance()
+    {
+        Deep::getInstance()->boot();
     }
 
     /**
@@ -318,7 +368,7 @@ class Deep extends Container
      *
      * @return void
      */
-    public static function bootEE(CI_Controller $ee)
+    public static function bootEE(CI_Controller $ee = null)
     {
         static $booted = false;
 
@@ -326,21 +376,27 @@ class Deep extends Container
             return;
         }
 
+        if (is_null($ee)) {
+            $ee = ee();
+        }
+
         if (! Model::getConnectionResolver() instanceof CodeIgniterConnectionResolver) {
             Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
         }
 
-        self::extendInstance('config', function ($app) use ($ee) {
+        static::extendInstance('config', function ($app) use ($ee) {
             return $ee->config->config;
         });
 
         $uploadPrefs = $ee->config->item('upload_preferences');
 
         if ($uploadPrefs) {
-            self::extendInstance('UploadPrefRepository', function ($app) use ($uploadPrefs) {
+            static::extendInstance('UploadPrefRepository', function ($app) use ($uploadPrefs) {
                 return new ConfigUploadPrefRepository($app->make('UploadPref'), $uploadPrefs);
             });
         }
+
+        static::bootInstance();
 
         $booted = true;
     }
@@ -353,7 +409,7 @@ class Deep extends Container
      */
     public static function extendInstance($abstract, Closure $closure)
     {
-        self::getInstance()->extend($abstract, $closure);
+        static::getInstance()->extend($abstract, $closure);
     }
 
     /**
@@ -365,7 +421,7 @@ class Deep extends Container
         static $app;
 
         if (is_null($app)) {
-            $app = new self();
+            $app = new static();
         }
 
         return $app;

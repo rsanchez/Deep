@@ -3,10 +3,8 @@
 namespace rsanchez\Deep\App\Laravel;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
-use Illuminate\Foundation\AliasLoader;
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Model;
-use rsanchez\Deep\Validation\Validator;
 
 class ServiceProvider extends LaravelServiceProvider
 {
@@ -20,26 +18,11 @@ class ServiceProvider extends LaravelServiceProvider
         }
 
         $this->app->singleton('deep', function ($app) {
-            return new Deep();
-        });
+            $deep = new Deep();
 
-        $this->app->singleton('deep.entry', function ($app) {
-            return $app->make('deep')->make('Entry');
-        });
+            $deep->boot();
 
-        $this->app->singleton('deep.category', function ($app) {
-            return $app->make('deep')->make('Category');
+            return $deep;
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function boot()
-    {
-        // register our Facade aliases
-        $loader = AliasLoader::getInstance();
-        $loader->alias('Entries', 'rsanchez\Deep\App\Laravel\Facade\Entries');
-        $loader->alias('Categories', 'rsanchez\Deep\App\Laravel\Facade\Categories');
     }
 }
