@@ -15,20 +15,8 @@ use rsanchez\Deep\Model\Channel;
 /**
  * Repository of all Channels
  */
-class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterface
+class ChannelRepository extends AbstractRepository implements ChannelRepositoryInterface
 {
-    /**
-     * Repository Channel Model
-     * @var \rsanchez\Deep\Model\Channel
-     */
-    protected $model;
-
-    /**
-     * Collection of all Channels
-     * @var \rsanchez\Deep\Collection\ChannelCollection
-     */
-    protected $collection;
-
     /**
      * Array of Channels keyed by channel_id
      * @var array
@@ -48,13 +36,21 @@ class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterfa
      */
     public function __construct(Channel $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
+    }
 
-        $this->collection = $this->model->all();
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadCollection()
+    {
+        if (is_null($this->collection)) {
+            parent::loadCollection();
 
-        foreach ($this->collection as $channel) {
-            $this->channelsById[$channel->channel_id] = $channel;
-            $this->channelsByName[$channel->channel_name] = $channel;
+            foreach ($this->collection as $channel) {
+                $this->channelsById[$channel->channel_id] = $channel;
+                $this->channelsByName[$channel->channel_name] = $channel;
+            }
         }
     }
 
@@ -67,7 +63,7 @@ class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterfa
             return new ChannelCollection();
         }
 
-        return $this->collection->filter(function ($channel) use ($channelIds) {
+        return $this->getCollection()->filter(function ($channel) use ($channelIds) {
             return in_array($channel->channel_id, $channelIds);
         });
     }
@@ -81,7 +77,7 @@ class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterfa
             return new ChannelCollection();
         }
 
-        return $this->collection->filter(function ($channel) use ($channelNames) {
+        return $this->getCollection()->filter(function ($channel) use ($channelNames) {
             return in_array($channel->channel_name, $channelNames);
         });
     }
@@ -99,6 +95,8 @@ class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterfa
      */
     public function getChannelById($channelId)
     {
+        $this->loadCollection();
+
         return array_key_exists($channelId, $this->channelsById) ? $this->channelsById[$channelId] : null;
     }
 
@@ -107,14 +105,8 @@ class ChannelRepository implements RepositoryInterface, ChannelRepositoryInterfa
      */
     public function getChannelByName($channelName)
     {
-        return array_key_exists($channelName, $this->channelsByName) ? $this->channelsByName[$channelName] : null;
-    }
+        $this->loadCollection();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getModel()
-    {
-        return $this->model;
+        return array_key_exists($channelName, $this->channelsByName) ? $this->channelsByName[$channelName] : null;
     }
 }

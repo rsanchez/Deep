@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Repository\CategoryFieldRepository;
+use rsanchez\Deep\Repository\CategoryFieldRepositoryInterface;
 
 /**
  * Trait for possessing a CategoryFieldRepository
@@ -18,23 +18,23 @@ trait HasCategoryFieldRepositoryTrait
 {
     /**
      * Global Category Field Repository
-     * @var \rsanchez\Deep\Repository\CategoryFieldRepository
+     * @var \rsanchez\Deep\Repository\CategoryFieldRepositoryInterface
      */
     protected static $categoryFieldRepository;
 
     /**
      * Set the global CategoryFieldRepository
-     * @param  \rsanchez\Deep\Repository\CategoryFieldRepository $categoryFieldRepository
+     * @param  \rsanchez\Deep\Repository\CategoryFieldRepositoryInterface $categoryFieldRepository
      * @return void
      */
-    public static function setCategoryFieldRepository(CategoryFieldRepository $categoryFieldRepository)
+    public static function setCategoryFieldRepository(CategoryFieldRepositoryInterface $categoryFieldRepository)
     {
         static::$categoryFieldRepository = $categoryFieldRepository;
     }
 
     /**
      * Get the global CategoryFieldRepository
-     * @return \rsanchez\Deep\Repository\CategoryFieldRepository
+     * @return \rsanchez\Deep\Repository\CategoryFieldRepositoryInterface
      */
     public static function getCategoryFieldRepository()
     {

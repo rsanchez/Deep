@@ -15,13 +15,13 @@ use rsanchez\Deep\Model\UploadPref;
 /**
  * Repository of all UploadPrefs
  */
-class UploadPrefRepository extends AbstractDeferredRepository implements UploadPrefRepositoryInterface
+class UploadPrefRepository extends AbstractRepository implements UploadPrefRepositoryInterface
 {
     /**
      * Array of UploadPrefs keyed by id
      * @var array
      */
-    protected $uploadPrefsById = array();
+    protected $uploadPrefsById = [];
 
     /**
      * Constructor
@@ -36,12 +36,14 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
     /**
      * {@inheritdoc}
      */
-    protected function boot()
+    protected function loadCollection()
     {
-        parent::boot();
+        if (is_null($this->collection)) {
+            parent::loadCollection();
 
-        foreach ($this->collection as $uploadPref) {
-            $this->uploadPrefsById[$uploadPref->id] = $uploadPref;
+            foreach ($this->collection as $uploadPref) {
+                $this->uploadPrefsById[$uploadPref->id] = $uploadPref;
+            }
         }
     }
 
@@ -60,7 +62,7 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
      */
     public function getUploadPrefById($id)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return array_key_exists($id, $this->uploadPrefsById) ? $this->uploadPrefsById[$id] : null;
     }
@@ -70,8 +72,6 @@ class UploadPrefRepository extends AbstractDeferredRepository implements UploadP
      */
     public function getUploadPrefs()
     {
-        $this->boot();
-
-        return $this->collection;
+        return $this->getCollection();
     }
 }

@@ -9,13 +9,12 @@
 
 namespace rsanchez\Deep\Repository;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Repository of all Sites
  */
-abstract class AbstractDeferredRepository implements RepositoryInterface
+abstract class AbstractRepository implements RepositoryInterface
 {
     /**
      * Repository Model
@@ -40,16 +39,24 @@ abstract class AbstractDeferredRepository implements RepositoryInterface
     }
 
     /**
-     * Defer loading of Collection until needed
-     * @return void
+     * {@inheritdoc}
      */
-    protected function boot()
+    public function getCollection()
     {
-        if (! is_null($this->collection)) {
-            return;
-        }
+        $this->loadCollection();
 
-        $this->collection = $this->model->all();
+        return $this->collection;
+    }
+
+    /**
+     * Defer loading of Collection until needed
+     * @return bool whether or not the collection needed loading
+     */
+    protected function loadCollection()
+    {
+        if (is_null($this->collection)) {
+            $this->collection = $this->model->all();
+        }
     }
 
     /**
@@ -57,14 +64,11 @@ abstract class AbstractDeferredRepository implements RepositoryInterface
      */
     public function find($id)
     {
-        $this->boot();
-
-        return $this->collection->find($id);
+        return $this->getCollection()->find($id);
     }
 
     /**
-     * Get the repository's model instance
-     * @return \Illuminate\Database\Eloquent\Model
+     * {@inheritdoc}
      */
     public function getModel()
     {

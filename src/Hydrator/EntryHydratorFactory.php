@@ -9,10 +9,8 @@
 
 namespace rsanchez\Deep\Hydrator;
 
-use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\FieldCollection;
-use rsanchez\Deep\Collection\PropertyCollection;
-use rsanchez\Deep\Repository\SiteRepository;
+use rsanchez\Deep\Repository\SiteRepositoryInterface;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 use rsanchez\Deep\Model\Asset;
 use rsanchez\Deep\Model\File;
@@ -52,7 +50,7 @@ class EntryHydratorFactory extends AbstractHydratorFactory
     /**
      * Constructor
      * @param \Illuminate\Database\ConnectionInterface                $db
-     * @param \rsanchez\Deep\Repository\SiteRepository                $siteRepository
+     * @param \rsanchez\Deep\Repository\SiteRepositoryInterface       $siteRepository
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      * @param \rsanchez\Deep\Model\Asset                              $asset
      * @param \rsanchez\Deep\Model\File                               $file
@@ -65,7 +63,7 @@ class EntryHydratorFactory extends AbstractHydratorFactory
      */
     public function __construct(
         ConnectionInterface $db,
-        SiteRepository $siteRepository,
+        SiteRepositoryInterface $siteRepository,
         UploadPrefRepositoryInterface $uploadPrefRepository,
         Asset $asset,
         File $file,

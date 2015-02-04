@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
-use rsanchez\Deep\Repository\SiteRepository;
+use rsanchez\Deep\Repository\SiteRepositoryInterface;
 
 class Wysiwyg implements StringableInterface
 {
@@ -47,11 +47,11 @@ class Wysiwyg implements StringableInterface
     /**
      * Constructor
      *
-     * @param \rsanchez\Deep\Repository\SiteRepository $siteRepository
+     * @param \rsanchez\Deep\Repository\SiteRepositoryInterface       $siteRepository
      * @param \rsanchez\Deep\Repository\UploadPrefRepositoryInterface $uploadPrefRepository
      * @param string $value
      */
-    public function __construct(SiteRepository $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository, $value = '')
+    public function __construct(SiteRepositoryInterface $siteRepository, UploadPrefRepositoryInterface $uploadPrefRepository, $value = '')
     {
         $this->siteRepository = $siteRepository;
         $this->uploadPrefRepository = $uploadPrefRepository;

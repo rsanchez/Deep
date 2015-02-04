@@ -14,7 +14,7 @@ use rsanchez\Deep\Model\CategoryField;
 /**
  * Repository of all CategoryFields
  */
-class CategoryFieldRepository extends AbstractFieldRepository
+class CategoryFieldRepository extends AbstractFieldRepository implements CategoryFieldRepositoryInterface
 {
     /**
      * {@inheritdoc}
@@ -25,9 +25,7 @@ class CategoryFieldRepository extends AbstractFieldRepository
     }
 
     /**
-     * Get fields by the cat group ID
-     * @param $groupId
-     * @return \rsanchez\Deep\Collection\CategoryFieldCollection
+     * {@inheritdoc}
      */
     public function getFieldsByGroup($groupId)
     {

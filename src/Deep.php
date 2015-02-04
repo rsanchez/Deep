@@ -104,11 +104,11 @@ class Deep extends Container
 
         $this->alias('rsanchez\Deep\Model\Field', 'Field');
 
-        $this->singleton('rsanchez\Deep\Repository\FieldRepository', function ($app) {
+        $this->singleton('rsanchez\Deep\Repository\FieldRepositoryInterface', function ($app) {
             return new FieldRepository($app->make('Field'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\FieldRepository', 'FieldRepository');
+        $this->alias('rsanchez\Deep\Repository\FieldRepositoryInterface', 'FieldRepository');
 
         $this->singleton('rsanchez\Deep\Model\Channel', function ($app) {
             $channel = new Channel();
@@ -161,11 +161,11 @@ class Deep extends Container
 
         $this->alias('rsanchez\Deep\Model\MemberField', 'MemberField');
 
-        $this->singleton('rsanchez\Deep\Repository\CategoryFieldRepository', function ($app) {
+        $this->singleton('rsanchez\Deep\Repository\CategoryFieldRepositoryInterface', function ($app) {
             return new CategoryFieldRepository($app->make('CategoryField'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\CategoryFieldRepository', 'CategoryFieldRepository');
+        $this->alias('rsanchez\Deep\Repository\CategoryFieldRepositoryInterface', 'CategoryFieldRepository');
 
         $this->singleton('rsanchez\Deep\Repository\MemberFieldRepository', function ($app) {
             return new MemberFieldRepository($app->make('MemberField'));
@@ -179,11 +179,11 @@ class Deep extends Container
 
         $this->alias('rsanchez\Deep\Repository\ChannelRepositoryInterface', 'ChannelRepository');
 
-        $this->singleton('rsanchez\Deep\Repository\SiteRepository', function ($app) {
+        $this->singleton('rsanchez\Deep\Repository\SiteRepositoryInterface', function ($app) {
             return new SiteRepository($app->make('Site'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\SiteRepository', 'SiteRepository');
+        $this->alias('rsanchez\Deep\Repository\SiteRepositoryInterface', 'SiteRepository');
 
         $this->singleton('rsanchez\Deep\Repository\UploadPrefRepository', function ($app) {
             if (isset($app['config']['upload_prefs'])) {

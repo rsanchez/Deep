@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Repository\FieldRepository;
+use rsanchez\Deep\Repository\FieldRepositoryInterface;
 
 /**
  * Model for the channels table
@@ -18,23 +18,23 @@ trait HasFieldRepositoryTrait
 {
     /**
      * Global Field Repository
-     * @var \rsanchez\Deep\Repository\FieldRepository
+     * @var \rsanchez\Deep\Repository\FieldRepositoryInterface
      */
     protected static $fieldRepository;
 
     /**
      * Set the global FieldRepository
-     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepositoryInterface $fieldRepository
      * @return void
      */
-    public static function setFieldRepository(FieldRepository $fieldRepository)
+    public static function setFieldRepository(FieldRepositoryInterface $fieldRepository)
     {
         static::$fieldRepository = $fieldRepository;
     }
 
     /**
      * Get the global FieldRepository
-     * @return \rsanchez\Deep\Repository\FieldRepository
+     * @return \rsanchez\Deep\Repository\FieldRepositoryInterface
      */
     public static function getFieldRepository()
     {

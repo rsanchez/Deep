@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Repository;
 
 /**
- * Repository of all UploadPrefs
+ * Repository of Models
  */
 interface RepositoryInterface
 {
@@ -20,4 +20,16 @@ interface RepositoryInterface
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function find($id);
+
+    /**
+     * Get the Collection of all items
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getCollection();
+
+    /**
+     * Get the Model
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel();
 }

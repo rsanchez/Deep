@@ -15,7 +15,6 @@ use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use rsanchez\Deep\Repository\FieldRepository;
 
 /**
  * Model for the matrix_data table

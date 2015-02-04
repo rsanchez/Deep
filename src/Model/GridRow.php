@@ -15,7 +15,6 @@ use rsanchez\Deep\Collection\GridColCollection;
 use rsanchez\Deep\Validation\ValidatableInterface;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use rsanchez\Deep\Relations\GridRowHasMany;
-use rsanchez\Deep\Repository\FieldRepository;
 
 /**
  * Model for the channel_grid_field_X table(s)

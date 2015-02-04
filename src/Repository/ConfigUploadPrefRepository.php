@@ -29,14 +29,16 @@ class ConfigUploadPrefRepository extends UploadPrefRepository
         $this->config = $config;
     }
 
-    public function boot()
+    protected function loadCollection()
     {
-        parent::boot();
+        if (is_null($this->collection)) {
+            parent::loadCollection();
 
-        foreach ($this->collection as $uploadPref) {
-            if (isset($this->config[$uploadPref->id])) {
-                foreach ($this->config[$uploadPref->id] as $key => $value) {
-                    $uploadPref->$key = $value;
+            foreach ($this->collection as $uploadPref) {
+                if (isset($this->config[$uploadPref->id])) {
+                    foreach ($this->config[$uploadPref->id] as $key => $value) {
+                        $uploadPref->$key = $value;
+                    }
                 }
             }
         }

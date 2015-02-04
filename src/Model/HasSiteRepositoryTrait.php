@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Repository\SiteRepository;
+use rsanchez\Deep\Repository\SiteRepositoryInterface;
 
 /**
  * Trait for possessing a SiteRepository
@@ -18,23 +18,23 @@ trait HasSiteRepositoryTrait
 {
     /**
      * Global Site Repository
-     * @var \rsanchez\Deep\Repository\SiteRepository
+     * @var \rsanchez\Deep\Repository\SiteRepositoryInterface
      */
     protected static $siteRepository;
 
     /**
      * Set the global SiteRepository
-     * @param  \rsanchez\Deep\Repository\SiteRepository $siteRepository
+     * @param  \rsanchez\Deep\Repository\SiteRepositoryInterface $siteRepository
      * @return void
      */
-    public static function setSiteRepository(SiteRepository $siteRepository)
+    public static function setSiteRepository(SiteRepositoryInterface $siteRepository)
     {
         static::$siteRepository = $siteRepository;
     }
 
     /**
      * Get the global SiteRepository
-     * @return \rsanchez\Deep\Repository\SiteRepository
+     * @return \rsanchez\Deep\Repository\SiteRepositoryInterface
      * @throws \Exception
      */
     public static function getSiteRepository()

@@ -57,4 +57,10 @@ interface ChannelRepositoryInterface
      * @return \rsanchez\Deep\Model\Channel
      */
     public function getModel();
+
+    /**
+     * Get the Collection of all items
+     * @return \rsanchez\Deep\Collection\ChannelCollection
+     */
+    public function getCollection();
 }

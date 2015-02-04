@@ -13,7 +13,7 @@ use rsanchez\Deep\Model\Entry;
 use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Repository\ChannelRepositoryInterface;
-use rsanchez\Deep\Repository\FieldRepository;
+use rsanchez\Deep\Repository\FieldRepositoryInterface;
 
 /**
  * Collection of \rsanchez\Deep\Model\Entry
@@ -71,12 +71,12 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 
     /**
      * Instantiate a collection of models
-     * @param  array                                                $models
-     * @param  \rsanchez\Deep\Repository\ChannelRepositoryInterface $channelRepository
-     * @param  \rsanchez\Deep\Repository\FieldRepository|null       $fieldRepository
+     * @param  array                                                   $models
+     * @param  \rsanchez\Deep\Repository\ChannelRepositoryInterface    $channelRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepositoryInterface|null $fieldRepository
      * @return \rsanchez\Deep\Collection\EntryCollection
      */
-    public static function create(array $models, ChannelRepositoryInterface $channelRepository, FieldRepository $fieldRepository = null)
+    public static function create(array $models, ChannelRepositoryInterface $channelRepository, FieldRepositoryInterface $fieldRepository = null)
     {
         $collection = new static($models);
 
@@ -206,10 +206,10 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 
     /**
      * Set the Field Repository
-     * @param  \rsanchez\Deep\Repository\FieldRepository $fieldRepository
+     * @param  \rsanchez\Deep\Repository\FieldRepositoryInterface $fieldRepository
      * @return void
      */
-    public function setFieldRepository(FieldRepository $fieldRepository)
+    public function setFieldRepository(FieldRepositoryInterface $fieldRepository)
     {
         $this->fieldRepository = $fieldRepository;
     }

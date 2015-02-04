@@ -14,19 +14,19 @@ use rsanchez\Deep\Model\AbstractField;
 /**
  * Repository of all Fields
  */
-abstract class AbstractFieldRepository extends AbstractDeferredRepository
+abstract class AbstractFieldRepository extends AbstractRepository implements FieldRepositoryInterface
 {
     /**
      * Array of Field keyed by field_name
      * @var array
      */
-    protected $fieldsByName = array();
+    protected $fieldsByName = [];
 
     /**
      * Array of Field keyed by field_id
      * @var array
      */
-    protected $fieldsById = array();
+    protected $fieldsById = [];
 
     /**
      * Constructor
@@ -41,10 +41,10 @@ abstract class AbstractFieldRepository extends AbstractDeferredRepository
     /**
      * {@inheritdoc}
      */
-    protected function boot()
+    protected function loadCollection()
     {
         if (is_null($this->collection)) {
-            parent::boot();
+            parent::loadCollection();
 
             foreach ($this->collection as $field) {
                 $this->fieldsByName[$field->field_name] = $field;
@@ -54,65 +54,49 @@ abstract class AbstractFieldRepository extends AbstractDeferredRepository
     }
 
     /**
-     * Get the collection of Fields
-     *
-     * @return \rsanchez\Deep\Collection\AbstractFieldCollection
+     * {@inheritdoc}
      */
     public function getFields()
     {
-        $this->boot();
-
-        return $this->collection;
+        return $this->getCollection();
     }
 
     /**
-     * Get the field_id for the specified field name
-     *
-     * @param  string                     $field name of the field
-     * @return \rsanchez\Deep\Model\Field
+     * {@inheritdoc}
      */
     public function getFieldId($field)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return $this->fieldsByName[$field]->field_id;
     }
 
     /**
-     * Get the field_id for the specified field name
-     *
-     * @param  int    $id id of the field
-     * @return string
+     * {@inheritdoc}
      */
     public function getFieldName($id)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return $this->fieldsById[$id]->field_name;
     }
 
     /**
-     * Check if this collection has the specified field name
-     *
-     * @param  string  $field the name of the field
-     * @return boolean
+     * {@inheritdoc}
      */
     public function hasField($field)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return isset($this->fieldsByName[$field]);
     }
 
     /**
-     * Check if this collection has the specified field id
-     *
-     * @param  int     $id the id of the field
-     * @return boolean
+     * {@inheritdoc}
      */
     public function hasFieldId($id)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return isset($this->fieldsById[$id]);
     }
@@ -122,7 +106,7 @@ abstract class AbstractFieldRepository extends AbstractDeferredRepository
      */
     public function find($id)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return isset($this->fieldsById[$id]) ? $this->fieldsById[$id] : null;
     }

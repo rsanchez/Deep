@@ -12,7 +12,7 @@ class SiteRepositoryTest extends PHPUnit_Framework_TestCase
 
     public function testGetSites()
     {
-        $query = $this->repository->getSites();
+        $query = $this->repository->getCollection();
 
         $this->assertInstanceOf('\\rsanchez\\Deep\\Collection\\SiteCollection', $query);
     }

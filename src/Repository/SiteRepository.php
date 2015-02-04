@@ -15,7 +15,7 @@ use rsanchez\Deep\Model\Site;
 /**
  * Repository of all Sites
  */
-class SiteRepository extends AbstractDeferredRepository
+class SiteRepository extends AbstractRepository implements SiteRepositoryInterface
 {
     /**
      * {@inheritdoc}
@@ -28,26 +28,11 @@ class SiteRepository extends AbstractDeferredRepository
     }
 
     /**
-     * Get Collection of all Sites
-     *
-     * @return \rsanchez\Deep\Collection\SiteCollection
-     */
-    public function getSites()
-    {
-        $this->boot();
-
-        return $this->collection;
-    }
-
-    /**
-     * Get the Page URI for the specified entry ID
-     *
-     * @param  int         $entryId
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getPageUri($entryId)
     {
-        foreach ($this->getSites() as $site) {
+        foreach ($this->getCollection() as $site) {
             if (isset($site->site_pages[$site->site_id]['uris'][$entryId])) {
                 return $site->site_pages[$site->site_id]['uris'][$entryId];
             }
@@ -57,15 +42,13 @@ class SiteRepository extends AbstractDeferredRepository
     }
 
     /**
-     * Get all the entry IDs of entries that have Page URIs
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getPageEntryIds()
     {
         $entryIds = array();
 
-        foreach ($this->getSites() as $site) {
+        foreach ($this->getCollection() as $site) {
             if (isset($site->site_pages[$site->site_id]['uris'])) {
                 $entryIds = array_merge($entryIds, array_keys($site->site_pages[$site->site_id]['uris']));
             }
@@ -75,15 +58,13 @@ class SiteRepository extends AbstractDeferredRepository
     }
 
     /**
-     * Get all the page uris of entries that have Page URIs
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getPageUris()
     {
         $pageUris = array();
 
-        foreach ($this->getSites() as $site) {
+        foreach ($this->getCollection() as $site) {
             if (isset($site->site_pages[$site->site_id]['uris'])) {
                 $pageUris += $site->site_pages[$site->site_id]['uris'];
             }

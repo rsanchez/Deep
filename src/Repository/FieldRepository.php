@@ -16,13 +16,13 @@ use rsanchez\Deep\Collection\ChannelCollection;
 /**
  * Repository of all Fields
  */
-class FieldRepository extends AbstractFieldRepository
+class FieldRepository extends AbstractFieldRepository implements ChannelFieldRepositoryInterface
 {
     /**
      * Array of FieldCollection keyed by group_id
      * @var array
      */
-    protected $fieldsByGroup = array();
+    protected $fieldsByGroup = [];
 
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class FieldRepository extends AbstractFieldRepository
     /**
      * {@inheritdoc}
      */
-    protected function boot()
+    protected function loadCollection()
     {
         if (is_null($this->collection)) {
             $this->collection = $this->model
@@ -65,7 +65,7 @@ class FieldRepository extends AbstractFieldRepository
      */
     public function getFieldsByGroup($groupId)
     {
-        $this->boot();
+        $this->loadCollection();
 
         return $groupId && isset($this->fieldsByGroup[$groupId]) ? $this->fieldsByGroup[$groupId] : new FieldCollection();
     }
@@ -77,7 +77,7 @@ class FieldRepository extends AbstractFieldRepository
      */
     public function getFieldsByChannelCollection(ChannelCollection $channels)
     {
-        $this->boot();
+        $this->loadCollection();
 
         $fields = new FieldCollection();
 

@@ -9,11 +9,9 @@
 
 namespace rsanchez\Deep\Model;
 
-use rsanchez\Deep\Repository\FieldRepository;
 use rsanchez\Deep\Collection\ChannelCollection;
 use rsanchez\Deep\Relations\HasManyFromRepository;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
-use rsanchez\Deep\Model\PropertyInterface;
 
 /**
  * Model for the channels table
