@@ -11,10 +11,12 @@
         "psr-4": { "rsanchez\\Deep\\": "src/" }
     },
     "require": {
-        "illuminate/container": "~4.2",
-        "illuminate/database": "~4.2",
-        "expressodev/laravel-codeigniter-db": "~1.0",
-        "nesbot/carbon": "1.*"
+        "php": ">=5.4.0",
+        "illuminate/container": "~4.2|~5.0",
+        "illuminate/database": "~4.2|~5.0",
+        "expressodev/laravel-codeigniter-db": "~1.0,>=1.0.5",
+        "nesbot/carbon": "1.*",
+        "illuminate/validation": "~4.2|~5.0"
     },
     "require-dev": {
         "robmorgan/phinx": "0.3.*",
