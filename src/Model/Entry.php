@@ -180,6 +180,12 @@ class Entry extends AbstractEntity
     ];
 
     /**
+     * Whether or not to hydrate custom fields
+     * @var bool
+     */
+    protected $hydrationEnabled = true;
+
+    /**
      * The class used when creating a new Collection
      * @var string
      */
@@ -586,7 +592,9 @@ class Entry extends AbstractEntity
         }
 
         //@TODO add withoutFields scope
-        $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
+        if ($this->hydrationEnabled) {
+            $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
+        }
 
         return $query;
     }
@@ -599,16 +607,18 @@ class Entry extends AbstractEntity
         $method = "{$this->collectionClass}::create";
 
         //@TODO withoutFields scope
-        $withoutFields = false;
+        $fieldRepository = $this->hydrationEnabled ? static::getFieldRepository() : null;
 
-        if ($withoutFields) {
-            $collection = call_user_func($method, $models, static::getChannelRepository());
-        } else {
-            $collection = call_user_func($method, $models, static::getChannelRepository(), static::getFieldRepository());
-        }
+        $collection = call_user_func($method, $models, static::getChannelRepository(), $fieldRepository);
 
         if ($models) {
-            $this->hydrateCollection($collection);
+            if ($this->hydrationEnabled) {
+                $this->hydrateCollection($collection);
+            } else {
+                foreach ($collection as $model) {
+                    $model->hydrationEnabled = false;
+                }
+            }
         }
 
         return $collection;
@@ -619,7 +629,7 @@ class Entry extends AbstractEntity
      */
     public function getProperties()
     {
-        return $this->channel_id ? $this->channel->fields : new FieldCollection();
+        return $this->channel_id && $this->hydrationEnabled ? $this->channel->fields : new FieldCollection();
     }
 
     /**
@@ -1905,15 +1915,12 @@ class Entry extends AbstractEntity
     public function scopeTagparams(Builder $query, array $parameters, array $request = [])
     {
         if (! empty($parameters['orderby'])) {
-            //@TODO withoutFields scope
-            $withoutFields = false;
-
             $directions = isset($parameters['sort']) ? explode('|', $parameters['sort']) : null;
 
             foreach (explode('|', $parameters['orderby']) as $i => $column) {
                 $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
 
-                if (! $withoutFields && static::getFieldRepository()->hasField($column)) {
+                if ($this->hydrationEnabled && static::getFieldRepository()->hasField($column)) {
                     $column = 'channel_data.field_id_' . static::getFieldRepository()->getFieldId($column);
 
                     $query->orderBy($column, $direction);
