@@ -269,6 +269,30 @@ class File extends Model implements FileInterface
     }
 
     /**
+     * Specify a file name
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string                                $fileName
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFileName(Builder $query, $fileName)
+    {
+        return $query->where('file_name', $fileName);
+    }
+
+    /**
+     * Specify an upload pref ID
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|int                            $uploadPrefId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUploadPrefId(Builder $query, $uploadPrefId)
+    {
+        return $query->where('upload_location_id', $uploadPrefId);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function attributesToArray()
