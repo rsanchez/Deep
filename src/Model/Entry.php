@@ -1657,6 +1657,27 @@ class Entry extends AbstractEntity
     }
 
     /**
+     * Scope to turn of custom field hydration
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithoutFields(Builder $query)
+    {
+        $this->hydrationEnabled = false;
+
+        // remove the channel_data join
+        foreach ($query->getQuery()->joins as $i => $join) {
+            if ($join->table === 'channel_data') {
+                unset($query->getQuery()->joins[$i]);
+                break;
+            }
+        }
+
+        return $query;
+    }
+
+    /**
      * Apply a single parameter
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
