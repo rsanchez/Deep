@@ -1775,13 +1775,15 @@ class Entry extends AbstractEntity
      */
     protected function saveCustomFields($isNew)
     {
+        $entryId = $this->entry_id;
+
         // it wasn't fetched from DB
         if (is_null($this->channelData)) {
             $this->channelData = $this->newChannelData();
         }
 
         $this->channelData->exists = ! $isNew;
-        $this->channelData->entry_id = $this->entry_id;
+        $this->channelData->entry_id = $entryId;
         $this->channelData->channel_id = $this->channel_id;
         $this->channelData->site_id = $this->site_id;
 
@@ -1805,6 +1807,9 @@ class Entry extends AbstractEntity
         }
 
         $this->channelData->save();
+
+        //restore the original entry ID
+        $this->entry_id = $entryId;
     }
 
     /**
