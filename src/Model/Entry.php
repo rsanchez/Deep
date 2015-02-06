@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Collection\EntryCollection;
+use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Hydrator\HydratorFactory;
 use rsanchez\Deep\Relations\HasOneFromRepository;
 use rsanchez\Deep\Validation\ValidatableInterface;
@@ -1789,6 +1790,20 @@ class Entry extends AbstractEntity
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function save(array $options = [])
+    {
+        $saved = parent::save($options);
+
+        if ($saved) {
+            $this->saveCategories();
+        }
+
+        return $saved;
+    }
+
+    /**
      * Dehydrate all custom fields and save to the channel_data table
      *
      * @param  bool $isNew
@@ -1831,6 +1846,164 @@ class Entry extends AbstractEntity
 
         //restore the original entry ID
         $this->entry_id = $entryId;
+    }
+
+    /**
+     * Set the categories for this entry
+     *
+     * @param  \rsanchez\Deep\Collection\CategoryCollection|null $categories
+     * @return void
+     */
+    public function setCategories(CategoryCollection $categories = null)
+    {
+        $this->setRelation('categories', $categories ?: new CategoryCollection());
+    }
+
+    /**
+     * Set the categories for this entry by cat_id
+     *
+     * @param  array $categoryIds
+     * @return void
+     */
+    public function setCategoryIds(array $categoryIds)
+    {
+        $categories = Category::find($categoryIds);
+
+        $this->setCategories($categories);
+    }
+
+    /**
+     * Add a category to this entry
+     *
+     * @param  \rsanchez\Deep\Model\Category $category
+     * @return void
+     */
+    public function addCategory(Category $category)
+    {
+        $this->categories->push($category);
+    }
+
+    /**
+     * Add many categories to this entry
+     *
+     * @param  \rsanchez\Deep\Collection\CategoryCollection $categories
+     * @return void
+     */
+    public function addCategories(CategoryCollection $categories)
+    {
+        foreach ($categories as $category) {
+            $this->categories->push($category);
+        }
+    }
+
+    /**
+     * Add a category to this entry by cat_id
+     * @param  int|string $categoryId
+     * @return void
+     */
+    public function addCategoryId($categoryId)
+    {
+        $category = Category::find($categoryId);
+
+        $this->addCategory($category);
+    }
+
+    /**
+     * Add many categories to this entry by cat_id
+     * @param  array $categoryIds
+     * @return void
+     */
+    public function addCategoryIds(array $categoryIds)
+    {
+        $categories = Category::find($categoryIds);
+
+        $this->addCategories($categories);
+    }
+
+    /**
+     * Set the categories attribute
+     * @param  \rsanchez\Deep\Collection\CategoryCollection|array|int|string|null $categories
+     * @return void
+     */
+    public function setCategoriesAttribute($categories)
+    {
+        // array of IDs
+        if (is_array($categories)) {
+            return $this->setCategoryIds($categories);
+        }
+
+        if ($categories instanceof CategoryCollection) {
+            return $this->setCategories($categories);
+        }
+
+        if (is_int($categories) || preg_match('/^\d+$/', $categories)) {
+            return $this->setCategoryIds([$categories]);
+        }
+
+        if (is_null($categories)) {
+            return $this->setCategories();
+        }
+
+        throw new \InvalidArgumentException('$categories must be an array, int, string, or \rsanchez\Deep\Collection\CategoryCollection');
+    }
+
+    /**
+     * Set the author for this entry
+     * @param  \rsanchez\Deep\Model\Member $member
+     * @return void
+     */
+    public function setAuthor(Member $member)
+    {
+        $this->attributes['author_id'] = $member->member_id;
+
+        $this->setRelation('author', $member);
+    }
+
+    /**
+     * Set the author_id attribute for this entry
+     * @param  $value
+     * @return void
+     */
+    public function setAuthorIdAttribute($value)
+    {
+        $author = Member::find($value);
+
+        $this->setAuthor($author);
+    }
+
+    /**
+     * Save selected categories to category_posts
+     * @return void
+     */
+    protected function saveCategories()
+    {
+        if (! isset($this->relations['categories'])) {
+            return;
+        }
+
+        $db = $this->getConnection();
+
+        // delete existing
+        $db->table('category_posts')
+            ->where('entry_id', $this->entry_id)
+            ->delete();
+
+        $categoryIds = [];
+
+        foreach ($this->categories as $category) {
+            // don't add the same one twice
+            if (in_array($category->cat_id, $categoryIds)) {
+                continue;
+            }
+
+            $categoryIds[] = $category->cat_id;
+
+            $db->table('category_posts')
+                ->insert([
+                    'cat_id' => $category->cat_id,
+                    'entry_id' => $this->entry_id,
+                ]);
+        }
     }
 
     /**
