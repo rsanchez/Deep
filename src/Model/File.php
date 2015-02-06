@@ -16,6 +16,7 @@ use rsanchez\Deep\Collection\GridColCollection;
 use rsanchez\Deep\Collection\GridRowCollection;
 use rsanchez\Deep\Collection\MatrixColCollection;
 use rsanchez\Deep\Collection\MatrixRowCollection;
+use rsanchez\Deep\Relations\HasOneFromRepository;
 use Carbon\Carbon;
 
 /**
