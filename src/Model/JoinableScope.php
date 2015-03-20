@@ -9,6 +9,7 @@
 
 namespace rsanchez\Deep\Model;
 
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ScopeInterface;
 
@@ -26,12 +27,16 @@ class JoinableScope implements ScopeInterface
     /**
      * Join the default join tables
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $builder
+     * @param  \Illuminate\Database\Eloquent\Builder    $builder
+     * @param  \Illuminate\Database\Eloquent\Model|null $model
      * @return void
      */
-    public function apply(Builder $builder)
+    public function apply(Builder $builder, EloquentModel $model = null)
     {
-        $model = $builder->getModel();
+        // Laravel 4.x doesn't provide the model as an argument
+        if (is_null($model)) {
+            $model = $builder->getModel();
+        }
 
         foreach ($model->defaultJoinTables() as $table) {
             $model->requireTable($builder, $table);
@@ -42,10 +47,11 @@ class JoinableScope implements ScopeInterface
     /**
      * Unjoin the tables
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $builder
+     * @param  \Illuminate\Database\Eloquent\Builder    $builder
+     * @param  \Illuminate\Database\Eloquent\Model|null $model
      * @return void
      */
-    public function remove(Builder $builder)
+    public function remove(Builder $builder, EloquentModel $model = null)
     {
         foreach ($this->joins as $join) {
             $index = array_search($join, $builder->getQuery()->joins, true);
