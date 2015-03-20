@@ -15,7 +15,7 @@
         "illuminate/container": "~4.2|~5.0",
         "illuminate/database": "~4.2|~5.0",
         "expressodev/laravel-codeigniter-db": "~1.0,>=1.0.5",
-        "nesbot/carbon": "1.*",
+        "nesbot/carbon": "1.*"
     },
     "require-dev": {
         "robmorgan/phinx": "0.3.*",
