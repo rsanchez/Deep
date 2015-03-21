@@ -52,4 +52,16 @@ abstract class Model extends Eloquent
 
         return static::resolveConnection($connectionName);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function hydrate(array $items, $connection = null)
+    {
+        $instance = (new static)->setConnection($connection);
+
+        $items = array_map([$instance, 'newFromBuilder'], $items);
+
+        return $instance->newCollection($items);
+    }
 }
