@@ -39,15 +39,9 @@ $entries = Entries::channel('blog')
 
 ## Installation
 
-Add this to your `composer.json`:
+Run this command in your terminal:
 
-    "require": {
-        "rsanchez/deep": "~1.1"
-    }
-
-Or run the command in your terminal:
-
-    composer require "rsanchez/deep" "~1.1"
+    composer require rsanchez/deep
 
 ## Setup
 
