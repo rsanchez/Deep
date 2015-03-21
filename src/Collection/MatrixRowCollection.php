@@ -21,6 +21,11 @@ class MatrixRowCollection extends AbstractModelCollection implements FilterableI
     use FilterableTrait;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\MatrixRow';
+
+    /**
      * @var \rsanchez\Deep\Model\PropertyInterface
      */
     protected $property;
@@ -41,24 +46,6 @@ class MatrixRowCollection extends AbstractModelCollection implements FilterableI
     public function getProperty()
     {
         return $this->property;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addModel(Model $item)
-    {
-        $this->addMatrixRow($item);
-    }
-
-    /**
-     * Add a MatrixRow to this collection
-     * @param  \rsanchez\Deep\Model\MatrixRow $item
-     * @return void
-     */
-    public function addMatrixRow(MatrixRow $item)
-    {
-        $this->items[] = $item;
     }
 
     /**

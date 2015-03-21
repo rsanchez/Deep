@@ -22,20 +22,7 @@ class AssetCollection extends AbstractModelCollection implements FilterableInter
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addAsset($item);
-    }
-
-    /**
-     * Add an Asset to this collection
-     * @param  \rsanchez\Deep\Model\Asset $item
-     * @return void
-     */
-    public function addAsset(Asset $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Asset';
 
     /**
      * Merge am AssetCollection with this collection
@@ -54,7 +41,7 @@ class AssetCollection extends AbstractModelCollection implements FilterableInter
      */
     public function addAssetId($assetId)
     {
-        $this->addAsset(Asset::find($assetId));
+        $this->add(Asset::find($assetId));
     }
 
     /**

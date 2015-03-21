@@ -20,18 +20,5 @@ class FileCollection extends AbstractModelCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addFile($item);
-    }
-
-    /**
-     * Add a File to this collection
-     * @param  \rsanchez\Deep\Model\File $item
-     * @return void
-     */
-    public function addFile(File $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\File';
 }

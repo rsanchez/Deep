@@ -20,18 +20,5 @@ class UploadPrefCollection extends AbstractModelCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addUploadPref($item);
-    }
-
-    /**
-     * Add a UploadPref to this collection
-     * @param  \rsanchez\Deep\Model\UploadPref $item
-     * @return void
-     */
-    public function addUploadPref(UploadPref $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\UploadPref';
 }

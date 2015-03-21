@@ -22,20 +22,7 @@ class CategoryCollection extends AbstractModelCollection implements FilterableIn
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model$item)
-    {
-        $this->addCategory($item);
-    }
-
-    /**
-     * Add a Category to this collection
-     * @param  \rsanchez\Deep\Model\Category $item
-     * @return void
-     */
-    public function addCategory(Category $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Category';
 
     /**
      * Filter by cat_id attribute

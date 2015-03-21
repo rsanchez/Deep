@@ -20,18 +20,5 @@ class ChannelCollection extends AbstractModelCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addChannel($item);
-    }
-
-    /**
-     * Add a Channel to this collection
-     * @param  \rsanchez\Deep\Model\Channel $item
-     * @return void
-     */
-    public function addChannel(Channel $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Channel';
 }

@@ -22,6 +22,11 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 {
     use FilterableTrait;
 
+    /**
+     * {@inheritdoc}
+     */
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Entry';
+
     protected $channelRepository;
 
     protected $fieldRepository;
@@ -197,14 +202,6 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function addModel(Model $item)
-    {
-        $this->addEntry($item);
-    }
-
-    /**
      * Set the Field Repository
      * @param  \rsanchez\Deep\Repository\FieldRepositoryInterface $fieldRepository
      * @return void
@@ -316,15 +313,5 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
     public function getGridCols()
     {
         return $this->gridCols;
-    }
-
-    /**
-     * Add a Entry to this collection
-     * @param  \rsanchez\Deep\Model\Entry $item
-     * @return void
-     */
-    public function addEntry(Entry $item)
-    {
-        $this->items[] = $item;
     }
 }

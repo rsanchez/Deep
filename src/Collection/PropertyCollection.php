@@ -24,34 +24,13 @@ class PropertyCollection extends AbstractModelCollection
     protected $propertiesByName = [];
 
     /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $properties = [])
-    {
-        foreach ($properties as $property) {
-            $this->addProperty($property);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param \rsanchez\Deep\Model\PropertyInterface $item
-     */
-    public function addModel(Model $item)
-    {
-        $this->addProperty($item);
-    }
-
-    /**
      * Add an PropertyInterface to this collection
      * @param  \rsanchez\Deep\Model\PropertyInterface $item
      * @return void
      */
-    public function addProperty(PropertyInterface $item)
+    protected function prepareModel(Model $item)
     {
         $this->propertiesByName[$item->getName()] = $item;
-
-        $this->items[] = $item;
     }
 
     /**

@@ -20,20 +20,7 @@ class PlayaCollection extends EntryCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addPlayaEntry($item);
-    }
-
-    /**
-     * Add a PlayaEntry to this collection
-     * @param  \rsanchez\Deep\Model\PlayaEntry $item
-     * @return void
-     */
-    public function addPlayaEntry(PlayaEntry $item)
-    {
-        $this->addEntry($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\PlayaEntry';
 
     /**
      * {@inheritdoc}
@@ -55,9 +42,9 @@ class PlayaCollection extends EntryCollection
 
     /**
      * Add several entries based on ID
-     * @param $entryIds
+     * @param array $entryIds
      */
-    public function addEntryIds($entryIds)
+    public function addEntryIds(array $entryIds)
     {
         $this->items += PlayaEntry::entryId($entryIds)->get()->all();
     }

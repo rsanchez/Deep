@@ -20,18 +20,5 @@ class GridColCollection extends PropertyCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addGridCol($item);
-    }
-
-    /**
-     * Add a GridCol to this collection
-     * @param  \rsanchez\Deep\Model\GridCol $item
-     * @return void
-     */
-    public function addGridCol(GridCol $item)
-    {
-        $this->addProperty($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\GridCol';
 }

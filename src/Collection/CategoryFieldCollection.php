@@ -20,18 +20,5 @@ class CategoryFieldCollection extends AbstractFieldCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addCategoryField($item);
-    }
-
-    /**
-     * Add a CategoryField to this collection
-     * @param  \rsanchez\Deep\Model\CategoryField $item
-     * @return void
-     */
-    public function addCategoryField(CategoryField $item)
-    {
-        $this->addField($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\CategoryField';
 }

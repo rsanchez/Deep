@@ -29,24 +29,6 @@ abstract class AbstractFieldCollection extends PropertyCollection
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function addModel(Model $item)
-    {
-        $this->addField($item);
-    }
-
-    /**
-     * Add an AbstractField to this collection
-     * @param  \rsanchez\Deep\Model\AbstractField $item
-     * @return void
-     */
-    public function addField(AbstractField $field)
-    {
-        $this->addProperty($field);
-    }
-
-    /**
      * Check if this collection has the specified field name
      *
      * @param  string  $field the name of the field

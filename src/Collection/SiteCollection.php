@@ -20,18 +20,5 @@ class SiteCollection extends AbstractModelCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addSite($item);
-    }
-
-    /**
-     * Add a Site to this collection
-     * @param  \rsanchez\Deep\Model\Site $item
-     * @return void
-     */
-    public function addSite(Site $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Site';
 }

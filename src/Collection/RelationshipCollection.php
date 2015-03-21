@@ -20,20 +20,7 @@ class RelationshipCollection extends EntryCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addRelationshipEntry($item);
-    }
-
-    /**
-     * Add a RelationshipEntry to this collection
-     * @param  \rsanchez\Deep\Model\RelationshipEntry $item
-     * @return void
-     */
-    public function addRelationshipEntry(RelationshipEntry $item)
-    {
-        $this->addEntry($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\RelationshipEntry';
 
     /**
      * {@inheritdoc}
@@ -55,9 +42,9 @@ class RelationshipCollection extends EntryCollection
 
     /**
      * Add several entries based on ID
-     * @param $entryIds
+     * @param array $entryIds
      */
-    public function addEntryIds($entryIds)
+    public function addEntryIds(array $entryIds)
     {
         $this->items += RelationshipEntry::entryId($entryIds)->get()->all();
     }

@@ -18,6 +18,11 @@ use Illuminate\Database\Eloquent\Model;
 class FieldCollection extends AbstractFieldCollection
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Field';
+
+    /**
      * Fieldtypes used by this collection
      * @var array
      */
@@ -53,20 +58,14 @@ class FieldCollection extends AbstractFieldCollection
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function addModel(Model $item)
-    {
-        $this->addCustomField($item);
-    }
-
-    /**
      * Add a Field to this collection
      * @param  \rsanchez\Deep\Model\Field $field
      * @return void
      */
-    public function addCustomField(Field $field)
+    protected function prepareModel(Model $item)
     {
+        $field = $item;
+
         $this->addFieldtype($field->field_type);
 
         $this->fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
@@ -76,8 +75,6 @@ class FieldCollection extends AbstractFieldCollection
         }
 
         $this->fieldsByFieldtype[$field->field_type]->items[] = $field;
-
-        $this->addField($field);
     }
 
     /**

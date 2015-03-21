@@ -21,6 +21,11 @@ class GridRowCollection extends AbstractModelCollection implements FilterableInt
     use FilterableTrait;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\GridRow';
+
+    /**
      * @var \rsanchez\Deep\Model\PropertyInterface
      */
     protected $property;
@@ -41,24 +46,6 @@ class GridRowCollection extends AbstractModelCollection implements FilterableInt
     public function getProperty()
     {
         return $this->property;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addModel(Model $item)
-    {
-        $this->addGridRow($item);
-    }
-
-    /**
-     * Add a GridRow to this collection
-     * @param  \rsanchez\Deep\Model\GridRow $item
-     * @return void
-     */
-    public function addGridRow(GridRow $item)
-    {
-        $this->items[] = $item;
     }
 
     /**

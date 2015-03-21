@@ -20,18 +20,5 @@ class MemberFieldCollection extends AbstractFieldCollection
     /**
      * {@inheritdoc}
      */
-    public function addModel(Model $item)
-    {
-        $this->addMemberField($item);
-    }
-
-    /**
-     * Add a MemberField to this collection
-     * @param  \rsanchez\Deep\Model\MemberField $item
-     * @return void
-     */
-    public function addMemberField(MemberField $item)
-    {
-        $this->addField($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\MemberField';
 }
