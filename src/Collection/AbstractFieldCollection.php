@@ -10,12 +10,12 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\AbstractField;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\AbstractField
  */
-abstract class AbstractFieldCollection extends Collection
+abstract class AbstractFieldCollection extends AbstractModelCollection
 {
     /**
      * array of field_name => \rsanchez\Deep\Model\AbstractField
@@ -26,13 +26,9 @@ abstract class AbstractFieldCollection extends Collection
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $fields = array())
+    protected function prepareModel(Model $item)
     {
-        foreach ($fields as $field) {
-            $this->fieldsByName[$field->field_name] = $field;
-        }
-
-        parent::__construct($fields);
+        $this->fieldsByName[$item->field_name] = $item;
     }
 
     /**
@@ -44,26 +40,6 @@ abstract class AbstractFieldCollection extends Collection
     public function getFieldId($field)
     {
         return $this->fieldsByName[$field]->field_id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
-    /**
-     * Add an AbstractField to this collection
-     * @param  \rsanchez\Deep\Model\AbstractField $item
-     * @return void
-     */
-    public function add(AbstractField $field)
-    {
-        $this->fieldsByName[$field->field_name] = $field;
-
-        return parent::push($field);
     }
 
     /**

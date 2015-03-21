@@ -10,32 +10,19 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Category;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\Category
  */
-class CategoryCollection extends Collection implements FilterableInterface
+class CategoryCollection extends AbstractModelCollection implements FilterableInterface
 {
     use FilterableTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
-    /**
-     * Add a Category to this collection
-     * @param  \rsanchez\Deep\Model\Category $item
-     * @return void
-     */
-    public function add(Category $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Category';
 
     /**
      * Filter by cat_id attribute

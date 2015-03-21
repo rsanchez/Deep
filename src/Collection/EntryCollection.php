@@ -10,7 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\Entry;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Repository\ChannelRepository;
 use rsanchez\Deep\Repository\FieldRepository;
@@ -20,6 +20,11 @@ use rsanchez\Deep\Repository\FieldRepository;
  */
 class EntryCollection extends TitleCollection
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Entry';
+
     /**
      * Matrix columns used by this collection
      * @var \rsanchez\Deep\Collection\MatrixColCollection
@@ -188,15 +193,5 @@ class EntryCollection extends TitleCollection
     public function getGridCols()
     {
         return $this->gridCols;
-    }
-
-    /**
-     * Add a Entry to this collection
-     * @param  \rsanchez\Deep\Model\Entry $item
-     * @return void
-     */
-    public function add(Entry $item)
-    {
-        parent::add($item);
     }
 }

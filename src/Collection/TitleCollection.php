@@ -18,12 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 class TitleCollection extends AbstractTitleCollection
 {
     /**
-     * Add a Title to this collection
-     * @param  \rsanchez\Deep\Model\Title $item
-     * @return void
+     * {@inheritdoc}
      */
-    public function add(Title $item)
-    {
-        parent::add($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\Title';
 }

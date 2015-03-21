@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\CategoryField;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\CategoryField
@@ -17,12 +18,7 @@ use rsanchez\Deep\Model\CategoryField;
 class CategoryFieldCollection extends AbstractFieldCollection
 {
     /**
-     * Add a CategoryField to this collection
-     * @param  \rsanchez\Deep\Model\CategoryField $item
-     * @return void
+     * {@inheritdoc}
      */
-    public function add(CategoryField $item)
-    {
-        parent::add($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\CategoryField';
 }

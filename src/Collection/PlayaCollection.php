@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\PlayaEntry;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\PlayaEntry
@@ -17,14 +18,9 @@ use rsanchez\Deep\Model\PlayaEntry;
 class PlayaCollection extends EntryCollection
 {
     /**
-     * Add a PlayaEntry to this collection
-     * @param  \rsanchez\Deep\Model\PlayaEntry $item
-     * @return void
+     * {@inheritdoc}
      */
-    public function add(PlayaEntry $item)
-    {
-        parent::add($item);
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\PlayaEntry';
 
     /**
      * {@inheritdoc}

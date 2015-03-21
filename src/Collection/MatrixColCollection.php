@@ -10,28 +10,15 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\MatrixCol;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\MatrixCol
  */
-class MatrixColCollection extends Collection
+class MatrixColCollection extends AbstractModelCollection
 {
     /**
      * {@inheritdoc}
      */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
-    /**
-     * Add a MatrixCol to this collection
-     * @param  \rsanchez\Deep\Model\MatrixCol $item
-     * @return void
-     */
-    public function add(MatrixCol $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\MatrixCol';
 }

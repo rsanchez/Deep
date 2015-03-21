@@ -10,28 +10,15 @@
 namespace rsanchez\Deep\Collection;
 
 use rsanchez\Deep\Model\File;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Collection of \rsanchez\Deep\Model\File
  */
-class FileCollection extends Collection
+class FileCollection extends AbstractModelCollection
 {
     /**
      * {@inheritdoc}
      */
-    public function push($item)
-    {
-        $this->add($item);
-    }
-
-    /**
-     * Add a File to this collection
-     * @param  \rsanchez\Deep\Model\File $item
-     * @return void
-     */
-    public function add(File $item)
-    {
-        $this->items[] = $item;
-    }
+    protected $modelClass = '\\rsanchez\\Deep\\Model\\File';
 }
