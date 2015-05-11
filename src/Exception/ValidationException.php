@@ -20,6 +20,14 @@ class ValidationException extends RuntimeException
     public function __construct (MessageBag $errors)
     {
         $this->errors = $errors;
+
+        $messages = [];
+
+        foreach ($this->errors->getMessages() as $error) {
+            $messages[] = implode(PHP_EOL, $error);
+        }
+
+        $this->message = implode(PHP_EOL, $messages);
     }
 
     /**
