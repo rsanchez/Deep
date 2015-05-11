@@ -11,12 +11,11 @@ class CreateFieldtypesTable extends AbstractMigration
      */
     public function up()
     {
-        $table = $this->table('fieldtypes');
+        $table = $this->table('fieldtypes', ['id' => 'fieldtype_id']);
 
-        $table->addColumn('fieldtype_id', 'integer');
         $table->addColumn('name', 'string', ['limit' => 50]);
         $table->addColumn('version', 'string', ['limit' => 12]);
-        $table->addColumn('settings', 'text', ['limit' => 65535, 'null' => true]);
+        $table->addColumn('settings', 'text', ['null' => true]);
         $table->addColumn('has_global_settings', 'string', ['limit' => 1, 'null' => true]);
     
         $table->create();

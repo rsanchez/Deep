@@ -13,9 +13,9 @@ class CreateUploadPrefsTable extends AbstractMigration
     {
         $table = $this->table('upload_prefs');
 
-        $table->addColumn('site_id', 'integer');
+        $table->addColumn('site_id', 'integer', ['signed' => false]);
         $table->addColumn('name', 'string', ['limit' => 50]);
-        $table->addColumn('server_path', 'string', ['limit' => 255]);
+        $table->addColumn('server_path', 'string');
         $table->addColumn('url', 'string', ['limit' => 100]);
         $table->addColumn('allowed_types', 'string', ['limit' => 3]);
         $table->addColumn('max_size', 'string', ['limit' => 16, 'null' => true]);
@@ -27,8 +27,8 @@ class CreateUploadPrefsTable extends AbstractMigration
         $table->addColumn('file_properties', 'string', ['limit' => 120, 'null' => true]);
         $table->addColumn('file_pre_format', 'string', ['limit' => 120, 'null' => true]);
         $table->addColumn('file_post_format', 'string', ['limit' => 120, 'null' => true]);
-        $table->addColumn('cat_group', 'string', ['limit' => 255, 'null' => true]);
-        $table->addColumn('batch_location', 'string', ['limit' => 255, 'null' => true]);
+        $table->addColumn('cat_group', 'string', ['null' => true]);
+        $table->addColumn('batch_location', 'string', ['null' => true]);
     
         $table->create();
     }

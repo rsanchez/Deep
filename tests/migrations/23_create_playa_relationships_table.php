@@ -11,17 +11,16 @@ class CreatePlayaRelationshipsTable extends AbstractMigration
      */
     public function up()
     {
-        $table = $this->table('playa_relationships');
+        $table = $this->table('playa_relationships', ['id' => 'rel_id']);
 
-        $table->addColumn('rel_id', 'integer');
-        $table->addColumn('parent_entry_id', 'integer', ['null' => true]);
-        $table->addColumn('parent_field_id', 'integer', ['null' => true]);
-        $table->addColumn('parent_col_id', 'integer', ['null' => true]);
-        $table->addColumn('parent_row_id', 'integer', ['null' => true]);
-        $table->addColumn('parent_var_id', 'integer', ['null' => true]);
-        $table->addColumn('parent_is_draft', 'integer', ['null' => true]);
-        $table->addColumn('child_entry_id', 'integer', ['null' => true]);
-        $table->addColumn('rel_order', 'integer', ['null' => true]);
+        $table->addColumn('parent_entry_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('parent_field_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('parent_col_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('parent_row_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('parent_var_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('parent_is_draft', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('child_entry_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('rel_order', 'integer', ['signed' => false, 'null' => true]);
     
         $table->create();
     }

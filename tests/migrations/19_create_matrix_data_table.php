@@ -11,18 +11,17 @@ class CreateMatrixDataTable extends AbstractMigration
      */
     public function up()
     {
-        $table = $this->table('matrix_data');
+        $table = $this->table('matrix_data', ['id' => 'row_id']);
 
-        $table->addColumn('row_id', 'integer');
-        $table->addColumn('site_id', 'integer', ['null' => true]);
-        $table->addColumn('entry_id', 'integer', ['null' => true]);
-        $table->addColumn('field_id', 'integer', ['null' => true]);
-        $table->addColumn('var_id', 'integer', ['null' => true]);
-        $table->addColumn('is_draft', 'boolean', ['null' => true]);
-        $table->addColumn('row_order', 'integer', ['null' => true]);
-        $table->addColumn('col_id_1', 'text', ['limit' => 65535, 'null' => true]);
-        $table->addColumn('col_id_2', 'text', ['limit' => 65535, 'null' => true]);
-        $table->addColumn('col_id_3', 'text', ['limit' => 65535, 'null' => true]);
+        $table->addColumn('site_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('entry_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('field_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('var_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('is_draft', 'boolean', ['signed' => false, 'null' => true]);
+        $table->addColumn('row_order', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('col_id_1', 'text', ['null' => true]);
+        $table->addColumn('col_id_2', 'text', ['null' => true]);
+        $table->addColumn('col_id_3', 'text', ['null' => true]);
     
         $table->create();
     }

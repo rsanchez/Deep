@@ -11,21 +11,20 @@ class CreateMatrixColsTable extends AbstractMigration
      */
     public function up()
     {
-        $table = $this->table('matrix_cols');
+        $table = $this->table('matrix_cols', ['id' => 'col_id']);
 
-        $table->addColumn('col_id', 'integer');
-        $table->addColumn('site_id', 'integer', ['null' => true]);
-        $table->addColumn('field_id', 'integer', ['null' => true]);
-        $table->addColumn('var_id', 'integer', ['null' => true]);
+        $table->addColumn('site_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('field_id', 'integer', ['signed' => false, 'null' => true]);
+        $table->addColumn('var_id', 'integer', ['signed' => false, 'null' => true]);
         $table->addColumn('col_name', 'string', ['limit' => 32, 'null' => true]);
         $table->addColumn('col_label', 'string', ['limit' => 50, 'null' => true]);
-        $table->addColumn('col_instructions', 'text', ['limit' => 65535, 'null' => true]);
+        $table->addColumn('col_instructions', 'text', ['null' => true]);
         $table->addColumn('col_type', 'string', ['limit' => 50, 'null' => true]);
         $table->addColumn('col_required', 'string', ['limit' => 1, 'null' => true]);
         $table->addColumn('col_search', 'string', ['limit' => 1, 'null' => true]);
-        $table->addColumn('col_order', 'integer', ['null' => true]);
+        $table->addColumn('col_order', 'integer', ['signed' => false, 'null' => true]);
         $table->addColumn('col_width', 'string', ['limit' => 4, 'null' => true]);
-        $table->addColumn('col_settings', 'text', ['limit' => 65535, 'null' => true]);
+        $table->addColumn('col_settings', 'text', ['null' => true]);
     
         $table->create();
     }
