@@ -46,10 +46,6 @@ abstract class AbstractModelCollection extends Collection implements Validatable
      */
     protected function validateModel($item)
     {
-        if (! $item instanceof \Illuminate\Database\Eloquent\Model) {
-            xdebug_break();
-        }
-
         if ($this->modelClass && ! $item instanceof $this->modelClass) {
             throw new InvalidArgumentException("\$item must be an instance of {$this->modelClass}");
         }
