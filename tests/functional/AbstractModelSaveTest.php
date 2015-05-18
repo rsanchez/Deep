@@ -84,6 +84,22 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
         $model = call_user_func([$class, 'find'], $id);
 
         $this->assertInstanceOf($class, $model);
+
+        $this->modelAttributesTest($model);
+
+        unset($model);
+    }
+
+    /**
+     * Assert that the saved model contains all the attributes assigned to it
+     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @return void
+     */
+    protected function modelAttributesTest($model)
+    {
+        foreach ($this->getModelAttributes() as $key => $value) {
+            $this->assertEquals($model->$key, $value);
+        }
     }
 
     /**
@@ -107,5 +123,7 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
         }
 
         $model->validateOrFail();
+
+        unset($model);
     }
 }
