@@ -35,7 +35,17 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
      * Get the class name of the model being tested
      * @return string
      */
-    abstract protected function getModelClass();
+    protected function getModelClass()
+    {
+        // derive the class name from the test class name
+        $reflectionClass = new \ReflectionClass($this);
+
+        $shortName = $reflectionClass->getShortName();
+
+        $modelClass = '\\rsanchez\\Deep\\Model\\' . preg_replace('/ModelSaveTest$/', '', $shortName);
+
+        return $modelClass;
+    }
 
     /**
      * Get the default attributes when creating a new model instance

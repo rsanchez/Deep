@@ -9,14 +9,6 @@ class AssetModelSaveTest extends AbstractModelSaveTest
     /**
      * {@inheritdoc}
      */
-    protected function getModelClass()
-    {
-        return 'rsanchez\Deep\Model\Asset';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getModelAttributes()
     {
         return [
