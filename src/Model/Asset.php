@@ -54,12 +54,36 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('file_id', 'folder_id', 'source_type', 'source_id', 'filedir_id', 'entry_id', 'field_id', 'col_id', 'row_id', 'var_id', 'element_id', 'content_type', 'sort_order', 'is_draft', 'uploadPref', 'source_type', 'folder_name', 'full_path', 'parent_id', 'name', 'settings');
+    protected $hidden = [
+        'file_id',
+        'folder_id',
+        'source_type',
+        'source_id',
+        'filedir_id',
+        'entry_id',
+        'field_id',
+        'col_id',
+        'row_id',
+        'var_id',
+        'element_id',
+        'content_type',
+        'sort_order',
+        'is_draft',
+        'uploadPref',
+        'source_type',
+        'folder_name',
+        'full_path',
+        'parent_id',
+        'name',
+        'settings',
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected $appends = array('url');
+    protected $appends = [
+        'url',
+    ];
 
     /**
      * {@inheritdoc}
