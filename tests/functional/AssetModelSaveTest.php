@@ -35,7 +35,7 @@ class AssetModelSaveTest extends AbstractModelSaveTest
 
         $model->setUploadPref($uploadPrefRepository->find($model->filedir_id));
 
-		return $model;
+        return $model;
     }
 
     public function testFolderIdRequiredValidation()
