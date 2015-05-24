@@ -67,6 +67,18 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Find a instance of the model by id
+     * @param  int $id
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    protected function getModelInstance($id)
+    {
+        $class = $this->getModelClass();
+
+        return call_user_func([$class, 'find'], $id);
+    }
+
+    /**
      * Test the model save method
      * @return void
      */
@@ -81,7 +93,7 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
         $id = $model->getKey();
 
         // if the save was successful, you should be able to find new record in DB
-        $model = call_user_func([$class, 'find'], $id);
+        $model = $this->getModelInstance($id);
 
         $this->assertInstanceOf($class, $model);
 
