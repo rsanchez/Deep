@@ -183,6 +183,8 @@ abstract class AbstractEntity extends Model
             $this->customFields[$name] = call_user_func($this->customFieldSetters[$name], $value, $this->getProperties()->getPropertyByName($name));
         } elseif ($this->hasCustomFieldAttribute($name)) {
             $this->setCustomFieldAttribute($name, $value);
+        } elseif ($this->isCustomFieldAttribute($name)) {
+            $this->setCustomFieldAttribute($name, $value);
         } elseif (array_key_exists($name, $this->customFields)) {
             if ($this->customFields[$name] instanceof StringableInterface) {
                 $this->customFields[$name]->setValue($value);
