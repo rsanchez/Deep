@@ -9,7 +9,6 @@
 
 namespace rsanchez\Deep\Validation;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Illuminate\Validation\Validator as IlluminateValidator;
 
 class Validator extends IlluminateValidator
