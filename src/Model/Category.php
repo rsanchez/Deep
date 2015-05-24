@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Model;
 use Illuminate\Database\Eloquent\Builder;
 use rsanchez\Deep\Collection\CategoryCollection;
 use rsanchez\Deep\Collection\CategoryFieldCollection;
+use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 
 /**
  * Model for the categories table
@@ -56,12 +57,15 @@ class Category extends AbstractEntity
      */
     protected $hiddenAttributesRegex = '/^field_(id|ft)_\d+$/';
 
+    /**
+     * {@inheritdoc}
+     */
     protected $rules = [
         'site_id' => 'required|exists:sites,site_id',
         'group_id' => 'required|exists:category_groups,group_id',
         'parent_id' => 'exists_or_zero:categories,cat_id',
         'cat_name' => 'required',
-        'cat_url_title' => 'required',
+        'cat_url_title' => 'required|alpha_dash|unique:categories,cat_url_title',
         'cat_order' => 'required|integer',
     ];
 
@@ -786,6 +790,18 @@ class Category extends AbstractEntity
         array_unshift($args, $query);
 
         return call_user_func_array(array($this, $method), $args);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
+    {
+        $rules = $this->getDefaultValidationRules($validatorFactory, $property);
+
+        $rules['cat_url_title'] .= sprintf(',%s,cat_id', $this->cat_id);
+
+        return $rules;
     }
 
     /**
