@@ -33,6 +33,15 @@ trait HasFieldRepositoryTrait
     }
 
     /**
+     * Unset the global FieldRepository
+     * @return void
+     */
+    public static function unsetFieldRepository()
+    {
+        static::$fieldRepository = null;
+    }
+
+    /**
      * Get the global FieldRepository
      * @return \rsanchez\Deep\Repository\FieldRepositoryInterface
      */

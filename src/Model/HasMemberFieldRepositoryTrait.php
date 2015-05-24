@@ -33,6 +33,15 @@ trait HasMemberFieldRepositoryTrait
     }
 
     /**
+     * Unset the global MemberFieldRepository
+     * @return void
+     */
+    public static function unsetMemberFieldRepository()
+    {
+        static::$memberFieldRepository = null;
+    }
+
+    /**
      * Get the global MemberFieldRepository
      * @return \rsanchez\Deep\Repository\MemberFieldRepository
      * @throws \Exception

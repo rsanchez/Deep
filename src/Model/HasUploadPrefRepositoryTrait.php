@@ -32,6 +32,15 @@ trait HasUploadPrefRepositoryTrait
     }
 
     /**
+     * Unset the global UploadPrefRepository
+     * @return void
+     */
+    public static function unsetUploadPrefRepository()
+    {
+        static::$uploadPrefRepository = null;
+    }
+
+    /**
      * Get the global UploadPrefRepository
      * @return \rsanchez\Deep\Repository\UploadPrefRepositoryInterface
      * @throws \Exception

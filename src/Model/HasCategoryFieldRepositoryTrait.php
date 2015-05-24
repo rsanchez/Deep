@@ -33,6 +33,15 @@ trait HasCategoryFieldRepositoryTrait
     }
 
     /**
+     * Unset the global CategoryFieldRepository
+     * @return void
+     */
+    public static function unsetCategoryFieldRepository()
+    {
+        static::$categoryFieldRepository = null;
+    }
+
+    /**
      * Get the global CategoryFieldRepository
      * @return \rsanchez\Deep\Repository\CategoryFieldRepositoryInterface
      */

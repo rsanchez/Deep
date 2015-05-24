@@ -33,6 +33,15 @@ trait HasSiteRepositoryTrait
     }
 
     /**
+     * Unset the global SiteRepository
+     * @return void
+     */
+    public static function unsetSiteRepository()
+    {
+        static::$siteRepository = null;
+    }
+
+    /**
      * Get the global SiteRepository
      * @return \rsanchez\Deep\Repository\SiteRepositoryInterface
      * @throws \Exception

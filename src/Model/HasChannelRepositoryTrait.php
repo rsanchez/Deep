@@ -33,6 +33,15 @@ trait HasChannelRepositoryTrait
     }
 
     /**
+     * Unset the global ChannelRepository
+     * @return void
+     */
+    public static function unsetChannelRepository()
+    {
+        static::$channelRepository = null;
+    }
+
+    /**
      * Get the global ChannelRepository
      * @return \rsanchez\Deep\Repository\ChannelRepositoryInterface
      * @throws \Exception
