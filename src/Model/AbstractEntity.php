@@ -426,6 +426,12 @@ abstract class AbstractEntity extends Model
         return $saved;
     }
 
+    /**
+     * Called after a successful save.
+     * An opportunity to persist any additional custom field data to external tables
+     * @param  bool $isNew whether the entity being saved is new or not
+     * @return void
+     */
     protected function saveCustomFields($isNew)
     {
     }
