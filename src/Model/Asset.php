@@ -103,6 +103,13 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
+    protected $attributes = [
+        'source_type' => 'ee',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUpdateValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = parent::getInsertValidationRules($validatorFactory, $property);
