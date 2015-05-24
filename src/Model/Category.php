@@ -70,6 +70,14 @@ class Category extends AbstractEntity
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $attributes = [
+        'site_id' => '1',
+        'parent_id' => '0',
+    ];
+
+    /**
      * Get child categories
      * NOTE: this will be empty unless you call scopeNested
      * @return \rsanchez\Deep\Collection\CategoryCollection
