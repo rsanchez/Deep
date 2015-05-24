@@ -41,4 +41,12 @@ class CategoryPosts extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $rules = [
+        'cat_id' => 'required|exists:categories,cat_id',
+        'entry_id' => 'required|exists:channel_titles,entry_id'
+    ];
 }
