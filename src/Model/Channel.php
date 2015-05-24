@@ -39,6 +39,9 @@ class Channel extends Model
      */
     protected $hidden = ['fields'];
 
+    /**
+     * {@inheritdoc}
+     */
     protected $rules = [
         'site_id' => 'required|exists:sites,site_id',
         'channel_name' => 'alpha_dash|unique:channels,channel_name',
@@ -79,6 +82,41 @@ class Channel extends Model
         'enable_versioning' => 'required|yes_or_no',
         'url_title_prefix' => 'alpha_dash',
         'live_look_template' => 'exists_or_zero:templates,template_id',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $attributes = [
+        'site_id' => '1',
+        'channel_lang' => 'en',
+        'total_entries' => '0',
+        'total_comments' => '0',
+        'last_entry_date' => '0',
+        'last_comment_date' => '0',
+        'deft_status' => 'open',
+        'deft_comments' => 'y',
+        'channel_require_membership' => 'y',
+        'channel_html_formatting' => 'all',
+        'channel_allow_img_urls' => 'y',
+        'channel_auto_link_urls' => 'n',
+        'channel_notify' => 'n',
+        'comment_system_enabled' => 'y',
+        'comment_require_membership' => 'n',
+        'comment_use_captcha' => 'n',
+        'comment_moderate' => 'n',
+        'comment_max_chars' => 'required|integer',
+        'comment_timelock' => 'required|integer',
+        'comment_require_email' => 'y',
+        'comment_text_formatting' => 'none',
+        'comment_html_formatting' => 'none',
+        'comment_allow_img_urls' => 'n',
+        'comment_auto_link_urls' => 'y',
+        'comment_notify' => 'n',
+        'comment_notify_authors' => 'n',
+        'show_button_cluster' => 'y',
+        'enable_versioning' => 'n',
+        'live_look_template' => '0',
     ];
 
     /**
