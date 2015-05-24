@@ -721,6 +721,12 @@ class Category extends AbstractEntity
         return $query;
     }
 
+    /**
+     * Set the "style" of the results, either 'nested' or 'linear'
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeStyleString(Builder $query, $string)
     {
         return $string === 'nested' ? $this->scopeNested($query) : $query;
@@ -739,6 +745,9 @@ class Category extends AbstractEntity
         return $query;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function saveCustomFields($isNew)
     {
         $categoryData = $this->customFieldAttributes;
