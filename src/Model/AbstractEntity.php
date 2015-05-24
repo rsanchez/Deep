@@ -134,13 +134,22 @@ abstract class AbstractEntity extends Model
     }
 
     /**
+     * Whether the specified key is a custom field attribute (e.g. field_id_X)
+     * @return bool
+     */
+    public function isCustomFieldAttribute($key)
+    {
+        return !! preg_match($this->customFieldAttributesRegex, $key);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setRawAttributes(array $attributes, $sync = false)
     {
         if ($this->customFieldAttributesRegex) {
             foreach ($attributes as $key => $value) {
-                if (preg_match($this->customFieldAttributesRegex, $key)) {
+                if ($this->isCustomFieldAttribute($key)) {
                     $this->setCustomFieldAttribute($key, $value);
 
                     unset($attributes[$key]);
