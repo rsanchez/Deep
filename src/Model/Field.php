@@ -46,10 +46,11 @@ class Field extends AbstractField
     /**
      * Create a new model instance that is existing.
      *
-     * @param  array  $attributes
+     * @param  array       $attributes
+     * @param  string|null $connection
      * @return static
      */
-    public function newFromBuilder($attributes = [])
+    public function newFromBuilder($attributes = [], $connection = null)
     {
         if (isset($attributes['field_type'])) {
             switch ($attributes['field_type']) {
@@ -70,7 +71,7 @@ class Field extends AbstractField
             }
         }
 
-        return parent::newFromBuilder($attributes);
+        return parent::newFromBuilder($attributes, $connection);
     }
 
     /**
