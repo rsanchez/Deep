@@ -54,6 +54,15 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
     abstract protected function getModelAttributes();
 
     /**
+     * Get the default attributes when creating a new model instance
+     * @return array  attr => value
+     */
+    protected function getModelAttributesForTesting()
+    {
+        return $this->getModelAttributes();
+    }
+
+    /**
      * Create a new model instance
      * @return \rsanchez\Deep\Model\Model
      */
@@ -109,7 +118,7 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
      */
     protected function modelAttributesTest($model)
     {
-        foreach ($this->getModelAttributes() as $key => $value) {
+        foreach ($this->getModelAttributesForTesting() as $key => $value) {
             $this->assertEquals($model->$key, $value);
         }
     }
