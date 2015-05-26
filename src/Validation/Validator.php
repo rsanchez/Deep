@@ -138,6 +138,38 @@ class Validator extends IlluminateValidator
     }
 
     /**
+     * Validate whether the specified string has a certain length
+     * @param $attribute
+     * @param $value
+     * @param array $parameters
+     * @return bool
+     */
+    public function validateLength($attribute, $value, $parameters = [])
+    {
+        $this->requireParameterCount(1, $parameters, 'length');
+
+        if (! preg_match('/^\d+$/', $parameters[0])) {
+            throw new \InvalidArgumentException('Validation rule length requires an integer value.');
+        }
+
+        return mb_strlen($value) === (int) $parameters[0];
+    }
+
+    /**
+     * Replace all place-holders for the length rule.
+     *
+     * @param  string  $message
+     * @param  string  $attribute
+     * @param  string  $rule
+     * @param  array   $parameters
+     * @return string
+     */
+    protected function replaceLength($message, $attribute, $rule, $parameters)
+    {
+        return str_replace(':length', $parameters[0], $message);
+    }
+
+    /**
      * Validate an associative array values is found in the specified array
      *
      * 'your_field' => 'attribute_in:your_key,1,2,3'

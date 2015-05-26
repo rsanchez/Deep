@@ -87,6 +87,7 @@ class Factory extends IlluminateFactory
         'max_count' => 'The :attribute may not have more than :max items.',
         'image_attribute' => 'The :attribute must be an image.',
         'is_dir' => 'The :attribute must be a valid path to a directory.',
+        'length' => 'The :attribute must be :length characters.',
         'attribute_in' => 'The :attribute contains invalid data.',
         'nested_attribute_in' => 'The :attribute contains invalid data.',
         'nested_concatenated_attribute_in' => 'The :attribute contains invalid data.',
