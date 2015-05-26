@@ -46,7 +46,7 @@ class Channel extends Model
         'site_id' => 'required|exists:sites,site_id',
         'channel_name' => 'alpha_dash|unique:channels,channel_name',
         'channel_title' => 'required',
-        'channel_lang' => 'required|size:2',
+        'channel_lang' => 'required|length:2',
         'total_entries' => 'required|integer',
         'total_comments' => 'required|integer',
         'last_entry_date' => 'date_format:U',
