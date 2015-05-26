@@ -80,6 +80,7 @@ class Factory extends IlluminateFactory
         'timezone' => 'The :attribute must be a valid zone.',
         /**/
         'exists_or_zero' => 'The selected :attribute is invalid.',
+        'pipe_exists' => 'The selected :attribute(s) are invalid.',
         'yes_or_no' => 'The :attribute field must be y or n.',
         'in_array' => 'The selected :attribute(s) are invalid.',
         'min_count' => 'The :attribute must have at least :min items.',
