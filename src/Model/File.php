@@ -39,12 +39,12 @@ class File extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('site_id', 'upload_location_id', 'rel_path', 'uploaded_by_member_id', 'modified_by_member_id', 'uploadPref');
+    protected $hidden = ['site_id', 'upload_location_id', 'rel_path', 'uploaded_by_member_id', 'modified_by_member_id', 'uploadPref'];
 
     /**
      * {@inheritdoc}
      */
-    protected $appends = array('url');
+    protected $appends = ['url'];
 
     /**
      * {@inheritdoc}
@@ -150,7 +150,7 @@ class File extends Model implements FileInterface
      * @param  array                                    $models
      * @return \rsanchez\Deep\Collection\FileCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new FileCollection($models);
     }
@@ -299,7 +299,7 @@ class File extends Model implements FileInterface
     {
         $attributes = parent::attributesToArray();
 
-        foreach (array('upload_date', 'modified_date') as $key) {
+        foreach (['upload_date', 'modified_date'] as $key) {
             if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }

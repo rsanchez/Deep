@@ -189,7 +189,7 @@ trait FilterableTrait
      */
     public function filterById($id)
     {
-        $ids = is_array($id) ? $id : array($id);
+        $ids = is_array($id) ? $id : [$id];
 
         $this->items = array_filter($this->items, function ($model) use ($ids) {
             return in_array($model->getKey(), $ids);
@@ -236,13 +236,13 @@ trait FilterableTrait
     public function sortByAttribute($attribute, $sort = 'asc')
     {
         //multisort
-        $attributes = is_array($attribute) ? $attribute : array($attribute);
+        $attributes = is_array($attribute) ? $attribute : [$attribute];
 
-        $sort = is_array($sort) ? $sort : array($sort);
+        $sort = is_array($sort) ? $sort : [$sort];
 
         $sort = array_pad($sort, count($attributes), 'asc');
 
-        $comparison = array();
+        $comparison = [];
 
         foreach ($this->items as $i => $model) {
             foreach ($attributes as $attribute) {
@@ -250,7 +250,7 @@ trait FilterableTrait
             }
         }
 
-        $args = array();
+        $args = [];
 
         foreach ($attributes as $i => $attribute) {
             $args[] = $comparison[$attribute];
@@ -306,7 +306,7 @@ trait FilterableTrait
 
         $collection = $this->createClone();
 
-        $ignore = array('fixed_order', 'orderby', 'sort', 'offset', 'limit', 'var_prefix', 'backspace');
+        $ignore = ['fixed_order', 'orderby', 'sort', 'offset', 'limit', 'var_prefix', 'backspace'];
 
         $filters = array_diff_key($params, array_flip($ignore));
 
@@ -342,7 +342,7 @@ trait FilterableTrait
         } elseif (isset($params['orderby'])) {
             $attributes = explode('|', $params['orderby']);
 
-            $sort = isset($params['sort']) ? explode('|', $params['sort']) : array();
+            $sort = isset($params['sort']) ? explode('|', $params['sort']) : [];
 
             $collection->sortByAttribute($attributes, $sort);
         }

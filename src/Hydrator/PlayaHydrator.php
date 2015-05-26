@@ -68,7 +68,7 @@ class PlayaHydrator extends AbstractHydrator
             $propertyId = $entry->parent_row_id ? $entry->parent_col_id : $entry->parent_field_id;
 
             if (! isset($this->entries[$type][$entityId][$propertyId])) {
-                $this->entries[$type][$entityId][$propertyId] = array();
+                $this->entries[$type][$entityId][$propertyId] = [];
             }
 
             $this->entries[$type][$entityId][$propertyId][] = $entry;
@@ -90,7 +90,7 @@ class PlayaHydrator extends AbstractHydrator
         }
 
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
-            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
+            ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : [];
 
         return $this->playaCollection->createChildCollection($entries);
     }

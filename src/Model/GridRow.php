@@ -33,7 +33,7 @@ class GridRow extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('site_id', 'entry_id', 'field_id', 'row_order');
+    protected $hidden = ['site_id', 'entry_id', 'field_id', 'row_order'];
 
     /**
      * {@inheritdoc}
@@ -46,7 +46,7 @@ class GridRow extends AbstractEntity
      * @param  array                                       $models
      * @return \rsanchez\Deep\Collection\GridRowCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new GridRowCollection($models);
     }
@@ -153,7 +153,7 @@ class GridRow extends AbstractEntity
      */
     public function scopeEntryId(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         return $query->whereIn('entry_id', $entryId);
     }

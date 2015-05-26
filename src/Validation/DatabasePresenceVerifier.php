@@ -46,7 +46,7 @@ class DatabasePresenceVerifier extends IlluminateDatabasePresenceVerifier
      * @param  array   $extra
      * @return int
      */
-    public function getCount($collection, $column, $value, $excludeId = null, $idColumn = null, array $extra = array())
+    public function getCount($collection, $column, $value, $excludeId = null, $idColumn = null, array $extra = [])
     {
         $argHash = md5(serialize(func_get_args()));
 
@@ -70,7 +70,7 @@ class DatabasePresenceVerifier extends IlluminateDatabasePresenceVerifier
      * @param  array   $extra
      * @return int
      */
-    public function getMultiCount($collection, $column, array $values, array $extra = array())
+    public function getMultiCount($collection, $column, array $values, array $extra = [])
     {
         $argHash = md5(serialize(func_get_args()));
 

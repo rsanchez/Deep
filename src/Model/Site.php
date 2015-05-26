@@ -32,7 +32,7 @@ class Site extends Model
      * @param  array                                    $models
      * @return \rsanchez\Deep\Collection\SiteCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new SiteCollection($models);
     }

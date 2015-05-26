@@ -57,7 +57,7 @@ class SiblingsHydrator extends AbstractHydrator
 
         foreach ($this->relationshipCollection as $entry) {
             if (! isset($this->entries[$entry->sibling_id])) {
-                $this->entries[$entry->sibling_id] = array();
+                $this->entries[$entry->sibling_id] = [];
             }
 
             $this->entries[$entry->sibling_id][] = $entry;

@@ -32,7 +32,7 @@ class MemberField extends AbstractField
      * @param  array                                           $fields
      * @return \rsanchez\Deep\Collection\MemberFieldCollection
      */
-    public function newCollection(array $fields = array())
+    public function newCollection(array $fields = [])
     {
         return new MemberFieldCollection($fields);
     }

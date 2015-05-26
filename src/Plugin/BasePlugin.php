@@ -45,7 +45,7 @@ abstract class BasePlugin
 
         $this->app->bootEE(ee());
 
-        ee()->load->library(array('pagination', 'typography'));
+        ee()->load->library(['pagination', 'typography']);
     }
 
     /**
@@ -55,7 +55,7 @@ abstract class BasePlugin
      */
     protected function getEntriesDefaultParameters()
     {
-        return array(
+        return [
             'dynamic' => 'yes',
             'limit' => '100',
             'orderby' => 'entry_date',
@@ -64,7 +64,7 @@ abstract class BasePlugin
             'show_expired' => 'no',
             'sort' => 'desc',
             'status' => 'open',
-        );
+        ];
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class BasePlugin
      */
     protected function getCategoriesDefaultParameters()
     {
-        return array(
+        return [
             'show_empty' => 'yes',
             'show_future_entries' => 'no',
             'show_expired' => 'no',
@@ -82,7 +82,7 @@ abstract class BasePlugin
             'style' => 'nested',
             'id' => 'nav_categories',
             'orderby' => 'categories.group_id|categories.parent_id|categories.cat_order',
-        );
+        ];
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class BasePlugin
             }
         }
 
-        $disabled = empty(ee()->TMPL->tagparams['disable']) ? array() : explode('|', ee()->TMPL->tagparams['disable']);
+        $disabled = empty(ee()->TMPL->tagparams['disable']) ? [] : explode('|', ee()->TMPL->tagparams['disable']);
 
         $this->paginator = ee()->pagination->create();
 
@@ -292,11 +292,11 @@ abstract class BasePlugin
     protected function parseEntryCollection(
         EntryCollection $entries,
         $tagdata,
-        array $params = array(),
-        array $varPair = array(),
-        array $varSingle = array()
+        array $params = [],
+        array $varPair = [],
+        array $varSingle = []
     ) {
-        $disabled = empty($params['disable']) ? array() : explode('|', $disable);
+        $disabled = empty($params['disable']) ? [] : explode('|', $disable);
 
         $offset = isset($params['offset']) ? $params['offset'] : 0;
 
@@ -317,8 +317,8 @@ abstract class BasePlugin
             $prefixLength = 0;
         }
 
-        $singleTags = array();
-        $pairTags = array();
+        $singleTags = [];
+        $pairTags = [];
 
         foreach (array_keys($varSingle) as $tag) {
             $spacePosition = strpos($tag, ' ');
@@ -328,22 +328,22 @@ abstract class BasePlugin
                 $tagparams = ee()->functions->assign_parameters(substr($tag, $spacePosition));
             } elseif (preg_match('#^([a-z_]+)=([\042\047]?)?(.*?)\\2$#', $tag, $match)) {
                 $name = $match[1];
-                $tagparams = $match[3] ? array($match[3]) : array('');
+                $tagparams = $match[3] ? [$match[3]] : [''];
             } else {
                 $name = $tag;
-                $tagparams = array();
+                $tagparams = [];
             }
 
             if ($prefix && strncmp($name, $prefix, $prefixLength) !== 0) {
                 continue;
             }
 
-            $singleTags[] = (object) array(
+            $singleTags[] = (object) [
                 'name' => $prefix ? substr($name, $prefixLength) : $name,
                 'key' => $tag,
                 'params' => $tagparams,
                 'tagdata' => '',
-            );
+            ];
         }
 
         foreach ($varPair as $tag => $tagparams) {
@@ -358,19 +358,19 @@ abstract class BasePlugin
             preg_match_all('#{('.preg_quote($tag).'}(.*?){/'.preg_quote($name).')}#s', $tagdata, $matches);
 
             foreach ($matches[1] as $i => $key) {
-                $pairTags[] = (object) array(
+                $pairTags[] = (object) [
                     'name' => $prefix ? substr($name, $prefixLength) : $name,
                     'key' => $key,
-                    'params' => $tagparams ?: array(),
+                    'params' => $tagparams ?: [],
                     'tagdata' => $matches[2][$i],
-                );
+                ];
             }
         }
 
-        $variables = array();
+        $variables = [];
 
         foreach ($entries as $i => $entry) {
-            $row = array(
+            $row = [
                 $prefix.'absolute_count' => $offset + $i + 1,
                 $prefix.'absolute_results' => $absoluteResults,
                 $prefix.'category_request' => isset($params['category_request']) ? $params['category_request'] : false,
@@ -385,12 +385,12 @@ abstract class BasePlugin
                 $prefix.'not_forum_topic' => (int) ! $entry->forum_topic_id,
                 $prefix.'page_uri' => $entry->page_uri,
                 $prefix.'page_url' => ee()->functions->create_url($entry->page_uri),
-                $prefix.'entry_id_path' => array($entry->entry_id, array('path_variable' => true)),
-                $prefix.'permalink' => array($entry->entry_id, array('path_variable' => true)),
-                $prefix.'title_permalink' => array($entry->url_title, array('path_variable' => true)),
-                $prefix.'url_title_path' => array($entry->url_title, array('path_variable' => true)),
-                $prefix.'profile_path' => array($entry->author_id, array('path_variable' => true)),
-            );
+                $prefix.'entry_id_path' => [$entry->entry_id, ['path_variable' => true]],
+                $prefix.'permalink' => [$entry->entry_id, ['path_variable' => true]],
+                $prefix.'title_permalink' => [$entry->url_title, ['path_variable' => true]],
+                $prefix.'url_title_path' => [$entry->url_title, ['path_variable' => true]],
+                $prefix.'profile_path' => [$entry->author_id, ['path_variable' => true]],
+            ];
 
             foreach ($pairTags as $tag) {
                 if ($tag->name === 'parents' || $tag->name === 'siblings') {
@@ -402,7 +402,7 @@ abstract class BasePlugin
                     if (! empty($tag->params['field'])) {
                         $fieldRepository = $this->app->make('FieldRepository');
 
-                        $fieldIds = array();
+                        $fieldIds = [];
 
                         foreach (explode('|', $tag->params['field']) as $fieldName) {
                             if ($fieldRepository->hasField($fieldName)) {
@@ -425,7 +425,7 @@ abstract class BasePlugin
                         $tag->vars['var_single']
                     );
                 } elseif ($categoriesEnabled && $tag->name === 'categories') {
-                    $categories = array();
+                    $categories = [];
 
                     foreach ($entry->categories->tagparams($tag->params) as $categoryModel) {
                         $category = $categoryModel->toArray();
@@ -452,7 +452,7 @@ abstract class BasePlugin
                         $category['category_image'] = $categoryModel->cat_image;
                         $category['category_name'] = $categoryModel->cat_name;
                         $category['category_url_title'] = $categoryModel->cat_url_title;
-                        $category['path'] = array($categoryUri, array('path_variable' => true));
+                        $category['path'] = [$categoryUri, ['path_variable' => true]];
 
                         array_push($categories, $category);
                     }
@@ -616,7 +616,7 @@ abstract class BasePlugin
 
             $output .= '</ul>';
         } else {
-            $variables = array();
+            $variables = [];
 
             $this->categoryCollectionToVariables($categories, $variables, $customFieldsEnabled, $prefix);
 
@@ -666,7 +666,7 @@ abstract class BasePlugin
 
         $regex = '#'.preg_quote($categoryUri).'(\/|\/P\d+\/?)?$#';
 
-        $row = array(
+        $row = [
             $prefix.'active' => (bool) preg_match($regex, ee()->uri->uri_string()),
             $prefix.'category_description' => $category->cat_description,
             $prefix.'category_id' => $category->cat_id,
@@ -674,8 +674,8 @@ abstract class BasePlugin
             $prefix.'category_image' => $category->cat_image,
             $prefix.'category_name' => $category->cat_name,
             $prefix.'category_url_title' => $category->cat_url_title,
-            $prefix.'path' => array($categoryUri, array('path_variable' => true)),
-        );
+            $prefix.'path' => [$categoryUri, ['path_variable' => true]],
+        ];
 
         if ($customFieldsEnabled) {
             foreach ($category->getFields() as $field) {

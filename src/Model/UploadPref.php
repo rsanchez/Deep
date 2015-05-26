@@ -44,7 +44,7 @@ class UploadPref extends Model
      * @param  array                                          $models
      * @return \rsanchez\Deep\Collection\UploadPrefCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new UploadPrefCollection($models);
     }

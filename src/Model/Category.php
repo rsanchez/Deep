@@ -116,11 +116,11 @@ class Category extends AbstractEntity
      */
     protected static function joinTables()
     {
-        return array(
+        return [
             'category_field_data' => function ($query) {
                 $query->join('category_field_data', 'category_field_data.cat_id', '=', 'categories.cat_id');
             },
-        );
+        ];
     }
 
     /**
@@ -182,13 +182,13 @@ class Category extends AbstractEntity
      * @param  array                                        $models
      * @return \rsanchez\Deep\Collection\CategoryCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         if ($this->nested) {
             $collection = new CategoryCollection();
 
-            $modelsByKey = array();
-            $childrenByParentId = array();
+            $modelsByKey = [];
+            $childrenByParentId = [];
 
             foreach ($models as $model) {
                 $modelsByKey[$model->cat_id] = $model;
@@ -401,7 +401,7 @@ class Category extends AbstractEntity
 
         $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
-        $groupIds = array();
+        $groupIds = [];
 
         $channels->each(function ($channel) use (&$groupIds) {
             $groupIds += $channel->cat_group;
@@ -410,7 +410,7 @@ class Category extends AbstractEntity
         if ($groupIds) {
             array_unshift($groupIds, $query);
 
-            call_user_func_array(array($this, 'scopeCategoryGroup'), $groupIds);
+            call_user_func_array([$this, 'scopeCategoryGroup'], $groupIds);
         }
 
         return $query;
@@ -429,7 +429,7 @@ class Category extends AbstractEntity
 
         $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
-        $groupIds = array();
+        $groupIds = [];
 
         $channels->each(function ($channel) use (&$groupIds) {
             $groupIds += $channel->cat_group;
@@ -438,7 +438,7 @@ class Category extends AbstractEntity
         if ($groupIds) {
             array_unshift($groupIds, $query);
 
-            call_user_func_array(array($this, 'scopeNotCategoryGroup'), $groupIds);
+            call_user_func_array([$this, 'scopeNotCategoryGroup'], $groupIds);
         }
 
         return $query;
@@ -469,7 +469,7 @@ class Category extends AbstractEntity
 
         $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
-        $channelIds = array();
+        $channelIds = [];
 
         $channels->each(function ($channel) use (&$channelIds) {
             $channelIds[] = $channel->channel_id;
@@ -497,7 +497,7 @@ class Category extends AbstractEntity
 
         $channels = static::getChannelRepository()->getChannelsByName($channelNames);
 
-        $channelIds = array();
+        $channelIds = [];
 
         $channels->each(function ($channel) use (&$channelIds) {
             $channelIds[] = $channel->channel_id;
@@ -667,7 +667,7 @@ class Category extends AbstractEntity
          * A map of parameter names => model scopes
          * @var array
          */
-        static $parameterMap = array(
+        static $parameterMap = [
             'show' => 'categoryIdString',
             'category_name' => 'categoryNameString',
             'category_group' => 'categoryGroupString',
@@ -681,7 +681,7 @@ class Category extends AbstractEntity
             'show_future_entries' => 'showFutureEntriesString',
             'status' => 'statusString',
             'style' => 'styleString',
-        );
+        ];
 
         if (! array_key_exists($key, $parameterMap)) {
             return $query;
@@ -806,7 +806,7 @@ class Category extends AbstractEntity
 
         array_unshift($args, $query);
 
-        return call_user_func_array(array($this, $method), $args);
+        return call_user_func_array([$this, $method], $args);
     }
 
     /**

@@ -40,7 +40,7 @@ class MatrixRow extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('site_id', 'entry_id', 'field_id', 'var_id', 'is_draft', 'row_order');
+    protected $hidden = ['site_id', 'entry_id', 'field_id', 'var_id', 'is_draft', 'row_order'];
 
     /**
      * {@inheritdoc}
@@ -53,7 +53,7 @@ class MatrixRow extends AbstractEntity
      * @param  array                                         $models
      * @return \rsanchez\Deep\Collection\MatrixRowCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new MatrixRowCollection($models);
     }
@@ -112,7 +112,7 @@ class MatrixRow extends AbstractEntity
      */
     public function scopeEntryId(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         return $query->whereIn('matrix_data.entry_id', $entryId);
     }

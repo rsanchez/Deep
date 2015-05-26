@@ -21,7 +21,7 @@ class RelationshipEntry extends Entry
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_id', 'field_id', 'grid_field_id', 'grid_col_id', 'grid_row_id', 'child_id', 'order', 'relationship_id');
+    protected $hidden = ['channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_id', 'field_id', 'grid_field_id', 'grid_col_id', 'grid_row_id', 'child_id', 'order', 'relationship_id'];
 
     /**
      * {@inheritdoc}
@@ -33,11 +33,11 @@ class RelationshipEntry extends Entry
      */
     protected static function joinTables()
     {
-        return array_merge(parent::joinTables(), array(
+        return array_merge(parent::joinTables(), [
             'relationships' => function ($query) {
                 $query->join('relationships', 'relationships.child_id', '=', 'channel_titles.entry_id');
             },
-        ));
+        ]);
     }
 
     /**
@@ -49,7 +49,7 @@ class RelationshipEntry extends Entry
      */
     public function scopeParentEntryId(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         return $this->requireTable($query, 'relationships', true)->whereIn('relationships.parent_id', $entryId);
     }
@@ -63,7 +63,7 @@ class RelationshipEntry extends Entry
      */
     public function scopeParents(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         return $query->join('relationships', 'relationships.parent_id', '=', 'channel_titles.entry_id')
             ->whereIn('relationships.child_id', $entryId)
@@ -82,7 +82,7 @@ class RelationshipEntry extends Entry
      */
     public function scopeSiblings(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         $connection = $query->getQuery()->getConnection();
         $tablePrefix = $connection->getTablePrefix();

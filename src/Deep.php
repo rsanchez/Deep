@@ -58,7 +58,7 @@ class Deep extends Container
      *
      * @var array $config  an EE config array
      */
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         Carbon::setToStringFormat(Carbon::ISO8601);
 

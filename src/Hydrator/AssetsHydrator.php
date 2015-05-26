@@ -30,7 +30,7 @@ class AssetsHydrator extends AbstractHydrator
      * Asset selections sorted out by entity (entry or matrix or grid)
      * @var array
      */
-    protected $selections = array();
+    protected $selections = [];
 
     /**
      * UploadPref model repository

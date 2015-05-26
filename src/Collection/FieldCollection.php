@@ -26,21 +26,21 @@ class FieldCollection extends AbstractFieldCollection
      * Fieldtypes used by this collection
      * @var array
      */
-    protected $fieldtypes = array();
+    protected $fieldtypes = [];
 
     /**
      * Map of fieldtypes to field IDs:
-     *    'fieldtype_name' => array(1, 2, 3),
+     *    'fieldtype_name' => [1, 2, 3],
      * @var array
      */
-    protected $fieldIdsByFieldtype = array();
+    protected $fieldIdsByFieldtype = [];
 
-    protected $fieldsByFieldtype = array();
+    protected $fieldsByFieldtype = [];
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $fields = array())
+    public function __construct(array $fields = [])
     {
         parent::__construct($fields);
 
@@ -96,7 +96,7 @@ class FieldCollection extends AbstractFieldCollection
      */
     public function getFieldIdsByFieldtype($fieldtype)
     {
-        return isset($this->fieldIdsByFieldtype[$fieldtype]) ? $this->fieldIdsByFieldtype[$fieldtype] : array();
+        return isset($this->fieldIdsByFieldtype[$fieldtype]) ? $this->fieldIdsByFieldtype[$fieldtype] : [];
     }
 
     public function getFieldsByFieldtype($fieldtype)

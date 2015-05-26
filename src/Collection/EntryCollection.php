@@ -87,7 +87,7 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 
         $collection->setChannelRepository($channelRepository);
 
-        $channelIds = array();
+        $channelIds = [];
 
         foreach ($models as $model) {
             $collection->entryIds[] = $model->entry_id;

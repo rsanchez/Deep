@@ -61,7 +61,7 @@ class RelationshipHydrator extends AbstractHydrator
             $propertyId = $entry->grid_field_id ? $entry->grid_col_id : $entry->field_id;
 
             if (! isset($this->entries[$type][$entityId][$propertyId])) {
-                $this->entries[$type][$entityId][$propertyId] = array();
+                $this->entries[$type][$entityId][$propertyId] = [];
             }
 
             $this->entries[$type][$entityId][$propertyId][] = $entry;

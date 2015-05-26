@@ -138,7 +138,7 @@ abstract class AbstractHydratorFactory
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @return array                                             AbstractHydrator[]
      */
-    public function getHydratorsForCollection(EntryCollection $collection, array $extraHydrators = array())
+    public function getHydratorsForCollection(EntryCollection $collection, array $extraHydrators = [])
     {
         $hydrators = new HydratorCollection();
 

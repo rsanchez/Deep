@@ -21,7 +21,7 @@ class PlayaEntry extends Entry
     /**
      * {@inheritdoc}
      */
-    protected $hidden = array('channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_entry_id', 'parent_field_id', 'parent_col_id', 'parent_row_id', 'parent_var_id', 'parent_is_draft', 'child_entry_id', 'rel_order', 'rel_id');
+    protected $hidden = ['channel', 'site_id', 'forum_topic_id', 'ip_address', 'versioning_enabled', 'parent_entry_id', 'parent_field_id', 'parent_col_id', 'parent_row_id', 'parent_var_id', 'parent_is_draft', 'child_entry_id', 'rel_order', 'rel_id'];
 
     /**
      * {@inheritdoc}
@@ -33,11 +33,11 @@ class PlayaEntry extends Entry
      */
     protected static function joinTables()
     {
-        return array_merge(parent::joinTables(), array(
+        return array_merge(parent::joinTables(), [
             'playa_relationships' => function ($query) {
                 $query->join('playa_relationships', 'playa_relationships.child_entry_id', '=', 'channel_titles.entry_id');
             },
-        ));
+        ]);
     }
 
     /**
@@ -49,7 +49,7 @@ class PlayaEntry extends Entry
      */
     public function scopeParentEntryId(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         return $this->requireTable($query, 'playa_relationships', true)->whereIn('playa_relationships.parent_entry_id', $entryId);
     }

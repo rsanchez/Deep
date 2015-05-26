@@ -163,7 +163,7 @@ class Asset extends Model implements FileInterface
      * @param  array                                     $assets
      * @return \rsanchez\Deep\Collection\AssetCollection
      */
-    public function newCollection(array $assets = array())
+    public function newCollection(array $assets = [])
     {
         return new AssetCollection($assets);
     }
@@ -207,7 +207,7 @@ class Asset extends Model implements FileInterface
      */
     public function scopeEntryId(Builder $query, $entryId)
     {
-        $entryId = is_array($entryId) ? $entryId : array($entryId);
+        $entryId = is_array($entryId) ? $entryId : [$entryId];
 
         return $this->requireTable($query, 'assets_selections')->whereIn('assets_selections.entry_id', $entryId);
     }
@@ -221,7 +221,7 @@ class Asset extends Model implements FileInterface
      */
     public function scopeFileId(Builder $query, $fileId)
     {
-        $fileId = is_array($fileId) ? $fileId : array($fileId);
+        $fileId = is_array($fileId) ? $fileId : [$fileId];
 
         return $this->whereIn('assets_files.file_id', $fileId);
     }
@@ -251,7 +251,7 @@ class Asset extends Model implements FileInterface
     {
         $attributes = parent::attributesToArray();
 
-        foreach (array('date', 'date_modified') as $key) {
+        foreach (['date', 'date_modified'] as $key) {
             if (isset($attributes[$key]) && $attributes[$key] instanceof Carbon) {
                 $attributes[$key] = (string) $attributes[$key];
             }
@@ -281,7 +281,7 @@ class Asset extends Model implements FileInterface
      */
     protected static function joinTables()
     {
-        return array(
+        return [
             'assets_selections' => function ($query) {
                 $query->join('assets_selections', 'assets_selections.file_id', '=', 'assets_files.file_id');
             },
@@ -291,7 +291,7 @@ class Asset extends Model implements FileInterface
             'assets_sources' => function ($query) {
                 $query->leftJoin('assets_sources', 'assets_sources.source_id', '=', 'assets_files.source_id');
             },
-        );
+        ];
     }
 
     /**

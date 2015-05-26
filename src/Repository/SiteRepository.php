@@ -46,7 +46,7 @@ class SiteRepository extends AbstractRepository implements SiteRepositoryInterfa
      */
     public function getPageEntryIds()
     {
-        $entryIds = array();
+        $entryIds = [];
 
         foreach ($this->getCollection() as $site) {
             if (isset($site->site_pages[$site->site_id]['uris'])) {
@@ -62,7 +62,7 @@ class SiteRepository extends AbstractRepository implements SiteRepositoryInterfa
      */
     public function getPageUris()
     {
-        $pageUris = array();
+        $pageUris = [];
 
         foreach ($this->getCollection() as $site) {
             if (isset($site->site_pages[$site->site_id]['uris'])) {

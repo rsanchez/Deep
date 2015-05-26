@@ -38,7 +38,7 @@ class Field extends AbstractField
      * @param  array                                     $fields
      * @return \rsanchez\Deep\Collection\FieldCollection
      */
-    public function newCollection(array $fields = array())
+    public function newCollection(array $fields = [])
     {
         return new FieldCollection($fields);
     }

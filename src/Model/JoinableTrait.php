@@ -23,7 +23,7 @@ trait JoinableTrait
      * @param  array                                          $columns
      * @return \Illuminate\Database\Eloquent\Model|Collection
      */
-    public static function find($id, $columns = array('*'))
+    public static function find($id, $columns = ['*'])
     {
         $instance = new static();
 
@@ -84,7 +84,7 @@ trait JoinableTrait
     /**
      * Return a structured array of joinable tables
      * ex.
-     *     'members' => array('members.member_id', 'channel_titles.author_id'),
+     *     'members' => ['members.member_id', 'channel_titles.author_id'],
      *
      * @return array
      */

@@ -67,6 +67,6 @@ class HasOneFromRepository extends HasOne
      */
     public function getResults()
     {
-        return call_user_func(array($this->repository, $this->repositoryMethod), $this->getParentKey());
+        return call_user_func([$this->repository, $this->repositoryMethod], $this->getParentKey());
     }
 }

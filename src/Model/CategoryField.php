@@ -64,7 +64,7 @@ class CategoryField extends AbstractField
      * @param  array                                             $fields
      * @return \rsanchez\Deep\Collection\CategoryFieldCollection
      */
-    public function newCollection(array $fields = array())
+    public function newCollection(array $fields = [])
     {
         return new CategoryFieldCollection($fields);
     }

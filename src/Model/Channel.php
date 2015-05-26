@@ -162,7 +162,7 @@ class Channel extends Model
      * @param  array                                       $models
      * @return \rsanchez\Deep\Collection\ChannelCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new ChannelCollection($models);
     }
@@ -200,7 +200,7 @@ class Channel extends Model
      */
     public function getCatGroupAttribute($data)
     {
-        return $data ? explode('|', $data) : array();
+        return $data ? explode('|', $data) : [];
     }
 
     /**

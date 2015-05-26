@@ -94,9 +94,9 @@ class Factory extends IlluminateFactory
         /**/
         'custom' => [
             /*
-            'attribute-name' => array(
+            'attribute-name' => [
                 'rule-name' => 'custom-message',
-            ),
+            ],
             */
         ],
         'attributes' => [],
@@ -132,7 +132,7 @@ class Factory extends IlluminateFactory
      * @param  array  $customAttributes
      * @return \Illuminate\Validation\Validator
      */
-    public function make(array $data, array $rules, array $messages = array(), array $customAttributes = array())
+    public function make(array $data, array $rules, array $messages = [], array $customAttributes = [])
     {
         $messages = array_merge($this->defaultMessages, $messages);
 

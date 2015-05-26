@@ -40,7 +40,7 @@ class MatrixCol extends AbstractProperty
      */
     public function scopeFieldId(Builder $query, $fieldId)
     {
-        $fieldId = is_array($fieldId) ? $fieldId : array($fieldId);
+        $fieldId = is_array($fieldId) ? $fieldId : [$fieldId];
 
         return $this->whereIn('field_id', $fieldId);
     }
@@ -51,7 +51,7 @@ class MatrixCol extends AbstractProperty
      * @param  array                                         $models
      * @return \rsanchez\Deep\Collection\MatrixColCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new MatrixColCollection($models);
     }
