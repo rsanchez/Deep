@@ -44,7 +44,7 @@ class Channel extends Model
      */
     protected $rules = [
         'site_id' => 'required|exists:sites,site_id',
-        'channel_name' => 'alpha_dash|unique:channels,channel_name',
+        'channel_name' => 'required|alpha_dash|unique:channels,channel_name',
         'channel_title' => 'required',
         'channel_lang' => 'required|length:2',
         'total_entries' => 'required|integer',
