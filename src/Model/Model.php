@@ -235,6 +235,18 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
     }
 
     /**
+     * Set a raw model attribute. No checking is done.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @return void
+     */
+    public function setRawAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
+
+    /**
      * Whether the specified attribute exists
      * @param  string $key
      * @return bool

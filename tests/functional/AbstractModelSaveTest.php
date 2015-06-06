@@ -129,9 +129,10 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
      *
      * @param  array        $attributes key/value pairs of attributes to set on the model
      * @param  string|array $messages one or more validation messages expected
+     * @param  bool         $setRawAttributes whether to set raw attributes or not
      * @return void
      */
-    protected function validateExceptionTest($attributes, $messages)
+    protected function validateExceptionTest($attributes, $messages, $setRawAttributes = false)
     {
         $message = implode(PHP_EOL, (array) $messages);
 
@@ -140,7 +141,11 @@ abstract class AbstractModelSaveTest extends PHPUnit_Framework_TestCase
         $model = $this->createModel();
 
         foreach ($attributes as $attribute => $value) {
-            $model->$attribute = $value;
+            if ($setRawAttributes) {
+                $model->setRawAttribute($attribute, $value);
+            } else {
+                $model->$attribute = $value;
+            }
         }
 
         $model->validateOrFail();
