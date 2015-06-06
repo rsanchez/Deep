@@ -72,6 +72,18 @@ class Category extends AbstractEntity
     /**
      * {@inheritdoc}
      */
+    protected $attributeNames = [
+        'site_id' => 'Site ID',
+        'group_id' => 'Group ID',
+        'parent_id' => 'Parent ID',
+        'cat_name' => 'Category Name',
+        'cat_url_title' => 'Category URL Title',
+        'cat_order' => 'Category Order',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $attributes = [
         'site_id' => '1',
         'parent_id' => '0',

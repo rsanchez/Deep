@@ -57,66 +57,66 @@ class CategoryModelSaveTest extends AbstractModelSaveTest
 
     public function testSiteIdRequiredValidation()
     {
-        $this->validateExceptionTest(['site_id' => ''], 'The site id field is required.');
+        $this->validateExceptionTest(['site_id' => ''], 'The Site ID field is required.');
     }
 
     public function testSiteIdExistsValidation()
     {
-        $this->validateExceptionTest(['site_id' => '10'], 'The selected site id is invalid.');
+        $this->validateExceptionTest(['site_id' => '10'], 'The selected Site ID is invalid.');
     }
 
     public function testGroupIdRequiredValidation()
     {
-        $this->validateExceptionTest(['group_id' => ''], 'The group id field is required.');
+        $this->validateExceptionTest(['group_id' => ''], 'The Group ID field is required.');
     }
 
     public function testGroupIdExistsValidation()
     {
-        $this->validateExceptionTest(['group_id' => '10'], 'The selected group id is invalid.');
+        $this->validateExceptionTest(['group_id' => '10'], 'The selected Group ID is invalid.');
     }
 
     public function testParentIdExistsValidation()
     {
-        $this->validateExceptionTest(['parent_id' => '10'], 'The selected parent id is invalid.');
+        $this->validateExceptionTest(['parent_id' => '10'], 'The selected Parent ID is invalid.');
     }
 
     public function testCatNameRequiredValidation()
     {
-        $this->validateExceptionTest(['cat_name' => ''], 'The cat name field is required.');
+        $this->validateExceptionTest(['cat_name' => ''], 'The Category Name field is required.');
     }
 
     public function testCatUrlTitleRequiredValidation()
     {
-        $this->validateExceptionTest(['cat_url_title' => ''], 'The cat url title field is required.');
+        $this->validateExceptionTest(['cat_url_title' => ''], 'The Category URL Title field is required.');
     }
 
     public function testCatUrlTitleAlphaDashValidation()
     {
-        $this->validateExceptionTest(['cat_url_title' => 'Foo bar'], 'The cat url title may only contain letters, numbers, and dashes.');
+        $this->validateExceptionTest(['cat_url_title' => 'Foo bar'], 'The Category URL Title may only contain letters, numbers, and dashes.');
     }
 
     public function testCatUrlTitleUniqueValidation()
     {
-        $this->validateExceptionTest(['cat_url_title' => 'category-a'], 'The cat url title has already been taken.');
+        $this->validateExceptionTest(['cat_url_title' => 'category-a'], 'The Category URL Title has already been taken.');
     }
 
     public function testCatOrderRequiredValidation()
     {
-        $this->validateExceptionTest(['cat_order' => ''], 'The cat order field is required.');
+        $this->validateExceptionTest(['cat_order' => ''], 'The Category Order field is required.');
     }
 
     public function testCatOrderIntegerValidation()
     {
-        $this->validateExceptionTest(['cat_order' => 'integer'], 'The cat order must be an integer.');
+        $this->validateExceptionTest(['cat_order' => 'integer'], 'The Category Order must be an integer.');
     }
 
     public function testCatColorRequiredValidation()
     {
-        $this->validateExceptionTest(['cat_color' => ''], 'The cat color field is required.');
+        $this->validateExceptionTest(['cat_color' => ''], 'The Color field is required.');
     }
 
     public function testCatColorInValidation()
     {
-        $this->validateExceptionTest(['cat_color' => 'Fuchsia'], 'The selected cat color is invalid.');
+        $this->validateExceptionTest(['cat_color' => 'Fuchsia'], 'The selected Color is invalid.');
     }
 }

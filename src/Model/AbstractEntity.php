@@ -359,6 +359,7 @@ abstract class AbstractEntity extends Model
 
         foreach ($this->getProperties() as $property) {
             $names[$prefix.$property->getIdentifier()] = $property->getLabel();
+            $names[$prefix.$property->getName()] = $property->getLabel();
 
             $value = $this->{$property->getName()};
 
