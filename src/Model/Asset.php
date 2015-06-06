@@ -88,6 +88,21 @@ class Asset extends Model implements FileInterface
     /**
      * {@inheritdoc}
      */
+    protected $attributeNames = [
+        'folder_id' => 'Folder ID',
+        'source_type' => 'Source Type',
+        'source_id' => 'Source ID',
+        'filedir_id' => 'Filedir ID',
+        'file_name' => 'File Name',
+        'kind' => 'Kind',
+        'width' => 'Width',
+        'height' => 'Height',
+        'size' => 'Size',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $rules = [
         'folder_id' => 'required|exists:assets_folders,folder_id',
         'source_type' => 'required',

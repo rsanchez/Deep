@@ -40,71 +40,71 @@ class AssetModelSaveTest extends AbstractModelSaveTest
 
     public function testFolderIdRequiredValidation()
     {
-        $this->validateExceptionTest(['folder_id' => ''], 'The folder id field is required.');
+        $this->validateExceptionTest(['folder_id' => ''], 'The Folder ID field is required.');
     }
 
     public function testFolderIdExistsValidation()
     {
-        $this->validateExceptionTest(['folder_id' => '10'], 'The selected folder id is invalid.');
+        $this->validateExceptionTest(['folder_id' => '10'], 'The selected Folder ID is invalid.');
     }
 
     public function testSourceTypeRequiredValidation()
     {
-        $this->validateExceptionTest(['source_type' => ''], 'The source type field is required.');
+        $this->validateExceptionTest(['source_type' => ''], 'The Source Type field is required.');
     }
 
     public function testSourceIdRequiredValidation()
     {
-        $this->validateExceptionTest(['source_type' => 's3', 'source_id' => ''], 'The source id field is required when source type is s3.');
+        $this->validateExceptionTest(['source_type' => 's3', 'source_id' => ''], 'The Source ID field is required when Source Type is s3.');
     }
 
     public function testSourceIdExistsValidation()
     {
-        $this->validateExceptionTest(['source_id' => '10'], 'The selected source id is invalid.');
+        $this->validateExceptionTest(['source_id' => '10'], 'The selected Source ID is invalid.');
     }
 
     public function testFiledirIdRequiredValidation()
     {
-        $this->validateExceptionTest(['filedir_id' => '', 'source_type' => 'ee'], 'The filedir id field is required when source type is ee.');
+        $this->validateExceptionTest(['filedir_id' => '', 'source_type' => 'ee'], 'The Filedir ID field is required when Source Type is ee.');
     }
 
     public function testFiledirIdExistsValidation()
     {
-        $this->validateExceptionTest(['filedir_id' => '10'], 'The selected filedir id is invalid.');
+        $this->validateExceptionTest(['filedir_id' => '10'], 'The selected Filedir ID is invalid.');
     }
 
     public function testFileNameRequiredValidation()
     {
-        $this->validateExceptionTest(['file_name' => ''], 'The file name field is required.');
+        $this->validateExceptionTest(['file_name' => ''], 'The File Name field is required.');
     }
 
     public function testKindRequiredValidation()
     {
-        $this->validateExceptionTest(['kind' => ''], 'The kind field is required.');
+        $this->validateExceptionTest(['kind' => ''], 'The Kind field is required.');
     }
 
     public function testKindInValidation()
     {
-        $this->validateExceptionTest(['kind' => 'foo'], 'The selected kind is invalid.');
+        $this->validateExceptionTest(['kind' => 'foo'], 'The selected Kind is invalid.');
     }
 
     public function testWidthIntegerValidation()
     {
-        $this->validateExceptionTest(['width' => 'foo'], 'The width must be an integer.');
+        $this->validateExceptionTest(['width' => 'foo'], 'The Width must be an integer.');
     }
 
     public function testHeightIntegerValidation()
     {
-        $this->validateExceptionTest(['height' => 'foo'], 'The height must be an integer.');
+        $this->validateExceptionTest(['height' => 'foo'], 'The Height must be an integer.');
     }
 
     public function testSizeRequiredValidation()
     {
-        $this->validateExceptionTest(['size' => ''], 'The size field is required.');
+        $this->validateExceptionTest(['size' => ''], 'The Size field is required.');
     }
 
     public function testSizeIntegerValidation()
     {
-        $this->validateExceptionTest(['size' => 'foo'], 'The size must be an integer.');
+        $this->validateExceptionTest(['size' => 'foo'], 'The Size must be an integer.');
     }
 }
