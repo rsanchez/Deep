@@ -364,10 +364,21 @@ class Deep extends Container
 
     /**
      * Bootstrap the main models on the global instance
+     * @return void
+     */
+    public static function bootGlobal()
+    {
+        static::getInstance()->boot();
+    }
+
+    /**
+     * Alias to bootGlobal
+     * @deprecated since 2.0
+     * @return void
      */
     public static function bootInstance()
     {
-        Deep::getInstance()->boot();
+        static::bootGlobal();
     }
 
     /**
@@ -394,19 +405,19 @@ class Deep extends Container
             Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
         }
 
-        static::extendInstance('config', function ($app) use ($ee) {
+        static::extendGlobal('config', function ($app) use ($ee) {
             return $ee->config->config;
         });
 
         $uploadPrefs = $ee->config->item('upload_preferences');
 
         if ($uploadPrefs) {
-            static::extendInstance('UploadPrefRepository', function ($app) use ($uploadPrefs) {
+            static::extendGlobal('UploadPrefRepository', function ($app) use ($uploadPrefs) {
                 return new ConfigUploadPrefRepository($app->make('UploadPref'), $uploadPrefs);
             });
         }
 
-        static::bootInstance();
+        static::bootGlobal();
 
         $booted = true;
     }
@@ -417,13 +428,25 @@ class Deep extends Container
      * @param  Closure $closure
      * @return void
      */
-    public static function extendInstance($abstract, Closure $closure)
+    public static function extendGlobal($abstract, Closure $closure)
     {
         static::getInstance()->extend($abstract, $closure);
     }
 
     /**
-     * The static proxies Entries and Titles use this
+     * Extend an abstract type in the global instance
+     * @deprecated since 2.0
+     * @param  string  $abstract
+     * @param  Closure $closure
+     * @return void
+     */
+    public static function extendInstance($abstract, Closure $closure)
+    {
+        static::extendGlobal($abstract, $closure);
+    }
+
+    /**
+     * Get the global, singleton instance of Deep
      * @return static
      */
     public static function getInstance()
