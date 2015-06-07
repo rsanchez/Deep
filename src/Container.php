@@ -9,7 +9,7 @@
 
 namespace rsanchez\Deep;
 
-use Illuminate\Container\Container;
+use Illuminate\Container\Container as IlluminateContainer;
 use Illuminate\CodeIgniter\CodeIgniterConnectionResolver;
 use rsanchez\Deep\Model\Model;
 use rsanchez\Deep\Model\Field;
@@ -49,7 +49,7 @@ use Closure;
 /**
  * IoC Container
  */
-class Deep extends Container
+class Container extends IlluminateContainer
 {
     /**
      * Constructor
@@ -363,25 +363,6 @@ class Deep extends Container
     }
 
     /**
-     * Bootstrap the main models on the global instance
-     * @return void
-     */
-    public static function bootGlobal()
-    {
-        static::getInstance()->boot();
-    }
-
-    /**
-     * Alias to bootGlobal
-     * @deprecated since 2.0
-     * @return void
-     */
-    public static function bootInstance()
-    {
-        static::bootGlobal();
-    }
-
-    /**
      * Set Eloquent to use CodeIgniter's DB connection
      *
      * Set Deep to use upload prefs from config.php,
@@ -389,7 +370,7 @@ class Deep extends Container
      *
      * @return void
      */
-    public static function bootEE(CI_Controller $ee = null)
+    public function bootEE(CI_Controller $ee = null)
     {
         static $booted = false;
 
@@ -405,58 +386,20 @@ class Deep extends Container
             Model::setConnectionResolver(new CodeIgniterConnectionResolver($ee));
         }
 
-        static::extendGlobal('config', function ($app) use ($ee) {
+        $this->extend('config', function ($app) use ($ee) {
             return $ee->config->config;
         });
 
         $uploadPrefs = $ee->config->item('upload_preferences');
 
         if ($uploadPrefs) {
-            static::extendGlobal('UploadPrefRepository', function ($app) use ($uploadPrefs) {
+            $this->extend('UploadPrefRepository', function ($app) use ($uploadPrefs) {
                 return new ConfigUploadPrefRepository($app->make('UploadPref'), $uploadPrefs);
             });
         }
 
-        static::bootGlobal();
+        $this->boot();
 
         $booted = true;
-    }
-
-    /**
-     * Extend an abstract type in the global instance
-     * @param  string  $abstract
-     * @param  Closure $closure
-     * @return void
-     */
-    public static function extendGlobal($abstract, Closure $closure)
-    {
-        static::getInstance()->extend($abstract, $closure);
-    }
-
-    /**
-     * Extend an abstract type in the global instance
-     * @deprecated since 2.0
-     * @param  string  $abstract
-     * @param  Closure $closure
-     * @return void
-     */
-    public static function extendInstance($abstract, Closure $closure)
-    {
-        static::extendGlobal($abstract, $closure);
-    }
-
-    /**
-     * Get the global, singleton instance of Deep
-     * @return static
-     */
-    public static function getInstance()
-    {
-        static $app;
-
-        if (is_null($app)) {
-            $app = new static();
-        }
-
-        return $app;
     }
 }
