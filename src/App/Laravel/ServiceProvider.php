@@ -3,7 +3,7 @@
 namespace rsanchez\Deep\App\Laravel;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
-use rsanchez\Deep\Deep;
+use rsanchez\Deep\Container;
 use rsanchez\Deep\Model\Model;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -18,7 +18,7 @@ class ServiceProvider extends LaravelServiceProvider
         }
 
         $this->app->singleton('deep', function ($app) {
-            $deep = new Deep();
+            $deep = new Container();
 
             $deep->boot();
 

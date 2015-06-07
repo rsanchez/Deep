@@ -26,7 +26,7 @@ use Closure;
 abstract class BasePlugin
 {
     /**
-     * @var \rsanchez\Deep\Deep
+     * @var \rsanchez\Deep\Container
      */
     protected $app;
 
