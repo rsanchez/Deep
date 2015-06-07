@@ -43,6 +43,24 @@ class CategoryField extends AbstractField
     /**
      * {@inheritdoc}
      */
+    protected $attributeNames = [
+        'site_id' => 'Site ID',
+        'group_id' => 'Group ID',
+        'field_name' => 'Field Name',
+        'field_label' => 'Field Label',
+        'field_type' => 'Field Type',
+        'field_maxl' => 'Field Max Length',
+        'field_ta_rows' => 'Field Textarea Rows',
+        'field_default_fmt' => 'Field Default Format',
+        'field_show_fmt' => 'Field Show Format',
+        'field_text_direction' => 'Field Text Direction',
+        'field_required' => 'Field Required',
+        'field_order' => 'Field Order',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $rules = [
         'site_id' => 'required|exists:sites,site_id',
         'group_id' => 'required|exists:category_groups,group_id',
