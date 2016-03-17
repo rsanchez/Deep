@@ -84,13 +84,13 @@ abstract class AbstractModelCollection extends Collection implements Validatable
     /**
      * {@inheritdoc}
      */
-    public function prepend($item)
+    public function prepend($item, $key = null)
     {
         $this->validateModel($item);
 
         $this->prepareModel($item);
 
-        return parent::prepend($item);
+        return parent::prepend($item, $key);
     }
 
     /**
