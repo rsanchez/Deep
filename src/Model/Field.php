@@ -52,6 +52,8 @@ class Field extends AbstractField
      */
     public function newFromBuilder($attributes = [], $connection = null)
     {
+        $attributes = (array) $attributes;
+
         if (isset($attributes['field_type'])) {
             switch ($attributes['field_type']) {
                 case 'matrix':
