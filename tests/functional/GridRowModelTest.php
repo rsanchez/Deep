@@ -40,13 +40,13 @@ class GridRowModelTest extends PHPUnit_Framework_TestCase
     {
         $query = GridRow::from('channel_grid_field_12')->entryId(8)->get();
 
-        $this->assertThat($query->fetch('row_id')->all(), new ArrayHasOnlyValuesConstraint([2, 3]));
+        $this->assertThat($query->pluck('row_id')->all(), new ArrayHasOnlyValuesConstraint([2, 3]));
     }
 
     public function testFieldIdScope()
     {
         $query = GridRow::fieldId(12)->get();
 
-        $this->assertThat($query->fetch('row_id')->all(), new ArrayHasOnlyValuesConstraint([1, 2, 3]));
+        $this->assertThat($query->pluck('row_id')->all(), new ArrayHasOnlyValuesConstraint([1, 2, 3]));
     }
 }

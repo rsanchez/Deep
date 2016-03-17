@@ -61,12 +61,23 @@ abstract class AbstractModelCollection extends Collection implements Validatable
     /**
      * Fetch a nested element of the collection.
      *
+     * @param  string $key
+     * @return Illuminate\Support\Collection
+     */
+    public function pluck($key)
+    {
+        return new SupportCollection(array_pluck($this->toArray(), $key));
+    }
+
+    /**
+     * Alias for pluck
+     *
      * @param  string  $key
-     * @return static
+     * @return Illuminate\Support\Collection
      */
     public function fetch($key)
     {
-        return new SupportCollection(array_fetch($this->toArray(), $key));
+        return $this->pluck($key);
     }
 
     /**

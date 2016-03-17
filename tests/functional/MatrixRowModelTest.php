@@ -40,6 +40,6 @@ class MatrixRowModelTest extends PHPUnit_Framework_TestCase
     {
         $query = MatrixRow::entryId(8)->get();
 
-        $this->assertThat($query->fetch('row_id')->all(), new ArrayHasOnlyValuesConstraint([2, 3]));
+        $this->assertThat($query->pluck('row_id')->all(), new ArrayHasOnlyValuesConstraint([2, 3]));
     }
 }

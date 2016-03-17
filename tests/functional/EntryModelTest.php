@@ -198,7 +198,7 @@ class EntryModelTest extends PHPUnit_Framework_TestCase
 
     public function testFixedOrderScope()
     {
-        $entryIds = Entry::fixedOrder(7, 8, 9)->get()->fetch('entry_id')->all();
+        $entryIds = Entry::fixedOrder(7, 8, 9)->get()->pluck('entry_id')->all();
 
         $this->assertEquals([7, 8, 9], $entryIds);
     }
