@@ -22,7 +22,7 @@ final class Deep
      * Singleton instance
      * @var \rsanchez\Deep\Container
      */
-    private $instance;
+    private $container;
 
     /**
      * Private constructor so you cannot instantiate
