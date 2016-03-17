@@ -17,10 +17,12 @@ For more detailed information, see the [auto-generated API docs](http://rsanchez
 ```
 <?php
 
-// this particular wrapper class is for use *inside* EE
-use rsanchez\Deep\App\EE\Entries;
+use rsanchez\Deep\Deep;
+use rsanchez\Deep\Model\Entry;
 
-$entries = Entries::channel('blog')
+Deep::bootInstance();
+
+$entries = Entry::channel('blog')
                 ->limit(10)
                 ->showFutureEntries()
                 ->get();
@@ -71,17 +73,17 @@ Deep comes with a service provider for Laravel. Add this to the list of provider
 
     'rsanchez\Deep\App\Laravel\ServiceProvider',
 
-This registers the `Entries`, `Titles` and `Categories` facades, so you can use them in your app easily:
+    use rsanchez\Deep\Model\Entry;
 
-    Route::get('/blog', function()
+    route('/blog', function()
     {
-        $entries = Entries::channel('blog')->get();
+        $entries = Entry::channel('blog')->get();
         return View::make('blog.index')->withEntries($entries);
     });
 
-    Route::get('/blog/json', function()
+    route('/blog/json', function()
     {
-        $entries = Entries::channel('blog')->get();
+        $entries = Entry::channel('blog')->get();
         return Response::json($entries);
     });
 
