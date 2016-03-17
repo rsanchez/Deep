@@ -13,16 +13,19 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
+        $this->app->instance('rsanchez\Deep\Container', new Container());
+        $this->app->alias('rsanchez\Deep\Container', 'deep');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function boot()
+    {
         if ($connection = $this->app['config']->get('database.deep.connection')) {
             Model::setGlobalConnection($connection);
         }
 
-        $this->app->singleton('deep', function ($app) {
-            $deep = new Container();
-
-            $deep->boot();
-
-            return $deep;
-        });
+        $this->app['deep']->boot();
     }
 }
