@@ -45,7 +45,7 @@ class FieldCollection extends AbstractFieldCollection
         parent::__construct($fields);
 
         foreach ($fields as $field) {
-            $this->addFieldtype($field->field_type);
+            $this->addFieldtype($field->getRawAttribute('field_type'));
 
             $this->fieldIdsByFieldtype[$field->field_type][] = $field->field_id;
 

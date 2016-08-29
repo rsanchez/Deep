@@ -378,4 +378,9 @@ abstract class Model extends Eloquent implements ValidatableInterface, ProvidesV
 
         return $instance->newCollection($items);
     }
+
+    public function getRawAttribute($key)
+    {
+        return $this->getAttributeFromArray($key);
+    }
 }
