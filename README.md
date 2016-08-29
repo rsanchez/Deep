@@ -56,16 +56,15 @@ Make sure you load composer's autoloader at the top of your `config.php` (your a
 Then you can create your own plugin that uses Deep by [extending the `BasePlugin` class](#extending-the-baseplugin-class). Or you can use the built-in wrapper class, which bootstraps Deep with EE for you:
 
 ```
-use rsanchez\Deep\App\EE\Entries;
+use rsanchez\Deep\Deep;
+use rsanchez\Deep\Model\Entry;
 
-$entries = Entries::channel('blog')
+Deep::bootEE();
+
+$entries = Entry::channel('blog')
                 ->limit(10)
                 ->get();
 ```
-
-If you are not [extending the `BasePlugin` class](#extending-the-baseplugin-class) or using the `Entries` or `Titles` wrapper class, you will need to boot up Eloquent to use EE's database connection. You should do so in your constructor. This method is idempotent, so you can safely run it more than once without consequence.
-
-    \rsanchez\Deep\Deep::bootEE(ee());
 
 ### Laravel
 
@@ -104,9 +103,12 @@ First you must bootstrap Eloquent for use outside of Laravel. There are [many](h
 Then you can simply use the generic wrapper:
 
 ```
-use rsanchez\Deep\App\Entries;
+use rsanchez\Deep\Deep;
+use rsanchez\Deep\Model\Entry;
 
-$entries = Entries::channel('blog')
+Deep::bootInstance();
+
+$entries = Entry::channel('blog')
                 ->limit(10)
                 ->get();
 ```
@@ -151,49 +153,49 @@ Filtering scopes should look familiar, since most of them relate to a native `{e
 #### Channel Name
 
 ```
-Entries::channel('blog', 'news')->get();
+Entry::channel('blog', 'news')->get();
 ```
 
 #### Not Channel Name
 
 ```
-Entries::notChannel('blog', 'news')->get();
+Entry::notChannel('blog', 'news')->get();
 ```
 
 #### Channel ID
 
 ```
-Entries::channelId(1, 2)->get();
+Entry::channelId(1, 2)->get();
 ```
 
 #### Not Channel ID
 
 ```
-Entries::notChannelId(1, 2)->get();
+Entry::notChannelId(1, 2)->get();
 ```
 
 #### Author ID
 
 ```
-Entries::authorId(1, 2)->get();
+Entry::authorId(1, 2)->get();
 ```
 
 #### Not Author ID
 
 ```
-Entries::notAuthorId(1, 2)->get();
+Entry::notAuthorId(1, 2)->get();
 ```
 
 #### Category ID
 
 ```
-Entries::category(1, 2)->get();
+Entry::category(1, 2)->get();
 ```
 
 #### Not Category ID
 
 ```
-Entries::notCategory(1, 2)->get();
+Entry::notCategory(1, 2)->get();
 ```
 
 #### All Categories
@@ -201,7 +203,7 @@ Entries::notCategory(1, 2)->get();
 Only show entries that have all of the specified categories.
 
 ```
-Entries::allCategories(1, 2)->get();
+Entry::allCategories(1, 2)->get();
 ```
 
 #### Not All Categories
@@ -209,133 +211,133 @@ Entries::allCategories(1, 2)->get();
 Exclude entries that have all of the specified categories.
 
 ```
-Entries::notAllCategories(1, 2)->get();
+Entry::notAllCategories(1, 2)->get();
 ```
 
 #### Category Name
 
 ```
-Entries::categoryName('mammals', 'reptiles')->get();
+Entry::categoryName('mammals', 'reptiles')->get();
 ```
 
 #### Not Category Name
 
 ```
-Entries::notCategoryName('mammals', 'reptiles')->get();
+Entry::notCategoryName('mammals', 'reptiles')->get();
 ```
 
 #### Category Group
 
 ```
-Entries::categoryGroup(1, 2)->get();
+Entry::categoryGroup(1, 2)->get();
 ```
 
 #### Not Category Group
 
 ```
-Entries::notCategoryGroup(1, 2)->get();
+Entry::notCategoryGroup(1, 2)->get();
 ```
 
 #### Day
 
 ```
-Entries::day(31)->get();
+Entry::day(31)->get();
 ```
 
 #### Dynamic Parameters
 
 ```
-Entries::dynamicParameters(array('limit', 'search:your_field_name'), $_REQUEST)->get();
+Entry::dynamicParameters(array('limit', 'search:your_field_name'), $_REQUEST)->get();
 ```
 
 #### Entry ID
 
 ```
-Entries::entryId(1, 2)->get();
+Entry::entryId(1, 2)->get();
 ```
 
 #### Not Entry ID
 
 ```
-Entries::notEntryId(1, 2)->get();
+Entry::notEntryId(1, 2)->get();
 ```
 
 #### Entry ID From
 
 ```
-Entries::entryIdFrom(1)->get();
+Entry::entryIdFrom(1)->get();
 ```
 
 #### Entry ID To
 
 ```
-Entries::entryIdTo(100)->get();
+Entry::entryIdTo(100)->get();
 ```
 
 #### Fixed Order
 
 ```
-Entries::fixedOrder(4, 8, 15, 16, 23, 42)->get();
+Entry::fixedOrder(4, 8, 15, 16, 23, 42)->get();
 ```
 
 #### Member Group ID
 
 ```
-Entries::groupId(1, 2)->get();
+Entry::groupId(1, 2)->get();
 ```
 
 #### Not Member Group ID
 
 ```
-Entries::notGroupId(1, 2)->get();
+Entry::notGroupId(1, 2)->get();
 ```
 
 #### Limit
 
 ```
-Entries::limit(1)->get();
+Entry::limit(1)->get();
 ```
 
 #### Month
 
 ```
-Entries::month(12)->get();
+Entry::month(12)->get();
 ```
 
 #### Offset
 
 ```
-Entries::offset(1)->get();
+Entry::offset(1)->get();
 ```
 
 #### Show Expired
 
 ```
-Entries::showExpired(false)->get();
+Entry::showExpired(false)->get();
 ```
 
 #### Show Future Entries
 
 ```
-Entries::showFutureEntries(true)->get();
+Entry::showFutureEntries(true)->get();
 ```
 
 #### Show Pages
 
 ```
-Entries::showPages(false)->get();
+Entry::showPages(false)->get();
 ```
 
 #### Show Pages Only
 
 ```
-Entries::showPagesOnly(true)->get();
+Entry::showPagesOnly(true)->get();
 ```
 
 #### Site ID
 
 ```
-Entries::siteId(1, 2)->get();
+Entry::siteId(1, 2)->get();
 ```
 
 #### Start On
@@ -343,14 +345,14 @@ Entries::siteId(1, 2)->get();
 Unix time:
 
 ```
-Entries::startOn(1394393247)->get();
+Entry::startOn(1394393247)->get();
 ```
 
 Or use a `DateTime` object:
 
 ```
 $date = new DateTime();
-Entries::startOn($date)->get();
+Entry::startOn($date)->get();
 ```
 
 #### Stop Before
@@ -358,62 +360,62 @@ Entries::startOn($date)->get();
 Unix time:
 
 ```
-Entries::stopBefore(1394393247)->get();
+Entry::stopBefore(1394393247)->get();
 ```
 
 Or use a `DateTime` object:
 
 ```
 $date = new DateTime();
-Entries::stopBefore($date)->get();
+Entry::stopBefore($date)->get();
 ```
 
 #### Sticky
 
 ```
-Entries::sticky(true)->get();
+Entry::sticky(true)->get();
 ```
 
 #### Status
 
 ```
-Entries::status('open', 'closed')->get();
+Entry::status('open', 'closed')->get();
 ```
 
 #### Not Status
 
 ```
-Entries::notStatus('open', 'closed')->get();
+Entry::notStatus('open', 'closed')->get();
 ```
 
 #### URL Title
 
 ```
-Entries::urlTitle('cats', 'dogs')->get();
+Entry::urlTitle('cats', 'dogs')->get();
 ```
 
 #### Not URL Title
 
 ```
-Entries::notUrlTitle('cats', 'dogs')->get();
+Entry::notUrlTitle('cats', 'dogs')->get();
 ```
 
 #### Username
 
 ```
-Entries::username('john_doe', 'jane_doe')->get();
+Entry::username('john_doe', 'jane_doe')->get();
 ```
 
 #### Not Username
 
 ```
-Entries::notUsername('john_doe', 'jane_doe')->get();
+Entry::notUsername('john_doe', 'jane_doe')->get();
 ```
 
 #### Year
 
 ```
-Entries::year(2014)->get();
+Entry::year(2014)->get();
 ```
 
 #### Tagparams
@@ -421,7 +423,7 @@ Entries::year(2014)->get();
 This scope accepts an array of parameters And applies all the [supported](#parameters-not-implemented) `{exp:channel:entries}` parameters to the query.
 
 ```
-Entries::tagparams(ee()->TMPL->tagparams)->get();
+Entry::tagparams(ee()->TMPL->tagparams)->get();
 ```
 
 The following channel:entries parameters are not implemented by the `tagparams` scope:
@@ -453,7 +455,7 @@ These scopes force eager loading of certain relationships. Eager loading of cust
 Eager load the `categories` attribute.
 
 ```
-Entries::withCategories()->get();
+Entry::withCategories()->get();
 ```
 
 #### With Category Fields
@@ -461,7 +463,7 @@ Entries::withCategories()->get();
 Eager load the `categories` attribute with custom category fields.
 
 ```
-Entries::withCategoryFields()->get();
+Entry::withCategoryFields()->get();
 ```
 
 #### With Author
@@ -469,7 +471,7 @@ Entries::withCategoryFields()->get();
 Eager load the `author` attribute.
 
 ```
-Entries::withAuthor()->get();
+Entry::withAuthor()->get();
 ```
 
 #### With Author Fields
@@ -477,7 +479,7 @@ Entries::withAuthor()->get();
 Eager load the `author` attribute with custom member fields.
 
 ```
-Entries::withAuthorFields()->get();
+Entry::withAuthorFields()->get();
 ```
 
 #### With Parents
@@ -485,7 +487,7 @@ Entries::withAuthorFields()->get();
 Eager load the `parents` attribute (native EE relationship fields only).
 
 ```
-Entries::withParents()->get();
+Entry::withParents()->get();
 ```
 
 #### With Siblings
@@ -493,7 +495,7 @@ Entries::withParents()->get();
 Eager load the `siblings` attribute (native EE relationship fields only).
 
 ```
-Entries::withSiblings()->get();
+Entry::withSiblings()->get();
 ```
 
 #### With Comments
@@ -501,7 +503,15 @@ Entries::withSiblings()->get();
 Eager load the `comments` attribute, a collection of Comment models.
 
 ```
-Entries::withComments()->get();
+Entry::withComments()->get();
+```
+
+#### Without Fields
+
+Do not load custom fields.
+
+```
+Entry::withoutFields()->get();
 ```
 
 ### Custom Field Scopes
@@ -511,91 +521,91 @@ This set of scopes allows you to use the traditional some Eloquent methods with 
 #### Order By Field
 
 ```
-Entries::orderByField('your_custom_field', 'asc')->get();
+Entry::orderByField('your_custom_field', 'asc')->get();
 ```
 
 #### Where Field
 
 ```
-Entries::whereField('your_custom_field', 'foo')->get();
+Entry::whereField('your_custom_field', 'foo')->get();
 ```
 
 #### Or Where Field
 
 ```
-Entries::orWhereField('your_custom_field', 'foo')->get();
+Entry::orWhereField('your_custom_field', 'foo')->get();
 ```
 
 #### Where Field In
 
 ```
-Entries::whereFieldIn('your_custom_field', array('foo', 'bar'))->get();
+Entry::whereFieldIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Or Where Field In
 
 ```
-Entries::orWhereFieldIn('your_custom_field', array('foo', 'bar'))->get();
+Entry::orWhereFieldIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Where Field Not In
 
 ```
-Entries::whereFieldNotIn('your_custom_field', array('foo', 'bar'))->get();
+Entry::whereFieldNotIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Or Where Field Not In
 
 ```
-Entries::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'))->get();
+Entry::orWhereFieldNotIn('your_custom_field', array('foo', 'bar'))->get();
 ```
 
 #### Where Field Between
 
 ```
-Entries::whereFieldBetween('your_custom_field', array(1, 10))->get();
+Entry::whereFieldBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Or Where Field Between
 
 ```
-Entries::orWhereFieldBetween('your_custom_field', array(1, 10))->get();
+Entry::orWhereFieldBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Where Field Not Between
 
 ```
-Entries::whereFieldNotBetween('your_custom_field', array(1, 10))->get();
+Entry::whereFieldNotBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Or Where Field Not Between
 
 ```
-Entries::orWhereFieldNotBetween('your_custom_field', array(1, 10))->get();
+Entry::orWhereFieldNotBetween('your_custom_field', array(1, 10))->get();
 ```
 
 #### Where Field Null
 
 ```
-Entries::whereFieldNull('your_custom_field')->get();
+Entry::whereFieldNull('your_custom_field')->get();
 ```
 
 #### Or Where Field Null
 
 ```
-Entries::orWhereFieldNull('your_custom_field')->get();
+Entry::orWhereFieldNull('your_custom_field')->get();
 ```
 
 #### Where Field Not Null
 
 ```
-Entries::whereFieldNotNull('your_custom_field')->get();
+Entry::whereFieldNotNull('your_custom_field')->get();
 ```
 
 #### Or Where Field Not Null
 
 ```
-Entries::orWhereFieldNotNull('your_custom_field')->get();
+Entry::orWhereFieldNotNull('your_custom_field')->get();
 ```
 
 #### Where Field Contains
@@ -603,13 +613,13 @@ Entries::orWhereFieldNotNull('your_custom_field')->get();
 This is like `search:your_custom_field="foo|bar"`.
 
 ```
-Entries::whereFieldContains('your_custom_field', 'foo', 'bar')->get();
+Entry::whereFieldContains('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Or Where Field Contains
 
 ```
-Entries::orWhereFieldContains('your_custom_field', 'foo', 'bar')->get();
+Entry::orWhereFieldContains('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Where Field Does Not Contain
@@ -617,13 +627,13 @@ Entries::orWhereFieldContains('your_custom_field', 'foo', 'bar')->get();
 This is like `search:your_custom_field="not foo|bar"`.
 
 ```
-Entries::whereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
+Entry::whereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Or Where Field Does Not Contain
 
 ```
-Entries::orWhereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
+Entry::orWhereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Where Field Contains Whole Word
@@ -631,13 +641,13 @@ Entries::orWhereFieldDoesNotContain('your_custom_field', 'foo', 'bar')->get();
 This is like `search:your_custom_field="foo\W|bar\W"`.
 
 ```
-Entries::whereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get();
+Entry::whereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Or Where Field Contains Whole Word
 
 ```
-Entries::orWhereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get();
+Entry::orWhereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Where Field Does Not Contain Whole Word
@@ -645,13 +655,13 @@ Entries::orWhereFieldContainsWholeWord('your_custom_field', 'foo', 'bar')->get()
 This is like `search:your_custom_field="not foo\W|bar\W"`.
 
 ```
-Entries::whereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')->get();
+Entry::whereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')->get();
 ```
 
 #### Or Where Field Does Not Contain Whole Word
 
 ```
-Entries::orWhereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')->get();
+Entry::orWhereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')->get();
 ```
 
 ### Advanced Category Querying
@@ -659,7 +669,7 @@ Entries::orWhereFieldDoesNotContainWholeWord('your_custom_field', 'foo', 'bar')-
 This library makes use of Eloquent's [relationship capabilities](http://laravel.com/docs/eloquent#querying-relations). If you need to do more advanced category querying than the default category scopes, you can use the `whereHas` and `orWhereHas` methods.
 
 ```
-Entries::whereHas('categories', function ($query) {
+Entry::whereHas('categories', function ($query) {
     // category starts with A
     $query->where('cat_name', 'LIKE', 'A%');
 })->get();
@@ -1175,21 +1185,3 @@ You can change this by overloading the `getCategoriesDefaultParameters` method i
 
         return $params;
     }
-
-## The `Titles` Class
-
-You might be wondering how to do the equivalent of `disable="custom_fields"`. You can use the `Titles` class for this, which will not query for custom fields.
-
-NOTE: The `Title` model does NOT implement the [Search](#search) and [Custom Field](#custom-field-scopes) scopes.
-
-```
-<?php
-
-use rsanchez\Deep\App\EE\Titles;
-
-$entries = Titles::channel('blog')
-                ->limit(1)
-                ->get();
-```
-
-Note: Use `rsanchez\Deep\App\Titles` (or use the Service Provider in Laravel) *outside* of an EE context.
