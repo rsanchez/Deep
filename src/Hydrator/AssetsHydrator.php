@@ -66,7 +66,7 @@ class AssetsHydrator extends AbstractHydrator
             if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {
                 if (! is_null($asset->source_id) && $asset->source_settings) {
                     $uploadPref = new UploadPref([
-                        'url' => $asset->source_settings->url_prefix,
+                        'url' => $asset->source_settings->url_prefix.$asset->source_settings->subfolder,
                     ]);
                 } else {
                     continue;
