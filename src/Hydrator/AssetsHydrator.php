@@ -14,6 +14,7 @@ use rsanchez\Deep\Collection\AssetCollection;
 use rsanchez\Deep\Model\PropertyInterface;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\Asset;
+use rsanchez\Deep\Model\UploadPref;
 use rsanchez\Deep\Repository\UploadPrefRepositoryInterface;
 
 /**
@@ -64,7 +65,9 @@ class AssetsHydrator extends AbstractHydrator
         foreach ($assets as $asset) {
             if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {
                 if (! is_null($asset->source_id) && $asset->source_settings) {
-                    $uploadPref = null;
+                    $uploadPref = new UploadPref([
+                        'url' => $asset->source_settings->url_prefix,
+                    ]);
                 } else {
                     continue;
                 }
