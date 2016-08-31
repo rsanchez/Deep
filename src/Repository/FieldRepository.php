@@ -73,9 +73,10 @@ class FieldRepository extends AbstractFieldRepository implements ChannelFieldRep
     /**
      * Get the fields used by the channels in the specified collection
      * @param  \rsanchez\Deep\Collection\ChannelCollection $channels
+     * @param  array                                       $withFields fields names to include
      * @return \rsanchez\Deep\Collection\FieldCollection
      */
-    public function getFieldsByChannelCollection(ChannelCollection $channels)
+    public function getFieldsByChannelCollection(ChannelCollection $channels, $withFields = [])
     {
         $this->loadCollection();
 
@@ -83,6 +84,10 @@ class FieldRepository extends AbstractFieldRepository implements ChannelFieldRep
 
         foreach ($channels as $channel) {
             foreach ($channel->fields as $field) {
+                if ($withFields && !in_array($field->field_name, $withFields)) {
+                    continue;
+                }
+
                 $fields->push($field);
             }
         }

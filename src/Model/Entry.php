@@ -193,6 +193,12 @@ class Entry extends AbstractEntity
     protected static $childHydrationEnabled = true;
 
     /**
+     * Which fields to hydrate
+     * @var bool
+     */
+    protected static $withFields = [];
+
+    /**
      * The class used when creating a new Collection
      * @var string
      */
@@ -368,6 +374,10 @@ class Entry extends AbstractEntity
             $entry->setDehydrators($dehydrators);
 
             foreach ($entry->channel->fields as $field) {
+                if (self::$withFields && !in_array($field->field_name, self::$withFields)) {
+                    continue;
+                }
+
                 $hydrator = $hydrators->get($field->getType());
 
                 if ($hydrator) {
@@ -620,7 +630,7 @@ class Entry extends AbstractEntity
 
         $fieldRepository = self::$hydrationEnabled ? static::getFieldRepository() : null;
 
-        $collection = call_user_func($method, $models, static::getChannelRepository(), $fieldRepository);
+        $collection = call_user_func($method, $models, static::getChannelRepository(), $fieldRepository, self::$withFields);
 
         if ($models && self::$hydrationEnabled) {
             $this->hydrateCollection($collection);
@@ -636,6 +646,14 @@ class Entry extends AbstractEntity
     {
         if (!$this->channel_id || !self::$hydrationEnabled) {
             return new FieldCollection();
+        }
+
+        if (self::$withFields) {
+            $withFields = self::$withFields;
+
+            return $this->channel->fields->filter(function ($field) use ($withFields) {
+                return in_array($field->field_name, $withFields);
+            });
         }
 
         return $this->channel->fields;
@@ -1695,6 +1713,37 @@ class Entry extends AbstractEntity
     public function scopeWithoutChildFields(Builder $query)
     {
         self::$childHydrationEnabled = false;
+
+        return $query;
+    }
+
+    /**
+     * Scope to turn of child entry custom field hydration
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithChildFields(Builder $query)
+    {
+        self::$childHydrationEnabled = true;
+
+        return $query;
+    }
+
+    /**
+     * Scope to only load the specified custom fields
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  array|bool                            $fieldNames
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithFields(Builder $query, $fieldNames)
+    {
+        if (is_array($fieldNames)) {
+            self::$withFields = $fieldNames;
+        } else {
+            self::$withoutFields = !$fieldNames;
+        }
 
         return $query;
     }

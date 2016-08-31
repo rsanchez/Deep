@@ -81,7 +81,7 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
      * @param  \rsanchez\Deep\Repository\FieldRepositoryInterface|null $fieldRepository
      * @return \rsanchez\Deep\Collection\EntryCollection
      */
-    public static function create(array $models, ChannelRepositoryInterface $channelRepository, FieldRepositoryInterface $fieldRepository = null)
+    public static function create(array $models, ChannelRepositoryInterface $channelRepository, FieldRepositoryInterface $fieldRepository = null, $withFields = [])
     {
         $collection = new static($models);
 
@@ -104,7 +104,7 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
 
             $channels = $collection->getChannels();
 
-            $fields = $fieldRepository->getFieldsByChannelCollection($channels);
+            $fields = $fieldRepository->getFieldsByChannelCollection($channels, $withFields);
 
             $collection->setFields($fields);
         }
@@ -186,7 +186,7 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
      */
     public function hasCustomFields()
     {
-        return !! $this->fields;
+        return count($this->fields) > 0;
     }
 
     /**
