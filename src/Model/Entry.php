@@ -187,6 +187,12 @@ class Entry extends AbstractEntity
     protected static $hydrationEnabled = true;
 
     /**
+     * Whether or not to hydrate children's custom fields
+     * @var bool
+     */
+    protected static $childHydrationEnabled = true;
+
+    /**
      * The class used when creating a new Collection
      * @var string
      */
@@ -343,6 +349,10 @@ class Entry extends AbstractEntity
      */
     public function hydrateCollection(EntryCollection $collection)
     {
+        $hydrationEnabled = self::$hydrationEnabled;
+
+        self::$hydrationEnabled = self::$childHydrationEnabled;
+
         $hydrators = static::getHydratorFactory()->getHydratorsForCollection($collection, $this->extraHydrators);
         $dehydrators = static::getHydratorFactory()->getDehydratorsForCollection($collection);
 
@@ -373,6 +383,8 @@ class Entry extends AbstractEntity
                 $entry->setCustomField($name, $hydrators[$name]->hydrate($entry, new NullProperty()));
             }
         }
+
+        self::$hydrationEnabled = $hydrationEnabled;
     }
 
     /**
@@ -1670,6 +1682,19 @@ class Entry extends AbstractEntity
                 break;
             }
         }
+
+        return $query;
+    }
+
+    /**
+     * Scope to turn of child entry custom field hydration
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithoutChildFields(Builder $query)
+    {
+        self::$childHydrationEnabled = false;
 
         return $query;
     }
