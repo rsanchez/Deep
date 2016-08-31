@@ -184,7 +184,7 @@ class Entry extends AbstractEntity
      * Whether or not to hydrate custom fields
      * @var bool
      */
-    protected $hydrationEnabled = true;
+    protected static $hydrationEnabled = true;
 
     /**
      * The class used when creating a new Collection
@@ -592,8 +592,7 @@ class Entry extends AbstractEntity
             $this->scopeChannel($query, $this->defaultChannelName);
         }
 
-        //@TODO add withoutFields scope
-        if ($this->hydrationEnabled) {
+        if (self::$hydrationEnabled) {
             $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
         }
 
@@ -607,19 +606,12 @@ class Entry extends AbstractEntity
     {
         $method = "{$this->collectionClass}::create";
 
-        //@TODO withoutFields scope
-        $fieldRepository = $this->hydrationEnabled ? static::getFieldRepository() : null;
+        $fieldRepository = self::$hydrationEnabled ? static::getFieldRepository() : null;
 
         $collection = call_user_func($method, $models, static::getChannelRepository(), $fieldRepository);
 
-        if ($models) {
-            if ($this->hydrationEnabled) {
-                $this->hydrateCollection($collection);
-            } else {
-                foreach ($collection as $model) {
-                    $model->hydrationEnabled = false;
-                }
-            }
+        if ($models && self::$hydrationEnabled) {
+            $this->hydrateCollection($collection);
         }
 
         return $collection;
@@ -630,7 +622,11 @@ class Entry extends AbstractEntity
      */
     public function getProperties()
     {
-        return $this->channel_id && $this->hydrationEnabled ? $this->channel->fields : new FieldCollection();
+        if (!$this->channel_id || !self::$hydrationEnabled) {
+            return new FieldCollection();
+        }
+
+        return $this->channel->fields;
     }
 
     /**
@@ -1665,7 +1661,7 @@ class Entry extends AbstractEntity
      */
     public function scopeWithoutFields(Builder $query)
     {
-        $this->hydrationEnabled = false;
+        self::$hydrationEnabled = false;
 
         // remove the channel_data join
         foreach ($query->getQuery()->joins as $i => $join) {
@@ -2119,7 +2115,7 @@ class Entry extends AbstractEntity
             foreach (explode('|', $parameters['orderby']) as $i => $column) {
                 $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
 
-                if ($this->hydrationEnabled && static::getFieldRepository()->hasField($column)) {
+                if (self::$hydrationEnabled && static::getFieldRepository()->hasField($column)) {
                     $column = 'channel_data.field_id_' . static::getFieldRepository()->getFieldId($column);
 
                     $query->orderBy($column, $direction);
