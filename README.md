@@ -514,24 +514,12 @@ Do not load custom fields.
 Entry::withoutFields()->get();
 ```
 
-*NOTE*: Enabling this scope will work for all subsequent queries. You must disable it by calling `withFields(true)` on your next query if you wish to do load custom fields for that query.
-
 #### Without Child Fields
 
 Do not load custom fields in child (Playa/Relationship) entries.
 
 ```
 Entry::withoutChildFields()->get();
-```
-
-*NOTE*: Enabling this scope will work for all subsequent queries. You must disable it by calling `withChildFields()` on your next query if you wish to do load custom fields for that query.
-
-#### With Child Fields
-
-Load custom fields in child (Playa/Relationship) entries. This is the default behavior. Use this to re-enable child field loading after calling `withoutChildFields()`.
-
-```
-Entry::withChildFields()->get();
 ```
 
 #### With Fields
@@ -541,15 +529,6 @@ Specify exactly which custom fields to load.
 ```
 Entry::withFields(['your_custom_field', 'your_other_custom_field'])->get();
 ```
-
-Or re-enable custom field loading after calling `withoutFields()`.
-
-```
-Entry::withFields(true)->get();
-```
-
-*NOTE*: Enabling this scope will work for all subsequent queries. You must disable it by calling `with
-Fields([])` on your next query if you wish to do load custom fields for that query.
 
 ### Custom Field Scopes
 

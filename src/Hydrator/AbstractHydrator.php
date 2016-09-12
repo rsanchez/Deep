@@ -9,6 +9,8 @@
 
 namespace rsanchez\Deep\Hydrator;
 
+use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Eloquent\Builder as DeepBuilder;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Model\AbstractEntity;
 use rsanchez\Deep\Model\PropertyInterface;
@@ -44,6 +46,12 @@ abstract class AbstractHydrator implements HydratorInterface
     protected $fieldtype;
 
     /**
+     * Whether to hydrate entries being populated
+     * @var boolean
+     */
+    protected $childHydrationEnabled = true;
+
+    /**
      * Constructor
      *
      * Set the EntryCollection and load any global elements the hydrator might need
@@ -55,6 +63,20 @@ abstract class AbstractHydrator implements HydratorInterface
     {
         $this->hydrators = $hydrators;
         $this->fieldtype = $fieldtype;
+    }
+
+    public function setChildHydrationDisabled()
+    {
+        $this->childHydrationEnabled = false;
+    }
+
+    protected function castToDeepBuilder(Builder $builder)
+    {
+        if (!$builder instanceof DeepBuilder) {
+            $builder = new DeepBuilder($builder->getQuery(), $builder);
+        }
+
+        return $builder;
     }
 
     /**

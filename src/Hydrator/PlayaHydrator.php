@@ -60,7 +60,13 @@ class PlayaHydrator extends AbstractHydrator
      */
     public function bootFromCollection(EntryCollection $collection)
     {
-        $this->playaCollection = $this->model->parentEntryId($collection->modelKeys())->orderBy('rel_order')->get();
+        $builder = $this->model->parentEntryId($collection->modelKeys())->orderBy('rel_order');
+
+        if (!$this->childHydrationEnabled) {
+            $builder = $this->castToDeepBuilder($builder)->setHydrationDisabled();
+        }
+
+        $this->playaCollection = $builder->get();
 
         foreach ($this->playaCollection as $entry) {
             $type = $entry->parent_row_id ? 'matrix' : 'entry';

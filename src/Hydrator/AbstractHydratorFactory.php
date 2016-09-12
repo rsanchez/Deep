@@ -138,7 +138,7 @@ abstract class AbstractHydratorFactory
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @return array                                             AbstractHydrator[]
      */
-    public function getHydratorsForCollection(EntryCollection $collection, array $extraHydrators = [])
+    public function getHydratorsForCollection(EntryCollection $collection, $childHydrationEnabled = true, array $extraHydrators = [])
     {
         $hydrators = new HydratorCollection();
 
@@ -146,7 +146,7 @@ abstract class AbstractHydratorFactory
             // add the built-in ones
             foreach ($this->hydrators as $type => $class) {
                 if ($collection->hasFieldtype($type)) {
-                    $hydrator = $this->newHydrator($hydrators, $type);
+                    $hydrator = $this->newHydrator($hydrators, $type, $childHydrationEnabled);
 
                     $hydrator->bootFromCollection($collection);
 
@@ -157,7 +157,7 @@ abstract class AbstractHydratorFactory
 
         foreach ($extraHydrators as $type) {
             if (isset($this->hydrators[$type])) {
-                $hydrator = $this->newHydrator($hydrators, $type);
+                $hydrator = $this->newHydrator($hydrators, $type, $childHydrationEnabled);
 
                 $hydrator->bootFromCollection($collection);
 
@@ -267,7 +267,7 @@ abstract class AbstractHydratorFactory
      * @param  string                                     $type
      * @return \rsanchez\Deep\Hydrator\AbstractHydrator
      */
-    public function newHydrator(HydratorCollection $hydrators, $type)
+    public function newHydrator(HydratorCollection $hydrators, $type, $childHydrationEnabled = true)
     {
         $class = $this->hydrators[$type];
 
@@ -277,10 +277,16 @@ abstract class AbstractHydratorFactory
 
         // some hydrators may have dependencies to be injected
         if (method_exists($this, $method)) {
-            return $this->$method($hydrators, $type);
+            $hydrator = $this->$method($hydrators, $type);
+        } else {
+            $hydrator = new $class($hydrators, $type);
         }
 
-        return new $class($hydrators, $type);
+        if (!$childHydrationEnabled) {
+            $hydrator->setChildHydrationDisabled();
+        }
+
+        return $hydrator;
     }
 
     /**

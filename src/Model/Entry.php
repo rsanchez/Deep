@@ -10,6 +10,7 @@
 namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Builder;
+use rsanchez\Deep\Eloquent\Builder as DeepBuilder;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Collection\EntryCollection;
 use rsanchez\Deep\Collection\CategoryCollection;
@@ -181,24 +182,6 @@ class Entry extends AbstractEntity
     ];
 
     /**
-     * Whether or not to hydrate custom fields
-     * @var bool
-     */
-    protected static $hydrationEnabled = true;
-
-    /**
-     * Whether or not to hydrate children's custom fields
-     * @var bool
-     */
-    protected static $childHydrationEnabled = true;
-
-    /**
-     * Which fields to hydrate
-     * @var bool
-     */
-    protected static $withFields = [];
-
-    /**
      * The class used when creating a new Collection
      * @var string
      */
@@ -353,13 +336,9 @@ class Entry extends AbstractEntity
      * @param  \rsanchez\Deep\Collection\EntryCollection $collection
      * @return void
      */
-    public function hydrateCollection(EntryCollection $collection)
+    public function hydrateCollection(EntryCollection $collection, $withFields = [], $childHydrationEnabled = true)
     {
-        $hydrationEnabled = self::$hydrationEnabled;
-
-        self::$hydrationEnabled = self::$childHydrationEnabled;
-
-        $hydrators = static::getHydratorFactory()->getHydratorsForCollection($collection, $this->extraHydrators);
+        $hydrators = static::getHydratorFactory()->getHydratorsForCollection($collection, $childHydrationEnabled, $this->extraHydrators);
         $dehydrators = static::getHydratorFactory()->getDehydratorsForCollection($collection);
 
         // loop through the hydrators for preloading
@@ -374,7 +353,7 @@ class Entry extends AbstractEntity
             $entry->setDehydrators($dehydrators);
 
             foreach ($entry->channel->fields as $field) {
-                if (self::$withFields && !in_array($field->field_name, self::$withFields)) {
+                if ($withFields && !in_array($field->field_name, $withFields)) {
                     continue;
                 }
 
@@ -393,8 +372,6 @@ class Entry extends AbstractEntity
                 $entry->setCustomField($name, $hydrators[$name]->hydrate($entry, new NullProperty()));
             }
         }
-
-        self::$hydrationEnabled = $hydrationEnabled;
     }
 
     /**
@@ -614,9 +591,9 @@ class Entry extends AbstractEntity
             $this->scopeChannel($query, $this->defaultChannelName);
         }
 
-        if (self::$hydrationEnabled) {
-            $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
-        }
+        $query = $this->castToDeepBuilder($query);
+
+        $query->join('channel_data', 'channel_titles.entry_id', '=', 'channel_data.entry_id');
 
         return $query;
     }
@@ -624,16 +601,24 @@ class Entry extends AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function newCollection(array $models = [])
+    public function newCollection(array $models = [], Builder $builder = null)
     {
         $method = "{$this->collectionClass}::create";
 
-        $fieldRepository = self::$hydrationEnabled ? static::getFieldRepository() : null;
+        if ($builder) {
+            $builder = $this->castToDeepBuilder($builder);
+        }
 
-        $collection = call_user_func($method, $models, static::getChannelRepository(), $fieldRepository, self::$withFields);
+        $isHydrationEnabled = $builder && $builder->isHydrationEnabled();
 
-        if ($models && self::$hydrationEnabled) {
-            $this->hydrateCollection($collection);
+        $withFields = $builder ? $builder->getWithFields() : [];
+
+        $fieldRepository = $isHydrationEnabled ? static::getFieldRepository() : null;
+
+        $collection = call_user_func($method, $models, static::getChannelRepository(), $fieldRepository, $withFields);
+
+        if ($models && $isHydrationEnabled) {
+            $this->hydrateCollection($collection, $withFields, $builder->isChildHydrationEnabled());
         }
 
         return $collection;
@@ -644,16 +629,8 @@ class Entry extends AbstractEntity
      */
     public function getProperties()
     {
-        if (!$this->channel_id || !self::$hydrationEnabled) {
+        if (!$this->channel_id) {
             return new FieldCollection();
-        }
-
-        if (self::$withFields) {
-            $withFields = self::$withFields;
-
-            return $this->channel->fields->filter(function ($field) use ($withFields) {
-                return in_array($field->field_name, $withFields);
-            });
         }
 
         return $this->channel->fields;
@@ -1704,6 +1681,15 @@ class Entry extends AbstractEntity
         return $query;
     }
 
+    protected function castToDeepBuilder(Builder $builder)
+    {
+        if (!$builder instanceof DeepBuilder) {
+            $builder = new DeepBuilder($builder->getQuery(), $builder);
+        }
+
+        return $builder;
+    }
+
     /**
      * Scope to turn of child entry custom field hydration
      *
@@ -1712,9 +1698,7 @@ class Entry extends AbstractEntity
      */
     public function scopeWithoutChildFields(Builder $query)
     {
-        self::$childHydrationEnabled = false;
-
-        return $query;
+        return $this->castToDeepBuilder($query)->setChildHydrationDisabled();
     }
 
     /**
@@ -1725,9 +1709,7 @@ class Entry extends AbstractEntity
      */
     public function scopeWithChildFields(Builder $query)
     {
-        self::$childHydrationEnabled = true;
-
-        return $query;
+        return $this->castToDeepBuilder($query)->setChildHydrationEnabled();
     }
 
     /**
@@ -1739,13 +1721,7 @@ class Entry extends AbstractEntity
      */
     public function scopeWithFields(Builder $query, $fieldNames)
     {
-        if (is_array($fieldNames)) {
-            self::$withFields = $fieldNames;
-        } else {
-            self::$withoutFields = !$fieldNames;
-        }
-
-        return $query;
+        return $this->castToDeepBuilder($query)->setWithFields($fieldNames);
     }
 
     /**

@@ -53,7 +53,13 @@ class SiblingsHydrator extends AbstractHydrator
      */
     public function bootFromCollection(EntryCollection $collection)
     {
-        $this->relationshipCollection = $this->model->siblings($collection->modelKeys())->get();
+        $builder = $this->model->siblings($collection->modelKeys());
+
+        if (!$this->childHydrationEnabled) {
+            $builder = $this->castToDeepBuilder($builder)->setHydrationDisabled();
+        }
+
+        $this->relationshipCollection = $builder->get();
 
         foreach ($this->relationshipCollection as $entry) {
             if (! isset($this->entries[$entry->sibling_id])) {
