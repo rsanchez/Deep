@@ -1668,8 +1668,6 @@ class Entry extends AbstractEntity
      */
     public function scopeWithoutFields(Builder $query)
     {
-        self::$hydrationEnabled = false;
-
         // remove the channel_data join
         foreach ($query->getQuery()->joins as $i => $join) {
             if ($join->table === 'channel_data') {
@@ -1678,7 +1676,7 @@ class Entry extends AbstractEntity
             }
         }
 
-        return $query;
+        return $this->castToDeepBuilder($query)->setHydrationDisabled();
     }
 
     protected function castToDeepBuilder(Builder $builder)
@@ -2160,12 +2158,14 @@ class Entry extends AbstractEntity
     public function scopeTagparams(Builder $query, array $parameters, array $request = [])
     {
         if (! empty($parameters['orderby'])) {
+            $query = $this->castToDeepBuilder($query);
+
             $directions = isset($parameters['sort']) ? explode('|', $parameters['sort']) : null;
 
             foreach (explode('|', $parameters['orderby']) as $i => $column) {
                 $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
 
-                if (self::$hydrationEnabled && static::getFieldRepository()->hasField($column)) {
+                if ($query->isHydrationEnabled() && static::getFieldRepository()->hasField($column)) {
                     $column = 'channel_data.field_id_' . static::getFieldRepository()->getFieldId($column);
 
                     $query->orderBy($column, $direction);
