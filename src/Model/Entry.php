@@ -1007,7 +1007,9 @@ class Entry extends AbstractEntity
 
         call_user_func_array([$this, 'scopeEntryId'], func_get_args());
 
-        return $query->orderBy('FIELD('.implode(', ', $fixedOrder).')', 'asc');
+        $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
+
+        return $query->orderByRaw('FIELD('.$tablePrefix.'channel_titles.entry_id,'.implode(', ', $fixedOrder).')');
     }
 
     /**
