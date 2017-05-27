@@ -119,6 +119,13 @@ class MatrixRow extends AbstractEntity
     {
         $array = parent::toArray();
 
+        // remove col_id_X fields from the array
+        foreach ($array as $key => $value) {
+            if (preg_match('#^col_id_#', $key)) {
+                unset($array[$key]);
+            }
+        }
+
         foreach ($array as &$row) {
             if (method_exists($row, 'toArray')) {
                 $row = $row->toArray();
