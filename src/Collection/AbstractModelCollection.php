@@ -85,7 +85,7 @@ abstract class AbstractModelCollection extends Collection
     /**
      * {@inheritdoc}
      */
-    public function prepend($iteme, $key = null)
+    public function prepend($item, $key = null)
     {
         $this->validateModel($item);
 
