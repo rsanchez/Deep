@@ -11,12 +11,19 @@ namespace rsanchez\Deep\Model;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\ScopeInterface;
+use Illuminate\Database\Eloquent\Scope;
+
+if (!class_exists('\\Illuminate\\Database\\Eloquent\\Scope')) {
+    class_alias(
+        '\\Illuminate\\Database\\Eloquent\\ScopeInterface',
+        '\\Illuminate\\Database\\Eloquent\\Scope'
+    );
+}
 
 /**
  * Global Joinable scope to automatically join the specified tables
  */
-class JoinableScope implements ScopeInterface
+class JoinableScope implements Scope
 {
     /**
      * List of Join objects created
