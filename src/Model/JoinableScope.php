@@ -13,11 +13,8 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Scope;
 
-if (!class_exists('\\Illuminate\\Database\\Eloquent\\Scope')) {
-    class_alias(
-        '\\Illuminate\\Database\\Eloquent\\ScopeInterface',
-        '\\Illuminate\\Database\\Eloquent\\Scope'
-    );
+if (!interface_exists('\\Illuminate\\Database\\Eloquent\\Scope')) {
+    class_alias('\\Illuminate\\Database\\Eloquent\\ScopeInterface', '\\Illuminate\\Database\\Eloquent\\Scope');
 }
 
 /**

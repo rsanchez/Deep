@@ -65,7 +65,9 @@ abstract class AbstractModelCollection extends Collection
      */
     public function fetch($key)
     {
-        return new SupportCollection(array_fetch($this->toArray(), $key));
+        $function = function_exists('array_fetch') ? 'array_fetch' : 'array_pluck';
+
+        return new SupportCollection(call_user_func($function, $this->toArray(), $key));
     }
 
     /**
@@ -83,13 +85,13 @@ abstract class AbstractModelCollection extends Collection
     /**
      * {@inheritdoc}
      */
-    public function prepend($item)
+    public function prepend($iteme, $key = null)
     {
         $this->validateModel($item);
 
         $this->prepareModel($item);
 
-        return parent::prepend($item);
+        return parent::prepend($item, $key);
     }
 
     /**
