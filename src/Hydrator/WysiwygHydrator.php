@@ -59,6 +59,8 @@ class WysiwygHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
+        parent::hydrate($entity, $property);
+
         $value = $this->parse($entity->getAttribute($property->getIdentifier()));
 
         $entity->setAttribute($property->getName(), $value);

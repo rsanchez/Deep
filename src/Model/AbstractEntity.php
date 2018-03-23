@@ -14,6 +14,13 @@ namespace rsanchez\Deep\Model;
  */
 abstract class AbstractEntity extends Model
 {
+
+    /**
+     * Entity hydration state
+     * @var bool
+     */
+    protected $hydrated = false;
+
     /**
      * Get the entity ID (eg. entry_id or row_id)
      * @return string|int

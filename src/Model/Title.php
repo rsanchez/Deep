@@ -267,7 +267,7 @@ class Title extends AbstractEntity
 
     /**
      * Loop through all the hydrators to set Entry custom field attributes
-     * @param  \rsanchez\Deep\Collection\TitleCollection $collection
+     * @param  \rsanchez\Deep\Collection\AbstractTitleCollection $collection
      * @return void
      */
     public function hydrateCollection(AbstractTitleCollection $collection)

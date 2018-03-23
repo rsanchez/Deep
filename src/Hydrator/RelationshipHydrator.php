@@ -65,6 +65,8 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
+        parent::hydrate($entity, $property);
+
         $entries = isset($this->entries[$entity->getType()][$entity->getId()][$property->getId()])
             ? $this->entries[$entity->getType()][$entity->getId()][$property->getId()] : array();
 

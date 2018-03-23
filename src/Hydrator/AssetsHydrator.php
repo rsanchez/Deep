@@ -98,6 +98,8 @@ class AssetsHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
+        parent::hydrate($entity, $property);
+
         if (isset($this->selections[$entity->getType()][$entity->getId()][$property->getId()])) {
             $value = $this->selections[$entity->getType()][$entity->getId()][$property->getId()];
         } else {

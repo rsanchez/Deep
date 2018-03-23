@@ -61,6 +61,8 @@ class ParentsHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
+        parent::hydrate($entity, $property);
+
         $entries = isset($this->entries[$entity->getId()]) ? $this->entries[$entity->getId()] : array();
 
         $value = $this->relationshipCollection->createChildCollection($entries);
