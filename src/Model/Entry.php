@@ -67,7 +67,7 @@ class Entry extends Title
 
         $collection = call_user_func($method, $models, self::$channelRepository, self::$fieldRepository);
 
-        if ($models) {
+        if ($models && !$collection->isHydrated()) {
             $this->hydrateCollection($collection);
         }
 

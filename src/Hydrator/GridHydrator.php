@@ -123,6 +123,8 @@ class GridHydrator extends AbstractHydrator
      */
     public function hydrate(AbstractEntity $entity, AbstractProperty $property)
     {
+        parent::hydrate($entity, $property);
+
         $value = isset($this->sortedRows[$entity->getId()][$property->getId()]) ? $this->sortedRows[$entity->getId()][$property->getId()] : new GridRowCollection();
 
         $entity->setAttribute($property->getName(), $value);

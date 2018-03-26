@@ -149,6 +149,18 @@ abstract class AbstractTitleCollection extends AbstractModelCollection implement
     }
 
     /**
+     * Determine if all items in the collection are fully hydrated
+     *
+     * @return bool
+     */
+    public function isHydrated()
+    {
+        return $this->reduce(function ($carry, $item) {
+            return $carry && $item->hydrated;
+        }, true);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toJson($options = 0)
