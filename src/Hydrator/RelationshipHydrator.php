@@ -53,7 +53,7 @@ class RelationshipHydrator extends AbstractHydrator
      */
     public function bootFromCollection(EntryCollection $collection)
     {
-        $builder = $this->model->parentEntryId($collection->modelKeys())->orderBy('orer');
+        $builder = $this->model->parentEntryId($collection->modelKeys())->orderBy('order');
 
         if (!$this->childHydrationEnabled) {
             $builder = $this->castToDeepBuilder($builder)->setHydrationDisabled();
