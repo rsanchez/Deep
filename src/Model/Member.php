@@ -50,7 +50,7 @@ class Member extends Model
     {
         return [
             'member_data' => function ($query) {
-                $query->join('member_data', 'member_data.member_id', '=', 'member_data.member_id');
+                $query->join('member_data', 'member_data.member_id', '=', 'members.member_id');
             },
         ];
     }
