@@ -38,7 +38,8 @@ use rsanchez\Deep\Repository\CategoryFieldRepository;
 use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\EntryHydratorFactory;
 use rsanchez\Deep\Hydrator\RowHydratorFactory;
-use Symfony\Component\Translation\Translator;
+use Illuminate\Translation\ArrayLoader;
+use Illuminate\Translation\Translator;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Validation\DatabasePresenceVerifier;
 use rsanchez\Deep\Validation\Validator;
@@ -79,7 +80,7 @@ class Container extends IlluminateContainer
         $this->alias('Illuminate\Validation\PresenceVerifierInterface', 'ValidationPresenceVerifier');
 
         $this->singleton('Symfony\Component\Translation\TranslatorInterface', function ($app) {
-            return new Translator('en');
+            return new Translator(new ArrayLoader, 'en');
         });
 
         $this->alias('Symfony\Component\Translation\TranslatorInterface', 'ValidationTranslator');
