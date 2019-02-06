@@ -12,6 +12,7 @@ namespace rsanchez\Deep\Repository;
 use rsanchez\Deep\Collection\FieldCollection;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Collection\ChannelCollection;
+use Illuminate\Database\ConnectionInterface;
 
 /**
  * Repository of all Fields
@@ -19,17 +20,48 @@ use rsanchez\Deep\Collection\ChannelCollection;
 class FieldRepository extends AbstractFieldRepository implements ChannelFieldRepositoryInterface
 {
     /**
-     * Array of FieldCollection keyed by group_id
+     * @var \Illuminate\Database\ConnectionInterface
+     */
+    protected $db;
+
+    /**
+     * Array of FieldCollection keyed by channel_id
      * @var array
      */
-    protected $fieldsByGroup = [];
+    protected $fieldsByChannel = [];
 
     /**
      * {@inheritdoc}
+     *
+     * @param \rsanchez\Deep\Model\Field               $model
+     * @param \Illuminate\Database\ConnectionInterface $db
      */
-    public function __construct(Field $model)
+    public function __construct(Field $model, ConnectionInterface $db)
     {
         parent::__construct($model);
+
+        $this->db = $db;
+    }
+
+    protected function getFieldIdsByChannel()
+    {
+        $fieldIdsByChannel = [];
+
+        $fieldAssignments = $this->db->table('channel_field_groups_fields')
+            ->select('channel_id', 'field_id')
+            ->join('channels_channel_field_groups', 'channels_channel_field_groups.group_id', '=', 'channel_field_groups_fields.group_id')
+            ->union($this->db->table('channels_channel_fields'))
+            ->get();
+
+        foreach ($fieldAssignments as $fieldAssignment) {
+            if (! array_key_exists($fieldAssignment->channel_id, $fieldIdsByChannel)) {
+                $fieldIdsByChannel[$field->channel_id] = [];
+            }
+
+            $fieldIdsByChannel[$field->channel_id][] = $fieldAssignment->field_id;
+        }
+
+        return $fieldIdsByChannel;
     }
 
     /**
@@ -38,6 +70,8 @@ class FieldRepository extends AbstractFieldRepository implements ChannelFieldRep
     protected function loadCollection()
     {
         if (is_null($this->collection)) {
+            $fieldIdsByChannel = $this->getFieldIdsByChannel();
+
             $this->collection = $this->model
                 ->orderByRaw("field_type IN ('matrix', 'grid') DESC")
                 ->orderByRaw("field_type IN ('playa', 'relationship') DESC")
@@ -45,11 +79,15 @@ class FieldRepository extends AbstractFieldRepository implements ChannelFieldRep
                 ->get();
 
             foreach ($this->collection as $field) {
-                if (! array_key_exists($field->group_id, $this->fieldsByGroup)) {
-                    $this->fieldsByGroup[$field->group_id] = new FieldCollection();
-                }
+                foreach ($fieldIdsByChannel as $channelId => $fieldIds) {
+                    if (in_array($field->field_id, $fieldIds)) {
+                        if (! array_key_exists($channelId, $this->fieldsByChannel)) {
+                            $this->fieldsByChannel[$channelId] = new FieldCollection();
+                        }
 
-                $this->fieldsByGroup[$field->group_id]->push($field);
+                        $this->fieldsByChannel[$channelId]->push($field);
+                    }
+                }
 
                 $this->fieldsByName[$field->field_name] = $field;
                 $this->fieldsById[$field->field_id] = $field;
@@ -60,14 +98,14 @@ class FieldRepository extends AbstractFieldRepository implements ChannelFieldRep
     /**
      * Get a Collection of fields from the specified group
      *
-     * @param  int                                       $groupId
+     * @param  int                                       $channelId
      * @return \rsanchez\Deep\Collection\FieldCollection
      */
-    public function getFieldsByGroup($groupId)
+    public function getFieldsByChannel($channelId)
     {
         $this->loadCollection();
 
-        return $groupId && isset($this->fieldsByGroup[$groupId]) ? $this->fieldsByGroup[$groupId] : new FieldCollection();
+        return $channelId && isset($this->fieldsByChannel[$groupId]) ? $this->fieldsByChannel[$groupId] : new FieldCollection();
     }
 
     /**

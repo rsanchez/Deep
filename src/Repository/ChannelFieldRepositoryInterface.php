@@ -77,10 +77,10 @@ interface ChannelFieldRepositoryInterface
     /**
      * Get a Collection of fields from the specified group
      *
-     * @param  int                                       $groupId
+     * @param  int                                       $channelId
      * @return \rsanchez\Deep\Collection\FieldCollection
      */
-    public function getFieldsByGroup($groupId);
+    public function getFieldsByChannel($channelId);
 
     /**
      * Get the fields used by the channels in the specified collection

@@ -106,7 +106,7 @@ class Container extends IlluminateContainer
         $this->alias('rsanchez\Deep\Model\Field', 'Field');
 
         $this->singleton('rsanchez\Deep\Repository\FieldRepositoryInterface', function ($app) {
-            return new FieldRepository($app->make('Field'));
+            return new FieldRepository($app->make('Field'), $app->make('db'));
         });
 
         $this->alias('rsanchez\Deep\Repository\FieldRepositoryInterface', 'FieldRepository');
