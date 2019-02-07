@@ -46,9 +46,13 @@ class ChannelData extends Model
             if (preg_match('/^field_(id|ft|dt)_(\d+)$/', $name, $match)) {
                 $fieldId = $match[1];
 
-                $attributesByField[$fieldId][$name] = $value;
+                $field = self::getFieldRepository()->find($fieldId);
 
-                unset($attributes[$name]);
+                if ($field && $field->legacy_field_data !== 'y') {
+                    $attributesByField[$fieldId][$name] = $value;
+
+                    unset($attributes[$name]);
+                }
             }
         }
 
@@ -72,12 +76,22 @@ class ChannelData extends Model
      */
     public function setAttribute($key, $value)
     {
+        $relation = null;
+
         if (preg_match('/^field_(id|ft|dt)_\d+$/', $key, $match)) {
             $fieldId = $match[1];
 
-            $table = "channel_data_field_{$fieldId}";
+            $field = self::getFieldRepository()->find($fieldId);
 
-            $this->relations[$table]->setAttribute($key, $value);
+            if ($field && $field->legacy_field_data !== 'y') {
+                $table = "channel_data_field_{$fieldId}";
+
+                $relation = $this->relations[$table];
+            }
+        }
+
+        if ($relation) {
+            $relation->setAttribute($key, $value);
         } else {
             parent::setAttribute($key, $value);
         }
@@ -106,9 +120,11 @@ class ChannelData extends Model
 
         // join all the channel_data_field_X tables
         foreach (static::getFieldRepository()->getFields() as $field) {
-            $table = "channel_data_field_{$field->field_id}";
+            if ($field->legacy_field_data !== 'y') {
+                $table = "channel_data_field_{$field->field_id}";
 
-            $query->leftJoin($table, 'channel_data.entry_id', '=', "{$table}.entry_id");
+                $query->leftJoin($table, 'channel_data.entry_id', '=', "{$table}.entry_id");
+            }
         }
 
         return $query;
