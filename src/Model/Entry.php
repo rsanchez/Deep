@@ -597,9 +597,11 @@ class Entry extends AbstractEntity
 
         // join all the channel_data_field_X tables
         foreach (static::getFieldRepository()->getFields() as $field) {
-            $table = "channel_data_field_{$field->field_id}";
+            if ($field->legacy_field_data !== 'y') {
+                $table = "channel_data_field_{$field->field_id}";
 
-            $query->leftJoin($table, 'channel_titles.entry_id', '=', "{$table}.entry_id");
+                $query->leftJoin($table, 'channel_titles.entry_id', '=', "{$table}.entry_id");
+            }
         }
 
         return $query;
@@ -2177,9 +2179,11 @@ class Entry extends AbstractEntity
                 $direction = isset($directions[$i]) ? $directions[$i] : 'asc';
 
                 if ($query->isHydrationEnabled() && static::getFieldRepository()->hasField($column)) {
-                    $fieldId = static::getFieldRepository()->getFieldId($column);
+                    $field = static::getFieldRepository()->getFieldByName($column);
 
-                    $column = "channel_data_field_{$fieldId}.field_id_{$fieldId}";
+                    $table = $field->legacy_field_data === 'y' ? 'channel_data' : "channel_data_field_{$field->field_id}";
+
+                    $column = "{$table}.field_id_{$field->field_id}";
 
                     $query->orderBy($column, $direction);
                 } else {
@@ -2216,9 +2220,11 @@ class Entry extends AbstractEntity
         $fieldName = array_shift($args);
 
         if (static::getFieldRepository()->hasField($fieldName)) {
-            $fieldId = static::getFieldRepository()->getFieldId($fieldName);
+            $field = static::getFieldRepository()->getFieldByName($column);
 
-            $column = "channel_data_field_{$fieldId}.field_id_{$fieldId}";
+            $table = $field->legacy_field_data === 'y' ? 'channel_data' : "channel_data_field_{$field->field_id}";
+
+            $column = "{$table}.field_id_{$field->field_id}";
 
             array_unshift($args, $column);
 
@@ -2239,9 +2245,11 @@ class Entry extends AbstractEntity
     public function scopeOrderByField(Builder $query, $fieldName, $direction = 'asc')
     {
         if (static::getFieldRepository()->hasField($fieldName)) {
-            $fieldId = static::getFieldRepository()->getFieldId($fieldName);
+            $field = static::getFieldRepository()->getFieldByName($fieldName);
 
-            $column = "channel_data_field_{$fieldId}.field_id_{$fieldId}";
+            $table = $field->legacy_field_data === 'y' ? 'channel_data' : "channel_data_field_{$field->field_id}";
+
+            $column = "{$table}.field_id_{$field->field_id}";
 
             $query->orderBy($column, $direction);
         }
@@ -2468,13 +2476,15 @@ class Entry extends AbstractEntity
                 $value = '([[:<:]]|^)'.preg_quote($value).'([[:>:]]|$)';
 
                 if (static::getFieldRepository()->hasField($fieldName)) {
-                    $fieldId = static::getFieldRepository()->getFieldId($fieldName);
+                    $field = static::getFieldRepository()->getFieldByName($fieldName);
+
+                    $table = $field->legacy_field_data === 'y' ? 'channel_data' : "channel_data_field_{$field->field_id}";
 
                     $method = $boolean === 'and' ? 'whereRaw' : 'orWhereRaw';
 
                     $tablePrefix = $query->getQuery()->getConnection()->getTablePrefix();
 
-                    $query->$method("`{$tablePrefix}channel_data_field_{$fieldId}`.`field_id_{$fieldId}` {$operator} '{$value}'");
+                    $query->$method("`{$tablePrefix}{$table}`.`field_id_{$field->field_id}` {$operator} '{$value}'");
                 }
             } else {
                 $operator .= 'like';

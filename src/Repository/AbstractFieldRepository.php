@@ -84,6 +84,16 @@ abstract class AbstractFieldRepository extends AbstractRepository implements Fie
     /**
      * {@inheritdoc}
      */
+    public function getFieldByName($name)
+    {
+        $this->loadCollection();
+
+        return $this->fieldsByName[$name] ?? null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasField($field)
     {
         $this->loadCollection();
