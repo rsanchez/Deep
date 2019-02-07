@@ -30,12 +30,17 @@ class Builder extends BaseBuilder
         parent::__construct($query);
         $this->model = $builder->model;
         $this->eagerLoad = $builder->eagerLoad;
-        $this->macros = $builder->macros;
+        $macrosProp = isset($builder->localMacros) ? 'localMacros' : 'macros';
+        $this->{$macrosProp} = $builder->{$macrosProp};
         $this->onDelete = $builder->onDelete;
         $this->passthru = $builder->passthru;
 
         if (isset($builder->scopes)) {
             $this->scopes = $builder->scopes;
+        }
+
+        if (isset($builder->removedScopes)) {
+            $this->removedScopes = $builder->removedScopes;
         }
     }
 
