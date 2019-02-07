@@ -40,7 +40,9 @@ use rsanchez\Deep\Repository\MemberFieldRepository;
 use rsanchez\Deep\Hydrator\EntryHydratorFactory;
 use rsanchez\Deep\Hydrator\RowHydratorFactory;
 use Illuminate\Translation\ArrayLoader;
-use Illuminate\Translation\Translator;
+use Illuminate\Translation\Translator as IlluminateTranslator;
+use Symfony\Component\Translation\Translator as SymfonyTranslator;
+use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Validation\PresenceVerifierInterface;
 use Illuminate\Validation\Factory as IlluminateValidationFactory;
@@ -85,13 +87,24 @@ class Container extends IlluminateContainer
         $this->alias(PresenceVerifierInterface::class, 'ValidationPresenceVerifier');
 
         $this->singleton(TranslatorInterface::class, function ($app) {
-            return new Translator(new ArrayLoader, 'en');
+            return new SymfonyTranslator('en');
         });
 
-        $this->alias(TranslatorInterface::class, 'ValidationTranslator');
+        $this->alias(TranslatorInterface::class, 'SymfonyTranslator');
+
+        $this->singleton(TranslatorContract::class, function ($app) {
+            return new IlluminateTranslator(new ArrayLoader, 'en');
+        });
+
+        $this->alias(TranslatorContract::class, 'IlluminateTranslator');
+
+        $this->singleton('Translator', function ($app) {
+            // Illluminate version > 5.4
+            return interface_exists(TranslatorContract::class) ? $app->make('IlluminateTranslator') : $app->make('SymfonyTranslator');
+        });
 
         $this->singleton(IlluminateValidationFactory::class, function ($app) {
-            $validatorFactory = new ValidatorFactory($app->make('ValidationTranslator'));
+            $validatorFactory = new ValidatorFactory($app->make('Translator'));
 
             $validatorFactory->setPresenceVerifier($app->make('ValidationPresenceVerifier'));
 
