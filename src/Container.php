@@ -40,6 +40,10 @@ use rsanchez\Deep\Hydrator\EntryHydratorFactory;
 use rsanchez\Deep\Hydrator\RowHydratorFactory;
 use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\Translator;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Validation\PresenceVerifierInterface;
+use Illuminate\Validation\Factory as IlluminateValidationFactory;
+use Symfony\Component\Translation\TranslatorInterface;
 use rsanchez\Deep\Validation\Factory as ValidatorFactory;
 use rsanchez\Deep\Validation\DatabasePresenceVerifier;
 use rsanchez\Deep\Validation\Validator;
@@ -67,25 +71,25 @@ class Container extends IlluminateContainer
             return $config;
         });
 
-        $this->bind('Illuminate\Database\ConnectionInterface', function ($app) {
+        $this->bind(ConnectionInterface::class, function ($app) {
             return Model::resolveConnection(Model::getGlobalConnection());
         });
 
-        $this->alias('Illuminate\Database\ConnectionInterface', 'db');
+        $this->alias(ConnectionInterface::class, 'db');
 
-        $this->singleton('Illuminate\Validation\PresenceVerifierInterface', function ($app) {
+        $this->singleton(PresenceVerifierInterface::class, function ($app) {
             return new DatabasePresenceVerifier(Model::getConnectionResolver());
         });
 
-        $this->alias('Illuminate\Validation\PresenceVerifierInterface', 'ValidationPresenceVerifier');
+        $this->alias(PresenceVerifierInterface::class, 'ValidationPresenceVerifier');
 
-        $this->singleton('Symfony\Component\Translation\TranslatorInterface', function ($app) {
+        $this->singleton(TranslatorInterface::class, function ($app) {
             return new Translator(new ArrayLoader, 'en');
         });
 
-        $this->alias('Symfony\Component\Translation\TranslatorInterface', 'ValidationTranslator');
+        $this->alias(TranslatorInterface::class, 'ValidationTranslator');
 
-        $this->singleton('Illuminate\Validation\Factory', function ($app) {
+        $this->singleton(IlluminateValidationFactory::class, function ($app) {
             $validatorFactory = new ValidatorFactory($app->make('ValidationTranslator'));
 
             $validatorFactory->setPresenceVerifier($app->make('ValidationPresenceVerifier'));
@@ -93,9 +97,9 @@ class Container extends IlluminateContainer
             return $validatorFactory;
         });
 
-        $this->alias('Illuminate\Validation\Factory', 'ValidatorFactory');
+        $this->alias(IlluminateValidationFactory::class, 'ValidatorFactory');
 
-        $this->singleton('rsanchez\Deep\Model\Field', function ($app) {
+        $this->singleton(Field::class, function ($app) {
             $model = new Field();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -103,15 +107,15 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\Field', 'Field');
+        $this->alias(Field::class, 'Field');
 
-        $this->singleton('rsanchez\Deep\Repository\FieldRepositoryInterface', function ($app) {
+        $this->singleton(FieldRepositoryInterface::class, function ($app) {
             return new FieldRepository($app->make('Field'), $app->make('db'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\FieldRepositoryInterface', 'FieldRepository');
+        $this->alias(FieldRepositoryInterface::class, 'FieldRepository');
 
-        $this->singleton('rsanchez\Deep\Model\Channel', function ($app) {
+        $this->singleton(Channel::class, function ($app) {
             $channel = new Channel();
 
             $channel->setFieldRepository($app->make('FieldRepository'));
@@ -120,9 +124,9 @@ class Container extends IlluminateContainer
             return $channel;
         });
 
-        $this->alias('rsanchez\Deep\Model\Channel', 'Channel');
+        $this->alias(Channel::class, 'Channel');
 
-        $this->singleton('rsanchez\Deep\Model\Site', function ($app) {
+        $this->singleton(Site::class, function ($app) {
             $model = new Site();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -130,9 +134,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\Site', 'Site');
+        $this->alias(Site::class, 'Site');
 
-        $this->singleton('rsanchez\Deep\Model\UploadPref', function ($app) {
+        $this->singleton(UploadPref::class, function ($app) {
             $model = new UploadPref();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -140,9 +144,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\UploadPref', 'UploadPref');
+        $this->alias(UploadPref::class, 'UploadPref');
 
-        $this->singleton('rsanchez\Deep\Model\CategoryField', function ($app) {
+        $this->singleton(CategoryField::class, function ($app) {
             $model = new CategoryField();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -150,9 +154,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\CategoryField', 'CategoryField');
+        $this->alias(CategoryField::class, 'CategoryField');
 
-        $this->singleton('rsanchez\Deep\Model\MemberField', function ($app) {
+        $this->singleton(MemberField::class, function ($app) {
             $model = new MemberField();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -160,33 +164,33 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\MemberField', 'MemberField');
+        $this->alias(MemberField::class, 'MemberField');
 
-        $this->singleton('rsanchez\Deep\Repository\CategoryFieldRepositoryInterface', function ($app) {
+        $this->singleton(CategoryFieldRepositoryInterface::class, function ($app) {
             return new CategoryFieldRepository($app->make('CategoryField'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\CategoryFieldRepositoryInterface', 'CategoryFieldRepository');
+        $this->alias(CategoryFieldRepositoryInterface::class, 'CategoryFieldRepository');
 
-        $this->singleton('rsanchez\Deep\Repository\MemberFieldRepository', function ($app) {
+        $this->singleton(MemberFieldRepository::class, function ($app) {
             return new MemberFieldRepository($app->make('MemberField'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\MemberFieldRepository', 'MemberFieldRepository');
+        $this->alias(MemberFieldRepository::class, 'MemberFieldRepository');
 
-        $this->singleton('rsanchez\Deep\Repository\ChannelRepositoryInterface', function ($app) {
+        $this->singleton(ChannelRepositoryInterface::class, function ($app) {
             return new ChannelRepository($app->make('Channel'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\ChannelRepositoryInterface', 'ChannelRepository');
+        $this->alias(ChannelRepositoryInterface::class, 'ChannelRepository');
 
-        $this->singleton('rsanchez\Deep\Repository\SiteRepositoryInterface', function ($app) {
+        $this->singleton(SiteRepositoryInterface::class, function ($app) {
             return new SiteRepository($app->make('Site'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\SiteRepositoryInterface', 'SiteRepository');
+        $this->alias(SiteRepositoryInterface::class, 'SiteRepository');
 
-        $this->singleton('rsanchez\Deep\Repository\UploadPrefRepository', function ($app) {
+        $this->singleton(UploadPrefRepository::class, function ($app) {
             if (isset($app['config']['upload_prefs'])) {
                 return new ConfigUploadPrefRepository($app->make('UploadPref'), $app['config']['upload_prefs']);
             }
@@ -194,9 +198,9 @@ class Container extends IlluminateContainer
             return new UploadPrefRepository($app->make('UploadPref'));
         });
 
-        $this->alias('rsanchez\Deep\Repository\UploadPrefRepository', 'UploadPrefRepository');
+        $this->alias(UploadPrefRepository::class, 'UploadPrefRepository');
 
-        $this->singleton('rsanchez\Deep\Model\Asset', function ($app) {
+        $this->singleton(Asset::class, function ($app) {
             $model = new Asset();
 
             $model->setUploadPrefRepository($app->make('UploadPrefRepository'));
@@ -205,9 +209,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\Asset', 'Asset');
+        $this->alias(Asset::class, 'Asset');
 
-        $this->singleton('rsanchez\Deep\Model\File', function ($app) {
+        $this->singleton(File::class, function ($app) {
             $model = new File();
 
             $model->setUploadPrefRepository($app->make('UploadPrefRepository'));
@@ -216,9 +220,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\File', 'File');
+        $this->alias(File::class, 'File');
 
-        $this->singleton('rsanchez\Deep\Model\GridCol', function ($app) {
+        $this->singleton(GridCol::class, function ($app) {
             $model = new GridCol();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -226,9 +230,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\GridCol', 'GridCol');
+        $this->alias(GridCol::class, 'GridCol');
 
-        $this->singleton('rsanchez\Deep\Model\GridRow', function ($app) {
+        $this->singleton(GridRow::class, function ($app) {
             $model = new GridRow();
 
             $model->setFieldRepository($app->make('FieldRepository'));
@@ -238,9 +242,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\GridRow', 'GridRow');
+        $this->alias(GridRow::class, 'GridRow');
 
-        $this->singleton('rsanchez\Deep\Model\MatrixCol', function ($app) {
+        $this->singleton(MatrixCol::class, function ($app) {
             $model = new MatrixCol();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -248,9 +252,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\MatrixCol', 'MatrixCol');
+        $this->alias(MatrixCol::class, 'MatrixCol');
 
-        $this->singleton('rsanchez\Deep\Model\MatrixRow', function ($app) {
+        $this->singleton(MatrixRow::class, function ($app) {
             $model = new MatrixRow();
 
             $model->setFieldRepository($app->make('FieldRepository'));
@@ -260,9 +264,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\MatrixRow', 'MatrixRow');
+        $this->alias(MatrixRow::class, 'MatrixRow');
 
-        $this->singleton('rsanchez\Deep\Model\PlayaEntry', function ($app) {
+        $this->singleton(PlayaEntry::class, function ($app) {
             $model = new PlayaEntry();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -270,9 +274,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\PlayaEntry', 'PlayaEntry');
+        $this->alias(PlayaEntry::class, 'PlayaEntry');
 
-        $this->singleton('rsanchez\Deep\Model\RelationshipEntry', function ($app) {
+        $this->singleton(RelationshipEntry::class, function ($app) {
             $model = new RelationshipEntry();
 
             $model->setValidatorFactory($app->make('ValidatorFactory'));
@@ -280,9 +284,9 @@ class Container extends IlluminateContainer
             return $model;
         });
 
-        $this->alias('rsanchez\Deep\Model\RelationshipEntry', 'RelationshipEntry');
+        $this->alias(RelationshipEntry::class, 'RelationshipEntry');
 
-        $this->singleton('rsanchez\Deep\Hydrator\RowHydratorFactory', function ($app) {
+        $this->singleton(RowHydratorFactory::class, function ($app) {
             return new RowHydratorFactory(
                 $app->make('db'),
                 $app->make('SiteRepository'),
@@ -294,9 +298,9 @@ class Container extends IlluminateContainer
             );
         });
 
-        $this->alias('rsanchez\Deep\Hydrator\RowHydratorFactory', 'RowHydratorFactory');
+        $this->alias(RowHydratorFactory::class, 'RowHydratorFactory');
 
-        $this->singleton('rsanchez\Deep\Hydrator\EntryHydratorFactory', function ($app) {
+        $this->singleton(EntryHydratorFactory::class, function ($app) {
             return new EntryHydratorFactory(
                 $app->make('db'),
                 $app->make('SiteRepository'),
@@ -312,9 +316,9 @@ class Container extends IlluminateContainer
             );
         });
 
-        $this->alias('rsanchez\Deep\Hydrator\EntryHydratorFactory', 'EntryHydratorFactory');
+        $this->alias(EntryHydratorFactory::class, 'EntryHydratorFactory');
 
-        $this->singleton('rsanchez\Deep\Model\Category', function ($app) {
+        $this->singleton(Category::class, function ($app) {
             $category = new Category();
 
             $category->setCategoryFieldRepository($app->make('CategoryFieldRepository'));
@@ -324,9 +328,9 @@ class Container extends IlluminateContainer
             return $category;
         });
 
-        $this->alias('rsanchez\Deep\Model\Category', 'Category');
+        $this->alias(Category::class, 'Category');
 
-        $this->singleton('rsanchez\Deep\Model\Member', function ($app) {
+        $this->singleton(Member::class, function ($app) {
             $member = new Member();
 
             $member->setMemberFieldRepository($app->make('MemberFieldRepository'));
@@ -335,9 +339,9 @@ class Container extends IlluminateContainer
             return $member;
         });
 
-        $this->alias('rsanchez\Deep\Model\Member', 'Member');
+        $this->alias(Member::class, 'Member');
 
-        $this->singleton('rsanchez\Deep\Model\Entry', function ($app) {
+        $this->singleton(Entry::class, function ($app) {
             $app->make('Category');
             $app->make('Member');
 
@@ -352,7 +356,7 @@ class Container extends IlluminateContainer
             return $entry;
         });
 
-        $this->alias('rsanchez\Deep\Model\Entry', 'Entry');
+        $this->alias(Entry::class, 'Entry');
     }
 
     /**
