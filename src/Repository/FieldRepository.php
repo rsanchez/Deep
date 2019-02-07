@@ -54,6 +54,8 @@ class FieldRepository extends AbstractFieldRepository implements ChannelFieldRep
             ->get();
 
         foreach ($fieldAssignments as $fieldAssignment) {
+            $fieldAssignment = (array) $fieldAssignment;
+
             if (! array_key_exists($fieldAssignment['channel_id'], $fieldIdsByChannel)) {
                 $fieldIdsByChannel[$fieldAssignment['channel_id']] = [];
             }
