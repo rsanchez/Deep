@@ -15,6 +15,7 @@ use rsanchez\Deep\Model\Model;
 use rsanchez\Deep\Model\Field;
 use rsanchez\Deep\Model\Channel;
 use rsanchez\Deep\Model\Entry;
+use rsanchez\Deep\Model\ChannelData;
 use rsanchez\Deep\Model\Site;
 use rsanchez\Deep\Model\Category;
 use rsanchez\Deep\Model\Member;
@@ -340,6 +341,16 @@ class Container extends IlluminateContainer
         });
 
         $this->alias(Member::class, 'Member');
+
+        $this->singleton(ChannelData::class, function ($app) {
+            $channelData = new ChannelData();
+
+            $channelData->setFieldRepository($app->make('FieldRepository'));
+
+            return $channelData;
+        });
+
+        $this->alias(ChannelData::class, 'ChannelData');
 
         $this->singleton(Entry::class, function ($app) {
             $app->make('Category');

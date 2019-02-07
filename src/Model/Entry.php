@@ -1804,6 +1804,8 @@ class Entry extends AbstractEntity
             $channelData->site_id = $this->site_id;
         }
 
+        $channelData->setFieldRepository(self::getFieldRepository());
+
         return $channelData;
     }
 
@@ -1888,7 +1890,7 @@ class Entry extends AbstractEntity
             }
         }
 
-        $this->channelData->save();
+        $this->channelData->push();
 
         //restore the original entry ID
         $this->entry_id = $entryId;

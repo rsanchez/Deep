@@ -14,6 +14,8 @@ namespace rsanchez\Deep\Model;
  */
 class ChannelData extends Model
 {
+    use HasFieldRepositoryTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -32,4 +34,83 @@ class ChannelData extends Model
         'channel_id' => 'required|exists:channels,channel_id',
         'entry_id' => 'required|exists:channel_titles,entry_id',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRawAttributes(array $attributes, $sync = false)
+    {
+        $attributesByField = [];
+
+        foreach ($attributes as $name => $value) {
+            if (preg_match('/^field_(id|ft|dt)_(\d+)$/', $name, $match)) {
+                $fieldId = $match[1];
+
+                $attributesByField[$fieldId][$name] = $value;
+
+                unset($attributes[$name]);
+            }
+        }
+
+        parent::setRawAttributes($attributes);
+
+        foreach ($attributesByField as $fieldId => $attributes) {
+            $table = "channel_data_field_{$fieldId}";
+
+            if ($this->entry_id) {
+                $attributes['entry_id'] = $this->entry_id;
+            }
+
+            $this->relations[$table] = new ChannelDataField($attributes);
+
+            $this->relations[$table]->setTable($table);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttribute($key, $value)
+    {
+        if (preg_match('/^field_(id|ft|dt)_\d+$/', $key, $match)) {
+            $fieldId = $match[1];
+
+            $table = "channel_data_field_{$fieldId}";
+
+            $this->relations[$table]->setAttribute($key, $value);
+        } else {
+            parent::setAttribute($key, $value);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributes()
+    {
+        $attributes = parent::getAttributes();
+
+        foreach ($this->relations as $relation) {
+            $attributes = array_merge($attributes, $relation->getAttributes());
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newQuery($excludeDeleted = true)
+    {
+        $query = parent::newQuery($excludeDeleted);
+
+        // join all the channel_data_field_X tables
+        foreach (static::getFieldRepository()->getFields() as $field) {
+            $table = "channel_data_field_{$field->field_id}";
+
+            $query->leftJoin($table, 'channel_data.entry_id', '=', "{$table}.entry_id");
+        }
+
+        return $query;
+    }
 }
