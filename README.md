@@ -752,7 +752,6 @@ $entry->channel->last_comment_date
 $entry->channel->cat_group
 $entry->channel->status_group
 $entry->channel->deft_status
-$entry->channel->field_group
 $entry->channel->search_excerpt
 $entry->channel->deft_category
 $entry->channel->deft_comments

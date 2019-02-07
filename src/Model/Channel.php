@@ -54,7 +54,6 @@ class Channel extends Model
         'cat_group' => 'Category Group',
         'status_group' => 'Status Group',
         'deft_status' => 'Default Status',
-        'field_group' => 'Field Group',
         'search_excerpt' => 'Search Excerpt',
         'deft_category' => 'Default Category',
         'deft_comments' => 'Default Allow Comments',
@@ -97,7 +96,6 @@ class Channel extends Model
         'cat_group' => 'pipe_exists:category_groups,group_id',
         'status_group' => 'exists:status_groups,group_id',
         'deft_status' => 'required',
-        'field_group' => 'exists:field_groups,group_id',
         'search_excerpt' => 'exists:channel_fields,field_id',
         'deft_category' => [
             ['exists', 'categories', 'cat_id'],
@@ -180,10 +178,6 @@ class Channel extends Model
     public function getDefaultValidationRules(ValidatorFactory $validatorFactory, PropertyInterface $property = null)
     {
         $rules = $this->rules;
-
-        if ($this->field_group) {
-            $rules['search_excerpt'] .= sprintf(',group_id,%s', $this->field_group);
-        }
 
         if ($this->cat_group) {
             $rules['deft_category'][0][] = 'group_id';
