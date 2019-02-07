@@ -20,7 +20,7 @@ For more detailed information, see the [auto-generated API docs](http://rsanchez
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Entry;
 
-Deep::bootInstance();
+Deep::boot();
 
 $entries = Entry::channel('blog')
                 ->limit(10)
@@ -106,7 +106,7 @@ Then you can simply use the generic wrapper:
 use rsanchez\Deep\Deep;
 use rsanchez\Deep\Model\Entry;
 
-Deep::bootInstance();
+Deep::boot();
 
 $entries = Entry::channel('blog')
                 ->limit(10)
