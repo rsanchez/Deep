@@ -2220,7 +2220,7 @@ class Entry extends AbstractEntity
         $fieldName = array_shift($args);
 
         if (static::getFieldRepository()->hasField($fieldName)) {
-            $field = static::getFieldRepository()->getFieldByName($column);
+            $field = static::getFieldRepository()->getFieldByName($fieldName);
 
             $table = $field->legacy_field_data === 'y' ? 'channel_data' : "channel_data_field_{$field->field_id}";
 
