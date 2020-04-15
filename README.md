@@ -14,6 +14,14 @@ A read-only set of [Eloquent](http://laravel.com/docs/eloquent) models for Expre
 
 For more detailed information, see the [auto-generated API docs](http://rsanchez.github.io/Deep/api).
 
+### Version Compatibility Chart
+
+| EE Version | Deep Version                                       |
+|------------|----------------------------------------------------|
+| 2.x        | [2.0.x](https://github.com/rsanchez/Deep/tree/2.0) |
+| 3.x        | [2.1.x](https://github.com/rsanchez/Deep/tree/2.1) |
+| >= 4.x     | [3.0.x](https://github.com/rsanchez/Deep/tree/3.0) |
+
 ```
 <?php
 
