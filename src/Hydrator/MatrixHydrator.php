@@ -97,7 +97,7 @@ class MatrixHydrator extends AbstractHydrator
      */
     public function preload(EntryCollection $collection)
     {
-        $this->rows = $this->rowModel->entryId($collection->getEntryIds())->orderBy('row_order')->get();
+        $this->rows = $this->rowModel->entryId($collection->modelKeys())->orderBy('row_order')->get();
 
         foreach ($this->rows as $row) {
             if (! isset($this->sortedRows[$row->entry_id][$row->field_id])) {

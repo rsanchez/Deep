@@ -60,7 +60,7 @@ class AssetsHydrator extends AbstractHydrator
      */
     public function preload(EntryCollection $collection)
     {
-        $assets = $this->model->entryId($collection->getEntryIds())->orderBy('sort_order')->get();
+        $assets = $this->model->entryId($collection->modelKeys())->orderBy('sort_order')->get();
 
         foreach ($assets as $asset) {
             if (! $asset->filedir_id || ! $uploadPref = $this->uploadPrefRepository->find($asset->filedir_id)) {

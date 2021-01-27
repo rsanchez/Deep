@@ -162,7 +162,7 @@ class EntryCollection extends AbstractModelCollection implements FilterableInter
     public function addEntryId($entryId)
     {
         if (! in_array($entryId, $this->entryIds)) {
-            $this->entryIds[$entryId] = $entryId;
+            $this->entryIds[] = $entryId;
         }
     }
 
