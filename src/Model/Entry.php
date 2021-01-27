@@ -146,7 +146,7 @@ class Entry extends AbstractEntity
         'day' => 'digits:2',
         'expiration_date' => 'date_format:U',
         'comment_expiration_date' => 'date_format:U',
-        'edit_date' => 'date_format:YmdHis',
+        'edit_date' => 'date_format:U',
         'recent_comment_date' => 'date_format:U',
         'comment_total' => 'required|integer',
     ];
@@ -481,7 +481,7 @@ class Entry extends AbstractEntity
      */
     public function getEditDateAttribute($value)
     {
-        return $this->attributes['edit_date'] ? Carbon::createFromFormat('YmdHis', $this->attributes['edit_date']) : null;
+        return $this->attributes['edit_date'] ? Carbon::createFromFormat('U', $this->attributes['edit_date']) : null;
     }
 
     /**
@@ -489,7 +489,7 @@ class Entry extends AbstractEntity
      */
     public function freshTimestampString()
     {
-        return $this->freshTimestamp()->format('YmdHis');
+        return $this->freshTimestamp()->format('U');
     }
 
     /**
@@ -499,7 +499,7 @@ class Entry extends AbstractEntity
      */
     public function setEditDateAttribute($date)
     {
-        $this->attributes['edit_date'] = $date instanceof DateTime ? $date->format('YmdHis') : $date;
+        $this->attributes['edit_date'] = $date instanceof DateTime ? $date->format('U') : $date;
     }
 
     /**
